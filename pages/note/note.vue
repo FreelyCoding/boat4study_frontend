@@ -1,82 +1,80 @@
 <template>
 	<view>
 		<view class="status-bar">
-			
+
 		</view>
-		
+
 		<view class="container">
 			<!--自定义navbar-->
 			<view>
 				<view>
-					
-					<uni-nav-bar shadow="true" title="笔记">
-						
+					<uni-nav-bar title="笔记" background-color="#00aaff" color="#FFFFFF" status-bar="true">
 						<block slot="left">
 							<view class="note-navbar">
-								<i-icon size="20px" color="#666" name="arrow-left-line"></i-icon>
+								<uni-icons type="left" color="#FFFFFF" size="18" />
 							</view>
 						</block>
-						
+
 						<block slot="right">
 							<view class="note-navbar">
-								<i-icon size="20px" color="#666" name="share-fill"></i-icon>
-								<i-icon size="20px" color="#666" name="more-2-fill"></i-icon>
+								<i-icon size="20px" color="#ffffff" name="share-fill"></i-icon>
+								<i-icon size="20px" color="#ffffff" name="more-2-fill"></i-icon>
 							</view>
-							
+
 						</block>
 					</uni-nav-bar>
 				</view>
 			</view>
-			
+
 			<view class="title_wrapper">
 				<textarea class="title" :maxlength="title_maxlength" :value="title" disabled="true"></textarea>
 			</view>
-			
+
 			<!--分界线-->
 			<u-line></u-line>
-			
+
 			<!--笔记内容-->
-			<view class="page-body">			
+			<view class="page-body">
 				<view class='wrapper'>
-				
+
 					<view class="editor-wrapper">
 						<editor id="editor" class="ql-container" showImgSize showImgToolbar showImgResize
-						 @statuschange="onStatusChange" :read-only="readOnly" @ready="onEditorReady">
+							@statuschange="onStatusChange" :read-only="readOnly" @ready="onEditorReady">
 						</editor>
 					</view>
 				</view>
 			</view>
-			
+
 			<!-- <uni-fab class="fab" horizontal="right" vertical="bottom" icon="icon-edit" -->
-						<!-- icon_size="28" :pattern="pattern"/> -->
-						
-						
+			<!-- icon_size="28" :pattern="pattern"/> -->
+
+
 			<!--悬浮按钮-->
-			<uni-fab ref="fab" horizontal="right" vertical="bottom" 
-			direction="horizontal" :content="content" @trigger="trigger"></uni-fab>
-			
-			
+			<uni-fab ref="fab" horizontal="right" vertical="bottom" direction="horizontal" :content="content"
+				@trigger="trigger"></uni-fab>
+
+
 			<u-line></u-line>
-			
+
 			<!--评论-->
 			<comment-eg :articleId="'article1'"></comment-eg>
-			
+
 			<!-- <uni-list :border="false"> -->
-				
-				<!-- <uni-list-chat v-for="item in listData" :avatar-circle="true" :key="item.id" :title="item.author_name" :avatar="item.cover" -->
-				 <!-- :note="item.title" :time="item.published_at" :clickable="false">				 -->
 
-					<!-- <view class="chat-custom-right"> -->
-						<!-- <text class="chat-custom-text">刚刚</text> -->
-						<!-- 需要使用 uni-icons 请自行引入 -->
-						<!-- <i-icon name="thumb-up-line"></i-icon> -->
-						<!-- <uni-icons type="checkempty" color="#999" size="18"></uni-icons> -->
-					<!-- </view> -->
+			<!-- <uni-list-chat v-for="item in listData" :avatar-circle="true" :key="item.id" :title="item.author_name" :avatar="item.cover" -->
+			<!-- :note="item.title" :time="item.published_at" :clickable="false">				 -->
 
-				<!-- </uni-list-chat> -->
-				
+			<!-- <view class="chat-custom-right"> -->
+			<!-- <text class="chat-custom-text">刚刚</text> -->
+			<!-- 需要使用 uni-icons 请自行引入 -->
+			<!-- <i-icon name="thumb-up-line"></i-icon> -->
+			<!-- <uni-icons type="checkempty" color="#999" size="18"></uni-icons> -->
+			<!-- </view> -->
+
+			<!-- </uni-list-chat> -->
+
 			<!-- </uni-list> -->
-			
+
 		</view>
 	</view>
 </template>
@@ -89,12 +87,12 @@
 				readOnly: true,
 				formats: {},
 				title_maxlength: 50,
-				
+
 				pattern: {
 					buttonColor: "#f3f4f6",
 					iconColor: "#18b566"
 				},
-				
+
 				content: [{
 						iconPath: '/static/pic/note/edit-fill.png',
 						selectedIconPath: '/static/pic/note/edit-fill-active.png',
@@ -114,9 +112,8 @@
 						active: false
 					}
 				],
-				
-				listData: [
-					{
+
+				listData: [{
 						id: "1",
 						author_name: "用户1",
 						cover: "https://img.36krcdn.com/20200406/v2_d2c6a686b4074a1eb43603e67d6ba204_img_png",
@@ -155,7 +152,7 @@
 				const formats = e.detail
 				this.formats = formats
 			},
-			
+
 			trigger(e) {
 				// console.log(e)
 				this.content[e.index].active = !e.item.active
@@ -177,7 +174,7 @@
 
 <style>
 	@import "./editor-icon.css";
-	
+
 	/* navbar css */
 	/* $nav-height: 30px;
 	 */
@@ -185,7 +182,7 @@
 		height: var(--status-bar-height);
 		width: 100%;
 	}
-	
+
 	.navbar {
 		position: fixed;
 		top: var(--status-bar-height);
@@ -209,7 +206,7 @@
 	.container {
 		top: var(--status-bar-height);
 	}
-	
+
 	/* 主体css */
 
 	.page-body {
@@ -248,7 +245,7 @@
 		/* font-style: italic; */
 	}
 
-	.title {		
+	.title {
 		box-sizing: border-box;
 		padding: 10px 15px;
 		width: 100%;
@@ -256,14 +253,14 @@
 		height: 100%;
 		margin-top: 10px;
 		line-height: 1.5;
-		
+
 		color: #303133;
 		font-size: 25px;
 		font-family: 黑体;
 		font-weight: bold;
 		/* font-style: italic;	 */
 	}
-	
+
 	.title_wrapper {
 		height: 30px;
 		margin-bottom: 50px;

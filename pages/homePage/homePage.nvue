@@ -1,5 +1,6 @@
 <template>
 	<view class="u-page">
+
 		<view class="u-page__item" style="margin-bottom: 20px;">
 			<div class="background-blue">
 				<view class="u-input m-middle-2" style="margin-top: 20px">
@@ -9,30 +10,32 @@
 					</u--input>
 				</view>
 
-				<view class="u-demo-block__content" style="margin-top: 5px; margin-bottom: 5px;">
+				<view class="u-demo-block__content" style="margin-top: 10px; margin-bottom: 10px;">
 					<uni-row class="demo-uni-row" :gutter="gutter" :width="nvueWidth">
 						<uni-col :span="6">
 							<view style="margin: auto;">
-								<u-icon name="camera" size="40px" color="white"></u-icon>
+								<u-icon name="/static/pic/camera2.svg" size="40px" color="white"></u-icon>
 							</view>
 							<view style="margin: auto;">
 								<p style="color: white; font-size: 14px;"> 拍照搜题</p>
 							</view>
 						</uni-col>
 						<uni-col :span="6">
-							<view style="margin: auto;">
-								<u-icon name="edit-pen" size="40px" color="white"></u-icon>
+							<view style="margin: auto;"  @click="jumpoToCreateNote()">
+								<u-icon name="/static/pic/edit2.svg" size="40px" color="white"></u-icon>
 							</view>
-							<view style="margin: auto;">
-								<p style="color: white; font-size: 14px;"> 添加笔记 </p>
+							<view style="margin: auto;" >
+								<p style="color: white; font-size: 14px;" > 添加笔记 </p>
 							</view>
 						</uni-col>
 						<uni-col :span="6">
-							<view style="margin: auto;">
+							<view style="margin: auto;" @click="jumpoToUploadProblem()">
 								<u-icon name="/static/pic/upload2.svg" size="40px" color="white"></u-icon>
 							</view>
 							<view style="margin: auto;">
-								<p style="color: white; font-size: 14px;"> 上传题库 </p>
+								<a href="/pages/problemCreate/problemCreate" style="text-decoration: none;">
+									<p style="color: white; font-size: 14px;"> 上传题库 </p>
+								</a>
 							</view>
 						</uni-col>
 						<uni-col :span="6">
@@ -52,7 +55,7 @@
 			<uni-row>
 				<uni-col span="12">
 					<view>
-						<p class="homePage-header"> 精选笔记</p>
+						<p class="homePage-header" @click="jumpToComponents()"> 精选笔记</p>
 					</view>
 				</uni-col>
 
@@ -163,17 +166,6 @@
 			</u-list>
 		</view>
 
-
-
-		<view class="u-page__item">
-			<u-tabbar :value="tabValue" @change="name => tabValue = name" :fixed="true" :placeholder="true"
-				:safeAreaInsetBottom="true">
-				<u-tabbar-item text="首页" icon="home"> </u-tabbar-item>
-				<u-tabbar-item text="分类" icon="grid"></u-tabbar-item>
-				<u-tabbar-item text="笔记" icon="file-text"></u-tabbar-item>
-				<u-tabbar-item text="我的" icon="account"></u-tabbar-item>
-			</u-tabbar>
-		</view>
 	</view>
 </template>
 
@@ -253,6 +245,26 @@
 
 		},
 		methods: {
+			jumpToPerson() {
+				uni.navigateTo({
+					url: "/pages/note/note"
+				})
+			},
+			jumpToComponents() {
+				uni.navigateTo({
+					url: "/pages/example/components"
+				})
+			},
+			jumpoToCreateNote() {
+				uni.navigateTo({
+					url: "/pages/note/create_note"
+				})
+			},
+			jumpoToUploadProblem() {
+				uni.navigateTo({
+					url: "/pages/problemCreate/problemCreate"
+				})
+			},
 			click1(e) {
 				console.log('click1', e);
 			},
@@ -341,7 +353,7 @@
 	}
 
 	.check-all {
-		padding-top: 6px;
+		padding-top: 7px;
 		text-align: right;
 		font-size: 14px;
 		color: #00aaff;

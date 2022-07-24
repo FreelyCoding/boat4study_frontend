@@ -1,0 +1,144 @@
+<template>
+	<view class="u-page">		
+		<view class="u-page__item">
+			<div class="background-blue">
+				<view style="width: 90%; margin: auto; margin-top: 40px; margin-bottom: 15px;">
+					<uni-row>
+						<uni-col span="7">
+							<view>
+								<image style="width: 80px; height: 80px; background-color: #00aaff;" mode="aspectFill"
+									:src="user.avatar"></image>
+							</view>
+						</uni-col>
+
+						<uni-col span="18">
+							<view style="margin: 15px 0px 10px 0px;">
+								<p class="user_name">{{user.user_name}}</p>
+								<p class="uid">{{user.uid}}</p>
+							</view>
+						</uni-col>
+					</uni-row>
+				</view>
+			</div>
+		</view>
+
+	</view>
+</template>
+
+<script>
+	export default {
+		data() {
+			return {
+				user: {
+					avatar: "/static/pic/student.png",
+					uid: 20376208,
+					user_name: "Longxmas"
+				},
+				searchValue: "",
+				tabValue: 0,
+			}
+		},
+		watch: {
+			searchValue(newValue, oldValue) {
+				// console.log('v-model', newValue);
+			}
+		},
+		onLoad() {
+
+		},
+		methods: {
+			click1(e) {
+				console.log('click1', e);
+			},
+			search(e) {
+				console.log('searchChange', e);
+			}
+		},
+	}
+</script>
+
+<style lang="scss">
+	.u-page {
+		padding: 0;
+
+		&__item {
+
+			&__title {
+				color: $u-tips-color;
+				background-color: $u-bg-color;
+				padding: 15px;
+				font-size: 15px;
+
+				&__slot-title {
+					color: $u-primary;
+					font-size: 14px;
+				}
+			}
+
+			&__slot-icon {
+				width: 17px;
+				height: 17px;
+			}
+		}
+	}
+
+	.m-middle-5 {
+		margin-left: 5%;
+		margin-right: 5%;
+	}
+
+	.m-middle-2 {
+		width: 96%;
+		margin: auto;
+	}
+
+	.m-lr-0 {
+		margin-left: 0px;
+		margin-right: 0px;
+	}
+
+	.m-bt-0 {
+		margin-top: 0px;
+		margin-bottom: 0px;
+	}
+
+	.background-blue {
+		background-color: #00aaff;
+	}
+
+	.user_name {
+		color: white;
+		font-family: shuhei;
+		font-size: 25px;
+		margin-bottom: 8px;
+	}
+
+	.uid {
+		color: white;
+		font-size: 16px;
+		font-weight: 500;
+		font-family: 'Times New Roman', Times, serif;
+	}
+
+	.wrap {
+		padding: 12px;
+	}
+
+	.demo-layout {
+		height: 25px;
+		border-radius: 4px;
+	}
+
+	.bg-purple {
+		background: #ced7e1;
+	}
+
+	.bg-purple-light {
+		background: #e5e9f2;
+	}
+
+	.bg-purple-dark {
+		background: #99a9bf;
+	}
+
+</style>
