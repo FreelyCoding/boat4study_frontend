@@ -23,16 +23,16 @@
 				<uni-tag text="多选题" type="primary" v-if="problem[cur_page-1].type===1"/>
 				<uni-tag text="判断题" type="primary" v-if="problem[cur_page-1].type===2"/>
 				<uni-tag text="填空题" type="primary" v-if="problem[cur_page-1].type===3"/>
-				<text>{{problem[cur_page-1].title}}</text>
 			</view>
+			<view>{{problem[cur_page-1].title}}</view>
 			
 			<view class="option_group">
-				<view  v-for="(item, index) in problem[0].options" :key="index">
+				<view  v-for="(item, index) in problem[cur_page-1].options" :key="index">
 					<view 
 						class="option_item"
-						:class="{'selected_option_item':problem[0].options[index].selected==1,
-						 'wrong_option_item':problem[0].options[index].selected==2,
-						 'right_option_item':problem[0].options[index].selected==3}" 
+						:class="{'selected_option_item':problem[cur_page-1].options[index].selected==1,
+						 'wrong_option_item':problem[cur_page-1].options[index].selected==2,
+						 'right_option_item':problem[cur_page-1].options[index].selected==3}" 
 						@click="select_single_option(index)"
 					>
 						<u-row>
@@ -40,8 +40,8 @@
 										<view class="option_letter_box">{{letter[index]}}</view>
 								</u-col>
 								<u-col span="11">
-										<view class="option_item_content" :class="{'selected_option_item_content':problem[0].options[index].selected!=0}">
-											{{problem[0].options[index].name}}
+										<view class="option_item_content" :class="{'selected_option_item_content':problem[cur_page-1].options[index].selected!=0}">
+											{{problem[cur_page-1].options[index].name}}
 										</view>
 								</u-col>
 						</u-row>
@@ -143,15 +143,16 @@
 				console.log('radioChange', n);
 			},
 			select_single_option(i) {
-				if (this.problem[0].done == 0) {
-					this.problem[0].options.forEach((item) => {
-						item.selected = 0;
+				let pr_i = this.cur_page - 1
+				if (this.problem[pr_i].done == 0) {
+					this.problem[pr_i].options.forEach((item) => {
+						item.selected = pr_i;
 					})
-					this.problem[0].options[i].selected = 2;
-					this.problem[0].options[this.problem[0].answer].selected = 3;
-					if (i == this.problem[0].answer)
-						this.problem[0].right = 1;
-					this.problem[0].done = 1;
+					this.problem[pr_i].options[i].selected = 2;
+					this.problem[pr_i].options[this.problem[pr_i].answer].selected = 3;
+					if (i == this.problem[pr_i].answer)
+						this.problem[pr_i].right = 1;
+					this.problem[pr_i].done = 1;
 				}
 
 			}
