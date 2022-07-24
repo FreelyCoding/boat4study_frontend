@@ -111,6 +111,9 @@
 			</view>
 			
 			
+			<view>
+				<div style="height: 30px;"></div>
+			</view>
 		</view>
 	</view>
 </template>

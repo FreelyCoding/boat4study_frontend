@@ -1,31 +1,26 @@
 <template>
 	<view>
-		<view class="status-bar">
+		<view>
+			<!--自定义navbar-->
+			<uni-nav-bar title="笔记" background-color="#00aaff" color="#FFFFFF" status-bar="true">
+				<block slot="left">
+					<view class="note-navbar">
+						<uni-icons type="left" color="#FFFFFF" size="18" />
+					</view>
+				</block>
+
+<!--
+				<block slot="right">
+					<view class="note-navbar">
+						<i-icon size="20px" color="#ffffff" name="share-fill"></i-icon>
+						<i-icon size="20px" color="#ffffff" name="more-2-fill"></i-icon>
+					</view>
+				</block>-->
+			</uni-nav-bar>
 
 		</view>
 
 		<view class="container">
-			<!--自定义navbar-->
-			<view>
-				<view>
-					<uni-nav-bar title="笔记" background-color="#00aaff" color="#FFFFFF" status-bar="true">
-						<block slot="left">
-							<view class="note-navbar">
-								<uni-icons type="left" color="#FFFFFF" size="18" />
-							</view>
-						</block>
-
-						<block slot="right">
-							<view class="note-navbar">
-								<i-icon size="20px" color="#ffffff" name="share-fill"></i-icon>
-								<i-icon size="20px" color="#ffffff" name="more-2-fill"></i-icon>
-							</view>
-
-						</block>
-					</uni-nav-bar>
-				</view>
-			</view>
-
 			<view class="title_wrapper">
 				<textarea class="title" :maxlength="title_maxlength" :value="title" disabled="true"></textarea>
 			</view>
@@ -185,7 +180,7 @@
 
 	.navbar {
 		position: fixed;
-		top: var(--status-bar-height);
+		/*top: var(--status-bar-height);*/
 	}
 
 	.note-navbar {

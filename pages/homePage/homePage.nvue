@@ -55,7 +55,7 @@
 			<uni-row>
 				<uni-col span="12">
 					<view>
-						<p class="homePage-header" @click="jumpToComponents()"> 精选笔记</p>
+						<p class="homePage-header" @click="jumpToComponents()">精选笔记</p>
 					</view>
 				</uni-col>
 

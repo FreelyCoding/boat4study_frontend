@@ -67,7 +67,10 @@
 			"path": "pages/note/note",
 			"style": {
 				// 自定义navbar
-				"navigationStyle": "custom"
+				"navigationBarTitleText": "笔记",
+				"navigationStyle": "custom",
+				"enablePullDownRefresh": false,
+				"navigationBarTextStyle": "white"
 			}
 		},
 
