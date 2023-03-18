@@ -1,6 +1,6 @@
 <script>
 	export default {
-		onLaunch: function() {
+		onLaunch: function() { 
 		},
 		onShow: function() {
 			
@@ -12,7 +12,7 @@
 </script>
 
 <style lang="scss">
-	/*每个页面公共css */
+	/*每个页面公共css公共CSS */
 	@import "@/uni_modules/uview-ui/index.scss";
 	@import "common/demo.scss";
 	
