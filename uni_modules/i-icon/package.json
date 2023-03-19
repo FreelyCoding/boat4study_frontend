@@ -1,0 +1,77 @@
+{
+    "id": "i-icon",
+    "name": "i-icon: uniapp生态最好的字体图标集，源于remixicon",
+    "version": "0.0.3",
+    "description": "uniapp生态最好的字体图标集，源于remixicon，图标由remixicon一一绘制，风格统一",
+    "keywords": [
+        "图标",
+        "icon",
+        "字体图标"
+    ],
+    "displayName": "i-icon: uniapp生态最好的字体图标集，源于remixicon",
+    "repository": "",
+    "engines": {
+        "HBuilderX": "^3.1.1"
+    },
+    "dcloudext": {
+        "category": [
+            "前端组件",
+            "通用组件"
+        ],
+        "sale": {
+            "regular": {
+                "price": "0.00"
+            },
+            "sourcecode": {
+                "price": "0.00"
+            }
+        },
+        "contact": {
+            "qq": ""
+        },
+        "declaration": {
+            "ads": "无",
+            "data": "无",
+            "permissions": "无"
+        },
+        "npmurl": ""
+    },
+    "uni_modules": {
+        "platforms": {
+            "cloud": {
+                "tcb": "y",
+                "aliyun": "y"
+            },
+            "client": {
+                "App": {
+                    "app-vue": "y",
+                    "app-nvue": "y"
+                },
+                "H5-mobile": {
+                    "Safari": "y",
+                    "Android Browser": "y",
+                    "微信浏览器(Android)": "y",
+                    "QQ浏览器(Android)": "y"
+                },
+                "H5-pc": {
+                    "Chrome": "y",
+                    "IE": "u",
+                    "Edge": "y",
+                    "Firefox": "y",
+                    "Safari": "y"
+                },
+                "小程序": {
+                    "微信": "y",
+                    "阿里": "u",
+                    "百度": "u",
+                    "字节跳动": "u",
+                    "QQ": "u"
+                },
+                "快应用": {
+                    "华为": "u",
+                    "联盟": "u"
+                }
+            }
+        }
+    }
+}

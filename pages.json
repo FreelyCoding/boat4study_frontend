@@ -7,21 +7,38 @@
 	// 		"query": "" //启动参数，在页面的onLoad函数里面得到
 	// 	}]
 	// },
+	"easycom": {
+	    "autoscan": true,
+	    "custom": {
+	        "^i-icon": "@/uni_modules/i-icon/components/i-icon/i-icon.vue"
+	    }
+	},
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/note/note",
+			"style": {
+				"navigationBarTitleText": "笔记",
+				// 自定义navbar
+				"navigationStyle": "custom"
+			}
+		},
+		
 		{
 			"path": "pages/example/components",
 			"style": {
 				"navigationBarTitleText": "uView UI"
 			}
 		},
-		{
-			"path": "pages/note/note",
-			"style": {
-				"navigationBarTitleText": "笔记"
-			}
-		}
+		// {
+		// 	"path": "pages/note/note",
+		// 	"style": {
+		// 		"navigationBarTitleText": "笔记",
+		// 		// 自定义navbar
+		// 		"navigationStyle": "custom"
+		// 	}
+		// },
 	    
-	    ,{
+	    {
             "path" : "pages/homePage/homePage",
             "style" :                                                                                    
             {
