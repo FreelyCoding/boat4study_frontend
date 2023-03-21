@@ -132,8 +132,8 @@
 			_onBlur(event) {
 				this.$emit('blur', event)
 				let value = event.detail.value;
-				if (isNaN(value)) {
-					this.inputValue = this.min;
+				if (!value) {
+					// this.inputValue = 0;
 					return;
 				}
 				value = +value;
@@ -146,7 +146,6 @@
 				this.inputValue = value.toFixed(String(scale).length - 1);
 				this.$emit("change", +this.inputValue);
 				this.$emit("input", +this.inputValue);
-				this.$emit("update:modelValue", +this.inputValue);
 			},
 			_onFocus(event) {
 				this.$emit('focus', event)
@@ -154,7 +153,7 @@
 		}
 	};
 </script>
-<style lang="scss" >
+<style lang="scss" scoped>
 	$box-height: 26px;
 	$bg: #f5f5f5;
 	$br: 2px;

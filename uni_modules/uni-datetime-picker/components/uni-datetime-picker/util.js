@@ -77,10 +77,20 @@ class Calendar {
 				dd.setDate(dd.getDate() + AddDayCount) // 获取AddDayCount天后的日期
 				break
 			case 'month':
-				if (dd.getDate() === 31) {
+				if (dd.getDate() === 31 && AddDayCount>0) {
 					dd.setDate(dd.getDate() + AddDayCount)
 				} else {
-					dd.setMonth(dd.getMonth() + AddDayCount) // 获取AddDayCount天后的日期
+					const preMonth = dd.getMonth()
+					dd.setMonth(preMonth + AddDayCount) // 获取AddDayCount天后的日期
+					const nextMonth = dd.getMonth()
+					// 处理 pre 切换月份目标月份为2月没有当前日(30 31) 切换错误问题
+					if(AddDayCount<0 && preMonth!==0 && nextMonth-preMonth>AddDayCount){
+						dd.setMonth(nextMonth+(nextMonth-preMonth+AddDayCount))
+					}
+					// 处理 next 切换月份目标月份为2月没有当前日(30 31) 切换错误问题
+					if(AddDayCount>0 && nextMonth-preMonth>AddDayCount){
+						dd.setMonth(nextMonth-(nextMonth-preMonth-AddDayCount))
+					}
 				}
 				break
 			case 'year':
@@ -396,15 +406,59 @@ class Calendar {
 		this.canlender = canlender
 		this.weeks = weeks
 	}
-
-	//静态方法
-	// static init(date) {
-	// 	if (!this.instance) {
-	// 		this.instance = new Calendar(date);
-	// 	}
-	// 	return this.instance;
-	// }
 }
 
+function getDateTime(date, hideSecond){
+  return `${getDate(date)} ${getTime(date, hideSecond)}`
+}
 
-export default Calendar
+function getDate(date) {
+  date = fixIosDateFormat(date)
+  date = new Date(date)
+  const year = date.getFullYear()
+  const month = date.getMonth()+1
+  const day = date.getDate()
+  return `${year}-${addZero(month)}-${addZero(day)}`
+}
+
+function getTime(date, hideSecond){
+  date = fixIosDateFormat(date)
+  date = new Date(date)
+  const hour = date.getHours()
+  const minute = date.getMinutes()
+  const second = date.getSeconds()
+  return hideSecond ? `${addZero(hour)}:${addZero(minute)}` : `${addZero(hour)}:${addZero(minute)}:${addZero(second)}`
+}
+
+function addZero(num) {
+  if(num < 10){
+    num = `0${num}`
+  }
+  return num
+}
+
+function getDefaultSecond(hideSecond) {
+  return hideSecond ? '00:00' : '00:00:00'
+}
+
+function dateCompare(startDate, endDate) {
+  startDate = new Date(startDate.replace(/-/g, '/'))
+  endDate = new Date(endDate.replace(/-/g, '/'))
+  return startDate <= endDate
+}
+
+function checkDate(date){
+  const dateReg = /((19|20)\d{2})(-|\/)\d{1,2}(-|\/)\d{1,2}/g
+  return date.match(dateReg)
+}
+
+function fixIosDateFormat(value) {
+  // #ifndef MP
+  if (typeof value === 'string') {
+    value = value.replace(/-/g, '/')
+  }
+  // #endif
+  return value
+}
+
+export {Calendar, getDateTime, getDate, getTime, addZero, getDefaultSecond, dateCompare, checkDate, fixIosDateFormat}

@@ -1,188 +1,297 @@
 <template>
 	<view class="u-page">
-		<u-navbar
-			title="上拉菜单"
-			@leftClick="navigateBack"
-			safeAreaInsetTop
-			fixed
-			placeholder
-		></u-navbar>
-		<u-cell-group>
-			<u-cell
-				@click="openSheet(index)"
-				:title="item.title"
-				v-for="(item, index) in list"
-				:key="index"
-				isLink
-			>
-				<image
-					slot="icon"
-					class="u-cell-icon"
-					:src="item.iconUrl"
-					mode="widthFix"
-				></image>
-			</u-cell>
-		</u-cell-group>
-		<u-action-sheet
-			:show="show0"
-			@close="close"
-			@select="select"
-			:actions="actions0"
-			:closeOnClickOverlay="false"
-		>
-		</u-action-sheet>
-		<u-action-sheet
-			:show="show1"
-			@close="show1 = false"
-			:actions="actions1"
-		>
-		</u-action-sheet>
-		<u-action-sheet
-			:show="show2"
-			@close="show2 = false"
-			:actions="actions2"
-			cancelText="取消"
-		>
-		</u-action-sheet>
-		<u-action-sheet
-			:show="show3"
-			@close="show3 = false"
-			:actions="actions3"
-			description="这是一段描述文本,字号偏小,颜色偏淡"
-		>
-		</u-action-sheet>
-		<u-action-sheet
-			:show="show4"
-			@close="show4 = false"
-			title="标题位置"
-			:round="10"
-		>
-			<text style="margin: 10px 20px 30px 20px; color: #303133; font-size: 15px;">这是一段通过slot传入的内容,您可以在此自定义操作面板</text>
-		</u-action-sheet>
-		<u-action-sheet
-			:show="show5"
-			@close="show5 = false"
-			title="微信开放能力"
-			:actions="actions5"
-			@getuserinfo="getuserinfo"
-		></u-action-sheet>
+
+		<view class="u-page__item">
+			<uni-card class="background-blue" margin="0px" spacing="0px" shadow="0px" border="false">
+				<view class="u-input" style="margin-top: 2%;">
+					<view class="u-demo-block__content m-lr-0">
+						<u--input placeholder="搜索题库或试题答案" prefixIcon="search"
+							prefixIconStyle="font-size: 20px;color: #909399" shape="circle" v-model="searchValue"
+							@change="search" style="background-color: white;">
+						</u--input>
+					</view>
+				</view>
+
+				<view class="u-demo-block__content">
+					<u-row gutter="10" custom-style="margin-top:10px">
+						<u-col span="3" text-align="center" align="center">
+							<view>
+								<u-icon name="camera" size="40px" color="white"></u-icon>
+							</view>
+							<view>
+								<p style="color: white;"> 拍照搜题</p>
+							</view>
+						</u-col>
+						<u-col span="3" align="center">
+							<view>
+								<u-icon name="edit-pen" size="40px" color="white"></u-icon>
+							</view>
+							<view>
+								<p style="color: white;"> 添加笔记</p>
+							</view>
+						</u-col>
+						<u-col span="3" align="center">
+							<view>
+								<u-icon name="../../static/pic/upload2.svg" size="40px"></u-icon>
+							</view>
+							<view>
+								<p style="color: white;"> 上传题目</p>
+							</view>
+						</u-col>
+						<u-col span="3" align="center">
+							<view class="u-page__grid__item__icon">
+								<u-icon name="../../static/pic/note.svg" size="40px"></u-icon>
+							</view>
+							<view>
+								<p style="color: white;"> 题目集锦</p>
+							</view>
+						</u-col>
+					</u-row>
+				</view>
+
+			</uni-card>
+		</view>
+
+		<view>
+			<table class="table-style ">
+				<tr>
+					<td class="homePage-header"> 精选笔记 </td>
+					<td class="check-all"><a>查看全部</a></td>
+				</tr>
+			</table>
+		</view>
+
+
+		<view class="u-demo-block">
+			<u-scroll-list indicatorColor="#fff0f0" indicatorActiveColor="#00aaff" @right="right" @left="left"
+				indicatorStyle="margin-top : 0">
+				<view class="scroll-list m-middle-2" style="flex-direction: row;">
+					<view class="scroll-list__goods-item" v-for="(item, index) in notes" :key="index"
+						:class="[(index === 5) && 'scroll-list__goods-item--no-margin-right']">
+						<uni-card style="max-width: 350px; height: 140px; margin-top: 0px; margin-left: 0%;">
+							<view class="u-demo-block">
+								<text class="note-title">{{notes[0].note_title}}</text>
+								<view>
+									<u-row gutter="10">
+										<u-col span="8">
+											<view>
+												<p class="note-content"> {{item.note_content}}</p>
+											</view>
+										</u-col>
+
+										<u-col span="4">
+											<view style="max-width : 300px;">
+												<img :src="item.pic">
+											</view>
+										</u-col>
+									</u-row>
+								</view>
+							</view>
+						</uni-card>
+					</view>
+				</view>
+			</u-scroll-list>
+		</view>
+
+
+
+		<view class="u-page__item">
+			<u-tabbar :value="tabValue" @change="name => tabValue = name" :fixed="true" :placeholder="true"
+				:safeAreaInsetBottom="true">
+				<u-tabbar-item text="首页" icon="home"> </u-tabbar-item>
+				<u-tabbar-item text="分类" icon="grid"></u-tabbar-item>
+				<u-tabbar-item text="笔记" icon="file-text"></u-tabbar-item>
+				<u-tabbar-item text="我的" icon="account"></u-tabbar-item>
+			</u-tabbar>
+		</view>
 	</view>
 </template>
+
 <script>
 	export default {
 		data() {
 			return {
-				show0: false,
-				show1: false,
-				show2: false,
-				show3: false,
-				show4: false,
-				show5: false,
-				actions0: [{
-						name: '选项1',
+				searchValue: "",
+				tabValue: 0,
+				notes: [{
+						author_name: "Longxmas",
+						note_title: "二分查找",
+						note_content: "二分查找是一类常见的算法问题, 对于这种问题，尤其需要注意的就是细节以及边界条件的处理," +
+							"二分查找是一类常见的算法问题, 对于这种问题，尤其需要注意的就是细节以及边界条件的处理" +
+							"二分查找是一类常见的算法问题, 对于这种问题，尤其需要注意的就是细节以及边界条件的处理" +
+							"二分查找是一类常见的算法问题, 对于这种问题，尤其需要注意的就是细节以及边界条件的处理",
+						pic: "../../static/pic/binSearch.png"
 					},
 					{
-						name: '选项2',
+						author_name: "Longxmas",
+						note_title: "二分查找",
+						note_content: "二分查找是一类常见的算法问题",
+						pic: "../../static/pic/binSearch.png"
 					},
 					{
-						name: '选项3',
-						subname: '描述文本'
-					},
-				],
-				actions1: [{
-						name: '选项1',
+						author_name: "Longxmas",
+						note_title: "二分查找",
+						note_content: "二分查找是一类常见的算法问题, 对于这种问题，尤其需要注意的就是细节以及边界条件的处理",
+						pic: "../../static/pic/binSearch.png"
 					},
 					{
-						loading: true
+						author_name: "Longxmas",
+						note_title: "二分查找",
+						note_content: "二分查找是一类常见的算法问题",
+						pic: "../../static/pic/binSearch.png"
 					},
 					{
-						name: '选项被禁用',
-						disabled: true
-					},
-				],
-				actions2: [{
-						name: '选项1',
-					},
-					{
-						name: '选项2',
-					},
-					{
-						name: '选项3',
-					},
-				],
-				actions3: [{
-						name: '选项1',
-					},
-					{
-						name: '选项2',
-					},
-					{
-						name: '选项3',
-					},
-				],
-				actions5: [{
-					name: '获取用户信息',
-					openType: 'getUserInfo',
-					color: uni.$u.color['success']
-				}],
-				list: [{
-						title: '普通使用',
-						iconUrl: 'https://cdn.uviewui.com/uview/demo/actionSheet/custom.png'
-
-					},
-					{
-						title: '设置状态',
-						iconUrl: 'https://cdn.uviewui.com/uview/demo/actionSheet/status.png'
-					},
-					{
-						title: '显示取消按钮',
-						iconUrl: 'https://cdn.uviewui.com/uview/demo/actionSheet/cancel.png'
-					},
-					{
-						title: '描述内容',
-						iconUrl: 'https://cdn.uviewui.com/uview/demo/actionSheet/desc.png'
-					},
-					{
-						title: '显示标题(显示圆角)',
-						iconUrl: 'https://cdn.uviewui.com/uview/demo/actionSheet/title.png'
-					},
-					{
-						title: '微信开放能力',
-						iconUrl: 'https://cdn.uviewui.com/uview/demo/actionSheet/open.png'
+						author_name: "Longxmas",
+						note_title: "二分查找",
+						note_content: "二分查找是一类常见的算法问题",
+						pic: "../../static/pic/binSearch.png"
 					}
 				]
+			}
+		},
+		watch: {
+			searchValue(newValue, oldValue) {
+				// console.log('v-model', newValue);
 			}
 		},
 		onLoad() {
 
 		},
 		methods: {
-			// 点击cell，判断显示哪个功能
-			openSheet(index) {
-				// #ifndef MP
-				if (index === 5) return uni.$u.toast('请在微信内预览')
-				// #endif
-				this[`show${index}`] = true
+			click1(e) {
+				console.log('click1', e);
 			},
-			getuserinfo(res) {
-				uni.$u.toast(`用户名：${res.userInfo.nickName}`)
-			},
-			navigateBack() {
-				uni.navigateBack()
-			},
-			close() {
-				console.log('close');
-				this['show0'] = false
-			},
-			select(e) {
-				console.log('select', e);
+			search(e) {
+				console.log('searchChange', e);
 			}
-		}
+		},
 	}
 </script>
 
 <style lang="scss">
 	.u-page {
 		padding: 0;
+
+		&__item {
+
+			&__title {
+				color: $u-tips-color;
+				background-color: $u-bg-color;
+				padding: 15px;
+				font-size: 15px;
+
+				&__slot-title {
+					color: $u-primary;
+					font-size: 14px;
+				}
+			}
+
+			&__slot-icon {
+				width: 17px;
+				height: 17px;
+			}
+		}
+	}
+
+	.m-middle-5 {
+		margin-left: 5%;
+		margin-right: 5%;
+	}
+
+	.m-middle-2 {
+		width: 96%;
+		margin: auto;
+	}
+
+	.m-lr-0 {
+		margin-left: 0px;
+		margin-right: 0px;
+	}
+
+	.m-bt-0 {
+		margin-top: 0px;
+		margin-bottom: 0px;
+	}
+
+	.background-blue {
+		background-color: #00aaff;
+	}
+
+	.parent_center {
+		display: flex;
+		justify-content: center;
+		justify-items: center;
+	}
+
+	.notes-ul {
+		width: auto;
+		height: auto;
+		overflow: hidden;
+		overflow-x: scroll;
+		white-space: nowrap;
+		padding-left: 0;
+		/* ul中的内容不换行 */
+	}
+
+	.notes-ul li {
+		width: auto;
+		display: inline-block;
+		margin-right: 15px;
+		margin-bottom: 15px;
+	}
+
+	.homePage-header {
+		font-size: 20px;
+		font-weight: bold;
+	}
+
+	.check-all {
+		text-align: right;
+		font-size: 14px;
+		color: #00aaff;
+		font-weight: bold;
+		font-family: 'Times New Roman', Times, serif;
+	}
+
+	.note-img {
+		max-height: 150px;
+	}
+
+	.note-title {
+		font-size: 15px;
+		color: black;
+		font-weight: 500;
+		margin-bottom: 5px;
+	}
+
+	.note-content {
+		text-overflow: ellipsis;
+		overflow: hidden;
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 4;
+		line-height: 20px;
+		max-height: 80px;
+		font-family: 微软雅黑, serif;
+		font-size: 12px;
+		color: gray;
+		/*盒子宽自己设置想要的宽度*/
+		white-space: pre-wrap;
+		/*处理元素内的空白,保留空白符序列，但是正常地进行换行*/
+	}
+
+	.table-style {
+		width: 96%;
+		margin: auto;
+		margin-top: 30px;
+		margin-bottom: 10px;
+	}
+
+	.d1 {
+		text-align: left;
+	}
+
+	.d3 {
+		text-align: right;
 	}
 </style>

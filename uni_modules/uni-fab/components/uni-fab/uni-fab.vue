@@ -206,9 +206,6 @@
 			 * 按钮点击事件
 			 */
 			_onItemClick(index, item) {
-				if (!this.isShow) {
-					return
-				}
 				this.$emit('trigger', {
 					index,
 					item

@@ -148,7 +148,7 @@
 	}
 </script>
 
-<style lang="scss" >
+<style lang="scss" scoped>
 	.uni-combox {
 		font-size: 14px;
 		border: 1px solid #DCDFE6;

@@ -15,6 +15,13 @@
 	},
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
+			"path": "pages/example/components",
+			"style": {
+				"navigationBarTitleText": "uView UI"
+			}
+		},
+		
+		{
 			"path": "pages/note/note",
 			"style": {
 				"navigationBarTitleText": "笔记",
@@ -23,12 +30,7 @@
 			}
 		},
 		
-		{
-			"path": "pages/example/components",
-			"style": {
-				"navigationBarTitleText": "uView UI"
-			}
-		},
+
 		// {
 		// 	"path": "pages/note/note",
 		// 	"style": {
