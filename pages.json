@@ -8,10 +8,10 @@
 	// 	}]
 	// },
 	"easycom": {
-	    "autoscan": true,
-	    "custom": {
-	        "^i-icon": "@/uni_modules/i-icon/components/i-icon/i-icon.vue"
-	    }
+		"autoscan": true,
+		"custom": {
+			"^i-icon": "@/uni_modules/i-icon/components/i-icon/i-icon.vue"
+		}
 	},
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
@@ -20,7 +20,7 @@
 				"navigationBarTitleText": "uView UI"
 			}
 		},
-		
+
 		{
 			"path": "pages/note/note",
 			"style": {
@@ -29,7 +29,7 @@
 				"navigationStyle": "custom"
 			}
 		},
-		
+
 
 		// {
 		// 	"path": "pages/note/note",
@@ -39,17 +39,16 @@
 		// 		"navigationStyle": "custom"
 		// 	}
 		// },
-	    
-	    {
-            "path" : "pages/homePage/homePage",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-    ],
+
+		{
+			"path": "pages/homePage/homePage",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+
+		}
+	],
 	"subPackages": [{
 		"root": "pages/componentsA",
 		"pages": [

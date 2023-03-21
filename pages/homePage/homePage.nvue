@@ -1,8 +1,8 @@
 <template>
 	<view class="u-page">
 
-		<view class="u-page__item">
-			<uni-card class="background-blue" margin="0px" spacing="0px" shadow="0px" border="false">
+		<view class="u-page__item" style="margin-bottom: 20px;">
+			<uni-card class="background-blue" margin="0px" spacing="0px" shadow="0px">
 				<view class="u-input" style="margin-top: 2%;">
 					<view class="u-demo-block__content m-lr-0">
 						<u--input placeholder="搜索题库或试题答案" prefixIcon="search"
@@ -19,7 +19,7 @@
 								<u-icon name="camera" size="40px" color="white"></u-icon>
 							</view>
 							<view>
-								<p style="color: white;"> 拍照搜题</p>
+								<p style="color: white;" class="puhui"> 拍照搜题</p>
 							</view>
 						</u-col>
 						<u-col span="3" align="center">
@@ -27,7 +27,7 @@
 								<u-icon name="edit-pen" size="40px" color="white"></u-icon>
 							</view>
 							<view>
-								<p style="color: white;"> 添加笔记</p>
+								<p style="color: white;" class="puhui"> 添加笔记</p>
 							</view>
 						</u-col>
 						<u-col span="3" align="center">
@@ -35,7 +35,7 @@
 								<u-icon name="../../static/pic/upload2.svg" size="40px"></u-icon>
 							</view>
 							<view>
-								<p style="color: white;"> 上传题目</p>
+								<p style="color: white;" class="puhui"> 上传题库</p>
 							</view>
 						</u-col>
 						<u-col span="3" align="center">
@@ -43,7 +43,7 @@
 								<u-icon name="../../static/pic/note.svg" size="40px"></u-icon>
 							</view>
 							<view>
-								<p style="color: white;"> 题目集锦</p>
+								<p style="color: white;" class="puhui"> 题目集锦</p>
 							</view>
 						</u-col>
 					</u-row>
@@ -68,21 +68,37 @@
 				<view class="scroll-list m-middle-2" style="flex-direction: row;">
 					<view class="scroll-list__goods-item" v-for="(item, index) in notes" :key="index"
 						:class="[(index === 5) && 'scroll-list__goods-item--no-margin-right']">
-						<uni-card style="max-width: 350px; height: 140px; margin-top: 0px; margin-left: 0%;">
+						<uni-card style="max-width: 350px; margin-top: 0px; margin-left: 0%;" isShadow="true"
+							border="true" padding="15px 5px 0px 5px">
 							<view class="u-demo-block">
 								<text class="note-title">{{notes[0].note_title}}</text>
 								<view>
-									<u-row gutter="10">
+									<u-row gutter="10" style="height: 90px;">
 										<u-col span="8">
 											<view>
 												<p class="note-content"> {{item.note_content}}</p>
 											</view>
 										</u-col>
-
 										<u-col span="4">
 											<view style="max-width : 300px;">
 												<img :src="item.pic">
 											</view>
+										</u-col>
+									</u-row>
+									<u-row style="margin-top: 5px;margin-bottom: 0;">
+										<u-col span="2">
+											<u-icon name="../../static/pic/like.svg" size="30px"></u-icon>
+										</u-col>
+										<u-col span="3" align="start">
+											<u-button class="button-layout__item" style="width: 30px;" text="114"
+												size="mini" color="#00aaff"></u-button>
+										</u-col>
+										<u-col span="2">
+											<u-icon name="../../static/pic/star.svg" size="30px"></u-icon>
+										</u-col>
+										<u-col span="3">
+											<u-button class="button-layout__item" style="width: 30px;" text="514"
+												size="mini" type="warning"></u-button>
 										</u-col>
 									</u-row>
 								</view>
@@ -91,6 +107,46 @@
 					</view>
 				</view>
 			</u-scroll-list>
+		</view>
+
+		<view>
+			<table class="table-style ">
+				<tr>
+					<td class="homePage-header"> 我的题库 </td>
+					<td class="check-all"><a>查看全部</a></td>
+				</tr>
+			</table>
+		</view>
+
+		<view class="u-demo-block">
+			<u-list style="width: 96%; margin: auto; max-height: 300px; margin-top: 3%;">
+				<u-list-item v-for="(item, index) in questionBank" :key="index">
+					<uni-card style="margin-top: 0%;margin-bottom: 0%;" spacing="0" padding="0">
+						<view>
+							<u-row>
+								<u-col span="3" align="start">
+									<view>
+										<u-icon name="../../static/pic/qb.svg" size="50px"></u-icon>
+									</view>
+								</u-col>
+
+								<u-col span="9" align="start">
+									<div class="shuhei" >
+										<p style="font-size: 16px;">{{item.qbName}}</p>
+									</div>
+									<div>
+										{{item.question_number}} 道题目 
+										&ensp; &ensp;
+										{{item.created_at}}
+									</div>
+								</u-col>
+							</u-row>
+							<u-divider v-if="(index != 3)"> </u-divider>
+						</view>
+					</uni-card>
+
+				</u-list-item>
+			</u-list>
 		</view>
 
 
@@ -146,7 +202,32 @@
 						note_content: "二分查找是一类常见的算法问题",
 						pic: "../../static/pic/binSearch.png"
 					}
-				]
+				],
+				questionBank: [{
+						qbName: "数据结构",
+						created_at: "2023-03-21",
+						question_number: "114",
+						pic: "../../static/pic/dataStructure.jpg",
+					},
+					{
+						qbName: "航空航天概论",
+						created_at: "2023-03-21",
+						question_number: "514",
+						pic: "../../static/pic/hanggai.jpg",
+					},
+					{
+						qbName: "数据结构",
+						created_at: "2023-03-21",
+						question_number: "114",
+						pic: "../../static/pic/dataStructure.jpg",
+					},
+					{
+						qbName: "数据结构",
+						created_at: "2023-03-21",
+						question_number: "114",
+						pic: "../../static/pic/dataStructure.jpg",
+					},
+				],
 			}
 		},
 		watch: {
@@ -242,7 +323,7 @@
 
 	.homePage-header {
 		font-size: 20px;
-		font-weight: bold;
+		font-family: alimama_shuhei;
 	}
 
 	.check-all {
@@ -283,7 +364,6 @@
 	.table-style {
 		width: 96%;
 		margin: auto;
-		margin-top: 30px;
 		margin-bottom: 10px;
 	}
 
@@ -293,5 +373,17 @@
 
 	.d3 {
 		text-align: right;
+	}
+
+	.shuhei {
+		font-family: alimama_shuhei;
+	}
+
+	.dakai {
+		font-family: alimama_dakai;
+	}
+
+	.puhui {
+		font-family: alibaba_puhui;
 	}
 </style>

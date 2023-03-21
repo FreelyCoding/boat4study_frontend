@@ -1,0 +1,21 @@
+	@font-face {
+	  font-family: "alimama_dakai";
+	  font-weight: 400;
+	  src: url('./Alimama_Regular.ttf');
+	  font-display: swap;
+	}
+	
+	@font-face {
+	  font-family: "alimama_shuhei";
+	  font-weight: 400;
+	  src: url('./Alimama_ShuHei.ttf');
+	  font-display: swap;
+	}
+	
+	
+	@font-face {
+	  font-family: "alibaba_puhui";
+	  font-weight: 400;
+	  src: url('./Alibaba_PuHui.ttf');
+	  font-display: swap;
+	}
