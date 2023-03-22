@@ -8,7 +8,7 @@ import store from './store'
 import uView from '@/uni_modules/uview-ui'
 
 import mixin from './common/mixin'
-import './assets/style/font.css';
+import '@/assets/style/font.css';
 
 Vue.prototype.$store = store
 
