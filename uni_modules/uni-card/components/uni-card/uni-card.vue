@@ -98,7 +98,7 @@
 			isShadow: {
 				// 是否开启阴影
 				type: Boolean,
-				default: true
+				default: false
 			},
 			shadow: {
 				type: String,
@@ -106,7 +106,7 @@
 			},
 			border: {
 				type: Boolean,
-				default: true
+				default: false
 			}
 		},
 		methods: {

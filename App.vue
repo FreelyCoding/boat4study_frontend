@@ -15,5 +15,6 @@
 	/*每个页面公共css公共CSS */
 	@import "@/uni_modules/uview-ui/index.scss";
 	@import "common/demo.scss";
+	@import "@/static/iconfont.css";
 	
 </style>

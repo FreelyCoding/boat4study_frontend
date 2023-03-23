@@ -1,95 +1,166 @@
 <template>
 	<view class="u-page">
-		<view class="u-page__item">
-			<uni-card class="background-blue" margin="0px" spacing="0px" shadow="0px" border="false">
-				<view class="u-input" style="margin-top: 2%;">
-					<view class="u-demo-block__content m-lr-0">
-						<u--input placeholder="搜索题库或试题答案" prefixIcon="search"
-							prefixIconStyle="font-size: 20px;color: #909399" shape="circle" v-model="searchValue"
-							@change="search" style="background-color: white;">
-						</u--input>
-					</view>
+		<view class="u-page__item" style="margin-bottom: 20px;">
+			<div class="background-blue">
+				<view class="u-input m-middle-2" style="margin-top: 20px">
+					<u--input placeholder="搜索题库或试题答案" prefixIcon="search"
+						prefixIconStyle="font-size: 20px;color: #909399" shape="circle" v-model="searchValue"
+						customStyle="background-color: white;">
+					</u--input>
 				</view>
 
-				<view class="u-demo-block__content">
-					<u-row gutter="10" custom-style="margin-top:10px">
-						<u-col span="3" text-align="center" align="center">
-							<view>
+				<view class="u-demo-block__content" style="margin-top: 5px; margin-bottom: 5px;">
+					<uni-row class="demo-uni-row" :gutter="gutter" :width="nvueWidth">
+						<uni-col :span="6">
+							<view style="margin: auto;">
 								<u-icon name="camera" size="40px" color="white"></u-icon>
 							</view>
-							<view>
-								<p style="color: white;"> 拍照搜题</p>
+							<view style="margin: auto;">
+								<p style="color: white; font-size: 14px;"> 拍照搜题</p>
 							</view>
-						</u-col>
-						<u-col span="3" align="center">
-							<view>
+						</uni-col>
+						<uni-col :span="6">
+							<view style="margin: auto;">
 								<u-icon name="edit-pen" size="40px" color="white"></u-icon>
 							</view>
-							<view>
-								<p style="color: white;"> 添加笔记</p>
+							<view style="margin: auto;">
+								<p style="color: white; font-size: 14px;"> 添加笔记 </p>
 							</view>
-						</u-col>
-						<u-col span="3" align="center">
-							<view>
-								<u-icon name="../../static/pic/upload2.svg" size="40px"></u-icon>
+						</uni-col>
+						<uni-col :span="6">
+							<view style="margin: auto;">
+								<u-icon name="/static/pic/upload2.svg" size="40px" color="white"></u-icon>
 							</view>
-							<view>
-								<p style="color: white;"> 上传题目</p>
+							<view style="margin: auto;">
+								<p style="color: white; font-size: 14px;"> 上传题库 </p>
 							</view>
-						</u-col>
-						<u-col span="3" align="center">
-							<view class="u-page__grid__item__icon">
-								<u-icon name="../../static/pic/note.svg" size="40px"></u-icon>
+						</uni-col>
+						<uni-col :span="6">
+							<view style="margin: auto;">
+								<u-icon name="/static/pic/note.svg" size="40px" color="white"></u-icon>
 							</view>
-							<view>
-								<p style="color: white;"> 题目集锦</p>
+							<view style="margin: auto;">
+								<p style="color: white; font-size: 14px;"> 题目集锦</p>
 							</view>
-						</u-col>
-					</u-row>
+						</uni-col>
+					</uni-row>
 				</view>
-
-			</uni-card>
+			</div>
 		</view>
 
-		<view>
-			<table class="table-style ">
-				<tr>
-					<td class="homePage-header"> 精选笔记 </td>
-					<td class="check-all"><a>查看全部</a></td>
-				</tr>
-			</table>
+		<view class="m-middle-2">
+			<uni-row>
+				<uni-col span="12">
+					<view>
+						<p class="homePage-header"> 精选笔记</p>
+					</view>
+				</uni-col>
+
+				<uni-col span="12">
+					<view>
+						<p class="check-all">查看全部</p>
+					</view>
+				</uni-col>
+			</uni-row>
 		</view>
 
 
-		<view class="u-demo-block">
-			<u-scroll-list indicatorColor="#fff0f0" indicatorActiveColor="#00aaff" @right="right" @left="left"
-				indicatorStyle="margin-top : 0">
-				<view class="scroll-list m-middle-2" style="flex-direction: row;">
-					<view class="scroll-list__goods-item" v-for="(item, index) in notes" :key="index"
-						:class="[(index === 5) && 'scroll-list__goods-item--no-margin-right']">
-						<uni-card style="max-width: 350px; height: 140px; margin-top: 0px; margin-left: 0%;">
+		<view class=" m-middle-2">
+			<u-scroll-list indicatorColor="#fff0f0" indicatorActiveColor="#00aaff" indicatorStyle="margin-top : 0">
+				<view class="scroll-list" style="flex-direction: row;">
+					<view class="scroll-list__goods-item" v-for="(item, index) in notes" :key="index">
+						<uni-card style="max-width: 350px;" isShadow="true" border="true" padding="15px 5px 0px 5px"
+							margin="15px 20px 20px 0px">
 							<view class="u-demo-block">
-								<text class="note-title">{{notes[0].note_title}}</text>
+								<text class="note-title">{{item.note_title}}</text>
 								<view>
-									<u-row gutter="10">
-										<u-col span="8">
-											<view>
-												<p class="note-content"> {{item.note_content}}</p>
-											</view>
-										</u-col>
+									<view>
+										<uni-row gutter="20" style="height: 90px;">
+											<uni-col span="15">
+												<view>
+													<p class="note-content"> {{item.note_content}}</p>
+												</view>
+											</uni-col>
+											<uni-col span="8">
+												<view style="width: 140px; height: 80px;">
+													<image :src="item.pic" style="width: 120px; height: 80px;"></image>
+												</view>
+											</uni-col>
+										</uni-row>
+									</view>
 
-										<u-col span="4">
-											<view style="max-width : 300px;">
-												<img :src="item.pic">
-											</view>
-										</u-col>
-									</u-row>
+									<view style="margin-top: 10px;margin-bottom: 0;">
+										<uni-row>
+											<uni-col span="4">
+												<u-icon name="/static/pic/like.svg" size="30px"></u-icon>
+											</uni-col>
+											<uni-col span="8">
+												<button type="primary" size="mini"
+													style="width: 60px; background-color: #00aaff;"> 114</button>
+											</uni-col>
+											<uni-col span="4">
+												<u-icon name="/static/pic/star.svg" size="30px"></u-icon>
+											</uni-col>
+											<uni-col span="8">
+												<button size="mini"
+													style="width: 60px; background-color: #f9ae3d; color: white;">
+													514</button>
+											</uni-col>
+										</uni-row>
+									</view>
 								</view>
 							</view>
 						</uni-card>
 					</view>
 				</view>
 			</u-scroll-list>
+		</view>
+
+		<view class="m-middle-2">
+			<uni-row>
+				<uni-col span="12">
+					<view>
+						<p class="homePage-header"> 我的题库</p>
+					</view>
+				</uni-col>
+
+				<uni-col span="12">
+					<view>
+						<p class="check-all">查看全部</p>
+					</view>
+				</uni-col>
+			</uni-row>
+		</view>
+
+		<view class="u-demo-block">
+			<u-list customStyle="width: 94%; margin: auto; max-height: 350px; margin-top: 15px;">
+				<u-list-item v-for="(item, index) in questionBank" :key="index">
+					<uni-card spacing="0" padding="0" margin="10px 0px 0px 0px">
+						<view>
+							<uni-row>
+								<uni-col span="6" align="start">
+									<view>
+										<u-icon name="/static/pic/qb.svg" size="50px"></u-icon>
+									</view>
+								</uni-col>
+
+								<uni-col span="18" align="start">
+									<div class="shuhei">
+										<p style="font-size: 16px;">{{item.qbName}}</p>
+									</div>
+									<div>
+										{{item.question_number}} 道题目
+										&ensp; &ensp;
+										{{item.created_at}}
+									</div>
+								</uni-col>
+							</uni-row>
+							<u-divider v-if="(index != 3)"> </u-divider>
+						</view>
+					</uni-card>
+
+				</u-list-item>
+			</u-list>
 		</view>
 
 
@@ -145,7 +216,32 @@
 						note_content: "二分查找是一类常见的算法问题",
 						pic: "../../static/pic/binSearch.png"
 					}
-				]
+				],
+				questionBank: [{
+						qbName: "数据结构",
+						created_at: "2023-03-21",
+						question_number: "114",
+						pic: "../../static/pic/dataStructure.jpg",
+					},
+					{
+						qbName: "航空航天概论",
+						created_at: "2023-03-21",
+						question_number: "514",
+						pic: "../../static/pic/hanggai.jpg",
+					},
+					{
+						qbName: "数据结构",
+						created_at: "2023-03-21",
+						question_number: "114",
+						pic: "../../static/pic/dataStructure.jpg",
+					},
+					{
+						qbName: "数据结构",
+						created_at: "2023-03-21",
+						question_number: "114",
+						pic: "../../static/pic/dataStructure.jpg",
+					},
+				],
 			}
 		},
 		watch: {
@@ -240,11 +336,12 @@
 	}
 
 	.homePage-header {
-		font-size: 20px;
-		font-weight: bold;
+		font-size: 24px;
+		font-family: shuhei;
 	}
 
 	.check-all {
+		padding-top: 6px;
 		text-align: right;
 		font-size: 14px;
 		color: #00aaff;
@@ -259,7 +356,7 @@
 	.note-title {
 		font-size: 15px;
 		color: black;
-		font-weight: 500;
+		font-weight: bold;
 		margin-bottom: 5px;
 	}
 
@@ -282,7 +379,6 @@
 	.table-style {
 		width: 96%;
 		margin: auto;
-		margin-top: 30px;
 		margin-bottom: 10px;
 	}
 
@@ -292,5 +388,17 @@
 
 	.d3 {
 		text-align: right;
+	}
+
+	.shuhei {
+		font-family: shuhei;
+	}
+
+	.dakai {
+		font-family: alimama_dakai;
+	}
+
+	.puhui {
+		font-family: alibaba_puhui;
 	}
 </style>

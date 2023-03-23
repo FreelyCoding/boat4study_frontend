@@ -96,7 +96,7 @@
     },
     "quickapp" : {},
     "mp-weixin" : {
-        "appid" : "wxd35b22af8a094b1e",
+        "appid" : "wx997102d02ee52e97",
         "setting" : {
             "urlCheck" : false,
             "es6" : false,
@@ -106,7 +106,8 @@
         "optimization" : {
             "subPackages" : true
         },
-        "usingComponents" : true
+        "usingComponents" : true,
+        "permission" : {}
     },
     "mp-alipay" : {
         "usingComponents" : true,

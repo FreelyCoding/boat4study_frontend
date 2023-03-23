@@ -1,24 +1,26 @@
 <template>
 	<view>
-		<view class="status-bar"></view>
+		<view class="status-bar">
+			
+		</view>
 		
 		<view class="container">
 			<!--自定义navbar-->
 			<view>
-				<view class="box-bg">
-					<uni-nav-bar shadow="true" title="新建笔记">
+				<view>
+					
+					<uni-nav-bar shadow="true" title="笔记">
 						
 						<block slot="left">
 							<view class="note-navbar">
-								<uni-icons type="closeempty" color="#666" size="18" />
+								<i-icon size="20px" color="#666" name="arrow-left-line"></i-icon>
 							</view>
 						</block>
 						
 						<block slot="right">
 							<view class="note-navbar">
-								<i-icon size="18px" color="#666" name="price-tag-fill"></i-icon>
-								<i-icon size="18px" color="#666" name="more-2-fill"></i-icon>
-								<uni-icons type="checkmarkempty" color="#666" size="18"></uni-icons>
+								<i-icon size="20px" color="#666" name="share-fill"></i-icon>
+								<i-icon size="20px" color="#666" name="more-2-fill"></i-icon>
 							</view>
 							
 						</block>
@@ -27,7 +29,7 @@
 			</view>
 			
 			<view class="title_wrapper">
-				<textarea class="title" :placeholder="title_placeholder" :maxlength="title_maxlength" placeholder-class="title_placeholder"></textarea>
+				<textarea class="title" :maxlength="title_maxlength" :value="title" disabled="true"></textarea>
 			</view>
 			
 			<!--分界线-->
@@ -38,67 +40,43 @@
 				<view class='wrapper'>
 				
 					<view class="editor-wrapper">
-						<editor id="editor" class="ql-container" :placeholder="content_placeholder" showImgSize showImgToolbar showImgResize
+						<editor id="editor" class="ql-container" showImgSize showImgToolbar showImgResize
 						 @statuschange="onStatusChange" :read-only="readOnly" @ready="onEditorReady">
 						</editor>
 					</view>
-					
-					<view class='toolbar' @tap="format" style="height: 120px;overflow-y: auto;">
-						<view :class="formats.bold ? 'ql-active' : ''" class="iconfont icon-zitijiacu" data-name="bold"></view>
-						<view :class="formats.italic ? 'ql-active' : ''" class="iconfont icon-zitixieti" data-name="italic"></view>
-						<view :class="formats.underline ? 'ql-active' : ''" class="iconfont icon-zitixiahuaxian" data-name="underline"></view>
-						<view :class="formats.strike ? 'ql-active' : ''" class="iconfont icon-zitishanchuxian" data-name="strike"></view>
-						<view :class="formats.align === 'left' ? 'ql-active' : ''" class="iconfont icon-zuoduiqi" data-name="align"
-						 data-value="left"></view>
-						<view :class="formats.align === 'center' ? 'ql-active' : ''" class="iconfont icon-juzhongduiqi" data-name="align"
-						 data-value="center"></view>
-						<view :class="formats.align === 'right' ? 'ql-active' : ''" class="iconfont icon-youduiqi" data-name="align"
-						 data-value="right"></view>
-						<view :class="formats.align === 'justify' ? 'ql-active' : ''" class="iconfont icon-zuoyouduiqi" data-name="align"
-						 data-value="justify"></view>
-						<view :class="formats.lineHeight ? 'ql-active' : ''" class="iconfont icon-line-height" data-name="lineHeight"
-						 data-value="2"></view>
-						<view :class="formats.letterSpacing ? 'ql-active' : ''" class="iconfont icon-Character-Spacing" data-name="letterSpacing"
-						 data-value="2em"></view>
-						<view :class="formats.marginTop ? 'ql-active' : ''" class="iconfont icon-722bianjiqi_duanqianju" data-name="marginTop"
-						 data-value="20px"></view>
-						<view :class="formats.previewarginBottom ? 'ql-active' : ''" class="iconfont icon-723bianjiqi_duanhouju" data-name="marginBottom"
-						 data-value="20px"></view>
-						<view class="iconfont icon-clearedformat" @tap="removeFormat"></view>
-						<view :class="formats.fontFamily ? 'ql-active' : ''" class="iconfont icon-font" data-name="fontFamily" data-value="Pacifico"></view>
-						<view :class="formats.fontSize === '24px' ? 'ql-active' : ''" class="iconfont icon-fontsize" data-name="fontSize"
-						 data-value="24px"></view>
-					
-						<view :class="formats.color === '#0000ff' ? 'ql-active' : ''" class="iconfont icon-text_color" data-name="color"
-						 data-value="#0000ff"></view>
-						<view :class="formats.backgroundColor === '#00ff00' ? 'ql-active' : ''" class="iconfont icon-fontbgcolor"
-						 data-name="backgroundColor" data-value="#00ff00"></view>
-					
-						<view class="iconfont icon-date" @tap="insertDate"></view>
-						<view class="iconfont icon--checklist" data-name="list" data-value="check"></view>
-						<view :class="formats.list === 'ordered' ? 'ql-active' : ''" class="iconfont icon-youxupailie" data-name="list"
-						 data-value="ordered"></view>
-						<view :class="formats.list === 'bullet' ? 'ql-active' : ''" class="iconfont icon-wuxupailie" data-name="list"
-						 data-value="bullet"></view>
-						<view class="iconfont icon-undo" @tap="undo"></view>
-						<view class="iconfont icon-redo" @tap="redo"></view>
-					
-						<view class="iconfont icon-outdent" data-name="indent" data-value="-1"></view>
-						<view class="iconfont icon-indent" data-name="indent" data-value="+1"></view>
-						<view class="iconfont icon-fengexian" @tap="insertDivider"></view>
-						<view class="iconfont icon-charutupian" @tap="insertImage"></view>
-						<view :class="formats.header === 1 ? 'ql-active' : ''" class="iconfont icon-format-header-1" data-name="header"
-						 :data-value="1"></view>
-						<view :class="formats.script === 'sub' ? 'ql-active' : ''" class="iconfont icon-zitixiabiao" data-name="script"
-						 data-value="sub"></view>
-						<view :class="formats.script === 'super' ? 'ql-active' : ''" class="iconfont icon-zitishangbiao" data-name="script"
-						 data-value="super"></view>
-						<view class="iconfont icon-shanchu" @tap="clear"></view>
-						<view :class="formats.direction === 'rtl' ? 'ql-active' : ''" class="iconfont icon-direction-rtl" data-name="direction"
-						 data-value="rtl"></view>
-					</view>
 				</view>
 			</view>
+			
+			<!-- <uni-fab class="fab" horizontal="right" vertical="bottom" icon="icon-edit" -->
+						<!-- icon_size="28" :pattern="pattern"/> -->
+						
+						
+			<!--悬浮按钮-->
+			<uni-fab ref="fab" horizontal="right" vertical="bottom" 
+			direction="horizontal" :content="content" @trigger="trigger"></uni-fab>
+			
+			
+			<u-line></u-line>
+			
+			<!--评论-->
+			<comment-eg :articleId="'article1'"></comment-eg>
+			
+			<!-- <uni-list :border="false"> -->
+				
+				<!-- <uni-list-chat v-for="item in listData" :avatar-circle="true" :key="item.id" :title="item.author_name" :avatar="item.cover" -->
+				 <!-- :note="item.title" :time="item.published_at" :clickable="false">				 -->
+
+					<!-- <view class="chat-custom-right"> -->
+						<!-- <text class="chat-custom-text">刚刚</text> -->
+						<!-- 需要使用 uni-icons 请自行引入 -->
+						<!-- <i-icon name="thumb-up-line"></i-icon> -->
+						<!-- <uni-icons type="checkempty" color="#999" size="18"></uni-icons> -->
+					<!-- </view> -->
+
+				<!-- </uni-list-chat> -->
+				
+			<!-- </uni-list> -->
+			
 		</view>
 	</view>
 </template>
@@ -107,27 +85,62 @@
 	export default {
 		data() {
 			return {
-				readOnly: false,
+				title: "基物实验笔记",
+				readOnly: true,
 				formats: {},
-				title_placeholder: "笔记标题",
 				title_maxlength: 50,
-				content_placeholder: "笔记内容"
+				
+				pattern: {
+					buttonColor: "#f3f4f6",
+					iconColor: "#18b566"
+				},
+				
+				content: [{
+						iconPath: '/static/pic/note/edit-fill.png',
+						selectedIconPath: '/static/pic/note/edit-fill-active.png',
+						text: '编辑',
+						active: false
+					},
+					{
+						iconPath: '/static/pic/note/heart.png',
+						selectedIconPath: '/static/pic/note/heart-active.png',
+						text: '喜欢',
+						active: false
+					},
+					{
+						iconPath: '/static/pic/note/star.png',
+						selectedIconPath: '/static/pic/note/star-active.png',
+						text: '收藏',
+						active: false
+					}
+				],
+				
+				listData: [
+					{
+						id: "1",
+						author_name: "用户1",
+						cover: "https://img.36krcdn.com/20200406/v2_d2c6a686b4074a1eb43603e67d6ba204_img_png",
+						title: "测试内容",
+						published_at: "2020-02-02 20:20"
+					},
+					{
+						id: "2",
+						author_name: "用户2",
+						cover: "https://img.36krcdn.com/20200406/v2_d2c6a686b4074a1eb43603e67d6ba204_img_png",
+						title: "helloghrweuioheeo",
+						published_at: "2020-02-02 20:20"
+					}
+				]
 			}
 		},
 		methods: {
-			readOnlyChange() {
-				this.readOnly = !this.readOnly
-			},
 			onEditorReady() {
 				uni.createSelectorQuery().select('#editor').context((res) => {
-					this.editorCtx = res.context
+					// this.editorCtx = res.context
+					res.context.setContents({
+						html: "<p><strong>基物实验</strong></p><p><em>111</em></p><p><em><s><u>diwjfweiohu</u></s></em></p>"
+					});
 				}).exec()
-			},
-			undo() {
-				this.editorCtx.undo()
-			},
-			redo() {
-				this.editorCtx.redo()
 			},
 			format(e) {
 				let {
@@ -142,44 +155,22 @@
 				const formats = e.detail
 				this.formats = formats
 			},
-			insertDivider() {
-				this.editorCtx.insertDivider({
-					success: function() {
-						console.log('insert divider success')
-					}
-				})
+			
+			trigger(e) {
+				// console.log(e)
+				this.content[e.index].active = !e.item.active
+				// uni.showModal({
+				// 	title: '提示',
+				// 	content: `您${this.content[e.index].active ? '选中了' : '取消了'}${e.item.text}`,
+				// 	success: function(res) {
+				// 		if (res.confirm) {
+				// 			console.log('用户点击确定')
+				// 		} else if (res.cancel) {
+				// 			console.log('用户点击取消')
+				// 		}
+				// 	}
+				// })
 			},
-			clear() {
-				this.editorCtx.clear({
-					success: function(res) {
-						console.log("clear success")
-					}
-				})
-			},
-			removeFormat() {
-				this.editorCtx.removeFormat()
-			},
-			insertDate() {
-				const date = new Date()
-				const formatDate = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`
-				this.editorCtx.insertText({
-					text: formatDate
-				})
-			},
-			insertImage() {
-				uni.chooseImage({
-					count: 1,
-					success: (res) => {
-						this.editorCtx.insertImage({
-							src: res.tempFilePaths[0],
-							alt: '图像',
-							success: function() {
-								console.log('insert image success')
-							}
-						})
-					}
-				})
-			}
 		}
 	}
 </script>
@@ -190,12 +181,9 @@
 	/* navbar css */
 	/* $nav-height: 30px;
 	 */
-
 	.status-bar {
 		height: var(--status-bar-height);
 		width: 100%;
-		position: fixed;
-		top: 0;
 	}
 	
 	.navbar {
