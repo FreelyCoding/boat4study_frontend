@@ -160,6 +160,9 @@ export default {
 							key: 'token',
 							data: res.data.token
 						})
+						uni.navigateTo({
+							url: '/pages/homePage/homePage'
+						})
 					}
 					this.query(e);
 				},

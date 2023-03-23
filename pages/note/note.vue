@@ -8,12 +8,10 @@
 			<!--自定义navbar-->
 			<view>
 				<view>
-					
 					<uni-nav-bar shadow="true" title="笔记">
-						
 						<block slot="left">
-							<view class="note-navbar">
-								<i-icon size="20px" color="#666" name="arrow-left-line"></i-icon>
+							<view class="note-navbar" >
+								<i-icon size="20px" color="#666" name="arrow-left-line" ></i-icon>
 							</view>
 						</block>
 						
