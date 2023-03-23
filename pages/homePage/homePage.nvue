@@ -1,6 +1,5 @@
 <template>
 	<view class="u-page">
-
 		<view class="u-page__item">
 			<uni-card class="background-blue" margin="0px" spacing="0px" shadow="0px" border="false">
 				<view class="u-input" style="margin-top: 2%;">
