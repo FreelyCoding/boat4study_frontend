@@ -1,12 +1,15 @@
 <template>
 	<view>
-		<view class="status-bar"></view>
+		<view class="status-bar">
+			
+		</view>
 		
 		<view class="container">
 			<!--自定义navbar-->
 			<view>
-				<view class="box-bg">
-					<uni-nav-bar shadow="true" title="笔记" fixed="true">
+				<view>
+					
+					<uni-nav-bar shadow="true" title="笔记">
 						
 						<block slot="left">
 							<view class="note-navbar">
@@ -181,8 +184,6 @@
 	.status-bar {
 		height: var(--status-bar-height);
 		width: 100%;
-		position: fixed;
-		top: 0;
 	}
 	
 	.navbar {
