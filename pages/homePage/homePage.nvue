@@ -21,21 +21,21 @@
 							</view>
 						</uni-col>
 						<uni-col :span="6">
-							<view style="margin: auto;">
+							<view style="margin: auto;"  @click="jumpoToCreateNote()">
 								<u-icon name="/static/pic/edit2.svg" size="40px" color="white"></u-icon>
 							</view>
-							<view style="margin: auto;">
-								<a href="/pages/note/note" style="text-decoration: none;">
-									<p style="color: white; font-size: 14px;"> 添加笔记 </p>
-								</a>
+							<view style="margin: auto;" >
+								<p style="color: white; font-size: 14px;" > 添加笔记 </p>
 							</view>
 						</uni-col>
 						<uni-col :span="6">
-							<view style="margin: auto;">
+							<view style="margin: auto;" @click="jumpoToUploadProblem()">
 								<u-icon name="/static/pic/upload2.svg" size="40px" color="white"></u-icon>
 							</view>
 							<view style="margin: auto;">
-								<p style="color: white; font-size: 14px;"> 上传题库 </p>
+								<a href="/pages/problemCreate/problemCreate" style="text-decoration: none;">
+									<p style="color: white; font-size: 14px;"> 上传题库 </p>
+								</a>
 							</view>
 						</uni-col>
 						<uni-col :span="6">
@@ -55,7 +55,7 @@
 			<uni-row>
 				<uni-col span="12">
 					<view>
-						<p class="homePage-header"> 精选笔记</p>
+						<p class="homePage-header" @click="jumpToComponents()"> 精选笔记</p>
 					</view>
 				</uni-col>
 
@@ -247,12 +247,22 @@
 		methods: {
 			jumpToPerson() {
 				uni.navigateTo({
-					url: "/pages/personal/personal"
+					url: "/pages/note/note"
 				})
 			},
 			jumpToComponents() {
 				uni.navigateTo({
 					url: "/pages/example/components"
+				})
+			},
+			jumpoToCreateNote() {
+				uni.navigateTo({
+					url: "/pages/note/create_note"
+				})
+			},
+			jumpoToUploadProblem() {
+				uni.navigateTo({
+					url: "/pages/problemCreate/problemCreate"
 				})
 			},
 			click1(e) {

@@ -4,11 +4,12 @@
 		<view class="status-bar"></view>
 		<view>
 			<!--自定义navbar-->
-			<uni-nav-bar left-text="返回" title="单题编辑录入" background-color="#0066CC" color="#FFFFFF" status-bar="true">
+			<uni-nav-bar title="单题编辑录入" background-color="#00aaff" color="#FFFFFF" status-bar="true">
 				<block slot="left">
 					<view class="note-navbar">
-						<uni-icons type="left" color="#FFFFFF" size="18" />
-						返回
+						<a href="/pages/homePage/homePage" style="text-decoration: none;">
+							<uni-icons type="left" color="#FFFFFF" size="18" />
+						</a>
 					</view>
 				</block>
 			</uni-nav-bar>
@@ -40,7 +41,7 @@
 					</uni-forms-item>
 				</uni-forms>
 				<view class="button-group">
-					<button type="primary" size="mini" @click="add_option">添加选项</button>
+					<button type="primary" size="mini" @click="add_option" style="background-color: #00aaff;">添加选项</button>
 				</view>
 				<uni-forms ref="baseForm" :modelValue="baseFormData" label-position="top">
 					<uni-forms-item label="答案" required>

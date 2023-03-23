@@ -160,7 +160,7 @@ export default {
 							key: 'token',
 							data: res.data.token
 						})
-						uni.navigateTo({
+						uni.switchTab({
 							url: '/pages/homePage/homePage'
 						})
 					}
