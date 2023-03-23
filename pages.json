@@ -10,10 +10,20 @@
 	"easycom": {
 		"autoscan": true,
 		"custom": {
-			"^i-icon": "@/uni_modules/i-icon/components/i-icon/i-icon.vue"
+			"^i-icon": "@/uni_modules/i-icon/components/i-icon/i-icon.vue",
+			"^hb-comment": "@/uni_modules/hb-comment/components/hb-comment/hb-comment.vue",
+			"note-comment": "@/components/note-comment/note-comment.vue"
 		}
 	},
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/note/note",
+			"style": {
+				// 自定义navbar
+				"navigationStyle": "custom"
+			}
+		},
+		
 		{
 			"path": "pages/homePage/homePage",
 			"style": {
@@ -28,27 +38,22 @@
 				"navigationBarTitleText": "uView UI"
 			}
 		},
-
+		
 		{
-			"path": "pages/note/note",
+			"path": "pages/note/create_note",
 			"style": {
-				"navigationBarTitleText": "笔记",
 				// 自定义navbar
 				"navigationStyle": "custom"
 			}
 		}
-
-
 		// {
 		// 	"path": "pages/note/note",
 		// 	"style": {
-		// 		"navigationBarTitleText": "笔记",
 		// 		// 自定义navbar
 		// 		"navigationStyle": "custom"
 		// 	}
-		// },
-
-
+		// }
+		
 	],
 	"subPackages": [{
 		"root": "pages/componentsA",
