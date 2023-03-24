@@ -32,6 +32,10 @@
 				<p class="problem_content">{{problem[cur_page-1].title}}</p>
 			</view>
 
+			<view>
+				<div style="height: 30px;"></div>
+			</view>
+
 			<view class="option_group">
 				<view v-for="(item, index) in problem[0].options" :key="index">
 					<view class="option_item" :class="{'selected_option_item':problem[0].options[index].selected==1,
@@ -50,6 +54,10 @@
 						</u-row>
 					</view>
 				</view>
+			</view>
+			
+			<view>
+				<div style="height: 30px;"></div>
 			</view>
 		</view>
 	</view>
@@ -236,7 +244,4 @@
 		color: #ffffff;
 	}
 
-	.option_group {
-		margin-bottom: 50px;
-	}
 </style>

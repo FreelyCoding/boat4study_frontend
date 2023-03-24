@@ -1,14 +1,10 @@
 <template>
 	<view>
-		<view class="status-bar">
-			
-		</view>
-		
 		<view class="container">
 			<!--自定义navbar-->
 			<view>
 				<view>
-					<uni-nav-bar shadow="true" title="笔记">
+					<uni-nav-bar shadow="true" title="创建笔记">
 						
 						<block slot="left">
 							<view class="note-navbar">
