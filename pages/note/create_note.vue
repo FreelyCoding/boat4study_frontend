@@ -39,7 +39,7 @@
 				<view class='wrapper'>
 				
 					<view class="editor-wrapper">
-						<editor id="editor" class="ql-container" :placeholder="content_placeholder" showImgSize showImgToolbar showImgResize
+						<editor id="editor" class="ql-container" :placeholder="content_placeholder" showImgToolbar
 						 @statuschange="onStatusChange" :read-only="readOnly" @ready="onEditorReady">
 						</editor>
 					</view>

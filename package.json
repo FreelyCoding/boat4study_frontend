@@ -4,7 +4,8 @@
 		"test": "eslint . --fix"
 	},
 	"dependencies": {
-		"egg-cors": "^2.2.3"
+		"egg-cors": "^2.2.3",
+		"html2plaintext": "^2.1.4"
 	},
 	"devDependencies": {
 		"eslint": "^8.2.0",

@@ -13,6 +13,7 @@ import '@/assets/style/font.css';
 
 import tui from './common/httpRequest'
 Vue.prototype.tui = tui
+
 Vue.prototype.$store = store
 
 Vue.config.productionTip = false
