@@ -56,13 +56,28 @@
 	},
 
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
-
 		{
 			"path": "pages/login/login",
 			"style": {
-				"navigationBarTitleText": "登录注册"
+				"navigationBarTitleText": "登录"
 			}
 		},
+		
+		{
+			"path": "pages/register/register",
+			"style": {
+				"navigationBarTitleText": "注册"
+			}
+			
+		},
+		
+		{
+			"path": "pages/note/index",
+			"style": {
+				"navigationBarTitleText": "所有笔记"
+			}
+		},
+		
 		{
 			"path": "pages/note/note",
 			"style": {

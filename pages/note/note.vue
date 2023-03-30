@@ -128,9 +128,10 @@
 		methods: {
 			onEditorReady() {
 				uni.createSelectorQuery().select('#editor').context((res) => {
-					// this.editorCtx = res.context
+					this.editorCtx = res.context
 					res.context.setContents({
-						html: "<p><strong>基物实验</strong></p><p><em>111</em></p><p><em><s><u>diwjfweiohu</u></s></em></p>"
+						// html: "<p><strong>基物实验</strong></p><p><em>111</em></p><p><em><s><u>diwjfweiohu</u></s></em></p>"
+						html: '<p>uihguyvi</p><p><br></p><p><img src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2Fa8f033c5-e4dd-47a9-9117-13e0b6c46912%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1682653405&t=807ac430db96da77a703fc6a9790ea0a" alt="图像"></p><p><br></p><p><strong><em><u>hvfcdxszedrtfygjk</u></em></strong><img src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2Fa8f033c5-e4dd-47a9-9117-13e0b6c46912%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1682653405&t=807ac430db96da77a703fc6a9790ea0a" alt="图像"></p><p><br></p>'
 					});
 				}).exec()
 			},
@@ -162,6 +163,15 @@
 				// 		}
 				// 	}
 				// })
+				
+				this.editorCtx.getContents({
+					success: res => {
+						// console.log(res.html)
+						console.log(res.text)
+					}
+				})
+				
+				console.log()
 			},
 		}
 	}

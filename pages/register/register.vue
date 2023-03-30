@@ -12,23 +12,30 @@
 					<input placeholder-class="tui-phcolor" class="tui-input" name="username" placeholder="请输入用户名"
 						maxlength="20" v-model="username"/>
 				</view>
+				
 				<view class="tui-line-cell tui-top28">
 					<tui-icon name="pwd" :size="20" color="#6d7a87"></tui-icon>
 					<input placeholder-class="tui-phcolor" class="tui-input" name="password" placeholder="请输入密码" password="true"
 						maxlength="30" v-model="password"/>
 				</view>
 				
+				<view class="tui-line-cell tui-top28">
+					<tui-icon name="pwd" :size="20" color="#6d7a87"></tui-icon>
+					<input placeholder-class="tui-phcolor" class="tui-input" name="confirm" placeholder="请再次确认密码" password="true"
+						maxlength="30" v-model="confirm"/>
+				</view>
 				
-				<u--text color="#5c8dff" text="注册" align="right" 
-					size="18" margin="10rpx" @click="toRegister"></u--text>
+				
+				<u--text color="#5c8dff" text="已有账号？登录" align="right"
+					size="18" margin="10rpx" @click="toLogin"></u--text>
 				
 				
 				<button class="tui-button-primary tui-btn-submit" hover-class="tui-button-hover"
-					form-type="submit">登录</button>
-				<!-- <view class="tui-protocol" hover-class="opcity" :hover-stay-time="150">
-					点击"登录"即表示已同意
+					form-type="submit">注册</button>
+				<view class="tui-protocol" hover-class="opcity" :hover-stay-time="150">
+					点击"注册"即表示已同意
 					<text class="tui-protocol-red">《用户协议》</text>
-				</view> -->
+				</view>
 			</view>
 		</form>
 		
@@ -48,47 +55,44 @@
 				disabled: false,
 				username: '',
 				password: '',
+				confirm: '',
 				type: 'primary',
-				msg: ''
 			};
 		},
 		methods: {
-			login(e) {
+			register(e) {
 				let userInfo = {
-					"username": this.username,
+					"name": this.username,
 					"password": this.password
 				}
-				
 				uni.request({
-					url: "http://123.249.3.32:9000/login",
-					method: 'POST',
+					url: "http://123.249.3.32:9000/register",
 					data: JSON.stringify(userInfo),
+					method: 'POST',
 					
 					success: res => {
 						if (res.statusCode == 200) {
-							this.tui.toast('登录成功')
-							uni.setStorage({
-								key: 'token',
-								data: res.data.token
-							})
-							uni.switchTab({
-								url: '/pages/homePage/homePage'
-							})
+							this.tui.toast("注册成功！")
+						}
+						else if (res.statusCode == 409){
+							this.tui.toast("用户名已存在");
 						}
 						else {
-							this.tui.toast('用户名或密码错误')
+							this.tui.toast("发生未知错误")
 						}
 					},
-					
 					fail: res => {
-						this.uni.toast('发生错误')
+						this.tui.toast('发生未知错误')
 					}
-				});				
+				})
+				
 			},
 			formLogin: function(e) {
 				let password = e.detail.value.password;
 				let username = e.detail.value.username;
-				let rules = [{
+				let confirm = e.detail.value.confirm;
+				let rules = [
+					{
 						name: 'username',
 						rule: ['required'],
 						msg: ['请输入用户名']
@@ -97,23 +101,30 @@
 						name: 'password',
 						rule: ['required'],
 						msg: ['请输入密码']
+					},
+					{
+						name: 'confirm',
+						rule: ['required', 'isSame:password'],
+						msg: ['请再次确认密码', '两次输入的密码不一致']
 					}
 				];
 				//进行表单检查
 				let formData = {
 					username: username,
-					password: password
+					password: password,
+					confirm: confirm
 				};
+				
 				let checkRes = form.validation(formData, rules);
 				if (checkRes) {
 					this.tui.toast(checkRes);
 					return;
 				}
-				this.login(e)
+				this.register(e)
 			},
-			toRegister() {
+			toLogin() {
 				uni.redirectTo({
-					url: "/pages/register/register"
+					url: "/pages/login/login"
 				})
 			}
 		}
