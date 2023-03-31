@@ -1,5 +1,5 @@
 <template>
-	<view class="u-page">		
+	<view class="u-page">
 		<view class="u-page__item">
 			<div class="background-blue">
 				<view style="width: 90%; margin: auto; margin-top: 60px; margin-bottom: 30px;">
@@ -21,10 +21,10 @@
 				</view>
 			</div>
 		</view>
-		
+
 		<view>
 			<div style="background-color: #f7f7f7;">
-				
+
 				<view>
 					<div style="background-color: white;">
 						<view class="u-demo-block__content" style="margin-top: 20px; margin-bottom: 10px;">
@@ -38,10 +38,11 @@
 									</view>
 								</uni-col>
 								<uni-col :span="6">
-									<view style="margin: auto;"  @click="jumpoToCreateNote()">
-										<u-icon name="/static/pic/personal_group.svg" size="50px" color="white"></u-icon>
+									<view style="margin: auto;" @click="jumpoToCreateNote()">
+										<u-icon name="/static/pic/personal_group.svg" size="50px" color="white">
+										</u-icon>
 									</view>
-									<view style="margin: auto;" >
+									<view style="margin: auto;">
 										<p style="font-size: 15px;"> 我的小组 </p>
 									</view>
 								</uni-col>
@@ -50,7 +51,8 @@
 										<u-icon name="/static/pic/personal_pb1.svg" size="50px" color="white"></u-icon>
 									</view>
 									<view style="margin: auto;">
-										<a href="/pages/problemCreate/problemCreate" style="text-decoration: none;color: black;">
+										<a href="/pages/problemCreate/problemCreate"
+											style="text-decoration: none;color: black;">
 											<p style="font-size: 15px;"> 我的题库 </p>
 										</a>
 									</view>
@@ -62,43 +64,84 @@
 									<view style="margin: auto;">
 										<p style="font-size: 15px;"> 全部错题 </p>
 									</view>
-									
+
 								</uni-col>
 							</uni-row>
 						</view>
 					</div>
 				</view>
-				
+
 				<view>
 					<div style="margin-top: 30px;">
-						
+
 					</div>
 				</view>
-				
+
 				<view>
 					<div style="background-color: white;">
-						<view class="m-middle-7" style="margin-top: 20px;">
-							<uni-row>
-								<uni-col span="12">
-									<view>
-										<p class="homePage-header" @click="jumpToComponents()">收藏夹</p>
-									</view>
-								</uni-col>
-							</uni-row>
+						<view class="m-middle-5" style="margin-top: 20px;">
+							<view>
+								<p class="homePage-header" @click="jumpToComponents()">收藏夹</p>
+							</view>
 						</view>
+
+
+						<view class="m-middle-5" style="margin-top: 30px;">
+							<u-row >
+								<u-col span="2">
+									<u-icon name="/static/pic/star.svg" size="40px"></u-icon>
+								</u-col>
+								<u-col span="9">
+									<p class="star-title"> 题库收藏</p>
+								</u-col>
+								<u-col span="1">
+									<u-icon name="arrow-right" size="20px"></u-icon>
+								</u-col>
+							</u-row>
+							<u-divider style="margin-bottom: 15px;"></u-divider>
+							<u-row >
+								<u-col span="2">
+									<u-icon name="/static/pic/star.svg" size="40px"></u-icon>
+								</u-col>
+								<u-col span="9">
+									<p class="star-title"> 题目收藏</p>
+								</u-col>
+								<u-col span="1">
+									<u-icon name="arrow-right" size="20px"></u-icon>
+								</u-col>
+							</u-row>
+							<u-divider style="margin-bottom: 15px;"></u-divider>
+							<u-row>
+								<u-col span="2">
+									<u-icon name="/static/pic/star.svg" size="40px"></u-icon>
+								</u-col>
+								<u-col span="9">
+									<p class="star-title"> 笔记收藏 </p>
+								</u-col>
+								<u-col span="1">
+									<u-icon name="arrow-right" size="20px"></u-icon>
+								</u-col>
+							</u-row>
+
+						</view>
+
+
+
+
+
 					</div>
 
 				</view>
-				
+
 			</div>
-			
-			
+
+
 		</view>
-		
+
 		<view>
-			
+
 		</view>
-		
+
 	</view>
 </template>
 
@@ -163,7 +206,7 @@
 		margin-left: 5%;
 		margin-right: 5%;
 	}
-	
+
 	.m-middle-7 {
 		margin-left: 7%;
 		margin-right: 7%;
@@ -222,13 +265,14 @@
 	.bg-purple-dark {
 		background: #99a9bf;
 	}
-	
-	
+
+
 	.homePage-header {
 		font-size: 24px;
 		font-family: shuhei;
 	}
-	
-	
 
+	.star-title {
+		font-size: 20px;
+	}
 </style>
