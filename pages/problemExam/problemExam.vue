@@ -41,7 +41,9 @@
 							 'right_option_item':problem[cur_page-1].options[index].selected==3}" @click="select_single_option(index)">
 							<u-row>
 								<u-col span="1">
-									<view class="option_letter_box">{{letter[index]}}</view>
+									<view class="option_letter_box" :class="{'selected_option_letter_box':problem[cur_page-1].options[index].selected==1,
+							 'wrong_option_letter_box':problem[cur_page-1].options[index].selected==2,
+							 'right_option_letter_box':problem[cur_page-1].options[index].selected==3}">{{letter[index]}}</view>
 								</u-col>
 								<u-col span="11">
 									<view class="option_item_content"
@@ -340,6 +342,18 @@
 		padding: 5px;
 		margin-left: 10px;
 		background-color: #c3c3c3;
+	}
+	.selected_option_letter_box {
+		background-color: #55aaff;
+		color: #ffffff;
+	}
+	.wrong_option_letter_box {
+		background-color: #c30421;
+		color: #ffffff;
+	}
+	.right_option_letter_box {
+		background-color: #0ca006;
+		color: #ffffff;
 	}
 
 	.option_item_content {

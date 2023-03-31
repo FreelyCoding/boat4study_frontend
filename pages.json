@@ -138,6 +138,26 @@
 				"enablePullDownRefresh": false,
 				"navigationBarTextStyle": "white"
 			}
+		},
+		
+		{
+			"path": "pages/problemSet/problemSetList",
+			"style": {
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom",
+				"enablePullDownRefresh": false,
+				"navigationBarTextStyle": "white"
+			}
+		},
+		
+		{
+			"path": "pages/problemSet/problemSetDetail",
+			"style": {
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom",
+				"enablePullDownRefresh": false,
+				"navigationBarTextStyle": "white"
+			}
 		}
 
 	    ,{
