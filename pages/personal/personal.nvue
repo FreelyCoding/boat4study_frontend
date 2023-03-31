@@ -2,17 +2,17 @@
 	<view class="u-page">		
 		<view class="u-page__item">
 			<div class="background-blue">
-				<view style="width: 90%; margin: auto; margin-top: 40px; margin-bottom: 15px;">
+				<view style="width: 90%; margin: auto; margin-top: 60px; margin-bottom: 30px;">
 					<uni-row>
-						<uni-col span="7">
+						<uni-col span="8">
 							<view>
-								<image style="width: 80px; height: 80px; background-color: #00aaff;" mode="aspectFill"
+								<image style="width: 100px; height: 100px; background-color: #00aaff;" mode="aspectFill"
 									:src="user.avatar"></image>
 							</view>
 						</uni-col>
 
 						<uni-col span="18">
-							<view style="margin: 15px 0px 10px 0px;">
+							<view style="margin: 20px 0px 10px 0px;">
 								<p class="user_name">{{user.user_name}}</p>
 								<p class="uid">{{user.uid}}</p>
 							</view>
@@ -21,7 +21,84 @@
 				</view>
 			</div>
 		</view>
+		
+		<view>
+			<div style="background-color: #f7f7f7;">
+				
+				<view>
+					<div style="background-color: white;">
+						<view class="u-demo-block__content" style="margin-top: 20px; margin-bottom: 10px;">
+							<uni-row class="demo-uni-row" :gutter="gutter" :width="nvueWidth">
+								<uni-col :span="6">
+									<view style="margin: auto;">
+										<u-icon name="/static/pic/homeNote.svg" size="50px"></u-icon>
+									</view>
+									<view style="margin: auto;">
+										<p style="font-size: 15px; margin-top: 5px;"> 我的笔记</p>
+									</view>
+								</uni-col>
+								<uni-col :span="6">
+									<view style="margin: auto;"  @click="jumpoToCreateNote()">
+										<u-icon name="/static/pic/personal_group.svg" size="50px" color="white"></u-icon>
+									</view>
+									<view style="margin: auto;" >
+										<p style="font-size: 15px;"> 我的小组 </p>
+									</view>
+								</uni-col>
+								<uni-col :span="6">
+									<view style="margin: auto;" @click="jumpoToUploadProblem()">
+										<u-icon name="/static/pic/personal_pb1.svg" size="50px" color="white"></u-icon>
+									</view>
+									<view style="margin: auto;">
+										<a href="/pages/problemCreate/problemCreate" style="text-decoration: none;color: black;">
+											<p style="font-size: 15px;"> 我的题库 </p>
+										</a>
+									</view>
+								</uni-col>
+								<uni-col :span="6">
+									<view style="margin: auto;">
+										<u-icon name="/static/pic/wrongProblem.svg" size="50px"></u-icon>
+									</view>
+									<view style="margin: auto;">
+										<p style="font-size: 15px;"> 全部错题 </p>
+									</view>
+									
+								</uni-col>
+							</uni-row>
+						</view>
+					</div>
+				</view>
+				
+				<view>
+					<div style="margin-top: 30px;">
+						
+					</div>
+				</view>
+				
+				<view>
+					<div style="background-color: white;">
+						<view class="m-middle-7" style="margin-top: 20px;">
+							<uni-row>
+								<uni-col span="12">
+									<view>
+										<p class="homePage-header" @click="jumpToComponents()">收藏夹</p>
+									</view>
+								</uni-col>
+							</uni-row>
+						</view>
+					</div>
 
+				</view>
+				
+			</div>
+			
+			
+		</view>
+		
+		<view>
+			
+		</view>
+		
 	</view>
 </template>
 
@@ -86,6 +163,11 @@
 		margin-left: 5%;
 		margin-right: 5%;
 	}
+	
+	.m-middle-7 {
+		margin-left: 7%;
+		margin-right: 7%;
+	}
 
 	.m-middle-2 {
 		width: 96%;
@@ -109,13 +191,13 @@
 	.user_name {
 		color: white;
 		font-family: shuhei;
-		font-size: 25px;
+		font-size: 30px;
 		margin-bottom: 8px;
 	}
 
 	.uid {
 		color: white;
-		font-size: 16px;
+		font-size: 20px;
 		font-weight: 500;
 		font-family: 'Times New Roman', Times, serif;
 	}
@@ -140,5 +222,13 @@
 	.bg-purple-dark {
 		background: #99a9bf;
 	}
+	
+	
+	.homePage-header {
+		font-size: 24px;
+		font-family: shuhei;
+	}
+	
+	
 
 </style>
