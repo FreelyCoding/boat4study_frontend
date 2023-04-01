@@ -164,8 +164,8 @@
             "path" : "pages/personal/personalNote",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "我的笔记",
-                "enablePullDownRefresh": false
+                "navigationStyle": "custom"
+				
             }
             
         }
@@ -173,17 +173,15 @@
             "path" : "pages/personal/personalProblemBank",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "我的题库",
-                "enablePullDownRefresh": false
+                "navigationStyle": "custom"
             }
             
         }
         ,{
             "path" : "pages/personal/personalGroup",
-            "style" :                                                                                    
+            "style" :
             {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
+                "navigationStyle": "custom"
             }
             
         }
@@ -191,7 +189,7 @@
             "path" : "pages/personal/wrongProblem",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationStyle": "custom",
                 "enablePullDownRefresh": false
             }
             
@@ -200,7 +198,7 @@
             "path" : "pages/personal/starProblem",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationStyle": "custom",
                 "enablePullDownRefresh": false
             }
             
@@ -209,7 +207,7 @@
             "path" : "pages/personal/starNotes",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationStyle": "custom",
                 "enablePullDownRefresh": false
             }
             
@@ -218,7 +216,7 @@
             "path" : "pages/personal/starProblemBank",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationStyle": "custom",
                 "enablePullDownRefresh": false
             }
             

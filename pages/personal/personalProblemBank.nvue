@@ -1,22 +1,271 @@
 <template>
 	<view>
-		
+		<uni-nav-bar title="我的题库" background-color="#00aaff" color="#FFFFFF" status-bar="true">
+			<block slot="left">
+				<view class="note-navbar">
+					<uni-icons type="left" color="#FFFFFF" size="18" />
+				</view>
+			</block>
+		</uni-nav-bar>
+		<view v-if="this.problemBank.length != 0">
+			<view class="u-demo-block">
+				<u-list customStyle="width: 94%; margin: auto; max-height: 350px; margin-top: 15px;">
+					<u-list-item v-for="(item, index) in problemBank" :key="index">
+						<uni-card spacing="0" padding="0" margin="10px 0px 0px 0px">
+							<view>
+								<uni-row>
+									<uni-col span="6" align="start">
+										<view>
+											<u-icon name="/static/pic/personal_pb1.svg" size="50px"></u-icon>
+										</view>
+									</uni-col>
+			
+									<uni-col span="18" align="start">
+										<div class="shuhei">
+											<p style="font-size: 16px;">{{item.qbName}}</p>
+										</div>
+										<div>
+											{{item.question_number}} 道题目
+											&ensp; &ensp;
+											{{item.created_at}}
+										</div>
+									</uni-col>
+								</uni-row>
+								<u-divider v-if="(index != 3)"> </u-divider>
+							</view>
+						</uni-card>
+			
+					</u-list-item>
+				</u-list>
+			</view>
+		</view>
+
+		<view v-else>
+			<tui-no-data :fixed="false" imgUrl="/static/pic/note/no_note.png" style="margin-top: 70px;">暂无题库
+			</tui-no-data>
+		</view>
+
+		<!--为了能够提取html信息加的不显示的editor-->
+		<editor id="editor" @ready="onEditorReady" style="display: none;">
+		</editor>
 	</view>
 </template>
 
 <script>
+	import tuiCard from '@/components/tui-card/tui-card.vue';
+	import tuiListCell from '@/components/tui-list-cell/tui-list-cell.vue';
+	import tuiNoData from '@/components/tui-no-data/tui-no-data.vue';
+
 	export default {
 		data() {
 			return {
-				
+				searchValue: "",
+				problemBank: [{
+						qbName: "数据结构",
+						created_at: "2023-03-21",
+						question_number: "114",
+						pic: "../../static/pic/dataStructure.jpg",
+					},
+					{
+						qbName: "航空航天概论",
+						created_at: "2023-03-21",
+						question_number: "514",
+						pic: "../../static/pic/hanggai.jpg",
+					},
+					{
+						qbName: "数据结构",
+						created_at: "2023-03-21",
+						question_number: "114",
+						pic: "../../static/pic/dataStructure.jpg",
+					},
+					{
+						qbName: "数据结构",
+						created_at: "2023-03-21",
+						question_number: "114",
+						pic: "../../static/pic/dataStructure.jpg",
+					},
+				],
 			}
 		},
 		methods: {
+			onEditorReady() {
+				uni.createSelectorQuery().select('#editor').context((res) => {
+					this.editorCtx = res.context
+				}).exec()
+				this.loadData()
+			},
+			onBackPress() {
+				// #ifdef APP-PLUS
+				plus.key.hideSoftKeybord();
+				// #endif
+			},
+
+			loadData() {
+				for (var i = 0; i < this.notes.length; i++) {
+					console.log(this.editorCtx)
+					this.editorCtx.setContents({
+						// html: "<p><strong>基物实验</strong></p><p><em>111</em></p><p><em><s><u>diwjfweiohu</u></s></em></p>"
+						html: this.notes[i].note_html
+					});
+
+					var plainText;
+
+					this.editorCtx.getContents({
+						success: res => {
+							this.notes[i].note_content = res.text;
+						}
+					})
+
+					this.editorCtx.clear()
+
+					this.notes[i].pic = this.extractImage(this.notes[i].note_html)
+				}
+			},
+
+			cardClick(item) {
+				console.log(item)
+				uni.switchTab({
+					url: "/pages/note/note"
+				})
+			},
+			
 			
 		}
 	}
 </script>
 
 <style>
+	page {
+		background: #EDEDED;
+	}
 
+	.container {
+		padding-bottom: env(safe-area-inset-bottom);
+	}
+
+	.m-middle-5 {
+		margin-left: 5%;
+		margin-right: 5%;
+	}
+
+	.m-middle-2 {
+		width: 96%;
+		margin: auto;
+	}
+
+	.m-lr-0 {
+		margin-left: 0px;
+		margin-right: 0px;
+	}
+
+	.m-bt-0 {
+		margin-top: 0px;
+		margin-bottom: 0px;
+	}
+
+	.background-blue {
+		background-color: #00aaff;
+	}
+
+	.parent_center {
+		display: flex;
+		justify-content: center;
+		justify-items: center;
+	}
+
+	.notes-ul {
+		width: auto;
+		height: auto;
+		overflow: hidden;
+		overflow-x: scroll;
+		white-space: nowrap;
+		padding-left: 0;
+		/* ul中的内容不换行 */
+	}
+
+	.notes-ul li {
+		width: auto;
+		display: inline-block;
+		margin-right: 15px;
+		margin-bottom: 15px;
+	}
+
+	.homePage-header {
+		font-size: 24px;
+		font-family: shuhei;
+	}
+
+	.check-all {
+		padding-top: 7px;
+		text-align: right;
+		font-size: 14px;
+		color: #00aaff;
+		font-weight: bold;
+		font-family: 'Times New Roman', Times, serif;
+	}
+
+	.note-img {
+		max-height: 150px;
+	}
+
+	.note-title {
+		font-size: 18px;
+		color: black;
+		font-weight: bold;
+		margin-bottom: 5px;
+	}
+
+	.note-content {
+		text-overflow: ellipsis;
+		overflow: hidden;
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 4;
+		line-height: 20px;
+		max-height: 80px;
+		font-family: 微软雅黑, serif;
+		font-size: 15px;
+		color: gray;
+		/*盒子宽自己设置想要的宽度*/
+		white-space: pre-wrap;
+		/*处理元素内的空白,保留空白符序列，但是正常地进行换行*/
+	}
+
+	.table-style {
+		width: 96%;
+		margin: auto;
+		margin-bottom: 10px;
+	}
+
+	.d1 {
+		text-align: left;
+	}
+
+	.d3 {
+		text-align: right;
+	}
+
+	.shuhei {
+		font-family: shuhei;
+	}
+
+	.dakai {
+		font-family: alimama_dakai;
+	}
+
+	.puhui {
+		font-family: alibaba_puhui;
+	}
+
+	.title {
+		font-size: 34rpx;
+		color: #333;
+		font-weight: 500;
+	}
+
+	.sub-title {
+		font-size: 24rpx;
+		color: #7a7a7a;
+		padding-top: 18rpx;
+	}
 </style>
