@@ -170,7 +170,7 @@
             
         }
         ,{
-            "path" : "pages/personal/personalProblemBank",
+            "path" : "pages/personal/personalProblemSet",
             "style" :                                                                                    
             {
                 "navigationStyle": "custom"
@@ -213,7 +213,7 @@
             
         }
         ,{
-            "path" : "pages/personal/starProblemBank",
+            "path" : "pages/personal/starProblemSet",
             "style" :                                                                                    
             {
                 "navigationStyle": "custom",

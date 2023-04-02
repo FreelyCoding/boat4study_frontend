@@ -31,7 +31,8 @@
 							<uni-row class="demo-uni-row" :gutter="gutter" :width="nvueWidth">
 								<uni-col :span="6">
 									<view style="margin: auto;">
-										<u-icon name="/static/pic/homeNote.svg" size="50px"></u-icon>
+										<u-icon name="/static/pic/homeNote.svg" size="50px" @click="jumpToMyNote()">
+										</u-icon>
 									</view>
 									<view style="margin: auto;">
 										<p style="font-size: 15px; margin-top: 5px;"> 我的笔记</p>
@@ -49,7 +50,7 @@
 								<uni-col :span="6">
 									<view style="margin: auto;">
 										<u-icon name="/static/pic/personal_pb1.svg" size="50px" color="white"
-											@click="jumpToProblemBank()"></u-icon>
+											@click="jumpToProblemSet()"></u-icon>
 									</view>
 									<view style="margin: auto;">
 										<p style="font-size: 15px;"> 我的题库 </p>
@@ -85,7 +86,7 @@
 
 
 						<view class="m-middle-5" style="margin-top: 30px;">
-							<u-row>
+							<u-row @click="jumpToStarProblemSet()">
 								<u-col span="2">
 									<u-icon name="/static/pic/star.svg" size="40px"></u-icon>
 								</u-col>
@@ -95,9 +96,9 @@
 								<u-col span="1">
 									<u-icon name="arrow-right" size="20px"></u-icon>
 								</u-col>
-							</u-row>
+							</u-row >
 							<u-divider style="margin-bottom: 15px;"></u-divider>
-							<u-row>
+							<u-row @click="jumpToStarProblem()">
 								<u-col span="2">
 									<u-icon name="/static/pic/star.svg" size="40px"></u-icon>
 								</u-col>
@@ -109,7 +110,7 @@
 								</u-col>
 							</u-row>
 							<u-divider style="margin-bottom: 15px;"></u-divider>
-							<u-row>
+							<u-row @click="jumpToStarNote()">
 								<u-col span="2">
 									<u-icon name="/static/pic/star.svg" size="40px"></u-icon>
 								</u-col>
@@ -139,6 +140,7 @@
 </template>
 
 <script>
+	import homePage from "@/pages/homePage/homePage"
 	export default {
 		data() {
 			return {
@@ -166,16 +168,45 @@
 			search(e) {
 				console.log('searchChange', e);
 			},
-			jumpToProblemBank() {
+			jumpToProblemSet() {
 				uni.navigateTo({
-					url: "/pages/personal/personalProblemBank"
+					url: "/pages/personal/personalProblemSet"
 				})
-			}
+			},
+			jumpToMyNote() {
+				uni.navigateTo({
+					url: "/pages/personal/personalNote"
+				})
+			},
+			jumpToStarProblemSet() {
+				uni.navigateTo({
+					url: '/pages/personal/starProblemSet'
+				})
+			},
+			jumpToStarNote() {
+				uni.navigateTo({
+					url: '/pages/personal/starNotes'
+				})
+			},
+			jumpToStarProblem() {
+				uni.navigateTo({
+					url: '/pages/personal/starProblem'
+				})
+			},
+			jumpToWrongProblem() {
+				uni.navigateTo({
+					url: '/pages/personal/wrongProblem'
+				})
+			},
+
+
 		},
 	}
 </script>
 
 <style lang="scss">
+	@import url('../homePage/homePage.css');
+
 	.u-page {
 		padding: 0;
 
@@ -200,35 +231,6 @@
 		}
 	}
 
-	.m-middle-5 {
-		margin-left: 5%;
-		margin-right: 5%;
-	}
-
-	.m-middle-7 {
-		margin-left: 7%;
-		margin-right: 7%;
-	}
-
-	.m-middle-2 {
-		width: 96%;
-		margin: auto;
-	}
-
-	.m-lr-0 {
-		margin-left: 0px;
-		margin-right: 0px;
-	}
-
-	.m-bt-0 {
-		margin-top: 0px;
-		margin-bottom: 0px;
-	}
-
-	.background-blue {
-		background-color: #00aaff;
-	}
-
 	.user_name {
 		color: white;
 		font-family: shuhei;
@@ -250,24 +252,6 @@
 	.demo-layout {
 		height: 25px;
 		border-radius: 4px;
-	}
-
-	.bg-purple {
-		background: #ced7e1;
-	}
-
-	.bg-purple-light {
-		background: #e5e9f2;
-	}
-
-	.bg-purple-dark {
-		background: #99a9bf;
-	}
-
-
-	.homePage-header {
-		font-size: 24px;
-		font-family: shuhei;
 	}
 
 	.star-title {

@@ -3,11 +3,13 @@
 		<uni-nav-bar title="我的笔记" background-color="#00aaff" color="#FFFFFF" status-bar="true">
 			<block slot="left">
 				<view class="note-navbar">
-					<uni-icons type="left" color="#FFFFFF" size="18" />
+					<uni-icons type="left" color="#FFFFFF" size="18" @click="back()" />
 				</view>
 			</block>
 		</uni-nav-bar>
+
 		<view v-if="this.notes.length != 0">
+
 			<view v-for="(item, index) in notes" :key="index">
 				<uni-card isShadow border padding="15px 5px 0px 5px" margin="15px 15px 15px 15px"
 					style="border-radius: 10px;" @click="cardClick(item)">
@@ -50,7 +52,6 @@
 											<button type="primary" size="mini"
 												style="width: 60px; background-color: #00aaff; margin-left: 10px;">
 												114</button>
-
 										</uni-col>
 
 										<uni-col offset="12" span="6">
@@ -88,6 +89,8 @@
 	import tuiCard from '@/components/tui-card/tui-card.vue';
 	import tuiListCell from '@/components/tui-list-cell/tui-list-cell.vue';
 	import tuiNoData from '@/components/tui-no-data/tui-no-data.vue';
+	import index from '@/pages/note/index.vue'
+	import note from '@/pages/note/note.vue'
 
 	export default {
 		data() {
@@ -181,16 +184,19 @@
 			},
 
 			cardClick(item) {
-				console.log(item)
-				uni.switchTab({
-					url: "/pages/note/note"
-				})
+				index.methods.cardClick(item)
+			},
+			
+			back() {
+				note.methods.back()
 			}
 		}
 	}
 </script>
 
 <style>
+	@import url('../homePage/homePage.css');
+
 	page {
 		background: #EDEDED;
 	}
@@ -199,66 +205,6 @@
 		padding-bottom: env(safe-area-inset-bottom);
 	}
 
-	.m-middle-5 {
-		margin-left: 5%;
-		margin-right: 5%;
-	}
-
-	.m-middle-2 {
-		width: 96%;
-		margin: auto;
-	}
-
-	.m-lr-0 {
-		margin-left: 0px;
-		margin-right: 0px;
-	}
-
-	.m-bt-0 {
-		margin-top: 0px;
-		margin-bottom: 0px;
-	}
-
-	.background-blue {
-		background-color: #00aaff;
-	}
-
-	.parent_center {
-		display: flex;
-		justify-content: center;
-		justify-items: center;
-	}
-
-	.notes-ul {
-		width: auto;
-		height: auto;
-		overflow: hidden;
-		overflow-x: scroll;
-		white-space: nowrap;
-		padding-left: 0;
-		/* ul中的内容不换行 */
-	}
-
-	.notes-ul li {
-		width: auto;
-		display: inline-block;
-		margin-right: 15px;
-		margin-bottom: 15px;
-	}
-
-	.homePage-header {
-		font-size: 24px;
-		font-family: shuhei;
-	}
-
-	.check-all {
-		padding-top: 7px;
-		text-align: right;
-		font-size: 14px;
-		color: #00aaff;
-		font-weight: bold;
-		font-family: 'Times New Roman', Times, serif;
-	}
 
 	.note-img {
 		max-height: 150px;
@@ -285,43 +231,5 @@
 		/*盒子宽自己设置想要的宽度*/
 		white-space: pre-wrap;
 		/*处理元素内的空白,保留空白符序列，但是正常地进行换行*/
-	}
-
-	.table-style {
-		width: 96%;
-		margin: auto;
-		margin-bottom: 10px;
-	}
-
-	.d1 {
-		text-align: left;
-	}
-
-	.d3 {
-		text-align: right;
-	}
-
-	.shuhei {
-		font-family: shuhei;
-	}
-
-	.dakai {
-		font-family: alimama_dakai;
-	}
-
-	.puhui {
-		font-family: alibaba_puhui;
-	}
-
-	.title {
-		font-size: 34rpx;
-		color: #333;
-		font-weight: 500;
-	}
-
-	.sub-title {
-		font-size: 24rpx;
-		color: #7a7a7a;
-		padding-top: 18rpx;
 	}
 </style>
