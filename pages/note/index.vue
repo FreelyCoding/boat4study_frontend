@@ -148,7 +148,7 @@
 			cardClick(item) {
 				console.log(item)
 				
-				uni.switchTab({
+				uni.navigateTo({
 					url: "/pages/note/note",
 					success: () => {
 						console.log(111)
