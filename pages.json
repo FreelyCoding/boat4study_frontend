@@ -35,13 +35,13 @@
 				"selectedIconPath": "static/pic/homePage.png",
 				"text": "主页"
 			}, {
-				"pagePath": "pages/problemExam/problemExam",
+				"pagePath": "pages/problemSet/problemSetList",
 				"iconPath": "static/pic/grid_unselect.png",
 				"selectedIconPath": "static/pic/grid.png",
 				"text": "分类"
 			},
 			{
-				"pagePath": "pages/note/note",
+				"pagePath": "pages/note/index",
 				"iconPath": "static/pic/homeNote_unselec.png",
 				"selectedIconPath": "static/pic/homeNote.png",
 				"text": "笔记"

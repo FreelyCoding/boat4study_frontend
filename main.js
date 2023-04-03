@@ -6,7 +6,6 @@ import store from './store'
 
 // 引入全局uView
 import uView from '@/uni_modules/uview-ui'
-
 import mixin from './common/mixin'
 import '@/assets/style/font.css';
 

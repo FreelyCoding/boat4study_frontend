@@ -16,5 +16,6 @@
 	@import "@/uni_modules/uview-ui/index.scss";
 	@import "common/demo.scss";
 	@import "@/static/iconfont.css";
+	@import "@/pages/homePage/homePage.css"
 	
 </style>
