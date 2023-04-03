@@ -12,7 +12,10 @@ import '@/assets/style/font.css';
 
 
 import tui from './common/httpRequest'
+import myRequest from './common/request'
+
 Vue.prototype.tui = tui
+Vue.prototype.myRequest = myRequest
 
 Vue.prototype.$store = store
 

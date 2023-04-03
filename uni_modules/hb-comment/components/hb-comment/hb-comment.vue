@@ -1,11 +1,11 @@
 <template>
 	<view class="hb-comment">
 		<!-- 阅读数-start -->
-		<view>
+		<!-- <view>
 			<img style="width: 14px; height: 14px;"
 				src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAA0tJREFUWEftVk2IHUUQ/qp311NOksRT8JBDkARCfrxEDyLK+pe/DQkmJpBlZ7ofDwQ15iRocjYSSWAzU/OWd4hCMJiQH43xBz2YXCRivIgHQQ8SRPGUU/btfNLPnuU5O7OZlWz2kobh8aq/qvq6qrq6BEu8ZIn94wGBBUWg3W6v6vV62wFsILlGRNYA6AH4AcCPJH8mebPT6dxomtpGBJxz4wD2kny2oWHN81ybEJmXQKvVWpfn+VsAXi45vgPgj/D5rUfC91AJ54m83el0PLZy1RKw1u4GkAB4OGj+LSJXRORMkiSXq6xFUfSUiHi93SKyImB+BeBU9fMqnUoCcRy/IiIfFAoicp7kYVX9pUkKrLWrReRdkjsLvNfPsuxYWX8OAWvtOwCODACPqOrRJo7LmApbe1T17CDuPwSccy2SpwZYj2VZdr7K+fj4+IqRkZFVIjJD8ndV/asKdzcSswTiON4iIlcBLPOGROTFNE0/rTHqQ3motHdWVffU1YYx5utizxjzXJIk3te/nbDdbi/r9XpesCWAasNureV86VDVurqKRUSD7k8zMzPPT01N/dYHW2uPA3gtnDxL09TWnPwjX+F+j+Q1EfkCwC0ALwHYGnTeU9U3q/Sdc0oyDnvnVHWXOOdeIPlJEN4E8ExVPq21ywH8GXCXVHXboJM4jr8VkSe8bHp6emW32y2ws7Bg40sA68NhD3gCXZIHA2q07r4659aT9C3XL3+vi3D2BaVi26Sq31dFIY7jgyLSDXs3xFp7rci9MebJJEn8/zlrMQj00+ic20/ydAjJhTRNd9Tk/56ngOT2ogg/BjAWHB9X1TfuQxG+r6qv9wlMTEw8OjQ0dAXAY8HxYl/D68PDw6OTk5O3Z+9sq9UazfP8s+Lki9iIbpMczbLsej/tg6F2zr1K8kQhI3n/WnHhdDEfI5L7syz7cPDQlW2zHIl78RwDqCzu2oEkiqKnjTFfDbD9vwOJb9vHsiw7XHWz5h3JoijaZIzxz/PjJeVGIxnJb4wxJ9M0PVflfE4R1oGcc2Mk9wHYVYcpyS8BuKiqnbvhG03FhRHn3GaSG0muM8as9b8AjB/HRcR/35G8oKr+hWy0FkSgkcUFgh4QWPII/ANy0cUvD9WbkgAAAABJRU5ErkJggg==" />
 			<span class="top-read">{{commentData.readNumer}}</span>
-		</view>
+		</view> -->
 		<!-- 阅读数-end -->
 		<!-- 阅读数下边那条线-start -->
 		<view class="seg_line_box">

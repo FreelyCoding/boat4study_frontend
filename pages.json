@@ -74,7 +74,8 @@
 		{
 			"path": "pages/note/index",
 			"style": {
-				"navigationBarTitleText": "所有笔记"
+				"navigationBarTitleText": "所有笔记",
+				"navigationStyle": "custom"
 			}
 		},
 		

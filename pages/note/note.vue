@@ -5,7 +5,7 @@
 			<uni-nav-bar title="笔记" background-color="#00aaff" color="#FFFFFF" status-bar="true">
 				<block slot="left">
 					<view class="note-navbar">
-						<uni-icons type="left" color="#FFFFFF" size="18" />
+						<uni-icons type="left" color="#FFFFFF" size="18" @click="back"/>
 					</view>
 				</block>
 
@@ -33,8 +33,8 @@
 				<view class='wrapper'>
 
 					<view class="editor-wrapper">
-						<editor id="editor" class="ql-container" showImgSize showImgToolbar showImgResize
-							@statuschange="onStatusChange" :read-only="readOnly" @ready="onEditorReady">
+						<editor id="editor" class="ql-container"
+							@statuschange="onStatusChange" read-only @ready="onEditorReady">
 						</editor>
 					</view>
 				</view>
@@ -71,24 +71,33 @@
 			<!-- </uni-list> -->
 
 		</view>
+		
+		
+		<!--模态框-->
+		<tui-modal :show="show"  title="提示" content="确定删除笔记吗" @click="handleModalClick" width="70%"></tui-modal>
+		
 	</view>
 </template>
 
 <script>
+import myRequest from '../../common/request'
 	export default {
 		data() {
 			return {
-				title: "基物实验笔记",
-				readOnly: true,
-				formats: {},
-				title_maxlength: 50,
-
-				pattern: {
-					buttonColor: "#f3f4f6",
-					iconColor: "#18b566"
-				},
-
-				content: [{
+				title: "",
+				show: false,
+				valid: false,
+				note_html: "",
+				note_id: "",
+			
+				content: [
+					{
+						iconPath: '/static/pic/note/delete-bin-line.png',
+						selectedIconPath: '/static/pic/note/delete-bin-fill.png',
+						text: '删除',
+						active: false
+					},
+					{
 						iconPath: '/static/pic/note/edit-fill.png',
 						selectedIconPath: '/static/pic/note/edit-fill-active.png',
 						text: '编辑',
@@ -126,13 +135,47 @@
 			}
 		},
 		methods: {
+			handleModalClick(e) {
+				let index = e.index
+				if (index == 0) {
+					this.show = false;
+					this.content[0].active = !this.content[0].active
+				}
+				else {
+					this.show = false;
+					this.content[0].active = !this.content[0].active
+					
+					console.log(123)
+					console.log(this.note_id)
+					
+					myRequest.request(`/note/delete/${this.note_id}`, 'DELETE').then(
+						function(res) {
+							console.log(222)
+							console.log(res)
+							if (res.statusCode == 200) {
+								uni.redirectTo({
+									url: '/pages/note/index'
+								})
+							}
+							else if (res.statusCode == 401) {
+								uni.redirectTo({
+									url: '/pages/login/login'
+								})
+							}
+							else {
+								myRequest.toast()
+							}
+						}
+					).catch(function(res) {
+						console.log(res)
+						myRequest.toast()
+					})
+				}
+			},
+			
 			onEditorReady() {
 				uni.createSelectorQuery().select('#editor').context((res) => {
 					this.editorCtx = res.context
-					res.context.setContents({
-						// html: "<p><strong>基物实验</strong></p><p><em>111</em></p><p><em><s><u>diwjfweiohu</u></s></em></p>"
-						html: '<p>uihguyvi</p><p><br></p><p><img src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2Fa8f033c5-e4dd-47a9-9117-13e0b6c46912%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1682653405&t=807ac430db96da77a703fc6a9790ea0a" alt="图像"></p><p><br></p><p><strong><em><u>hvfcdxszedrtfygjk</u></em></strong><img src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2Fa8f033c5-e4dd-47a9-9117-13e0b6c46912%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1682653405&t=807ac430db96da77a703fc6a9790ea0a" alt="图像"></p><p><br></p>'
-					});
 				}).exec()
 			},
 			format(e) {
@@ -164,19 +207,47 @@
 				// 	}
 				// })
 				
-				this.editorCtx.getContents({
-					success: res => {
-						// console.log(res.html)
-						console.log(res.text)
-					}
-				})
+				if (e.index == 0) {
+					this.show = true;
+				}
 				
-				console.log()
 			},
 			
 			back() {
-				uni.navigateBack()
-			}
+				// uni.navigateBack()
+				// uni.switchTab({
+				// 	url: '/pages/note/index'
+				// })
+				// uni.redirectTo({
+				// 	url: '/pages/note/index'
+				// })
+				uni.redirectTo({
+					url: '/pages/note/index'
+				})
+			},
+			
+		},
+		
+		onLoad() {
+			this.valid = false;
+			let that = this;
+			
+			uni.$on('passNoteContent', async function(data) {
+				console.log(data)
+				that.valid = true;
+				that.title = data.note_title;
+				that.note_html = data.note_html;
+				that.note_id = data.id;
+				
+				await that.onEditorReady()
+				
+				that.editorCtx.setContents({
+					html: that.note_html
+				})
+			})
+		},
+		onUnload() {
+			uni.$off('passNoteContent')
 		}
 	}
 </script>
