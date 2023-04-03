@@ -176,6 +176,25 @@ import myRequest from '../../common/request'
 			onEditorReady() {
 				uni.createSelectorQuery().select('#editor').context((res) => {
 					this.editorCtx = res.context
+					
+					let that = this;
+					
+					myRequest.showLoading('加载中')
+					
+					uni.$on('passNoteContent', async function(data) {
+						uni.hideLoading()
+						
+						console.log(data)
+						that.valid = true;
+						that.title = data.note_title;
+						that.note_html = data.note_html;
+						that.note_id = data.id;
+						
+						that.editorCtx.setContents({
+							html: that.note_html
+						})
+					})
+					
 				}).exec()
 			},
 			format(e) {
@@ -221,7 +240,7 @@ import myRequest from '../../common/request'
 				// uni.redirectTo({
 				// 	url: '/pages/note/index'
 				// })
-				uni.redirectTo({
+				uni.switchTab({
 					url: '/pages/note/index'
 				})
 			},
@@ -229,22 +248,7 @@ import myRequest from '../../common/request'
 		},
 		
 		onLoad() {
-			this.valid = false;
-			let that = this;
 			
-			uni.$on('passNoteContent', async function(data) {
-				console.log(data)
-				that.valid = true;
-				that.title = data.note_title;
-				that.note_html = data.note_html;
-				that.note_id = data.id;
-				
-				await that.onEditorReady()
-				
-				that.editorCtx.setContents({
-					html: that.note_html
-				})
-			})
 		},
 		onUnload() {
 			uni.$off('passNoteContent')

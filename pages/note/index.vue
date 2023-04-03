@@ -154,12 +154,12 @@
 						console.log(111)
 						var t = item
 						
-						// 为了先跳转到另一个页面定义on函数
+						// 为了先跳转到另一个页面定义好on函数
 						setTimeout(
 							() => {
 								uni.$emit('passNoteContent', t)
 							},
-							500
+							2500
 						)
 						
 					}
@@ -178,6 +178,7 @@
 					url: '/pages/login/login'
 				})
 			}
+			
 			
 			console.log(uni.getStorageSync('token'))
 			
