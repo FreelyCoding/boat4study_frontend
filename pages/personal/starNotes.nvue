@@ -8,7 +8,7 @@
 			</block>
 		</uni-nav-bar>
 
-		<view v-if="this.notes.length != 0">
+		<view v-if="this.notes.length != 0"> 
 
 			<view v-for="(item, index) in notes" :key="index">
 				<uni-card isShadow border padding="15px 5px 0px 5px" margin="15px 15px 15px 15px"

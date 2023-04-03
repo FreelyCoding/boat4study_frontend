@@ -58,7 +58,8 @@
 								</uni-col>
 								<uni-col :span="6">
 									<view style="margin: auto;">
-										<u-icon name="/static/pic/wrongProblem.svg" size="50px"></u-icon>
+										<u-icon name="/static/pic/wrongProblem.svg" size="50px"
+											@click="jumpToWrongProblem()"></u-icon>
 									</view>
 									<view style="margin: auto;">
 										<p style="font-size: 15px;"> 全部错题 </p>
@@ -197,7 +198,6 @@
 </script>
 
 <style lang="scss">
-	@import url('../homePage/homePage.css');
 
 	.u-page {
 		padding: 0;

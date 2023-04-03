@@ -129,7 +129,7 @@
 
 				<uni-col span="12">
 					<view>
-						<p class="check-all">查看全部</p>
+						<p class="check-all" @click="jumpToAllProblemSet()">查看全部</p>
 					</view>
 				</uni-col>
 			</uni-row>
@@ -138,20 +138,20 @@
 		<view class="u-demo-block">
 			<u-list customStyle="width: 94%; margin: auto; max-height: 350px; margin-top: 15px;">
 				<u-list-item v-for="(item, index) in questionBank" :key="index">
-					<uni-card spacing="0" padding="0" margin="10px 0px 0px 0px">
+					<uni-card spacing="0" padding="0" margin="10px 0px 0px 10px">
 						<view>
 							<uni-row>
-								<uni-col span="6" align="start">
+								<uni-col span="5" align="start">
 									<view>
 										<u-icon name="/static/pic/qb.svg" size="50px"></u-icon>
 									</view>
 								</uni-col>
 
 								<uni-col span="18" align="start">
-									<div class="shuhei">
-										<p style="font-size: 16px;">{{item.qbName}}</p>
+									<div class="shuhei" style="margin-bottom: 5px;">
+										<p style="font-size: 20px;">{{item.qbName}}</p>
 									</div>
-									<div>
+									<div style="font-size: 16px;">
 										{{item.question_number}} 道题目
 										&ensp; &ensp;
 										{{item.created_at}}
@@ -268,6 +268,11 @@
 			jumpToAllNote() {
 				uni.navigateTo({
 					url: "/pages/note/index"
+				})
+			},
+			jumpToAllProblemSet() {
+				uni.navigateTo({
+					url: "/pages/personal/personalProblemSet"
 				})
 			},
 			click1(e) {

@@ -11,27 +11,28 @@
 			<view class="u-demo-block">
 				<u-list customStyle="width: 94%; margin: auto; margin-top: 15px;">
 					<u-list-item v-for="(item, index) in problemSet" :key="index">
-						<uni-card spacing="0" padding="0" margin="10px 0px 0px 0px">
+						<uni-card spacing="0" padding="0" margin="10px 0px 0px 0px" @click="jumpToPS()">
 							<view>
 								<uni-row>
-									<uni-col span="6">
+									<uni-col span="7">
 										<view>
-											<u-icon name="/static/pic/personal_pb1.svg" size="90px" customStyle="padding-top: 20px;"></u-icon>
+											<u-icon name="/static/pic/personal_pb1.svg" size="80px"
+											 customStyle="margin-top: 10px; margin-bottom:10px ; margin-left: 10px"></u-icon>
 										</view>
 									</uni-col>
 
 									<uni-col span="18">
-										<div class="shuhei" style="padding-top: 35px;" @click="jumpToPS()">
-											<p style="font-size: 18px;">{{item.qbName}}</p>
+										<div class="shuhei" style="padding-top: 22px;" @click="jumpToPS()">
+											<p style="font-size: 24px;">{{item.qbName}}</p>
 										</div>
-										<div>
+										<div style="margin-top: 14px;font-size: 16px">
 											{{item.question_number}} 道题目
 											&ensp; &ensp;
 											{{item.created_at}}
 										</div>
 									</uni-col>
 								</uni-row>
-								<u-divider> </u-divider>
+								
 							</view>
 						</uni-card>
 
@@ -45,9 +46,6 @@
 			</tui-no-data>
 		</view>
 
-		<!--为了能够提取html信息加的不显示的editor-->
-		<editor id="editor" @ready="onEditorReady" style="display: none;">
-		</editor>
 	</view>
 </template>
 
@@ -106,5 +104,5 @@
 		background: #EDEDED;
 	}
 
-	@import url('../homePage/homePage.css');
+	
 </style>
