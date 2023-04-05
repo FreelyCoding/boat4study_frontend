@@ -14,10 +14,10 @@
 						style="margin-left: 5px; margin-right: 5px;">
 		</uni-search-bar>
 		
-		<view  v-if="this.notes.length != 0">
+		<view v-if="notes && notes.length != 0">
 			<view v-for="(item, index) in notes" :key="index">
 				<uni-card isShadow border padding="15px 5px 0px 5px"
-					margin="15px 15px 15px 15px" style="border-radius: 10px;" @click="cardClick(item)">
+					margin="0px 15px 15px 15px" style="border-radius: 10px;" @click="cardClick(item)">
 					<view class="u-demo-block">
 						<view>
 							<view>
@@ -91,6 +91,9 @@
 	import myRequest from '../../common/request';
 
 	export default {
+		components: {
+			tuiNoData
+		},
 		data() {
 			return {
 				searchValue: "",
@@ -179,7 +182,6 @@
 				})
 			}
 			
-			
 			console.log(uni.getStorageSync('token'))
 			
 			uni.request({
@@ -212,7 +214,7 @@
 						else {
 							myRequest.toast('请登录')
 						}
-						uni.navigateTo({
+						uni.redirectTo({
 							url: '/pages/login/login'
 						})
 					}
