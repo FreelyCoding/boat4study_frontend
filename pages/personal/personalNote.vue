@@ -19,12 +19,12 @@
 								<text class="note-title">{{item.note_title}}</text>
 					
 								<uni-row v-if="item.pic" style="margin-top: 15px;">
-									<uni-col span="12">
+									<uni-col :span="12">
 										<view>
 											<p class="note-content"> {{item.note_content ? item.note_content : "..."}}</p>
 										</view>
 									</uni-col>
-									<uni-col offset="3" span="9">
+									<uni-col offset="3" :span="9">
 										<view>
 											<u--image :src="item.pic" width="250rpx" height="180rpx" radius="15"></u--image>
 										</view>
@@ -32,7 +32,7 @@
 								</uni-row>
 								
 								<uni-row v-else style="margin-top: 15px;">
-									<uni-col span="24">
+									<uni-col :span="24">
 										<view>
 											<p class="note-content"> {{item.note_content}}</p>
 										</view>
@@ -45,17 +45,17 @@
 								
 								<view style="margin-top: 10px;">
 									<uni-row>
-										<uni-col span="2">
+										<uni-col :span="2">
 											<u-icon name="/static/pic/like.svg" size="30px"></u-icon>
 										</uni-col>
-										<uni-col span="4">
+										<uni-col :span="4">
 											<button type="primary" size="mini"
 												style="width: 60px; background-color: #00aaff; margin-left: 5px;"> 114</button>
 										</uni-col>
-										<uni-col offset="12" span="2">
+										<uni-col :offset="12" :span="2">
 											<u-icon name="/static/pic/star.svg" size="30px"></u-icon>
 										</uni-col>
-										<uni-col span="4">
+										<uni-col :span="4">
 											<button size="mini"
 												style="width: 60px; background-color: #f9ae3d; color: white; margin-left: 5px;">
 												514</button>
@@ -83,13 +83,9 @@
 <script>
 	import tuiCard from '@/components/tui-card/tui-card.vue';
 	import tuiListCell from '@/components/tui-list-cell/tui-list-cell.vue';
-	import tuiNoData from '@/components/tui-no-data/tui-no-data.vue';
 	import myRequest from '../../common/request';
 
 	export default {
-		components: {
-			tuiNoData
-		},
 		data() {
 			return {
 				searchValue: "",
@@ -98,12 +94,6 @@
 			}
 		},
 		methods: {
-			search(res) {
-				uni.showToast({
-					title: '搜索：' + res.value,
-					icon: 'none'
-				})
-			},
 			extractImage(htmlStr) {
 				// 从html中提取出第一个图片
 				var img = htmlStr.match(/<img.*?(?:>|\/>)/gi);
@@ -166,7 +156,7 @@
 			},
 			back() {
 				uni.switchTab({
-					url: '/pages/homePage/homePage'
+					url: '/pages/personal/personal'
 				})
 			}
 		},
@@ -196,7 +186,7 @@
 								note_html: res.data.notes[i].content, 
 								note_title: res.data.notes[i].title,
 								pic: "",
-								create_time: '2022/02/02',
+								create_time: res.data.notes[i].created_at.slice(0,10),
 								id: res.data.notes[i].id
 							}
 							this.notes.push(t);

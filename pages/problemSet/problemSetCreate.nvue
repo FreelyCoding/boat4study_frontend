@@ -111,7 +111,7 @@
 								uni.navigateTo({
 									url: '/pages/problemSet/problemUpload'
 								});
-							}, 1500)
+							}, 1000)
 						} else if (res.statusCode == 401) {
 							if (myRequest.isLogin()) {
 								myRequest.toast('请重新登录')
