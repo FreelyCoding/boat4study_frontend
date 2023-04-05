@@ -5,7 +5,7 @@
 			<uni-nav-bar title="笔记" background-color="#00aaff" color="#FFFFFF" status-bar="true">
 				<block slot="left">
 					<view class="note-navbar">
-						<uni-icons type="left" color="#FFFFFF" size="18" @click="back"/>
+						<uni-icons type="left" color="#FFFFFF" size="18" @click="back()"/>
 					</view>
 				</block>
 
@@ -233,16 +233,16 @@ import myRequest from '../../common/request'
 			},
 			
 			back() {
-				// uni.navigateBack()
+				uni.navigateBack()
 				// uni.switchTab({
 				// 	url: '/pages/note/index'
 				// })
 				// uni.redirectTo({
 				// 	url: '/pages/note/index'
 				// })
-				uni.switchTab({
+				/*uni.switchTab({
 					url: '/pages/note/index'
-				})
+				})*/
 			},
 			
 		},

@@ -3,35 +3,33 @@
 		<uni-nav-bar title="我的笔记" background-color="#00aaff" color="#FFFFFF" status-bar="true">
 			<block slot="left">
 				<view class="note-navbar">
-					<uni-icons type="left" color="#FFFFFF" size="18" @click="back()" />
+					<uni-icons type="left" color="#FFFFFF" size="18" @click="back()"/>
 				</view>
 			</block>
 		</uni-nav-bar>
-
-		<view v-if="this.notes.length != 0">
-
+		
+		<view  v-if="this.notes.length != 0">
 			<view v-for="(item, index) in notes" :key="index">
-				<uni-card isShadow border padding="15px 5px 0px 5px" margin="15px 15px 15px 15px"
-					style="border-radius: 10px;" @click="cardClick(item)">
+				<uni-card isShadow border padding="15px 5px 0px 5px"
+					margin="15px 15px 15px 15px" style="border-radius: 10px;" @click="cardClick(item)">
 					<view class="u-demo-block">
 						<view>
 							<view>
 								<text class="note-title">{{item.note_title}}</text>
-
+					
 								<uni-row v-if="item.pic" style="margin-top: 15px;">
 									<uni-col span="12">
 										<view>
-											<p class="note-content"> {{item.note_content}}</p>
+											<p class="note-content"> {{item.note_content ? item.note_content : "..."}}</p>
 										</view>
 									</uni-col>
 									<uni-col offset="3" span="9">
 										<view>
-											<u--image :src="item.pic" width="250rpx" height="180rpx" radius="15">
-											</u--image>
+											<u--image :src="item.pic" width="250rpx" height="180rpx" radius="15"></u--image>
 										</view>
 									</uni-col>
 								</uni-row>
-
+								
 								<uni-row v-else style="margin-top: 15px;">
 									<uni-col span="24">
 										<view>
@@ -39,49 +37,45 @@
 										</view>
 									</uni-col>
 								</uni-row>
-
+								
 								<view style="margin-top: 5px;">
 									<u--text type="info" :text="item.create_time" size="12px"></u--text>
 								</view>
-
+								
 								<view style="margin-top: 10px;">
 									<uni-row>
-										<uni-col span="6">
-											<u-icon name="/static/pic/like.svg" size="30px"
-												style="display: inline-block;"></u-icon>
-											<button type="primary" size="mini"
-												style="width: 60px; background-color: #00aaff; margin-left: 10px;">
-												114</button>
+										<uni-col span="2">
+											<u-icon name="/static/pic/like.svg" size="30px"></u-icon>
 										</uni-col>
-
-										<uni-col offset="12" span="6">
-											<u-icon name="/static/pic/star.svg" size="30px"
-												style="display: inline-block;"></u-icon>
-
+										<uni-col span="4">
+											<button type="primary" size="mini"
+												style="width: 60px; background-color: #00aaff; margin-left: 5px;"> 114</button>
+										</uni-col>
+										<uni-col offset="12" span="2">
+											<u-icon name="/static/pic/star.svg" size="30px"></u-icon>
+										</uni-col>
+										<uni-col span="4">
 											<button size="mini"
-												style="width: 60px; background-color: #f9ae3d; color: white; margin-left: 10px;">
+												style="width: 60px; background-color: #f9ae3d; color: white; margin-left: 5px;">
 												514</button>
 										</uni-col>
 									</uni-row>
 								</view>
-
-
+								
+								
 							</view>
 						</view>
 					</view>
-
+					
 				</uni-card>
 			</view>
 		</view>
-
-		<view v-else>
-			<tui-no-data :fixed="false" imgUrl="/static/pic/note/no_note.png" style="margin-top: 70px;">暂无笔记
-			</tui-no-data>
+		
+		<view v-else style="text-align: center;">
+			<image src="../../static/pic/note/no_note.png" style="margin: auto; margin-top: 30px; height: 200px; width: 200px;" ></image>
+			<p style="font-size: 20px;margin-top: 30px;">暂无笔记</p>
 		</view>
-
-		<!--为了能够提取html信息加的不显示的editor-->
-		<editor id="editor" @ready="onEditorReady" style="display: none;">
-		</editor>
+		
 	</view>
 </template>
 
@@ -89,127 +83,146 @@
 	import tuiCard from '@/components/tui-card/tui-card.vue';
 	import tuiListCell from '@/components/tui-list-cell/tui-list-cell.vue';
 	import tuiNoData from '@/components/tui-no-data/tui-no-data.vue';
-	import index from '@/pages/note/index.vue'
-	import note from '@/pages/note/note.vue'
+	import myRequest from '../../common/request';
 
 	export default {
 		data() {
 			return {
 				searchValue: "",
-				notes: [{
-						note_title: "基物实验",
-						note_content: "",
-						pic: "",
-						create_time: "2023/02/02",
-						note_html: '<p>uihguyvi</p><p><br></p><p><img src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2Fa8f033c5-e4dd-47a9-9117-13e0b6c46912%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1682653405&t=807ac430db96da77a703fc6a9790ea0a" alt="图像"></p><p><br></p><p><strong><em><u>hvfcdxszedrtfygjk</u></em></strong><img src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2Fa8f033c5-e4dd-47a9-9117-13e0b6c46912%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1682653405&t=807ac430db96da77a703fc6a9790ea0a" alt="图像"></p><p><br></p>'
-					},
-					{
-						author_name: "Longxmas",
-						note_title: "二分查找",
-						note_content: "",
-						pic: "",
-						create_time: "2022/12/15",
-						note_html: '<ol><li><strong>二分查找</strong>是一类常见的<em><u>算法问题</u></em>, 对于这种问题，尤其需要注意的就是细节以及边界条件的处理</li><li><img src="https://img1.baidu.com/it/u=360207058,2093383890&fm=253&fmt=auto&app=120&f=PNG?w=1535&h=547" alt="图像"></li></ol><p>						</p>'
-					},
-					{
-						author_name: "Longxmas",
-						note_title: "二分查找",
-						note_content: "",
-						pic: "",
-						create_time: "2022/12/15",
-						note_html: '<ol><li>二分查找是一类常见的算法问题, 对于这种问题，尤其需要注意的就是细节以及边界条件的处理二分查找是一类常见的算法问题, 对于这种问题，尤其需要注意的就是细节以及边界条件的处理二分查找是一类常见的算法问题, 对于这种问题，尤其需要注意的就是细节以及边界条件的处理二分查找是一类常见的算法问题, 对于这种问题，尤其需要注意的就是细节以及边界条件的处理二分查找是一类常见的算法问题, 对于这种问题，尤其需要注意的就是细节以及边界条件的处理二分查找是一类常见的算法问题, 对于这种问题，尤其需要注意的就是细节以及边界条件的处理二分查找是一类常见的算法问题, 对于这种问题，尤其需要注意的就是细节以及边界条件的处理</li><li><br></li></ol><p><img src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2Fa8f033c5-e4dd-47a9-9117-13e0b6c46912%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1682653405&t=807ac430db96da77a703fc6a9790ea0a" data-local="blob:http://localhost:8080/424489c9-f442-40df-bbb4-fc878e0fe13d" alt="图像"></p><p><br></p><p><br></p><p><img src="https://img1.baidu.com/it/u=360207058,2093383890&fm=253&fmt=auto&app=120&f=PNG?w=1535&h=547" data-local="blob:http://localhost:8080/943ddd9e-f079-4f4b-8460-131233e215c7" alt="图像"></p><p><br></p><p><br></p><p><br></p>'
-					},
-					{
-						author_name: "Longxmas",
-						note_title: "二分查找",
-						note_content: "",
-						pic: "",
-						create_time: "2022/06/06",
-						note_html: "<p>测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试</p>"
-					}
+				notes: [
 				]
 			}
 		},
 		methods: {
-			onEditorReady() {
-				uni.createSelectorQuery().select('#editor').context((res) => {
-					this.editorCtx = res.context
-				}).exec()
-				this.loadData()
-			},
-			search(res) {
-				uni.showToast({
-					title: '搜索：' + res.value,
-					icon: 'none'
-				})
-			},
-			extractImage(htmlStr) {
-				// 从html中提取出第一个图片
-				var img = htmlStr.match(/<img.*?(?:>|\/>)/gi);
-				if (img) {
-					img = img[0].match(/src=[\'\"]?([^\'\"]*)[\'\"]?/i);
-					if (img) {
-						img = img[1];
-					}
-				}
-				return img;
-			},
-
 			onBackPress() {
 				// #ifdef APP-PLUS
 				plus.key.hideSoftKeybord();
 				// #endif
 			},
-
+			
 			loadData() {
-				for (var i = 0; i < this.notes.length; i++) {
-					console.log(this.editorCtx)
-					this.editorCtx.setContents({
-						// html: "<p><strong>基物实验</strong></p><p><em>111</em></p><p><em><s><u>diwjfweiohu</u></s></em></p>"
-						html: this.notes[i].note_html
-					});
-
-					var plainText;
-
-					this.editorCtx.getContents({
-						success: res => {
-							this.notes[i].note_content = res.text;
-						}
-					})
-
-					this.editorCtx.clear()
-
+				for (var i = 0; i < this.notes.length; i ++ ) {
+					var html = this.notes[i].note_html
+					var plainText = html.replace(/<[^>]+>/g, "");
+					var plainText = html.replace(/<[^>]+>/g, "").replace(/&nbsp;/g, " ").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&");
+					
+					// console.log(plainText)
+					
+					// 替换所有换行符为空格
+					plainText = plainText.replace(/[\r\n\t]/g, " ");
+					// 替换所有空格为一个空格
+					plainText = plainText.replace(/\s+/g, " ");
+					// 去除首尾空格
+					plainText = plainText.replace(/(^\s*)|(\s*$)/g, "");
+					
+					this.notes[i].note_content = plainText
+					// console.log(this.notes[i].note_content)
 					this.notes[i].pic = this.extractImage(this.notes[i].note_html)
+					
 				}
 			},
-
+				
 			cardClick(item) {
-				index.methods.cardClick(item)
+				console.log(item)
+				
+				uni.navigateTo({
+					url: "/pages/note/note",
+					success: () => {
+						console.log(111)
+						var t = item
+						
+						// 为了先跳转到另一个页面定义好on函数
+						setTimeout(
+							() => {
+								uni.$emit('passNoteContent', t)
+							},
+							2500
+						)
+						
+					}
+				})
 			},
-			
 			back() {
-				note.methods.back()
+				uni.switchTab({
+					url: '/pages/personal/personal'
+				})
 			}
+		},
+		onLoad() {
+			if (!myRequest.isLogin()) {
+				myRequest.toast('请先登录')
+				uni.redirectTo({
+					url: '/pages/login/login'
+				})
+			}
+			
+			
+			console.log(uni.getStorageSync('token'))
+			
+			uni.request({
+				url: myRequest.interfaceUrl() + '/user/note',
+				method: 'GET',
+				header: {
+					'X-Token': myRequest.getToken()
+				},
+				
+				success: (res) => {
+					console.log(res)
+					if (res.statusCode == 200) {
+						for (var i = 0; i < res.data.length; i ++) {
+							var t = {
+								note_content: "", 
+								note_html: res.data[i].content, 
+								note_title: res.data[i].title,
+								pic: "",
+								create_time: '2022/02/02',
+								id: res.data[i].id
+							}
+							this.notes.push(t);
+						}
+						this.loadData()
+					}
+					else if (res.statusCode == 401) {
+						if (myRequest.isLogin()) {
+							myRequest.toast('请重新登录')
+						}
+						else {
+							myRequest.toast('请登录')
+						}
+						uni.navigateTo({
+							url: '/pages/login/login'
+						})
+					}
+					else {
+						myRequest.toast()
+					}
+				},
+				
+				fail: (res) => {					
+					console.log(res)
+					myRequest.toast()
+				}
+			})
 		}
 	}
+	
 </script>
 
 <style>
 	@import url('../homePage/homePage.css');
-
 	page {
 		background: #EDEDED;
 	}
-
+	
 	.container {
 		padding-bottom: env(safe-area-inset-bottom);
 	}
-
-
+	
+	
 	.note-img {
 		max-height: 150px;
 	}
-
+	
 	.note-title {
 		font-size: 18px;
 		color: black;
@@ -217,19 +230,4 @@
 		margin-bottom: 5px;
 	}
 
-	.note-content {
-		text-overflow: ellipsis;
-		overflow: hidden;
-		display: -webkit-box;
-		-webkit-box-orient: vertical;
-		-webkit-line-clamp: 4;
-		line-height: 20px;
-		max-height: 80px;
-		font-family: 微软雅黑, serif;
-		font-size: 15px;
-		color: gray;
-		/*盒子宽自己设置想要的宽度*/
-		white-space: pre-wrap;
-		/*处理元素内的空白,保留空白符序列，但是正常地进行换行*/
-	}
 </style>
