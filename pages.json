@@ -222,6 +222,26 @@
             }
             
         }
+        ,{
+            "path" : "pages/problemSet/problemSetCreate",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "创建题库",
+                "navigationStyle": "custom",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/problemSet/problemUpload",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "上传题目",
+                "navigationStyle": "custom",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"subPackages": [{
 		"root": "pages/componentsA",

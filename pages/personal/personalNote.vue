@@ -3,15 +3,16 @@
 		<uni-nav-bar title="我的笔记" background-color="#00aaff" color="#FFFFFF" status-bar="true">
 			<block slot="left">
 				<view class="note-navbar">
-					<uni-icons type="left" color="#FFFFFF" size="18" @click="back()"/>
+					<uni-icons type="left" color="#FFFFFF" size="18" @click="back"/>
 				</view>
 			</block>
 		</uni-nav-bar>
 		
-		<view  v-if="this.notes.length != 0">
+		
+		<view v-if="notes && notes.length != 0" style="margin-top: 20px;">
 			<view v-for="(item, index) in notes" :key="index">
 				<uni-card isShadow border padding="15px 5px 0px 5px"
-					margin="15px 15px 15px 15px" style="border-radius: 10px;" @click="cardClick(item)">
+					margin="0px 15px 15px 15px" style="border-radius: 10px;" @click="cardClick(item)">
 					<view class="u-demo-block">
 						<view>
 							<view>
@@ -86,6 +87,9 @@
 	import myRequest from '../../common/request';
 
 	export default {
+		components: {
+			tuiNoData
+		},
 		data() {
 			return {
 				searchValue: "",
@@ -94,6 +98,24 @@
 			}
 		},
 		methods: {
+			search(res) {
+				uni.showToast({
+					title: '搜索：' + res.value,
+					icon: 'none'
+				})
+			},
+			extractImage(htmlStr) {
+				// 从html中提取出第一个图片
+				var img = htmlStr.match(/<img.*?(?:>|\/>)/gi);
+				if (img) {
+					img = img[0].match(/src=[\'\"]?([^\'\"]*)[\'\"]?/i);
+					if (img) {
+						img = img[1];
+					}
+				}
+				return img;
+			},
+
 			onBackPress() {
 				// #ifdef APP-PLUS
 				plus.key.hideSoftKeybord();
@@ -144,7 +166,7 @@
 			},
 			back() {
 				uni.switchTab({
-					url: '/pages/personal/personal'
+					url: '/pages/homePage/homePage'
 				})
 			}
 		},
@@ -155,7 +177,6 @@
 					url: '/pages/login/login'
 				})
 			}
-			
 			
 			console.log(uni.getStorageSync('token'))
 			
@@ -169,14 +190,14 @@
 				success: (res) => {
 					console.log(res)
 					if (res.statusCode == 200) {
-						for (var i = 0; i < res.data.length; i ++) {
+						for (var i = 0; i < res.data.notes.length; i ++) {
 							var t = {
 								note_content: "", 
-								note_html: res.data[i].content, 
-								note_title: res.data[i].title,
+								note_html: res.data.notes[i].content, 
+								note_title: res.data.notes[i].title,
 								pic: "",
 								create_time: '2022/02/02',
-								id: res.data[i].id
+								id: res.data.notes[i].id
 							}
 							this.notes.push(t);
 						}
@@ -189,7 +210,7 @@
 						else {
 							myRequest.toast('请登录')
 						}
-						uni.navigateTo({
+						uni.redirectTo({
 							url: '/pages/login/login'
 						})
 					}

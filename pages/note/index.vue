@@ -14,7 +14,7 @@
 						style="margin-left: 5px; margin-right: 5px;">
 		</uni-search-bar>
 		
-		<view v-if="notes && notes.length != 0">
+		<view v-if="notes && notes.length != 0" style="margin-top: 10px;">
 			<view v-for="(item, index) in notes" :key="index">
 				<uni-card isShadow border padding="15px 5px 0px 5px"
 					margin="0px 15px 15px 15px" style="border-radius: 10px;" @click="cardClick(item)">
@@ -77,8 +77,9 @@
 			</view>
 		</view>
 		
-		<view v-else>
-			<tui-no-data :fixed="false" imgUrl="/static/pic/note/no_note.png" style="margin-top: 70px;">暂无笔记</tui-no-data>
+		<view v-else style="text-align: center;">
+			<image src="../../static/pic/note/no_note.png" style="margin: auto; margin-top: 30px; height: 200px; width: 200px;" ></image>
+			<p style="font-size: 20px;margin-top: 30px;">暂无笔记</p>
 		</view>
 		
 	</view>
@@ -194,14 +195,14 @@
 				success: (res) => {
 					console.log(res)
 					if (res.statusCode == 200) {
-						for (var i = 0; i < res.data.length; i ++) {
+						for (var i = 0; i < res.data.notes.length; i ++) {
 							var t = {
 								note_content: "", 
-								note_html: res.data[i].content, 
-								note_title: res.data[i].title,
+								note_html: res.data.notes[i].content, 
+								note_title: res.data.notes[i].title,
 								pic: "",
 								create_time: '2022/02/02',
-								id: res.data[i].id
+								id: res.data.notes[i].id
 							}
 							this.notes.push(t);
 						}

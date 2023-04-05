@@ -53,6 +53,7 @@
 <script>
 	import tuiNoData from '@/components/tui-no-data/tui-no-data.vue';
 	import note from '@/pages/note/note.vue'
+	import myRequest from '../../common/request';
 
 	export default {
 		data() {
