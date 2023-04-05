@@ -153,7 +153,7 @@ import myRequest from '../../common/request'
 							console.log(222)
 							console.log(res)
 							if (res.statusCode == 200) {
-								uni.redirectTo({
+								uni.switchTab({
 									url: '/pages/note/index'
 								})
 							}
@@ -240,9 +240,6 @@ import myRequest from '../../common/request'
 				// uni.redirectTo({
 				// 	url: '/pages/note/index'
 				// })
-				/*uni.switchTab({
-					url: '/pages/note/index'
-				})*/
 			},
 			
 		},

@@ -4,27 +4,43 @@
 			<!--自定义navbar-->
 			<view>
 				<view>
-					<uni-nav-bar backgroundColor="#ffffff" color="#000000" shadow="true" statusBar="true" title="创建笔记">
+					<uni-nav-bar backgroundColor="#00aaff" fixed=false color="#ffffff" shadow="true" statusBar="true" title="创建笔记">
 						
 						<block slot="left">
 							<view class="note-navbar">
 								<!-- <uni-icons type="closeempty" color="#e45656" size="18" /> -->
-								<i-icon size="20px" color="#e45656" name="close-fill" @click="clickClose"></i-icon>
+								<i-icon size="20px" color="#ffffff" name="more-2-fill" @click="toggle"></i-icon>
+								<!-- <i-icon size="20px" color="#e45656" name="close-fill" @click="clickClose"></i-icon> -->
+								
+								<!-- <i-icon size="20px" color="#18b566" name="check-fill" @click="submit" style="margin-left: 5px;"></i-icon> -->
 							</view>
 						</block>
 						
 						<block slot="right">
 							<view class="note-navbar">
 								<!-- <i-icon size="20px" color="#f29100" name="price-tag-fill"></i-icon> -->
-								<!-- <i-icon size="20px" color="#666" name="more-2-fill"></i-icon> -->
 								<!-- <uni-icons type="checkmarkempty" color="#19be6b" size="18"></uni-icons> -->
-								<i-icon size="20px" color="#19be6b" name="check-fill" @click="submit"></i-icon>
 							</view>
 						</block>
 					</uni-nav-bar>
 				</view>
 			</view>
 			
+			<!--气泡弹窗-->
+			<tui-bubble-popup :show="popupShow" @close="toggle" maskBgColor="transparent" left="8px" :top="popupTop" 
+				width="120px" backgroundColor="#4c4c4c"
+				triangleLeft="10px" triangleTop="-22rpx">
+				<view class="tui-popup-item" :class="{ 'tui-start': index === 0, 'tui-last': index === itemList.length - 1 }"
+				 hover-class="tui-item-active" :hover-stay-time="150" @tap="handleClick(index)" v-for="(item, index) in itemList"
+				 :key="index">
+					<!-- <tui-icon :name="item.icon" color="#fff" :size="40" unit="rpx" v-if="item.icon && !isImage"></tui-icon> -->
+					<i-icon :name="item.icon" color="#fff" :size="20"></i-icon>
+					<text class="tui-bubble-popup_title" style="margin-left: 10px;">{{ item.title }}</text>
+				</view>
+			</tui-bubble-popup>
+		
+			
+			<!--笔记标题-->
 			<view class="title_wrapper">
 				<textarea class="title" v-model=title :placeholder="title_placeholder" :maxlength="title_maxlength" placeholder-class="title_placeholder"></textarea>
 			</view>
@@ -108,13 +124,19 @@
 <script>
 	import myRequest from '../../common/request';
 	import tuiModal from '@/components/tui-modal/tui-modal.vue';
+	import tuiBubblePopup from '@/components/tui-bubble-popup/tui-bubble-popup.vue';
+	import tRtPopup from '@/components/t-rt-popup/t-rt-popup';
 	
 	export default {
 		components: {
-			tuiModal
+			tuiModal,
+			tuiBubblePopup,
+			tRtPopup
 		},
 		data() {
 			return {
+				popupTop: '12rpx',
+				
 				show: false,
 				readOnly: false,
 				formats: {},
@@ -122,10 +144,35 @@
 				title_placeholder: "笔记标题",
 				title_maxlength: 50,
 				content_placeholder: "笔记内容",
-				token: ""
+				token: "",
+				
+				itemList: [{
+						title: '保存',
+						icon: 'save-fill'
+					},
+					{
+						title: '取消',
+						icon: 'delete-back-fill'
+					}
+				],
+				popupShow: false
 			}
 		},
 		methods: {
+			toggle() {
+				this.popupShow = !this.popupShow;
+			},
+			handleClick(index) {
+				if (index == 0) {
+					this.submit()
+				}
+				else if (index == 1) {
+					this.show = true;
+				}
+				
+				this.toggle()
+			},
+			
 			clickClose() {
 				this.show = true;
 			},
@@ -137,7 +184,7 @@
 				}
 				else {
 					this.show = false;
-					uni.redirectTo({
+					uni.switchTab({
 						url: '/pages/note/index'
 					})
 				}
@@ -242,9 +289,14 @@
 			
 			async submit() {
 				if (!myRequest.isLogin()) {
-					uni.navigateTo({
+					uni.redirectTo({
 						url: '/pages/login/login'
 					})
+					return;
+				}
+				
+				if (!this.title) {
+					myRequest.toast('标题不能为空')
 					return;
 				}
 				
@@ -256,44 +308,49 @@
 					success: res => {
 						html_content = res.html
 						
-						// TODO: 后续更改is_public字段
-						var data = JSON.stringify({
-							"content": html_content,
-							"title": this.title
-						})
-						
-						var is_public = true
-						
-						myRequest.request(`/note/create?is_public=${is_public}`, 'POST', data).then(
-							function(res) {
-								console.log(res)
-								if (res.statusCode == 200) {
-									myRequest.toast('笔记创建成功')
-									uni.redirectTo({
-										url: '/pages/note/index'
-									})
-								}
-								else if(res.statusCode == 401){
-									if (myRequest.isLogin()) {
-										myRequest.toast('请重新登录')
+						if (!res.text.replace(/[\r\n\t\s]*/, "")) {
+							myRequest.toast('内容不能为空')
+						}
+						else {						
+							// TODO: 后续更改is_public字段
+							var data = JSON.stringify({
+								"content": html_content,
+								"title": this.title
+							})
+							
+							var is_public = true
+							
+							myRequest.request(`/note/create?is_public=${is_public}`, 'POST', data).then(
+								function(res) {
+									console.log(res)
+									if (res.statusCode == 200) {
+										myRequest.toast('笔记创建成功')
+										uni.switchTab({
+											url: '/pages/note/index'
+										})
+									}
+									else if(res.statusCode == 401){
+										if (myRequest.isLogin()) {
+											myRequest.toast('请重新登录')
+										}
+										else {
+											myRequest.toast('请登录')
+										}
+										uni.redirectTo({
+											url: '/pages/login/login'
+										})
 									}
 									else {
-										myRequest.toast('请登录')
+										myRequest.toast()
 									}
-									uni.navigateTo({
-										url: '/pages/login/login'
-									})
 								}
-								else {
+							).catch(
+								function(res) {
+									console.log(res)
 									myRequest.toast()
 								}
-							}
-						).catch(
-							function(res) {
-								console.log(res)
-								myRequest.toast()
-							}
-						)
+							)
+						}
 					}
 				})
 				
@@ -330,6 +387,15 @@
 					
 				// } 
 			}
+		},
+		onLoad() {
+			// #ifdef H5
+			this.popupTop = 44 + uni.upx2px(12) + 'px';
+			// #endif
+			
+			// #ifndef H5
+			this.popupTop = 12 + 96 + 'px';		// ios var(--status-bar-height)为48 
+			// #endif
 		}
 	}
 </script>
@@ -443,4 +509,30 @@
 	.ql-active {
 		color: #06c;
 	}
+	
+	.tui-popup-item {
+		/* padding: 34rpx; */
+		padding-top: 34rpx;
+		padding-bottom: 34rpx;
+		padding-left: 15rpx;
+		display: flex;
+		align-items: flex-start;
+		font-size: 25rpx;
+		/* position: relative; */
+	}
+	
+	.tui-start {
+		border-top-left-radius: 8rpx;
+		border-top-right-radius: 8rpx;
+	}
+	
+	.tui-last {
+		border-bottom-left-radius: 8rpx;
+		border-bottom-right-radius: 8rpx;
+	}
+	
+	.tui-item-active {
+		background-color: #444;
+	}
+	
 </style>
