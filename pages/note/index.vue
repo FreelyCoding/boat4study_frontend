@@ -55,7 +55,7 @@
 										</uni-col>
 										<uni-col :span="4">
 											<button type="primary" size="mini"
-												style="width: 60px; background-color: #00aaff; margin-left: 5px;"> 114</button>
+												style="width: 60px; background-color: #00aaff; margin-left: 5px;">{{ item.like_count }}</button>
 										</uni-col>
 										<uni-col :offset="12" :span="2">
 											<u-icon name="/static/pic/star.svg" size="30px"></u-icon>
@@ -63,7 +63,7 @@
 										<uni-col :span="4">
 											<button size="mini"
 												style="width: 60px; background-color: #f9ae3d; color: white; margin-left: 5px;">
-												514</button>
+												{{ item.star_count }}</button>
 										</uni-col>
 									</uni-row>
 								</view>
@@ -98,6 +98,7 @@
 		data() {
 			return {
 				searchValue: "",
+				flag: false,
 				notes: [
 				]
 			}
@@ -156,20 +157,20 @@
 				console.log(item)
 				
 				uni.navigateTo({
-					url: "/pages/note/note",
-					success: () => {
-						console.log(111)
-						var t = item
+					url: `/pages/note/note?id=${item.id}`,
+					// success: () => {
+					// 	console.log(111)
+					// 	var t = item
 						
-						// 为了先跳转到另一个页面定义好on函数
-						setTimeout(
-							() => {
-								uni.$emit('passNoteContent', t)
-							},
-							2500
-						)
+					// 	// 为了先跳转到另一个页面定义好on函数
+					// 	setTimeout(
+					// 		() => {
+					// 			uni.$emit('passNoteContent', t)
+					// 		},
+					// 		2500
+					// 	)
 						
-					}
+					// }
 				})
 			},
 			back() {
@@ -179,6 +180,8 @@
 			},
 			refresh() {
 				myRequest.checkLogin()
+				
+				this.notes = []
 				
 				uni.request({
 					url: myRequest.interfaceUrl() + '/user/note',
@@ -197,7 +200,9 @@
 									note_title: res.data.notes[i].title,
 									pic: "",
 									create_time:  res.data.notes[i].created_at.slice(0,10),
-									id: res.data.notes[i].id
+									id: res.data.notes[i].id,
+									like_count: res.data.notes[i].is_liked ? 1 : 0,
+									star_count: res.data.notes[i].is_favorite ? 1 : 0 
 								}
 								this.notes.push(t);
 							}

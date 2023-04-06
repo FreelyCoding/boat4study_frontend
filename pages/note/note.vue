@@ -45,7 +45,7 @@
 
 
 			<!--悬浮按钮-->
-			<uni-fab ref="fab" horizontal="right" vertical="bottom" direction="horizontal" :content="content"
+			<uni-fab ref="fab" horizontal="right" vertical="bottom" direction="horizontal" :content="fabContent"
 				@trigger="trigger"></uni-fab>
 
 
@@ -89,8 +89,12 @@
 				valid: false,
 				note_html: "",
 				note_id: "",
+				
+				like_index: 2, 
+				star_index: 3,
 
-				content: [{
+				fabContent: [
+					{
 						iconPath: '/static/pic/note/delete-bin-line.png',
 						selectedIconPath: '/static/pic/note/delete-bin-fill.png',
 						text: '删除',
@@ -138,10 +142,10 @@
 				let index = e.index
 				if (index == 0) {
 					this.show = false;
-					this.content[0].active = !this.content[0].active
+					this.fabContent[0].active = !this.fabContent[0].active
 				} else {
 					this.show = false;
-					this.content[0].active = !this.content[0].active
+					this.fabContent[0].active = !this.fabContent[0].active
 
 					console.log(123)
 					console.log(this.note_id)
@@ -172,25 +176,85 @@
 			onEditorReady() {
 				uni.createSelectorQuery().select('#editor').context((res) => {
 					this.editorCtx = res.context
-
-					let that = this;
-
-					myRequest.showLoading('加载中')
-
-					uni.$on('passNoteContent', async function(data) {
-						uni.hideLoading()
-
-						console.log(data)
-						that.valid = true;
-						that.title = data.note_title;
-						that.note_html = data.note_html;
-						that.note_id = data.id;
-
-						that.editorCtx.setContents({
-							html: that.note_html
+					
+					var pages = getCurrentPages();
+					var curRoutes = pages[pages.length - 1].route
+					var curParam = pages[pages.length - 1].options;
+					
+					var id = curParam['id']
+					
+					if (!myRequest.isLogin()) {
+						myRequest.toast('请先登录')
+						uni.redirectTo({
+							url: '/pages/login/login'
 						})
-					})
-
+						return
+					}
+					
+					if (!id) {
+						uni.switchTab({
+							url: '/pages/note/index'
+						})
+					}
+					else {
+						this.note_id = id;
+						
+						uni.request({
+							url: myRequest.interfaceUrl() + `/note/all?id=${id}`,
+							method: 'GET',
+							header: {
+								'X-Token': myRequest.getToken()
+							},
+							success: (res) => {
+								if (res.statusCode == 200) {
+									console.log(res)
+									if (res.data == null) {
+										myRequest.toast()
+										uni.switchTab({
+											url: '/pages/note/index'
+										})
+										return
+									}
+									var data = res.data[0];
+									
+									this.title = data.title;
+									this.note_html = data.content;
+									this.note_id = data.id;
+									
+									if (data.is_liked) {
+										this.fabContent[this.like_index].active = true
+									}
+									if (data.is_favorite) {
+										this.fabContent[this.star_index].active = true
+									}
+									
+									this.editorCtx.setContents({
+										html: this.note_html
+									})
+								}
+								else if (res.statusCode == 401) {
+									myRequest.toast('请先登录')
+									uni.redirectTo({
+										url: '/pages/login/login'
+									})
+								}
+								else {
+									console.log('wrong')
+									myRequest.toast()
+									uni.switchTab({
+										url: '/pages/note/index'
+									})
+								}
+							},
+							
+							fail: (res) => {
+								myRequest.toast()
+								uni.switchTab({
+									url: '/pages/note/index'
+								})
+							}
+						})	
+					}	
 				}).exec()
 			},
 			format(e) {
@@ -209,43 +273,92 @@
 
 			trigger(e) {
 				// console.log(e)
-				this.content[e.index].active = !e.item.active
-				// uni.showModal({
-				// 	title: '提示',
-				// 	content: `您${this.content[e.index].active ? '选中了' : '取消了'}${e.item.text}`,
-				// 	success: function(res) {
-				// 		if (res.confirm) {
-				// 			console.log('用户点击确定')
-				// 		} else if (res.cancel) {
-				// 			console.log('用户点击取消')
-				// 		}
-				// 	}
-				// })
+				this.fabContent[e.index].active = !e.item.active
+				var t = this.fabContent[e.index].active
 
 				if (e.index == 0) {
 					this.show = true;
+				}
+				if (e.index == 1) {
+					uni.redirectTo({
+						url: `/pages/note/edit_note?id=${this.note_id}`
+					})
+					return
+				}
+				
+				if (e.index == this.like_index || e.index == this.star_index) {
+					
+					var url;
+					if (e.index == this.like_index && !t) url = `/note/unlike/${this.note_id}`
+					else if (e.index == this.like_index && t) url = `/note/like/${this.note_id}`
+					else if (e.index == this.star_index && !t) url = `/note/unfavorite/${this.note_id}`
+					else url = `/note/favorite/${this.note_id}`
+					
+					uni.request({
+						url: myRequest.interfaceUrl() + url,
+						method: 'POST',
+						header: {
+							'X-Token': myRequest.getToken()
+						},
+						success: (res) => {
+							if (res.statusCode == 200) {
+								console.log(res)
+							}
+							else if (res.statusCode == 401) {
+								myRequest.toast('请先登录')
+								uni.redirectTo({
+									url: '/pages/login/login'
+								})
+							}
+							else {
+								console.log('wrong')
+								myRequest.toast()
+								uni.switchTab({
+									url: '/pages/note/index'
+								})
+							}
+						},
+						
+						fail: (res) => {
+							myRequest.toast()
+							uni.switchTab({
+								url: '/pages/note/index'
+							})
+						}
+					})	
+				
 				}
 
 			},
 
 			back() {
-				uni.navigateBack()
-				// uni.switchTab({
-				// 	url: '/pages/note/index'
-				// })
-				// uni.redirectTo({
-				// 	url: '/pages/note/index'
-				// })
+				var pages = getCurrentPages()
+				if (pages.length > 1) {
+					let page = pages[pages.length - 2]; //跳转页面成功之后
+					
+					if (page.route == 'pages/note/index') {
+						page.refresh(); //如果页面存在，则重新刷新页面
+					}
+					uni.navigateBack()
+				}
+				else {
+					uni.switchTab({
+						url: '/pages/note/index'
+					})
+				}
 			},
 
 		},
 
 		onLoad() {
-
+			var pages = getCurrentPages();
+			var curRoutes = pages[pages.length - 1].route
+			var curParam = pages[pages.length - 1].options;
+			
+			var id = curParam['id']
+			
+			if (id) this.note_id = id
 		},
-		onUnload() {
-			uni.$off('passNoteContent')
-		}
 	}
 </script>
 
