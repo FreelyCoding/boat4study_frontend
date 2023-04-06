@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<uni-nav-bar title="题库信息" background-color="#00aaff" color="#FFFFFF" status-bar="true">
+		<uni-nav-bar title="创建题库" background-color="#00aaff" color="#FFFFFF" status-bar="true">
 			<block slot="left">
 				<view class="note-navbar">
 					<uni-icons type="left" color="#FFFFFF" size="18" @click="back()" />
@@ -12,7 +12,7 @@
 			<uni-row>
 				<uni-col :span="12">
 					<view>
-						<p class="homePage-header" style="margin-bottom: 20px;">创建题库</p>
+						<p class="homePage-header" style="margin-bottom: 20px;">题库信息</p>
 					</view>
 				</uni-col>
 			</uni-row>
