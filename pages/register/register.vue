@@ -47,6 +47,7 @@
 	import tuiButton from '@/components/tui-button/tui-button.vue'
 	import tuiIcon from '@/components/tui-icon/tui-icon.vue'
 	import tuiToast from '@/components/tui-toast/tui-toast.vue'
+	import myRequest from '../../common/request'
 	
 	import util from '@/util/thor_utils/util.js'
 	export default {
@@ -72,7 +73,15 @@
 					
 					success: res => {
 						if (res.statusCode == 200) {
-							this.tui.toast("注册成功！")
+							myRequest.toast('注册成功', 500, true)
+							setTimeout(() => {
+								uni.hideToast();
+								//关闭提示后跳转
+								uni.redirectTo({
+									url: "/pages/login/login"
+								});
+							}, 800)
+							
 						}
 						else if (res.statusCode == 409){
 							this.tui.toast("用户名已存在");

@@ -102,6 +102,9 @@
 				]
 			}
 		},
+		onLoad: function() {
+			this.refresh()
+		},
 		methods: {
 			search(res) {
 				uni.showToast({
@@ -173,63 +176,49 @@
 				uni.switchTab({
 					url: '/pages/homePage/homePage'
 				})
-			}
-		},
-		onLoad() {
-			if (!myRequest.isLogin()) {
-				myRequest.toast('请先登录')
-				uni.redirectTo({
-					url: '/pages/login/login'
-				})
-			}
-			
-			console.log(uni.getStorageSync('token'))
-			
-			uni.request({
-				url: myRequest.interfaceUrl() + '/user/note',
-				method: 'GET',
-				header: {
-					'X-Token': myRequest.getToken()
-				},
+			},
+			refresh() {
+				myRequest.checkLogin()
 				
-				success: (res) => {
-					console.log(res)
-					if (res.statusCode == 200) {
-						for (var i = 0; i < res.data.notes.length; i ++) {
-							var t = {
-								note_content: "", 
-								note_html: res.data.notes[i].content, 
-								note_title: res.data.notes[i].title,
-								pic: "",
-								create_time:  res.data.notes[i].created_at.slice(0,10),
-								id: res.data.notes[i].id
+				uni.request({
+					url: myRequest.interfaceUrl() + '/user/note',
+					method: 'GET',
+					header: {
+						'X-Token': myRequest.getToken()
+					},
+					
+					success: (res) => {
+						console.log(res)
+						if (res.statusCode == 200) {
+							for (var i = 0; i < res.data.notes.length; i ++) {
+								var t = {
+									note_content: "", 
+									note_html: res.data.notes[i].content, 
+									note_title: res.data.notes[i].title,
+									pic: "",
+									create_time:  res.data.notes[i].created_at.slice(0,10),
+									id: res.data.notes[i].id
+								}
+								this.notes.push(t);
 							}
-							this.notes.push(t);
+							this.loadData()
 						}
-						this.loadData()
-					}
-					else if (res.statusCode == 401) {
-						if (myRequest.isLogin()) {
-							myRequest.toast('请重新登录')
+						else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
 						}
 						else {
-							myRequest.toast('请登录')
+							myRequest.toast()
 						}
-						uni.redirectTo({
-							url: '/pages/login/login'
-						})
-					}
-					else {
+					},
+					
+					fail: (res) => {					
+						console.log(res)
 						myRequest.toast()
 					}
-				},
-				
-				fail: (res) => {					
-					console.log(res)
-					myRequest.toast()
-				}
-			})
-		}
+				})
+			}
+		},
+
 	}
 	
 </script>

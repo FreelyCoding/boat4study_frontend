@@ -5,11 +5,11 @@
 			<uni-nav-bar title="笔记" background-color="#00aaff" color="#FFFFFF" status-bar="true">
 				<block slot="left">
 					<view class="note-navbar">
-						<uni-icons type="left" color="#FFFFFF" size="18" @click="back()"/>
+						<uni-icons type="left" color="#FFFFFF" size="18" @click="back()" />
 					</view>
 				</block>
 
-<!--
+				<!--
 				<block slot="right">
 					<view class="note-navbar">
 						<i-icon size="20px" color="#ffffff" name="share-fill"></i-icon>
@@ -33,8 +33,8 @@
 				<view class='wrapper'>
 
 					<view class="editor-wrapper">
-						<editor id="editor" class="ql-container"
-							@statuschange="onStatusChange" read-only @ready="onEditorReady">
+						<editor id="editor" class="ql-container" @statuschange="onStatusChange" read-only
+							@ready="onEditorReady">
 						</editor>
 					</view>
 				</view>
@@ -71,16 +71,16 @@
 			<!-- </uni-list> -->
 
 		</view>
-		
-		
+
+
 		<!--模态框-->
-		<tui-modal :show="show"  title="提示" content="确定删除笔记吗" @click="handleModalClick" width="70%"></tui-modal>
-		
+		<tui-modal :show="show" title="提示" content="确定删除笔记吗" @click="handleModalClick" width="70%"></tui-modal>
+
 	</view>
 </template>
 
 <script>
-import myRequest from '../../common/request'
+	import myRequest from '../../common/request'
 	export default {
 		data() {
 			return {
@@ -89,9 +89,8 @@ import myRequest from '../../common/request'
 				valid: false,
 				note_html: "",
 				note_id: "",
-			
-				content: [
-					{
+
+				content: [{
 						iconPath: '/static/pic/note/delete-bin-line.png',
 						selectedIconPath: '/static/pic/note/delete-bin-fill.png',
 						text: '删除',
@@ -140,14 +139,13 @@ import myRequest from '../../common/request'
 				if (index == 0) {
 					this.show = false;
 					this.content[0].active = !this.content[0].active
-				}
-				else {
+				} else {
 					this.show = false;
 					this.content[0].active = !this.content[0].active
-					
+
 					console.log(123)
 					console.log(this.note_id)
-					
+
 					myRequest.request(`/note/delete/${this.note_id}`, 'DELETE').then(
 						function(res) {
 							console.log(222)
@@ -156,13 +154,11 @@ import myRequest from '../../common/request'
 								uni.switchTab({
 									url: '/pages/note/index'
 								})
-							}
-							else if (res.statusCode == 401) {
+							} else if (res.statusCode == 401) {
 								uni.redirectTo({
 									url: '/pages/login/login'
 								})
-							}
-							else {
+							} else {
 								myRequest.toast()
 							}
 						}
@@ -172,29 +168,29 @@ import myRequest from '../../common/request'
 					})
 				}
 			},
-			
+
 			onEditorReady() {
 				uni.createSelectorQuery().select('#editor').context((res) => {
 					this.editorCtx = res.context
-					
+
 					let that = this;
-					
+
 					myRequest.showLoading('加载中')
-					
+
 					uni.$on('passNoteContent', async function(data) {
 						uni.hideLoading()
-						
+
 						console.log(data)
 						that.valid = true;
 						that.title = data.note_title;
 						that.note_html = data.note_html;
 						that.note_id = data.id;
-						
+
 						that.editorCtx.setContents({
 							html: that.note_html
 						})
 					})
-					
+
 				}).exec()
 			},
 			format(e) {
@@ -225,13 +221,13 @@ import myRequest from '../../common/request'
 				// 		}
 				// 	}
 				// })
-				
+
 				if (e.index == 0) {
 					this.show = true;
 				}
-				
+
 			},
-			
+
 			back() {
 				uni.navigateBack()
 				// uni.switchTab({
@@ -241,11 +237,11 @@ import myRequest from '../../common/request'
 				// 	url: '/pages/note/index'
 				// })
 			},
-			
+
 		},
-		
+
 		onLoad() {
-			
+
 		},
 		onUnload() {
 			uni.$off('passNoteContent')
@@ -256,6 +252,7 @@ import myRequest from '../../common/request'
 <style>
 	@import "./editor-icon.css";
 	@import url('note.css');
+
 	/* navbar css */
 	/* $nav-height: 30px;
 	 */
@@ -289,6 +286,4 @@ import myRequest from '../../common/request'
 	}
 
 	/* 主体css */
-
-	
 </style>
