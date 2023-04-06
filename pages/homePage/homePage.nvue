@@ -34,7 +34,7 @@
 							</view>
 							<view style="margin: auto;">
 								<a href="/pages/problemCreate/problemCreate" style="text-decoration: none;">
-									<p style="color: white; font-size: 14px;"> 上传题库 </p>
+									<p style="color: white; font-size: 14px;"> 创建题库 </p>
 								</a>
 							</view>
 						</uni-col>
@@ -247,37 +247,37 @@
 		methods: {
 			jumpToPerson() {
 				uni.navigateTo({
-					url: "/pages/note/note"
+					url: "pages/note/note"
 				})
 			},
 			jumpToCreateProblemSet() {
 				uni.navigateTo({
-					url: "/pages/problemSet/problemSetCreate"
+					url: "pages/problemSet/problemSetCreate"
 				})
 			},
 			jumpToComponents() {
 				uni.navigateTo({
-					url: "/pages/example/components"
+					url: "pages/example/components"
 				})
 			},
 			jumpoToCreateNote() {
 				uni.navigateTo({
-					url: "/pages/note/create_note"
+					url: "pages/note/create_note"
 				})
 			},
 			jumpoToUploadProblem() {
 				uni.navigateTo({
-					url: "/pages/problemCreate/problemCreate"
+					url: "pages/problemCreate/problemCreate"
 				})
 			},
 			jumpToAllNote() {
 				uni.switchTab({
-					url: '/pages/note/index'
+					url: 'pages/note/index'
 				})
 			},
 			jumpToAllProblemSet() {
 				uni.navigateTo({
-					url: "/pages/personal/personalProblemSet"
+					url: "pages/personal/personalProblemSet"
 				})
 			},
 			click1(e) {
