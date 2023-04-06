@@ -29,7 +29,7 @@
 							</view>
 						</uni-col>
 						<uni-col :span="6">
-							<view style="margin: auto;" @click="jumpoToUploadProblem()">
+							<view style="margin: auto;" @click="jumpToCreateProblemSet()">
 								<u-icon name="/static/pic/upload2.svg" size="40px" color="white"></u-icon>
 							</view>
 							<view style="margin: auto;">
@@ -53,13 +53,13 @@
 
 		<view class="m-middle-2">
 			<uni-row>
-				<uni-col span="12">
+				<uni-col :span="12">
 					<view>
 						<p class="homePage-header">精选笔记</p>
 					</view>
 				</uni-col>
 
-				<uni-col span="12">
+				<uni-col :span="12">
 					<view>
 						<p class="check-all" @click="jumpToAllNote()">查看全部</p>
 					</view>
@@ -78,13 +78,13 @@
 								<text class="note-title">{{item.note_title}}</text>
 								<view>
 									<view>
-										<uni-row gutter="20" style="height: 90px;">
-											<uni-col span="15">
+										<uni-row :gutter="20" style="height: 90px;">
+											<uni-col :span="15">
 												<view>
 													<p class="note-content"> {{item.note_content}}</p>
 												</view>
 											</uni-col>
-											<uni-col span="8">
+											<uni-col :span="8">
 												<view style="width: 140px; height: 80px;">
 													<image :src="item.pic" style="width: 120px; height: 80px;"></image>
 												</view>
@@ -94,17 +94,17 @@
 
 									<view style="margin-top: 10px;margin-bottom: 0;">
 										<uni-row>
-											<uni-col span="4">
+											<uni-col :span="4">
 												<u-icon name="/static/pic/like.svg" size="30px"></u-icon>
 											</uni-col>
-											<uni-col span="8">
+											<uni-col :span="8">
 												<button type="primary" size="mini"
 													style="width: 60px; background-color: #00aaff;"> 114</button>
 											</uni-col>
-											<uni-col span="4">
+											<uni-col :span="4">
 												<u-icon name="/static/pic/star.svg" size="30px"></u-icon>
 											</uni-col>
-											<uni-col span="8">
+											<uni-col :span="8">
 												<button size="mini"
 													style="width: 60px; background-color: #f9ae3d; color: white;">
 													514</button>
@@ -121,13 +121,13 @@
 
 		<view class="m-middle-2">
 			<uni-row>
-				<uni-col span="12">
+				<uni-col :span="12">
 					<view>
 						<p class="homePage-header"> 我的题库</p>
 					</view>
 				</uni-col>
 
-				<uni-col span="12">
+				<uni-col :span="12">
 					<view>
 						<p class="check-all" @click="jumpToAllProblemSet()">查看全部</p>
 					</view>
@@ -141,13 +141,13 @@
 					<uni-card spacing="0" padding="0" margin="10px 0px 0px 10px">
 						<view>
 							<uni-row>
-								<uni-col span="5" align="start">
+								<uni-col :span="5" align="start">
 									<view>
 										<u-icon name="/static/pic/qb.svg" size="50px"></u-icon>
 									</view>
 								</uni-col>
 
-								<uni-col span="18" align="start">
+								<uni-col :span="18" align="start">
 									<div class="shuhei" style="margin-bottom: 5px;">
 										<p style="font-size: 20px;">{{item.qbName}}</p>
 									</div>
@@ -248,6 +248,11 @@
 			jumpToPerson() {
 				uni.navigateTo({
 					url: "/pages/note/note"
+				})
+			},
+			jumpToCreateProblemSet() {
+				uni.navigateTo({
+					url: "/pages/problemSet/problemSetCreate"
 				})
 			},
 			jumpToComponents() {

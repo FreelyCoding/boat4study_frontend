@@ -14,7 +14,7 @@
 						style="margin-left: 5px; margin-right: 5px;">
 		</uni-search-bar>
 		
-		<view v-if="notes && notes.length != 0">
+		<view v-if="notes && notes.length != 0" style="margin-top: 10px;">
 			<view v-for="(item, index) in notes" :key="index">
 				<uni-card isShadow border padding="15px 5px 0px 5px"
 					margin="0px 15px 15px 15px" style="border-radius: 10px;" @click="cardClick(item)">
@@ -24,12 +24,12 @@
 								<text class="note-title">{{item.note_title}}</text>
 					
 								<uni-row v-if="item.pic" style="margin-top: 15px;">
-									<uni-col span="12">
+									<uni-col :span="12">
 										<view>
 											<p class="note-content"> {{item.note_content ? item.note_content : "..."}}</p>
 										</view>
 									</uni-col>
-									<uni-col offset="3" span="9">
+									<uni-col :offset="3" :span="9">
 										<view>
 											<u--image :src="item.pic" width="250rpx" height="180rpx" radius="15"></u--image>
 										</view>
@@ -37,7 +37,7 @@
 								</uni-row>
 								
 								<uni-row v-else style="margin-top: 15px;">
-									<uni-col span="24">
+									<uni-col :span="24">
 										<view>
 											<p class="note-content"> {{item.note_content}}</p>
 										</view>
@@ -50,17 +50,17 @@
 								
 								<view style="margin-top: 10px;">
 									<uni-row>
-										<uni-col span="2">
+										<uni-col :span="2">
 											<u-icon name="/static/pic/like.svg" size="30px"></u-icon>
 										</uni-col>
-										<uni-col span="4">
+										<uni-col :span="4">
 											<button type="primary" size="mini"
 												style="width: 60px; background-color: #00aaff; margin-left: 5px;"> 114</button>
 										</uni-col>
-										<uni-col offset="12" span="2">
+										<uni-col :offset="12" :span="2">
 											<u-icon name="/static/pic/star.svg" size="30px"></u-icon>
 										</uni-col>
-										<uni-col span="4">
+										<uni-col :span="4">
 											<button size="mini"
 												style="width: 60px; background-color: #f9ae3d; color: white; margin-left: 5px;">
 												514</button>
@@ -77,8 +77,9 @@
 			</view>
 		</view>
 		
-		<view v-else>
-			<tui-no-data :fixed="false" imgUrl="/static/pic/note/no_note.png" style="margin-top: 70px;">暂无笔记</tui-no-data>
+		<view v-else style="text-align: center;">
+			<image src="../../static/pic/note/no_note.png" style="margin: auto; margin-top: 30px; height: 200px; width: 200px;" ></image>
+			<p style="font-size: 20px;margin-top: 30px;">暂无笔记</p>
 		</view>
 		
 	</view>
@@ -194,14 +195,14 @@
 				success: (res) => {
 					console.log(res)
 					if (res.statusCode == 200) {
-						for (var i = 0; i < res.data.length; i ++) {
+						for (var i = 0; i < res.data.notes.length; i ++) {
 							var t = {
 								note_content: "", 
-								note_html: res.data[i].content, 
-								note_title: res.data[i].title,
+								note_html: res.data.notes[i].content, 
+								note_title: res.data.notes[i].title,
 								pic: "",
-								create_time: '2022/02/02',
-								id: res.data[i].id
+								create_time:  res.data.notes[i].created_at.slice(0,10),
+								id: res.data.notes[i].id
 							}
 							this.notes.push(t);
 						}

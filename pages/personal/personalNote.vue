@@ -3,27 +3,28 @@
 		<uni-nav-bar title="我的笔记" background-color="#00aaff" color="#FFFFFF" status-bar="true">
 			<block slot="left">
 				<view class="note-navbar">
-					<uni-icons type="left" color="#FFFFFF" size="18" @click="back()"/>
+					<uni-icons type="left" color="#FFFFFF" size="18" @click="back"/>
 				</view>
 			</block>
 		</uni-nav-bar>
 		
-		<view  v-if="this.notes.length != 0">
+		
+		<view v-if="notes && notes.length != 0" style="margin-top: 20px;">
 			<view v-for="(item, index) in notes" :key="index">
 				<uni-card isShadow border padding="15px 5px 0px 5px"
-					margin="15px 15px 15px 15px" style="border-radius: 10px;" @click="cardClick(item)">
+					margin="0px 15px 15px 15px" style="border-radius: 10px;" @click="cardClick(item)">
 					<view class="u-demo-block">
 						<view>
 							<view>
 								<text class="note-title">{{item.note_title}}</text>
 					
 								<uni-row v-if="item.pic" style="margin-top: 15px;">
-									<uni-col span="12">
+									<uni-col :span="12">
 										<view>
 											<p class="note-content"> {{item.note_content ? item.note_content : "..."}}</p>
 										</view>
 									</uni-col>
-									<uni-col offset="3" span="9">
+									<uni-col offset="3" :span="9">
 										<view>
 											<u--image :src="item.pic" width="250rpx" height="180rpx" radius="15"></u--image>
 										</view>
@@ -31,7 +32,7 @@
 								</uni-row>
 								
 								<uni-row v-else style="margin-top: 15px;">
-									<uni-col span="24">
+									<uni-col :span="24">
 										<view>
 											<p class="note-content"> {{item.note_content}}</p>
 										</view>
@@ -44,17 +45,17 @@
 								
 								<view style="margin-top: 10px;">
 									<uni-row>
-										<uni-col span="2">
+										<uni-col :span="2">
 											<u-icon name="/static/pic/like.svg" size="30px"></u-icon>
 										</uni-col>
-										<uni-col span="4">
+										<uni-col :span="4">
 											<button type="primary" size="mini"
 												style="width: 60px; background-color: #00aaff; margin-left: 5px;"> 114</button>
 										</uni-col>
-										<uni-col offset="12" span="2">
+										<uni-col :offset="12" :span="2">
 											<u-icon name="/static/pic/star.svg" size="30px"></u-icon>
 										</uni-col>
-										<uni-col span="4">
+										<uni-col :span="4">
 											<button size="mini"
 												style="width: 60px; background-color: #f9ae3d; color: white; margin-left: 5px;">
 												514</button>
@@ -82,7 +83,6 @@
 <script>
 	import tuiCard from '@/components/tui-card/tui-card.vue';
 	import tuiListCell from '@/components/tui-list-cell/tui-list-cell.vue';
-	import tuiNoData from '@/components/tui-no-data/tui-no-data.vue';
 	import myRequest from '../../common/request';
 
 	export default {
@@ -94,6 +94,18 @@
 			}
 		},
 		methods: {
+			extractImage(htmlStr) {
+				// 从html中提取出第一个图片
+				var img = htmlStr.match(/<img.*?(?:>|\/>)/gi);
+				if (img) {
+					img = img[0].match(/src=[\'\"]?([^\'\"]*)[\'\"]?/i);
+					if (img) {
+						img = img[1];
+					}
+				}
+				return img;
+			},
+
 			onBackPress() {
 				// #ifdef APP-PLUS
 				plus.key.hideSoftKeybord();
@@ -156,7 +168,6 @@
 				})
 			}
 			
-			
 			console.log(uni.getStorageSync('token'))
 			
 			uni.request({
@@ -169,14 +180,14 @@
 				success: (res) => {
 					console.log(res)
 					if (res.statusCode == 200) {
-						for (var i = 0; i < res.data.length; i ++) {
+						for (var i = 0; i < res.data.notes.length; i ++) {
 							var t = {
 								note_content: "", 
-								note_html: res.data[i].content, 
-								note_title: res.data[i].title,
+								note_html: res.data.notes[i].content, 
+								note_title: res.data.notes[i].title,
 								pic: "",
-								create_time: '2022/02/02',
-								id: res.data[i].id
+								create_time: res.data.notes[i].created_at.slice(0,10),
+								id: res.data.notes[i].id
 							}
 							this.notes.push(t);
 						}
@@ -189,7 +200,7 @@
 						else {
 							myRequest.toast('请登录')
 						}
-						uni.navigateTo({
+						uni.redirectTo({
 							url: '/pages/login/login'
 						})
 					}

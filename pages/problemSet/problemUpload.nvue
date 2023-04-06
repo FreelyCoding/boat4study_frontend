@@ -1,0 +1,86 @@
+<template>
+	<view>
+		<uni-nav-bar title="上传题目" background-color="#00aaff" color="#FFFFFF" status-bar="true">
+			<block slot="left">
+				<view class="note-navbar">
+					<uni-icons type="left" color="#FFFFFF" size="18" @click="back()" />
+				</view>
+			</block>
+		</uni-nav-bar>
+		
+		<view class="u-demo-block">
+			<u-list customStyle="width: 94%; margin: auto; margin-top: 15px;">
+				<u-list-item v-for="(item, index) in list" :key="index">
+					<uni-card spacing="0" padding="0" margin="20px 0px 0px 0px" isShadow="true" border="true"
+						@click="jumpTo(item.url)">
+						<view>
+							<uni-row>
+								<uni-col span="6">				
+									<view>
+										<u-icon :name="item.iconPath" size="80px"
+										 customStyle="margin-top: 10px; margin-bottom:10px ; margin-left: 10px"></u-icon>
+									</view>
+								</uni-col>
+		
+								<uni-col span="18">
+									<div class="shuhei" style="padding-top: 22px;" >
+										<p style="font-size: 24px;">{{item.title}}</p>
+									</div>
+									<div style="margin-top: 14px;font-size: 16px">
+										{{item.description}}
+									</div>
+								</uni-col>
+							</uni-row>
+						</view>
+					</uni-card>
+				</u-list-item>
+			</u-list>
+		</view>
+	</view>
+</template>
+
+<script>
+	export default {
+		data() {
+			return {
+				problemSet: {
+					id : 1,
+					name : "计算机组成"
+				},
+				list : [
+					{
+						iconPath: "../../static/pic/single.svg",
+						title: "单题导入",
+						description: "单题手动逐一录入题库",
+						url: "/pages/problemCreate/problemCreate"
+					},
+					{
+						iconPath: "../../static/pic/word.svg",
+						title: "Word导入",
+						description: "参考模板调整文档格式内容，然后上传文档"
+					}
+				]
+			}
+		},
+		methods: {
+			back() {
+				uni.navigateTo({
+					url: '/pages/problemSet/problemSetDetail'
+				})
+			},
+			
+			jumpTo(url) {
+				uni.navigateTo({
+					url: url
+				})
+			}
+		}
+	}
+</script>
+
+<style>
+	page {
+		background: #EDEDED;
+	}
+
+</style>
