@@ -177,6 +177,26 @@ const myRequest = {
 	isLogin: function() {
 		return uni.getStorageSync("token") ? true : false
 	},
+	checkLogin: function () {
+		if (!myRequest.isLogin()) {
+			myRequest.toast('请先登录')
+			uni.redirectTo({
+				url: '/pages/login/login'
+			})
+		}
+		console.log(uni.getStorageSync('token'))
+	},
+	redirectToLogin: function() {
+		if (myRequest.isLogin()) {
+			myRequest.toast('请重新登录')
+		}
+		else {
+			myRequest.toast('请登录')
+		}
+		uni.navigateTo({
+			url: '/pages/login/login'
+		})
+	},
 	//跳转页面，校验登录状态
 	href(url, isVerify) {
 		if (isVerify && !myRequest.isLogin()) {

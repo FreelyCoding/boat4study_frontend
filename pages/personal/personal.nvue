@@ -14,7 +14,7 @@
 						<uni-col span="18">
 							<view style="margin: 20px 0px 10px 0px;">
 								<p class="user_name">{{user.user_name}}</p>
-								<p class="uid">{{user.uid}}</p>
+								<p class="uid">uid: &ensp; {{user.uid}}</p>
 							</view>
 						</uni-col>
 					</uni-row>
@@ -134,13 +134,14 @@
 
 <script>
 	import homePage from "@/pages/homePage/homePage"
+	import myRequest from '../../common/request'
 	export default {
 		data() {
 			return {
 				user: {
 					avatar: "/static/pic/student.png",
-					uid: 20376208,
-					user_name: "Longxmas"
+					uid: 1,
+					user_name: "",
 				},
 				searchValue: "",
 				tabValue: 0,
@@ -152,7 +153,43 @@
 			}
 		},
 		onLoad() {
-
+			myRequest.checkLogin()
+			console.log(uni.getStorageSync('token'))
+			uni.request({
+				url: myRequest.interfaceUrl() + '/user/info',
+				method: 'GET',
+				header: {
+					'X-Token': myRequest.getToken()
+				},
+				
+				success: (res) => {
+					console.log(res)
+					if (res.statusCode == 200) {
+						this.user.avatar = "/static/pic/student.png";
+						this.user.user_name = res.data.user_name;
+						this.uid = res.data.user_id;
+					}
+					else if (res.statusCode == 401) {
+						if (myRequest.isLogin()) {
+							myRequest.toast('请重新登录')
+						}
+						else {
+							myRequest.toast('请登录')
+						}
+						uni.redirectTo({
+							url: '/pages/login/login'
+						})
+					}
+					else {
+						myRequest.toast()
+					}
+				},
+				
+				fail: (res) => {					
+					console.log(res)
+					myRequest.toast()
+				}
+			})
 		},
 		methods: {
 			click1(e) {
@@ -232,6 +269,7 @@
 
 	.uid {
 		color: white;
+		padding-left: 2px;
 		font-size: 20px;
 		font-weight: 500;
 		font-family: 'Times New Roman', Times, serif;

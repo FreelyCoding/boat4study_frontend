@@ -76,15 +76,7 @@
 			
 		},
 		onLoad() {
-			if (!myRequest.isLogin()) {
-				myRequest.toast('请先登录')
-				uni.redirectTo({
-					url: '/pages/login/login'
-				})
-			}
-			
-			console.log(uni.getStorageSync('token'))
-			
+			myRequest.checkLogin()
 			uni.request({
 				url: myRequest.interfaceUrl() + '/user/problemset',
 				method: 'GET',
@@ -98,26 +90,18 @@
 						for (var i = 0; i < res.data.length; i ++) {
 							var t = {
 								id: res.data[i].id,
-								description: res.data[i].description, 
-								name: res.data[i].name, 
+								description: res.data[i].description,
+								name: res.data[i].name,
 								pic: "../../static/pic/dataStructure.jpg",
-								created_at: '2023/03/04',
-								problem_number: 114,
+								created_at: res.data[i].created_at.slice(0, 10),
+								problem_number: res.data[i].problem_count,
 							}
 							this.problemSet.push(t);
 						}
 						this.loadData()
 					}
 					else if (res.statusCode == 401) {
-						if (myRequest.isLogin()) {
-							myRequest.toast('请重新登录')
-						}
-						else {
-							myRequest.toast('请登录')
-						}
-						uni.navigateTo({
-							url: '/pages/login/login'
-						})
+						myRequest.redirectToLogin()
 					}
 					else {
 						myRequest.toast()
