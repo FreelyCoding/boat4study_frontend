@@ -3,7 +3,7 @@
 		<view>
 			<!--自定义navbar-->
 			<uni-nav-bar title="题库详情" background-color="#00aaff" color="#FFFFFF" status-bar="true">
-				<block slot="left">
+				<block slot="left" @click="back()">
 					<view class="note-navbar">
 						<uni-icons type="left" color="#FFFFFF" size="18" />
 					</view>
@@ -353,6 +353,11 @@
 			jumpToSetProblemList() {
 				uni.navigateTo({
 					url: "/pages/problemSet/problemSetProblemList?id="+this.problem_set_id
+				})
+			},
+			back() {
+				uni.navigateTo({
+					url: "/pages/homePage/homePage"
 				})
 			}
 			

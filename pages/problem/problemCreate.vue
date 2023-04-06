@@ -5,7 +5,7 @@
 		<view>
 			<!--自定义navbar-->
 			<uni-nav-bar title="单题编辑录入" background-color="#00aaff" color="#FFFFFF" status-bar="true">
-				<block slot="left">
+				<block slot="left" @click="back()">
 					<view class="note-navbar">
 						<uni-icons type="left" color="#FFFFFF" size="18" />
 					</view>
@@ -203,6 +203,11 @@ import list from '../../uni_modules/uview-ui/libs/config/props/list';
 			
 		},
 		methods: {
+			back() {
+				uni.navigateTo({
+					url: "/pages/problemSet/problemSetDetail?id="+this.problem_set_id
+				})
+			},
 			change(e) {
 				console.log("e:", e);
 				this.baseFormData.title = ''

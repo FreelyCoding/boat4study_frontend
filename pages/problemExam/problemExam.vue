@@ -4,7 +4,7 @@
 		<view>
 			<!--自定义navbar-->
 			<uni-nav-bar title="顺序练习" background-color="#00aaff" color="#FFFFFF" status-bar="true">
-				<block slot="left">
+				<block slot="left" @click="back()">
 					<view class="note-navbar">
 						<uni-icons type="left" color="#FFFFFF" size="18" />
 					</view>
@@ -242,6 +242,11 @@
 			
 		},
 		methods: {
+			back() {
+				uni.navigateTo({
+					url: "/pages/problemSet/problemSetDetail?id="+this.problem_set_id
+				})
+			},
 			groupChange(n) {
 				console.log('groupChange', n);
 			},
