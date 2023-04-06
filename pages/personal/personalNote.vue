@@ -161,14 +161,7 @@
 			}
 		},
 		onLoad() {
-			if (!myRequest.isLogin()) {
-				myRequest.toast('请先登录')
-				uni.redirectTo({
-					url: '/pages/login/login'
-				})
-			}
-			
-			console.log(uni.getStorageSync('token'))
+			myRequest.checkLogin()
 			
 			uni.request({
 				url: myRequest.interfaceUrl() + '/user/note',
@@ -194,15 +187,7 @@
 						this.loadData()
 					}
 					else if (res.statusCode == 401) {
-						if (myRequest.isLogin()) {
-							myRequest.toast('请重新登录')
-						}
-						else {
-							myRequest.toast('请登录')
-						}
-						uni.redirectTo({
-							url: '/pages/login/login'
-						})
+						myRequest.redirectToLogin()
 					}
 					else {
 						myRequest.toast()

@@ -5,7 +5,7 @@
 			<view>
 				<view>
 					<uni-nav-bar backgroundColor="#00aaff" fixed=false color="#ffffff" shadow="true" statusBar="true"
-						title="创建笔记">
+						title="编辑笔记">
 
 						<block slot="left">
 							<view class="note-navbar">
@@ -153,8 +153,12 @@
 				title_maxlength: 50,
 				content_placeholder: "笔记内容",
 				token: "",
-
-				itemList: [{
+				
+				note_id: "",
+				title: "",
+				note_html: "",
+				itemList: [
+					{
 						title: '保存',
 						icon: 'save-fill'
 					},
@@ -210,6 +214,80 @@
 			onEditorReady() {
 				uni.createSelectorQuery().select('#editor').context((res) => {
 					this.editorCtx = res.context
+					
+					var pages = getCurrentPages();
+					var curRoutes = pages[pages.length - 1].route
+					var curParam = pages[pages.length - 1].options;
+					
+					var id = curParam['id']
+					
+					if (!myRequest.isLogin()) {
+						myRequest.toast('请先登录')
+						uni.redirectTo({
+							url: '/pages/login/login'
+						})
+						return
+					}
+					
+					if (!id) {
+						uni.switchTab({
+							url: '/pages/note/index'
+						})
+					}
+					else {
+						this.note_id = id;
+						
+						uni.request({
+							url: myRequest.interfaceUrl() + `/note/all?id=${id}`,
+							method: 'GET',
+							header: {
+								'X-Token': myRequest.getToken()
+							},
+							success: (res) => {
+								if (res.statusCode == 200) {
+									console.log(res)
+									if (res.data == null) {
+										myRequest.toast()
+										uni.switchTab({
+											url: '/pages/note/index'
+										})
+										return
+									}
+									var data = res.data[0];
+									console.log("data")
+									console.log(data)
+									
+									this.title = data.title;
+									this.note_html = data.content;
+									this.note_id = data.id;
+									
+									this.editorCtx.setContents({
+										html: this.note_html
+									})
+								}
+								else if (res.statusCode == 401) {
+									myRequest.toast('请先登录')
+									uni.redirectTo({
+										url: '/pages/login/login'
+									})
+								}
+								else {
+									console.log('wrong')
+									myRequest.toast()
+									uni.switchTab({
+										url: '/pages/note/index'
+									})
+								}
+							},
+							
+							fail: (res) => {
+								myRequest.toast()
+								uni.switchTab({
+									url: '/pages/note/index'
+								})
+							}
+						})	
+					}
 				}).exec()
 			},
 			undo() {
@@ -317,26 +395,25 @@
 							myRequest.toast('内容不能为空')
 						} else {
 							// TODO: 后续更改is_public字段
+							var is_public = true
+							
 							var data = JSON.stringify({
 								"content": html_content,
-								"title": this.title
+								"title": this.title,
+								"id": this.note_id,
+								"is_public": is_public
 							})
-
-							var is_public = true
-
-							myRequest.request(`/note/create?is_public=${is_public}`, 'POST', data).then(
+							
+							let that = this;
+							
+							myRequest.request(`/note/update`, 'PUT', data).then(
 								function(res) {
 									console.log(res)
 									if (res.statusCode == 200) {
-										myRequest.toast('笔记创建成功')
-										uni.switchTab({
-											url: '/pages/note/index',
-											success() {
-												let page = getCurrentPages().pop(); //跳转页面成功之后
-												if (!page) return;
-												page.$vm.refresh(); //如果页面存在，则重新刷新页面
-											}
-										})
+										myRequest.toast('笔记修改成功')
+										uni.redirectTo({
+											url: `/pages/note/note?id=${that.note_id}`,
+										})									
 									} else if (res.statusCode == 401) {
 										if (myRequest.isLogin()) {
 											myRequest.toast('请重新登录')

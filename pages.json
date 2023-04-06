@@ -112,6 +112,12 @@
 				"navigationStyle": "custom"
 			}
 		},
+		{
+			"path": "pages/note/edit_note",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
 
 		{
 			"path": "pages/personal/personal",
