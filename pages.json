@@ -159,16 +159,6 @@
 				"enablePullDownRefresh": false,
 				"navigationBarTextStyle": "white"
 			}
-		},
-		
-		{
-			"path": "pages/problemSet/problemSetCreate",
-			"style": {
-				"navigationBarTitleText": "",
-				"navigationStyle": "custom",
-				"enablePullDownRefresh": false,
-				"navigationBarTextStyle": "white"
-			}
 		}
 
 	    ,{

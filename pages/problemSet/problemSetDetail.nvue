@@ -18,10 +18,10 @@
 						{{proSetTitle}}
 					</u-col>
 					<u-col span="3">
-						<button class="mini-btn" type="warn" size="mini">举报</button>
+						<button class="mini-btn" type="primary" size="mini">编辑</button>
 					</u-col>
 					<u-col span="3">
-						<button class="mini-btn" type="primary" size="mini">编辑</button>
+						<button class="mini-btn" type="warn" size="mini">删除</button>
 					</u-col>
 				</u-row>
 			</view>
@@ -41,6 +41,12 @@
 								</u-col>
 								<u-col span="4">
 									{{proTotalNum}}题
+								</u-col>
+								<u-col span="4">
+									<view class="button-group">
+										<button class="button" size="mini" type="primary"
+											@click="submit()" style="background-color: #00aaff; text-align: center; margin: auto;">添加试题</button>
+									</view>
 								</u-col>
 							</u-row>
 						</view>
@@ -289,15 +295,19 @@
 		}
 	}
 	
+	.button-group {
+		
+	}
 	
 	.footer {
 		margin: 0;
 		padding-top: 10px;
+		padding-bottom: 10px;
 		width: 100vw;
 		background-color: #fcfcfc;
 		position: fixed;
 		bottom: 0;
-		height: 50px;
+		height: 60px;
 		overflow: auto;
 	}
 </style>
