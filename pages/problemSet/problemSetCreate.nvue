@@ -12,7 +12,7 @@
 			<uni-row>
 				<uni-col :span="12">
 					<view>
-						<p class="homePage-header" style="margin-bottom: 20px;">创建题库</p>
+						<p class="homePage-header" style="margin-bottom: 20px;">题库信息</p>
 					</view>
 				</uni-col>
 			</uni-row>
