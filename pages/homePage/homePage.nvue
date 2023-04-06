@@ -276,7 +276,7 @@
 			console.log(uni.getStorageSync('token'))
 
 			uni.request({
-				url: myRequest.interfaceUrl() + '/user/problemset',
+				url: myRequest.interfaceUrl() + '/user/problem_set',
 				method: 'GET',
 				header: {
 					'X-Token': myRequest.getToken()

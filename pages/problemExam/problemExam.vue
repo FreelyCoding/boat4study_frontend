@@ -254,22 +254,23 @@
 					this.problem[pr_i].options.forEach((item) => {
 						item.selected = 0;
 					})
-					this.problem[pr_i].options[i].selected = 2;
-					
 					uni.request({
-						url: myRequest.interfaceUrl() + '/problem/choice/answer/'+this.problem_id_list[i].problem_id,
+						url: myRequest.interfaceUrl() + '/problem/choice/answer/'+this.problem_id_list[pr_i].problem_id,
 						method: 'GET',
 						header: {
 							'X-Token': myRequest.getToken()
 						},
 						
 						success: (res1) => {
-							console.log("!!!"+this.problem_id_list[i].problem_id)
 							console.log(res1)
 							if (res1.statusCode == 200) {
-							
-							
-							
+								var answer_index = res1.data[0].choice.charCodeAt(0) - 'A'.charCodeAt(0)
+								if (i == answer_index) {
+									this.problem[pr_i].options[answer_index].selected = 3;
+								} else {
+									this.problem[pr_i].options[i].selected = 2;
+									this.problem[pr_i].options[answer_index].selected = 3;
+								}
 							}
 							else if (res1.statusCode == 401) {
 								if (myRequest.isLogin()) {
