@@ -5,9 +5,9 @@
 		<view>
 			<!--自定义navbar-->
 			<uni-nav-bar title="单题编辑录入" background-color="#00aaff" color="#FFFFFF" status-bar="true">
-				<block slot="left" @click="back()">
+				<block slot="left">
 					<view class="note-navbar">
-						<uni-icons type="left" color="#FFFFFF" size="18" />
+						<uni-icons type="left" color="#FFFFFF" size="18"  @click="back()"/>
 					</view>
 				</block>
 			</uni-nav-bar>
@@ -200,7 +200,6 @@ import list from '../../uni_modules/uview-ui/libs/config/props/list';
 		onLoad: function (option) {
 			this.problem_set_id = option.id
 			console.log("problem_set_id: "+this.problem_set_id)
-			
 		},
 		methods: {
 			back() {
@@ -238,8 +237,6 @@ import list from '../../uni_modules/uview-ui/libs/config/props/list';
 				this.option_name.splice(len_option - 1, 1)
 			},
 			async create_problem() {
-				
-				
 				if (!myRequest.isLogin()) {
 					uni.redirectTo({
 						url: '/pages/login/login'
@@ -301,7 +298,7 @@ import list from '../../uni_modules/uview-ui/libs/config/props/list';
 						if (res.statusCode == 200) {
 							myRequest.toast('题目添加成功', 1500, true)
 							
-							myRequest.request('/problem_set/'+temp_problem_set_id+'/add?problem_id='+res.data, 'POST', data).then(
+							myRequest.request('/problem_set/'+temp_problem_set_id+'/add?problem_id='+res.data.id, 'POST', data).then(
 								function(res2) {
 									console.log(res2)
 									if (res2.statusCode == 200) {
@@ -314,14 +311,7 @@ import list from '../../uni_modules/uview-ui/libs/config/props/list';
 											});
 										}, 1000)
 									} else if (res2.statusCode == 401) {
-										if (myRequest.isLogin()) {
-											myRequest.toast('请重新登录')
-										} else {
-											myRequest.toast('请登录')
-										}
-										uni.redirectTo({
-											url: '/pages/login/login'
-										})
+										myRequest.redirectToLogin()
 									} else {
 										myRequest.toast()
 									}
@@ -334,14 +324,7 @@ import list from '../../uni_modules/uview-ui/libs/config/props/list';
 							)
 
 						} else if (res.statusCode == 401) {
-							if (myRequest.isLogin()) {
-								myRequest.toast('请重新登录')
-							} else {
-								myRequest.toast('请登录')
-							}
-							uni.redirectTo({
-								url: '/pages/login/login'
-							})
+							myRequest.redirectToLogin()
 						} else {
 							myRequest.toast()
 						}

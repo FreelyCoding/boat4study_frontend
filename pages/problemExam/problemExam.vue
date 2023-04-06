@@ -139,14 +139,8 @@
 			}
 		},
 		onLoad: function(option) {
-			if (!myRequest.isLogin()) {
-				myRequest.toast('请先登录')
-				uni.redirectTo({
-					url: '/pages/login/login'
-				})
-			}
+			myRequest.checkLogin()
 			
-			console.log(uni.getStorageSync('token'))
 			console.log(option.id); //打印出上个页面传递的参数。
 			this.problem_set_id = option.id
 			var _this = this
@@ -193,15 +187,7 @@
 										
 										}
 										else if (res2.statusCode == 401) {
-											if (myRequest.isLogin()) {
-												myRequest.toast('请重新登录')
-											}
-											else {
-												myRequest.toast('请登录')
-											}
-											uni.navigateTo({
-												url: '/pages/login/login'
-											})
+											myRequest.redirectToLogin()
 										}
 										else {
 											myRequest.toast()
@@ -214,20 +200,10 @@
 									},
 								})
 							}
-							
 						}
-
 					}
 					else if (res1.statusCode == 401) {
-						if (myRequest.isLogin()) {
-							myRequest.toast('请重新登录')
-						}
-						else {
-							myRequest.toast('请登录')
-						}
-						uni.navigateTo({
-							url: '/pages/login/login'
-						})
+						myRequest.redirectToLogin()
 					}
 					else {
 						myRequest.toast()
@@ -278,15 +254,7 @@
 								}
 							}
 							else if (res1.statusCode == 401) {
-								if (myRequest.isLogin()) {
-									myRequest.toast('请重新登录')
-								}
-								else {
-									myRequest.toast('请登录')
-								}
-								uni.navigateTo({
-									url: '/pages/login/login'
-								})
+								myRequest.redirectToLogin()
 							}
 							else {
 								myRequest.toast()

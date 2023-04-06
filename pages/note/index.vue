@@ -57,7 +57,7 @@
 											<button type="primary" size="mini"
 												style="width: 60px; background-color: #00aaff; margin-left: 5px;">{{ item.like_count }}</button>
 										</uni-col>
-										<uni-col :offset="12" :span="2">
+										<uni-col :offset="10" :span="2">
 											<u-icon name="/static/pic/star.svg" size="30px"></u-icon>
 										</uni-col>
 										<uni-col :span="4">
@@ -158,19 +158,6 @@
 				
 				uni.navigateTo({
 					url: `/pages/note/note?id=${item.id}`,
-					// success: () => {
-					// 	console.log(111)
-					// 	var t = item
-						
-					// 	// 为了先跳转到另一个页面定义好on函数
-					// 	setTimeout(
-					// 		() => {
-					// 			uni.$emit('passNoteContent', t)
-					// 		},
-					// 		2500
-					// 	)
-						
-					// }
 				})
 			},
 			back() {

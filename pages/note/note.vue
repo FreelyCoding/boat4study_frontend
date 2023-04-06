@@ -163,8 +163,8 @@
 										if (!page) return;
 										console.log(page.route)
 										if (page.route == 'pages/note/index' 
-												|| page.route == 'pages/personal/personalNote'
-												|| page.route == 'pages/personal/starNotes') {
+												|| page.route == '/pages/personal/personalNote'
+												|| page.route == '/pages/personal/starNotes') {
 											page.$vm.refresh(); //如果页面存在，则重新刷新页面
 										}
 									}
@@ -347,7 +347,9 @@
 				if (pages.length > 1) {
 					let page = pages[pages.length - 2]; //跳转页面成功之后
 					
-					if (page.route == 'pages/note/index') {
+					if (page.route == 'pages/note/index'
+						|| page.route == 'pages/personal/personalNote'
+						|| page.route == 'pages/personal/starNotes') {
 						page.$vm.refresh(); //如果页面存在，则重新刷新页面
 					}
 					uni.navigateBack()

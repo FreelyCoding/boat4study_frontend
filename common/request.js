@@ -173,6 +173,33 @@ const myRequest = {
 	getToken() {
 		return uni.getStorageSync("token")
 	},
+	getUserId() {
+		uni.request({
+			url: myRequest.interfaceUrl() + '/user/info',
+			method: 'GET',
+			header: {
+				'X-Token': myRequest.getToken()
+			},
+			
+			success: (res) => {
+				console.log(res)
+				if (res.statusCode == 200) {
+					return res.data.user_id;
+				}
+				else if (res.statusCode == 401) {
+					myRequest.redirectToLogin()
+				}
+				else {
+					myRequest.toast()
+				}
+			},
+			
+			fail: (res) => {					
+				console.log(res)
+				myRequest.toast()
+			}
+		})
+	},
 	//判断是否登录
 	isLogin: function() {
 		return uni.getStorageSync("token") ? true : false

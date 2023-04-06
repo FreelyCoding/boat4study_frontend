@@ -3,18 +3,18 @@
 		<view>
 			<!--自定义navbar-->
 			<uni-nav-bar title="题库详情" background-color="#00aaff" color="#FFFFFF" status-bar="true">
-				<block slot="left" @click="back()">
+				<block slot="left">
 					<view class="note-navbar">
-						<uni-icons type="left" color="#FFFFFF" size="18" />
+						<uni-icons type="left" color="#FFFFFF" size="18" @click="back()" />
 					</view>
 				</block>
 			</uni-nav-bar>
 		</view>
-		
+
 		<view class="main-body">
 			<view class="title-line">
 				<u-row>
-					<u-col span="6" >
+					<u-col span="6">
 						<view style="font-size: 20px; font-weight: bold;">
 							{{proDetail.title}}
 						</view>
@@ -26,14 +26,15 @@
 						<button class="mini-btn" type="primary" size="mini">编辑</button>
 					</u-col>
 					<u-col span="3">
-						<button class="mini-btn" type="warn" size="mini">删除</button>
+						<button class="mini-btn" type="warn" size="mini" @click="deletePS()">删除</button>
 					</u-col>
 				</u-row>
 			</view>
 			<view class="owner_info_box">
 				<u-row>
 					<u-col span="2">
-						<u--image width="50px" height="50px" src="https://cdn.uviewui.com/uview/album/1.jpg" shape="circle"></u--image>
+						<u--image width="50px" height="50px" src="https://cdn.uviewui.com/uview/album/1.jpg"
+							shape="circle"></u--image>
 					</u-col>
 					<u-col span="9">
 						<view class="" style="font-size: 16px;">
@@ -49,8 +50,8 @@
 								</u-col>
 								<u-col span="4">
 									<view class="button-group">
-										<button class="button" size="mini" type="primary"
-											@click="jumpToProblemUpload()" style="background-color: #00aaff; text-align: center; margin: auto;">添加试题</button>
+										<button class="button" size="mini" type="primary" @click="jumpToProblemUpload()"
+											style="background-color: #00aaff; text-align: center; margin: auto;">添加试题</button>
 									</view>
 								</u-col>
 							</u-row>
@@ -64,10 +65,10 @@
 						<view class="" style="margin: auto;">
 							<u-icon name="/static/pic/problemSet/thinking.svg" size="40px"></u-icon>
 						</view>
-						<view class=""  style="text-align: center; font-size: 15px;">
+						<view class="" style="text-align: center; font-size: 15px;">
 							我的错题
 						</view>
-						<view class=""  style="text-align: center; font-size: 12px; color: darkgrey;">
+						<view class="" style="text-align: center; font-size: 12px; color: darkgrey;">
 							(0)
 						</view>
 					</uni-col>
@@ -75,10 +76,10 @@
 						<view class="" style="text-align: center; margin: auto;">
 							<u-icon name="/static/pic/problemSet/envolop.svg" size="40px"></u-icon>
 						</view>
-						<view class=""  style="text-align: center; font-size: 15px;">
+						<view class="" style="text-align: center; font-size: 15px;">
 							我的收藏
 						</view>
-						<view class=""  style="text-align: center; font-size: 12px; color: darkgrey;">
+						<view class="" style="text-align: center; font-size: 12px; color: darkgrey;">
 							(0)
 						</view>
 					</uni-col>
@@ -86,21 +87,21 @@
 						<view class="" style="text-align: center; margin: auto;">
 							<u-icon name="/static/pic/homeNote.png" size="40px"></u-icon>
 						</view>
-						<view class=""  style="text-align: center; font-size: 15px;">
+						<view class="" style="text-align: center; font-size: 15px;">
 							我的笔记
 						</view>
-						<view class=""  style="text-align: center; font-size: 12px; color: darkgrey;">
+						<view class="" style="text-align: center; font-size: 12px; color: darkgrey;">
 							(0)
 						</view>
 					</uni-col>
 				</uni-row>
 			</view>
-			
+
 			<view class="practise-box">
 				<view class="practise-box-title" style="font-size: 18px;">
 					练习模式
 				</view>
-				
+
 				<view class="practise-box-row">
 					<uni-row>
 						<uni-col :span="12">
@@ -215,12 +216,12 @@
 						</uni-col>
 					</uni-row>
 				</view>
-				
+
 			</view>
-			
-			
+
+
 		</view>
-		
+
 		<view class="footer">
 			<u-row>
 				<u-col span="2"></u-col>
@@ -234,13 +235,13 @@
 				<u-col span="2"></u-col>
 			</u-row>
 		</view>
-		
+
 	</view>
 </template>
 
 <script>
 	import myRequest from '../../common/request';
-	
+
 	export default {
 		data() {
 			return {
@@ -251,117 +252,122 @@
 					descrip: ''
 				},
 				problem_set_id: 0,
-				
+
 			}
 		},
-		onLoad: function (option) { //option为object类型，会序列化上个页面传递的参数
-		
-			if (!myRequest.isLogin()) {
-				myRequest.toast('请先登录')
-				uni.redirectTo({
-					url: '/pages/login/login'
-				})
-			}
-			console.log(uni.getStorageSync('token'))
+		onLoad: function(option) { //option为object类型，会序列化上个页面传递的参数
+			myRequest.checkLogin()
 			this.problem_set_id = option.id
-			console.log('this.problem_set_id: '+this.problem_set_id); //打印出上个页面传递的参数。
-			
-			
+			console.log('this.problem_set_id: ' + this.problem_set_id); //打印出上个页面传递的参数。
+
 			uni.request({
 				url: myRequest.interfaceUrl() + '/problem_set/all?id=' + option.id,
 				method: 'GET',
 				header: {
 					'X-Token': myRequest.getToken()
 				},
-				
+
 				success: (res) => {
 					console.log(res)
 					if (res.statusCode == 200) {
-						this.proDetail.title = res.data.problemset[0].name
-						this.proDetail.totalNum = res.data.problemset[0].problem_count
-						this.proDetail.descrip = res.data.problemset[0].description
-						
+						this.proDetail.title = res.data.problem_set[0].name
+						this.proDetail.totalNum = res.data.problem_set[0].problem_count
+						this.proDetail.descrip = res.data.problem_set[0].description
+						console.log(res.data.problem_set)
 						uni.request({
-							url: myRequest.interfaceUrl() + `/user/info/${res.data.problemset[0].user_id}`,
+							url: myRequest.interfaceUrl() +
+								`/user/info/${res.data.problem_set[0].user_id}`,
 							method: 'GET',
 							header: {
 								'X-Token': myRequest.getToken()
 							},
-							
+
 							success: (res2) => {
 								console.log(res2)
 								if (res2.statusCode == 200) {
 									this.proDetail.ownerName = res2.data.user_name
-								}
-								else if (res2.statusCode == 401) {
-									if (myRequest.isLogin()) {
-										myRequest.toast('请重新登录')
-									}
-									else {
-										myRequest.toast('请登录')
-									}
-									uni.navigateTo({
-										url: '/pages/login/login'
-									})
-								}
-								else {
+								} else if (res2.statusCode == 401) {
+									myRequest.redirectToLogin()
+								} else {
 									myRequest.toast()
 								}
 							},
-							
-							fail: (res2) => {					
+
+							fail: (res2) => {
 								console.log(res2)
 								myRequest.toast()
 							},
 						})
-											
-					}
-					else if (res.statusCode == 401) {
-						if (myRequest.isLogin()) {
-							myRequest.toast('请重新登录')
-						}
-						else {
-							myRequest.toast('请登录')
-						}
-						uni.navigateTo({
-							url: '/pages/login/login'
-						})
-					}
-					else {
+
+					} else if (res.statusCode == 401) {
+						myRequest.redirectToLogin()
+					} else {
 						myRequest.toast()
 					}
 				},
-				
-				fail: (res) => {					
+
+				fail: (res) => {
 					console.log(res)
 					myRequest.toast()
 				}
 			})
-			
+
 		},
 		methods: {
 			jumpToProblemUpload() {
 				uni.navigateTo({
-					url: "/pages/problemSet/problemUpload?id="+this.problem_set_id
+					url: "/pages/problemSet/problemUpload?id=" + this.problem_set_id
 				})
 			},
 			jumpToSequencePractice() {
 				uni.navigateTo({
-					url: "/pages/problemExam/problemExam?id="+this.problem_set_id
+					url: "/pages/problemExam/problemExam?id=" + this.problem_set_id
 				})
 			},
 			jumpToSetProblemList() {
 				uni.navigateTo({
-					url: "/pages/problemSet/problemSetProblemList?id="+this.problem_set_id
+					url: "/pages/problemSet/problemSetProblemList?id=" + this.problem_set_id
 				})
 			},
 			back() {
 				uni.navigateTo({
-					url: "/pages/homePage/homePage"
+					url: "/pages/personal/personalProblemSet"
+				})
+			},
+			deletePS() {
+				uni.request({
+					url: myRequest.interfaceUrl() + '/problem_set/delete/' + this.problem_set_id,
+					method: 'DELETE',
+					header: {
+						'X-Token': myRequest.getToken()
+					},
+
+					success: (res) => {
+						console.log(res)
+						if (res.statusCode == 200) {
+							myRequest.toast('删除成功', 1000, true)
+							setTimeout(() => {
+								uni.hideToast();
+								//关闭提示后跳转
+								uni.redirectTo({
+									url: '/pages/personal/personalProblemSet'
+								});
+							}, 1000)
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else {
+							myRequest.toast()
+						}
+					},
+
+					fail: (res) => {
+						console.log(res)
+						myRequest.toast()
+					}
 				})
 			}
-			
-			
+
+
 		},
 	}
 </script>
@@ -370,27 +376,32 @@
 	.container {
 		height: 100%;
 	}
-	
+
 	.main-body {
 		margin: 0 10px 0 10px;
 	}
+
 	.title-line {
 		margin: 15px 0 15px 0;
 	}
+
 	.owner_info_box {
 		margin-bottom: 20px;
 	}
+
 	.proSetStatis {
 		margin-bottom: 40px;
 	}
-	
+
 	.practise-box {
 		.practise-box-title {
 			margin-bottom: 20px;
 		}
+
 		.practise-box-row {
 			margin-bottom: 20px;
 		}
+
 		.practise-card {
 			background-color: #e5f3ff;
 			height: 50px;
@@ -399,10 +410,12 @@
 			border-radius: 10px;
 			justify-content: center;
 			padding: 12px;
+
 			.practise-card-title {
 				font-size: 15px;
-				
+
 			}
+
 			.practise-card-detail {
 				margin-top: 3px;
 				color: darkgrey;
@@ -410,11 +423,9 @@
 			}
 		}
 	}
-	
-	.button-group {
-		
-	}
-	
+
+	.button-group {}
+
 	.footer {
 		margin: 0;
 		padding-top: 10px;

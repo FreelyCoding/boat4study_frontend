@@ -167,18 +167,10 @@
 					if (res.statusCode == 200) {
 						this.user.avatar = "/static/pic/student.png";
 						this.user.user_name = res.data.user_name;
-						this.uid = res.data.user_id;
+						this.user.uid = res.data.user_id;
 					}
 					else if (res.statusCode == 401) {
-						if (myRequest.isLogin()) {
-							myRequest.toast('请重新登录')
-						}
-						else {
-							myRequest.toast('请登录')
-						}
-						uni.redirectTo({
-							url: '/pages/login/login'
-						})
+						myRequest.redirectToLogin()
 					}
 					else {
 						myRequest.toast()

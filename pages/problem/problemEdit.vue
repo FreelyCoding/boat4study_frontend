@@ -195,7 +195,16 @@ import list from '../../uni_modules/uview-ui/libs/config/props/list';
 				}],
 			};
 		},
+		onLoad: function (option) {
+			this.problem_set_id = option.id
+			console.log("problem_set_id: "+this.problem_set_id)
+		},
 		methods: {
+			back() {
+				uni.navigateTo({
+					url: "/pages/problemSet/problemSetDetail?id="+this.problem_set_id
+				})
+			},
 			change(e) {
 				console.log("e:", e);
 				this.baseFormData.title = ''

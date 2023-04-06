@@ -266,15 +266,7 @@
 			},
 		},
 		onLoad() {
-			if (!myRequest.isLogin()) {
-				myRequest.toast('请先登录')
-				uni.redirectTo({
-					url: '/pages/login/login'
-				})
-			}
-
-			console.log(uni.getStorageSync('token'))
-
+			myRequest.checkLogin()
 			uni.request({
 				url: myRequest.interfaceUrl() + '/user/problem_set',
 				method: 'GET',
