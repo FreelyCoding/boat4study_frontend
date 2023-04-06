@@ -12,7 +12,7 @@
 			<u-list customStyle="width: 94%; margin: auto; margin-top: 15px;">
 				<u-list-item v-for="(item, index) in list" :key="index">
 					<uni-card spacing="0" padding="0" margin="20px 0px 0px 0px" isShadow="true" border="true"
-						@click="jumpTo(item.url)">
+						@click="jumpToSingelProUpload()">
 						<view>
 							<uni-row>
 								<uni-col span="6">				
@@ -43,16 +43,12 @@
 	export default {
 		data() {
 			return {
-				problemSet: {
-					id : 1,
-					name : "计算机组成"
-				},
+				problem_set_id: 0,
 				list : [
 					{
 						iconPath: "../../static/pic/single.svg",
 						title: "单题导入",
 						description: "单题手动逐一录入题库",
-						url: "/pages/problemCreate/problemCreate"
 					},
 					{
 						iconPath: "../../static/pic/word.svg",
@@ -62,10 +58,20 @@
 				]
 			}
 		},
+		onLoad:function(option) {
+			this.problem_set_id = option.id
+			console.log(this.problem_set_id)
+		},
 		methods: {
 			back() {
 				uni.navigateTo({
-					url: '/pages/problemSet/problemSetDetail'
+					url: '/pages/problemSet/problemSetDetail?id='+this.problem_set_id
+				})
+			},
+			
+			jumpToSingelProUpload() {
+				uni.navigateTo({
+					url: "/pages/problem/problemCreate?id="+this.problem_set_id
 				})
 			},
 			

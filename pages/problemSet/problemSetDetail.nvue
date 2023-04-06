@@ -14,8 +14,13 @@
 		<view class="main-body">
 			<view class="title-line">
 				<u-row>
-					<u-col span="6" style="font-size: 20px; font-weight: bold;">
-						{{proSetTitle}}
+					<u-col span="6" >
+						<view style="font-size: 20px; font-weight: bold;">
+							{{proDetail.title}}
+						</view>
+						<view style="font-size: 14px; color: darkgrey;">
+							{{proDetail.descrip}}
+						</view>
 					</u-col>
 					<u-col span="3">
 						<button class="mini-btn" type="primary" size="mini">编辑</button>
@@ -32,7 +37,7 @@
 					</u-col>
 					<u-col span="9">
 						<view class="" style="font-size: 16px;">
-							{{proSetOwnerName}}
+							{{proDetail.ownerName}}
 						</view>
 						<view class="" style="font-size: 14px; color: darkgray;">
 							<u-row>
@@ -40,12 +45,12 @@
 									2023-3-31
 								</u-col>
 								<u-col span="4">
-									{{proTotalNum}}题
+									{{proDetail.totalNum}}题
 								</u-col>
 								<u-col span="4">
 									<view class="button-group">
 										<button class="button" size="mini" type="primary"
-											@click="submit()" style="background-color: #00aaff; text-align: center; margin: auto;">添加试题</button>
+											@click="jumpToProblemUpload()" style="background-color: #00aaff; text-align: center; margin: auto;">添加试题</button>
 									</view>
 								</u-col>
 							</u-row>
@@ -63,7 +68,7 @@
 							我的错题
 						</view>
 						<view class=""  style="text-align: center; font-size: 12px; color: darkgrey;">
-							(51)
+							(0)
 						</view>
 					</uni-col>
 					<uni-col :span="8">
@@ -74,7 +79,7 @@
 							我的收藏
 						</view>
 						<view class=""  style="text-align: center; font-size: 12px; color: darkgrey;">
-							(4)
+							(0)
 						</view>
 					</uni-col>
 					<uni-col :span="8">
@@ -99,7 +104,7 @@
 				<view class="practise-box-row">
 					<uni-row>
 						<uni-col :span="12">
-							<view class="practise-card">
+							<view class="practise-card" @click="jumpToSequencePractice()">
 								<uni-row>
 									<uni-col :span="18">
 										<view class="practise-card-title">
@@ -175,14 +180,14 @@
 				<view class="practise-box-row">
 					<uni-row>
 						<uni-col :span="12">
-							<view class="practise-card">
+							<view class="practise-card" @click="jumpToSetProblemList()">
 								<uni-row>
 									<uni-col :span="18">
 										<view class="practise-card-title">
-											学习资料
+											所有试题
 										</view>
 										<view class="practise-card-detail">
-											考试学习相关资料
+											查看所有试题
 										</view>
 									</uni-col>
 									<uni-col :span="6">
@@ -234,16 +239,122 @@
 </template>
 
 <script>
+	import myRequest from '../../common/request';
+	
 	export default {
 		data() {
 			return {
-				proSetTitle: "计算机组成",
-				proSetOwnerName: "丁真",
-				proTotalNum: 114,
+				proDetail: {
+					title: "",
+					ownerName: "丁真",
+					totalNum: 0,
+					descrip: ''
+				},
+				problem_set_id: 0,
 				
 			}
 		},
+		onLoad: function (option) { //option为object类型，会序列化上个页面传递的参数
+		
+			if (!myRequest.isLogin()) {
+				myRequest.toast('请先登录')
+				uni.redirectTo({
+					url: '/pages/login/login'
+				})
+			}
+			console.log(uni.getStorageSync('token'))
+			this.problem_set_id = option.id
+			console.log('this.problem_set_id: '+this.problem_set_id); //打印出上个页面传递的参数。
+			
+			
+			uni.request({
+				url: myRequest.interfaceUrl() + '/problem_set/all?id=' + option.id,
+				method: 'GET',
+				header: {
+					'X-Token': myRequest.getToken()
+				},
+				
+				success: (res) => {
+					console.log(res)
+					if (res.statusCode == 200) {
+						this.proDetail.title = res.data.problemset[0].name
+						this.proDetail.totalNum = res.data.problemset[0].problem_count
+						this.proDetail.descrip = res.data.problemset[0].description
+						
+						uni.request({
+							url: myRequest.interfaceUrl() + `/user/info/${res.data.problemset[0].user_id}`,
+							method: 'GET',
+							header: {
+								'X-Token': myRequest.getToken()
+							},
+							
+							success: (res2) => {
+								console.log(res2)
+								if (res2.statusCode == 200) {
+									this.proDetail.ownerName = res2.data.user_name
+								}
+								else if (res2.statusCode == 401) {
+									if (myRequest.isLogin()) {
+										myRequest.toast('请重新登录')
+									}
+									else {
+										myRequest.toast('请登录')
+									}
+									uni.navigateTo({
+										url: '/pages/login/login'
+									})
+								}
+								else {
+									myRequest.toast()
+								}
+							},
+							
+							fail: (res2) => {					
+								console.log(res2)
+								myRequest.toast()
+							},
+						})
+											
+					}
+					else if (res.statusCode == 401) {
+						if (myRequest.isLogin()) {
+							myRequest.toast('请重新登录')
+						}
+						else {
+							myRequest.toast('请登录')
+						}
+						uni.navigateTo({
+							url: '/pages/login/login'
+						})
+					}
+					else {
+						myRequest.toast()
+					}
+				},
+				
+				fail: (res) => {					
+					console.log(res)
+					myRequest.toast()
+				}
+			})
+			
+		},
 		methods: {
+			jumpToProblemUpload() {
+				uni.navigateTo({
+					url: "/pages/problemSet/problemUpload?id="+this.problem_set_id
+				})
+			},
+			jumpToSequencePractice() {
+				uni.navigateTo({
+					url: "/pages/problemExam/problemExam?id="+this.problem_set_id
+				})
+			},
+			jumpToSetProblemList() {
+				uni.navigateTo({
+					url: "/pages/problemSet/problemSetProblemList?id="+this.problem_set_id
+				})
+			}
 			
 			
 		},

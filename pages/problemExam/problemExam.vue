@@ -3,7 +3,7 @@
 		<view class="status-bar"></view>
 		<view>
 			<!--自定义navbar-->
-			<uni-nav-bar title="做题" background-color="#00aaff" color="#FFFFFF" status-bar="true">
+			<uni-nav-bar title="顺序练习" background-color="#00aaff" color="#FFFFFF" status-bar="true">
 				<block slot="left">
 					<view class="note-navbar">
 						<uni-icons type="left" color="#FFFFFF" size="18" />
@@ -14,26 +14,26 @@
 		<view class="contain">
 
 			<view class="page_nav">
-				<uni-pagination :show-icon="true" :total="problem.length" pageSize="1" v-model="cur_page" />
+				<uni-pagination :show-icon="true" :total="problem.length" pageSize="1" v-model="cur_page" @change="load_next_pro()"/>
 			</view>
 
 			<view class="problem_title">
 				<uni-tag text="单选题" type="primary" customStyle="background-color: #00aaff"
-					v-if="problem[cur_page-1].type===0" />
+					v-if="problem[cur_page-1].type===0 && problem[cur_page-1].is_multiple === false" />
 				<uni-tag text="多选题" type="primary" customStyle="background-color: #00aaff"
+					v-if="problem[cur_page-1].type===0 && problem[cur_page-1].is_multiple === true" />
+				<uni-tag text="填空题" type="primary" customStyle="background-color: #00aaff"
 					v-if="problem[cur_page-1].type===1" />
 				<uni-tag text="判断题" type="primary" customStyle="background-color: #00aaff"
 					v-if="problem[cur_page-1].type===2" />
-				<uni-tag text="填空题" type="primary" customStyle="background-color: #00aaff"
-					v-if="problem[cur_page-1].type===3" />
 			</view>
 
-			<view>
-				<p class="problem_content">{{problem[cur_page-1].title}}</p>
+			<view class="problem_content">
+				<p>{{problem[cur_page-1].title}}</p>
 			</view>
 
 			<!-- 单选题 -->
-			<view v-if="problem[cur_page-1].type === 0">
+			<view v-if="problem[cur_page-1].type === 0 && problem[cur_page-1].is_multiple === false">
 				<view class="option_group">
 					<view v-for="(item, index) in problem[cur_page-1].options" :key="index">
 						<view class="option_item" :class="{'selected_option_item':problem[cur_page-1].options[index].selected==1,
@@ -58,7 +58,7 @@
 			</view>
 			
 			<!-- 多选题 -->
-			<view v-if="problem[cur_page-1].type === 1">
+			<view v-if="problem[cur_page-1].type === 1 && problem[cur_page-1].is_multiple === true">
 				<view class="option_group">
 					<view v-for="(item, index) in problem[cur_page-1].options" :key="index">
 						<view class="option_item" :class="{'selected_option_item':problem[cur_page-1].options[index].selected==1,
@@ -79,6 +79,14 @@
 					</view>
 					<button class="button" size="mini" type="primary" @click="submit_multi_option_answer()">提交</button>
 				</view>
+			</view>
+			
+			<!-- 填空题 -->
+			<view v-if="problem[cur_page-1].type === 1">
+				<view class="block_answer_box">
+					<uni-easyinput class="block_answer_box" v-model="baseFormData.analyse" placeholder="请输入答案" />
+				</view>
+				<button class="button" size="mini" type="primary" @click="submit_block_answer()">提交</button>
 			</view>
 			
 			<!-- 判断题 -->
@@ -104,15 +112,6 @@
 				</view>
 			</view>
 			
-			<!-- 填空题 -->
-			<view v-if="problem[cur_page-1].type === 3">
-				<view class="block_answer_box">
-					<uni-easyinput class="block_answer_box" v-model="baseFormData.analyse" placeholder="请输入答案" />
-				</view>
-				<button class="button" size="mini" type="primary" @click="submit_block_answer()">提交</button>
-			</view>
-			
-			
 			<view>
 				<div style="height: 30px;"></div>
 			</view>
@@ -121,9 +120,13 @@
 </template>
 
 <script>
+	import myRequest from '../../common/request';
+		
 	export default {
 		data() {
 			return {
+				problem_set_id: 0,
+				problem_id_list:[],
 				cur_page: 1,
 
 				letter: [
@@ -131,96 +134,112 @@
 					'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
 				],
 
-				problem: [{
-						type: 0,
-						done: 0,
-						answer: 1,
-						right: 0,
-						title: "第一题：1一般来说， 上学，到底应该如何实现。 卡莱尔曾经说过，过去一切时代的精华尽在书中。带着这句话，我们还要更加慎重的审视这个问题： 要想清楚，上学，到底是一种怎么样的存在。 一般来说， 既然如何， 吉姆·罗恩在不经意间这样说过，要么你主宰生活，要么你被生活主宰。带着这句话，我们还要更加慎重的审视这个问题： 一般来讲，我们都必须务必慎重的考虑考虑。 这种事实对本人来说意义重大，相信对这个世界也是有一定意义的。 现在，解决上学的问题，是非常非常重要的。 所以， 问题的关键究竟为何? ",
-						options: [{
-								name: '苹果',
-								selected: 0,
-							},
-							{
-								name: '香蕉',
-								selected: 0,
-							},
-							{
-								name: '橙子',
-								selected: 0,
-							}, {
-								name: '榴莲',
-								selected: 0,
-							}, {
-								name: '榴莲2',
-								selected: 0,
-							}, {
-								name: '榴莲3',
-								selected: 0,
-							},	{
-								name: '榴莲4',
-								selected: 0,
-							}
-						]
-					},
-					{
-						type: 1,
-						done: 0,
-						answer: [0,1,4],
-						right: 0,
-						title: "第二题：2",
-						options: [{
-								name: '苹果',
-								selected: 0,
-							},
-							{
-								name: '香蕉',
-								selected: 0,
-							},
-							{
-								name: '橙子',
-								selected: 0,
-							}, {
-								name: '榴莲',
-								selected: 0,
-							}, {
-								name: '榴莲2',
-								selected: 0,
-							}, {
-								name: '榴莲3',
-								selected: 0,
-							},	{
-								name: '榴莲4',
-								selected: 0,
-							}, 	{
-								name: '榴莲5',
-								selected: 0,
-							}
-						]
-					},
-					{
-						type: 2,
-						done: 0,
-						answer: 0,
-						right: 0,
-						title: "第三题：3",
-						options: [{
-								name: '正确',
-								selected: 0,
-							}, {
-								name: '错误',
-								selected: 0,
-							},
-						],
-					},
-					{
-						type: 3,
-						title: "第四题：4",
-						options: [],
-					},
-				]
+				problem: [],
 
 			}
+		},
+		onLoad: function(option) {
+			if (!myRequest.isLogin()) {
+				myRequest.toast('请先登录')
+				uni.redirectTo({
+					url: '/pages/login/login'
+				})
+			}
+			
+			console.log(uni.getStorageSync('token'))
+			console.log(option.id); //打印出上个页面传递的参数。
+			this.problem_set_id = option.id
+			var _this = this
+			
+			uni.request({
+				url: myRequest.interfaceUrl() + '/problem_set/'+this.problem_set_id+'/all_problem?is_favorite='+0,
+				method: 'GET',
+				header: {
+					'X-Token': myRequest.getToken()
+				},
+				
+				success: (res1) => {
+					console.log(res1)
+					if (res1.statusCode == 200) {
+						this.problem_id_list = JSON.parse(JSON.stringify(res1.data))
+						
+						for (var i=0;i<this.problem_id_list.length;i++) {
+							if (this.problem_id_list[i].problem_type_id == 0) {
+
+								uni.request({
+									url: myRequest.interfaceUrl() + '/problem/choice/'+this.problem_id_list[i].problem_id,
+									method: 'GET',
+									header: {
+										'X-Token': myRequest.getToken()
+									},
+									success: (res2) => {
+										console.log(res2)
+										if (res2.statusCode == 200) {
+											this.problem.push({
+												type: 0,
+												is_multiple: res2.data.is_multiple,
+												done: 0,
+												right: 0,
+												title: res2.data.description,
+												options: [],
+											})
+											for (var j=0;j<res2.data.choices.length;j++) {
+												this.problem[this.problem.length-1].options.push({
+													name: res2.data.choices[j].description,
+													selected: 0,
+												})
+											}
+											console.log(this.problem)
+										
+										}
+										else if (res2.statusCode == 401) {
+											if (myRequest.isLogin()) {
+												myRequest.toast('请重新登录')
+											}
+											else {
+												myRequest.toast('请登录')
+											}
+											uni.navigateTo({
+												url: '/pages/login/login'
+											})
+										}
+										else {
+											myRequest.toast()
+										}
+									},
+									
+									fail: (res2) => {					
+										console.log(res2)
+										myRequest.toast()
+									},
+								})
+							}
+							
+						}
+
+					}
+					else if (res1.statusCode == 401) {
+						if (myRequest.isLogin()) {
+							myRequest.toast('请重新登录')
+						}
+						else {
+							myRequest.toast('请登录')
+						}
+						uni.navigateTo({
+							url: '/pages/login/login'
+						})
+					}
+					else {
+						myRequest.toast()
+					}
+				},
+				
+				fail: (res1) => {					
+					console.log(res1)
+					myRequest.toast()
+				},
+			})
+			
 		},
 		methods: {
 			groupChange(n) {
@@ -236,9 +255,44 @@
 						item.selected = 0;
 					})
 					this.problem[pr_i].options[i].selected = 2;
-					this.problem[pr_i].options[this.problem[pr_i].answer].selected = 3;
-					if (i == this.problem[pr_i].answer)
-						this.problem[pr_i].right = 1;
+					
+					uni.request({
+						url: myRequest.interfaceUrl() + '/problem/choice/answer/'+this.problem_id_list[i].problem_id,
+						method: 'GET',
+						header: {
+							'X-Token': myRequest.getToken()
+						},
+						
+						success: (res1) => {
+							console.log("!!!"+this.problem_id_list[i].problem_id)
+							console.log(res1)
+							if (res1.statusCode == 200) {
+							
+							
+							
+							}
+							else if (res1.statusCode == 401) {
+								if (myRequest.isLogin()) {
+									myRequest.toast('请重新登录')
+								}
+								else {
+									myRequest.toast('请登录')
+								}
+								uni.navigateTo({
+									url: '/pages/login/login'
+								})
+							}
+							else {
+								myRequest.toast()
+							}
+						},
+						
+						fail: (res1) => {					
+							console.log(res1)
+							myRequest.toast()
+						},
+					})
+					
 					this.problem[pr_i].done = 1;
 				}
 			},
@@ -308,6 +362,8 @@
 
 	.problem_content {
 		font-size: 16px;
+		margin-bottom: 30px;
+		line-height: 30px;
 	}
 
 	.option_item {
@@ -316,7 +372,7 @@
 		display: flex;
 		align-items: center;
 		margin: 10px 0 10px 0;
-		background-color: #ebebeb;
+		//background-color: #ebebeb;
 	}
 
 	.selected_option_item {

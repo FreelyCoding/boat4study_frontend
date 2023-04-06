@@ -4,7 +4,7 @@
 		<view class="status-bar"></view>
 		<view>
 			<!--自定义navbar-->
-			<uni-nav-bar title="单题编辑录入" background-color="#00aaff" color="#FFFFFF" status-bar="true">
+			<uni-nav-bar title="编辑题目" background-color="#00aaff" color="#FFFFFF" status-bar="true">
 				<block slot="left">
 					<view class="note-navbar">
 						<uni-icons type="left" color="#FFFFFF" size="18" />
@@ -22,14 +22,14 @@
 			<uni-section v-if="problem_type_select === 0" title="试题内容" type="line" class="select_box">
 				<uni-forms ref="baseForm" :modelValue="baseFormData" label-position="top">
 					<uni-forms-item label="题目" required>
-						<uni-easyinput v-model="baseFormData.name" placeholder="请输入题目" />
+						<uni-easyinput v-model="baseFormData.title" placeholder="请输入题目" />
 					</uni-forms-item>
 					<uni-forms-item label="选项" required style="margin-bottom: 0ch;"></uni-forms-item>
 				</uni-forms>
 				<uni-forms ref="baseForm" :modelValue="baseFormData" label-position="left">
-					<uni-forms-item v-for="(item,index) in dynamicLists" :key="item.id" :label="letter[index]">
+					<uni-forms-item v-for="(item,index) in dynamicLists" :key="index" :label="letter[index]">
 						<view class="form-item">
-							<uni-easyinput v-model="dynamicFormData.domains[item.id]" placeholder="请输入选项" />
+							<uni-easyinput v-model="dynamicLists[index].description" placeholder="请输入选项" />
 							<button class="button" v-if="index>=2" size="mini" type="warn"
 								@click="del_option(item.id)">删除</button>
 						</view>
@@ -49,14 +49,14 @@
 			<uni-section v-if="problem_type_select === 1" title="试题内容" type="line" class="select_box">
 				<uni-forms ref="baseForm" :modelValue="baseFormData" label-position="top">
 					<uni-forms-item label="题目" required>
-						<uni-easyinput v-model="baseFormData.name" placeholder="请输入题目" />
+						<uni-easyinput v-model="baseFormData.title" placeholder="请输入题目" />
 					</uni-forms-item>
 					<uni-forms-item label="选项" required style="margin-bottom: 0ch;"></uni-forms-item>
 				</uni-forms>
 				<uni-forms ref="baseForm" :modelValue="baseFormData" label-position="left">
 					<uni-forms-item v-for="(item,index) in dynamicLists" :key="item.id" :label="letter[index]">
 						<view class="form-item">
-							<uni-easyinput v-model="dynamicFormData.domains[item.id]" placeholder="请输入选项" />
+							<uni-easyinput v-model="dynamicLists[index].description" placeholder="请输入选项" />
 							<button class="button" v-if="index>=2" size="mini" type="warn"
 								@click="del_option(item.id)">删除</button>
 						</view>
@@ -76,7 +76,7 @@
 			<uni-section v-if="problem_type_select === 2" title="试题内容" type="line" class="select_box">
 				<uni-forms ref="baseForm" :modelValue="baseFormData" label-position="top">
 					<uni-forms-item label="题目" required>
-						<uni-easyinput v-model="baseFormData.name" placeholder="请输入题目" />
+						<uni-easyinput v-model="baseFormData.title" placeholder="请输入题目" />
 					</uni-forms-item>
 				</uni-forms>
 				<uni-forms ref="baseForm" :modelValue="baseFormData" label-position="top">
@@ -89,7 +89,7 @@
 			<uni-section v-if="problem_type_select === 3" title="试题内容" type="line" class="select_box">
 				<uni-forms ref="baseForm" :modelValue="baseFormData" label-position="top">
 					<uni-forms-item label="题目" required>
-						<uni-easyinput v-model="baseFormData.name" placeholder="请输入题目" />
+						<uni-easyinput v-model="baseFormData.title" placeholder="请输入题目" />
 					</uni-forms-item>
 				</uni-forms>
 				<uni-forms ref="baseForm" :modelValue="baseFormData" label-position="top">
@@ -112,13 +112,17 @@
 			
 			<view class="button-group">
 				<button class="button" size="mini" type="primary"
-					@click="submit()" style="background-color: #00aaff; text-align: center; margin: auto;">添加试题</button>
+					@click="create_problem()" style="background-color: #00aaff; text-align: center; margin: auto;">添加试题</button>
 			</view>
 		</view>
 	</view>
 </template>
 
 <script>
+	import myRequest from '../../common/request';
+import list from '../../uni_modules/uview-ui/libs/config/props/list';
+	import toast from '../../uni_modules/uview-ui/libs/config/props/toast';
+	
 	export default {
 		data() {
 			return {
@@ -165,25 +169,24 @@
 						text: "填空题"
 					},
 				],
-				// 基础表单数据
+				// 题目信息
 				baseFormData: {
 					title: '',
 					answer: '',
 					analyse: '',
 					difficulty: 0,
 				},
-				dynamicFormData: {
-					domains: {}
-				},
 				dynamicLists: [{
-					label: '选项',
+					label: 'A',
+					description: '',
 					rules: [{
 						'required': true,
 						errorMessage: '选项必填'
 					}],
 					id: Date.now()
 				}, {
-					label: '选项',
+					label: 'B',
+					description: '',
 					rules: [{
 						'required': true,
 						errorMessage: '选项必填'
@@ -203,7 +206,8 @@
 			add_option() {
 				let temp = this.option_name.length
 				this.dynamicLists.push({
-					label: '选项',
+					label: this.letter[temp],
+					description: '',
 					rules: [{
 						'required': true,
 						errorMessage: '选项必填'
@@ -221,6 +225,93 @@
 				this.dynamicLists.splice(index, 1)
 				this.option_name.splice(len_option - 1, 1)
 			},
+			async create_problem() {
+				if (!myRequest.isLogin()) {
+					uni.redirectTo({
+						url: '/pages/login/login'
+					})
+					return;
+				}
+				console.log(uni.getStorageSync('token'))
+				console.log(this.baseFormData)
+				if (!this.baseFormData.title) {
+					myRequest.toast('题目内容不能为空')
+					return;
+				}
+				if (!this.baseFormData.answer) {
+					if (this.baseFormData.answer != 0) {
+						myRequest.toast('题目答案不能为空')
+						return;
+					}
+				}
+				if (this.problem_type_select == 0 || this.problem_type_select == 1) {
+					this.dynamicLists.forEach((item) => {
+						if (!item.description) {
+							myRequest.toast('题目选项不能为空')
+							return;
+						}
+					})
+				}
+				console.log(this.dynamicLists)
+
+				var data = {
+					"choices": [],
+					"description": this.baseFormData.title,
+					"is_public": true,
+				}
+				var k=0
+				for (var i=0;i<this.dynamicLists.length;i++) {
+					if (i == this.baseFormData.answer[k]) {
+						data.choices.push({
+							"choice": this.dynamicLists[i].label,
+							"description": this.dynamicLists[i].description,
+							"is_correct": true
+						})
+						k++;
+					} else {
+						data.choices.push({
+							"choice": this.dynamicLists[i].label,
+							"description": this.dynamicLists[i].description,
+							"is_correct": false
+						})
+					}
+				}
+				console.log(data)
+				data = JSON.stringify(data)
+				
+				myRequest.request('/problem/choice/create', 'POST', data).then(
+					function(res) {
+						console.log(res)
+						if (res.statusCode == 200) {
+							myRequest.toast('题目添加成功', 1500, true)
+							/*setTimeout(() => {
+								uni.hideToast();
+								//关闭提示后跳转
+								uni.navigateTo({
+									url: '/pages/problemSet/problemUpload'
+								});
+							}, 1000)*/
+						} else if (res.statusCode == 401) {
+							if (myRequest.isLogin()) {
+								myRequest.toast('请重新登录')
+							} else {
+								myRequest.toast('请登录')
+							}
+							uni.redirectTo({
+								url: '/pages/login/login'
+							})
+						} else {
+							myRequest.toast()
+						}
+					}
+				).catch(
+					function(res) {
+						console.log(res)
+						myRequest.toast()
+					}
+				)
+				
+			}
 		}
 	};
 </script>

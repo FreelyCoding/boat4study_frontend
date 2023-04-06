@@ -100,7 +100,7 @@
 
 				var is_public = true
 
-				myRequest.request(`/problemset/create?is_public=${is_public}`, 'POST', data).then(
+				myRequest.request(`/problem_set/create?is_public=${is_public}`, 'POST', data).then(
 					function(res) {
 						console.log(res)
 						if (res.statusCode == 200) {
@@ -109,7 +109,7 @@
 								uni.hideToast();
 								//关闭提示后跳转
 								uni.navigateTo({
-									url: '/pages/problemSet/problemUpload'
+									url: '/pages/personal/personalProblemSet'
 								});
 							}, 1000)
 						} else if (res.statusCode == 401) {
