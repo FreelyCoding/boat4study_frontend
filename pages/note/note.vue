@@ -156,7 +156,16 @@
 							console.log(res)
 							if (res.statusCode == 200) {
 								uni.switchTab({
-									url: '/pages/note/index'
+									url: '/pages/note/index',
+									success() {
+										console.log(getCurrentPages())
+										let page = getCurrentPages().pop(); //跳转页面成功之后
+										if (!page) return;
+										console.log(page.route)
+										if (page.route == 'pages/note/index') {
+											page.$vm.refresh(); //如果页面存在，则重新刷新页面
+										}
+									}
 								})
 							} else if (res.statusCode == 401) {
 								uni.redirectTo({
@@ -337,7 +346,7 @@
 					let page = pages[pages.length - 2]; //跳转页面成功之后
 					
 					if (page.route == 'pages/note/index') {
-						page.refresh(); //如果页面存在，则重新刷新页面
+						page.$vm.refresh(); //如果页面存在，则重新刷新页面
 					}
 					uni.navigateBack()
 				}
