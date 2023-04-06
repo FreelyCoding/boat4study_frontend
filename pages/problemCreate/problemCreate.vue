@@ -63,7 +63,8 @@
 					</uni-forms-item>
 				</uni-forms>
 				<view class="button-group">
-					<button type="primary" size="mini" @click="add_option">添加选项</button>
+					<button type="primary" size="mini" @click="add_option"
+					style="background-color: #00aaff;">添加选项</button>
 				</view>
 				<uni-forms ref="baseForm" :modelValue="baseFormData" label-position="top">
 					<uni-forms-item label="答案" required>
@@ -108,6 +109,11 @@
 					</uni-forms-item>
 				</uni-forms>
 			</uni-section>
+			
+			<view class="button-group">
+				<button class="button" size="mini" type="primary"
+					@click="submit()" style="background-color: #00aaff; text-align: center; margin: auto;">添加试题</button>
+			</view>
 		</view>
 	</view>
 </template>
@@ -258,5 +264,6 @@
 		align-items: center;
 		height: 35px;
 		margin-left: 10px;
+		
 	}
 </style>
