@@ -219,14 +219,14 @@
 							success: (res) => {
 								if (res.statusCode == 200) {
 									console.log(res)
-									if (res.data == null) {
+									if (res.data.notes == null) {
 										myRequest.toast()
 										uni.switchTab({
 											url: '/pages/note/index'
 										})
 										return
 									}
-									var data = res.data[0];
+									var data = res.data.notes[0];
 									
 									this.title = data.title;
 									this.note_html = data.content;

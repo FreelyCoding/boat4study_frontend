@@ -316,15 +316,16 @@
 						if (!res.text.replace(/[\r\n\t\s]*/, "")) {
 							myRequest.toast('内容不能为空')
 						} else {
+							var is_public = true
+							
 							// TODO: 后续更改is_public字段
 							var data = JSON.stringify({
 								"content": html_content,
-								"title": this.title
+								"title": this.title,
+								"is_public": is_public
 							})
 
-							var is_public = true
-
-							myRequest.request(`/note/create?is_public=${is_public}`, 'POST', data).then(
+							myRequest.request(`/note/create`, 'POST', data).then(
 								function(res) {
 									console.log(res)
 									if (res.statusCode == 200) {
