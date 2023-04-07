@@ -311,6 +311,9 @@
 			}
 		},
 		onLoad: function() {
+			//this.refresh()
+		},
+		onShow: function() {
 			this.refresh()
 		}
 	}

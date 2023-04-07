@@ -66,7 +66,7 @@
 		methods: {
 			back() {
 				uni.navigateBack({
-				    delta: 1
+				    delta: 1,
 				});
 				/*
 				uni.switchTab({
@@ -78,47 +78,55 @@
 				uni.navigateTo({
 					url: "/pages/problemSet/problemSetDetail?id="+item.id
 				})
+			},
+			
+			refresh() {
+				myRequest.checkLogin()
+				uni.request({
+					url: myRequest.interfaceUrl() + '/user/problem_set',
+					method: 'GET',
+					header: {
+						'X-Token': myRequest.getToken()
+					},
+					
+					success: (res) => {
+						console.log(res)
+						if (res.statusCode == 200) {
+							this.problemSet = []
+							for (var i = 0; i < res.data.length; i ++) {
+								var t = {
+									id: res.data[i].id,
+									description: res.data[i].description,
+									name: res.data[i].name,
+									pic: "../../static/pic/dataStructure.jpg",
+									created_at: res.data[i].created_at.slice(0, 10),
+									problem_number: res.data[i].problem_count,
+								}
+								this.problemSet.push(t);
+							}
+							
+						}
+						else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						}
+						else {
+							myRequest.toast()
+						}
+					},
+					
+					fail: (res) => {					
+						console.log(res)
+						myRequest.toast()
+					}
+				})
 			}
 			
 		},
 		onLoad() {
-			myRequest.checkLogin()
-			uni.request({
-				url: myRequest.interfaceUrl() + '/user/problem_set',
-				method: 'GET',
-				header: {
-					'X-Token': myRequest.getToken()
-				},
-				
-				success: (res) => {
-					console.log(res)
-					if (res.statusCode == 200) {
-						for (var i = 0; i < res.data.length; i ++) {
-							var t = {
-								id: res.data[i].id,
-								description: res.data[i].description,
-								name: res.data[i].name,
-								pic: "../../static/pic/dataStructure.jpg",
-								created_at: res.data[i].created_at.slice(0, 10),
-								problem_number: res.data[i].problem_count,
-							}
-							this.problemSet.push(t);
-						}
-						
-					}
-					else if (res.statusCode == 401) {
-						myRequest.redirectToLogin()
-					}
-					else {
-						myRequest.toast()
-					}
-				},
-				
-				fail: (res) => {					
-					console.log(res)
-					myRequest.toast()
-				}
-			})
+			//this.refresh()
+		},
+		onShow() {
+			this.refresh()
 		}
 	}
 </script>

@@ -72,8 +72,8 @@
 		},
 		methods: {
 			back() {
-				uni.switchTab({
-					url: '/pages/personal/personal'
+				uni.navigateBack({
+					delta: 1,
 				})
 			},
 
@@ -110,13 +110,14 @@
 								//关闭提示后跳转
 								uni.navigateBack({
 										delta: 1,
+										/*
 										success() {
 											let pages = getCurrentPages();  //获取所有页面栈实例列表
 											let prePage = pages[ pages.length - 2];
 											console.log(prePage.$vm)
 											if (!prePage) return;
 											prePage.$vm.refresh(); //如果页面存在，则重新刷新页面
-										}
+										}*/
 								});
 							}, 1000)
 						} else if (res.statusCode == 401) {

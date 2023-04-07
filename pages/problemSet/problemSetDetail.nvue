@@ -349,8 +349,8 @@
 							setTimeout(() => {
 								uni.hideToast();
 								//关闭提示后跳转
-								uni.redirectTo({
-									url: '/pages/personal/personalProblemSet'
+								uni.navigateBack({
+										delta: 1,
 								});
 							}, 1000)
 						} else if (res.statusCode == 401) {
