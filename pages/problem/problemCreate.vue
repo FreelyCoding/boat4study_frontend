@@ -203,9 +203,13 @@ import list from '../../uni_modules/uview-ui/libs/config/props/list';
 		},
 		methods: {
 			back() {
+				uni.navigateBack({
+				    delta: 1
+				});
+				/*
 				uni.navigateTo({
 					url: "/pages/problemSet/problemSetDetail?id="+this.problem_set_id
-				})
+				})*/
 			},
 			change(e) {
 				console.log("e:", e);

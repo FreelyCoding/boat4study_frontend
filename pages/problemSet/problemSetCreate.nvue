@@ -109,7 +109,7 @@
 								uni.hideToast();
 								//关闭提示后跳转
 								uni.navigateTo({
-									url: '/pages/personal/personalProblemSet'
+									url: '/pages/homePage/homePage'
 								});
 							}, 1000)
 						} else if (res.statusCode == 401) {

@@ -330,7 +330,9 @@
 				})
 			},
 			back() {
-				uni.navigateBack()
+				uni.navigateBack({
+				    delta: 1
+				});
 			},
 			deletePS() {
 				uni.request({

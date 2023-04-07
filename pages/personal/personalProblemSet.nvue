@@ -65,9 +65,13 @@
 		},
 		methods: {
 			back() {
+				uni.navigateBack({
+				    delta: 1
+				});
+				/*
 				uni.switchTab({
 					url: '/pages/personal/personal'
-				})
+				})*/
 			},
 			
 			jumpToPS(item) {

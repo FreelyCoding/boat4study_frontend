@@ -254,7 +254,7 @@
 				})
 			},
 			jumpToProblemSetDetail(item) {
-				uni.redirectTo({
+				uni.navigateTo({
 					url: "/pages/problemSet/problemSetDetail?id=" + item.id 
 				})
 			},

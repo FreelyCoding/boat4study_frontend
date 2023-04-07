@@ -191,7 +191,7 @@
 				console.log('searchChange', e);
 			},
 			jumpToProblemSet() {
-				uni.redirectTo({
+				uni.navigateTo({
 					url: "/pages/personal/personalProblemSet"
 				})
 			},
