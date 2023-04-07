@@ -276,6 +276,7 @@
 					success: (res) => {
 						console.log(res)
 						if (res.statusCode == 200) {
+							this.problemSet = []
 							for (var i = 0; i < Math.min(4, res.data.length); i++) {
 								var t = {
 									id: res.data[i].id,
