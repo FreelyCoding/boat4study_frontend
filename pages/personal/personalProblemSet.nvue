@@ -65,7 +65,9 @@
 		},
 		methods: {
 			back() {
-				note.methods.back()
+				uni.switchTab({
+					url: '/pages/personal/personal'
+				})
 			},
 			
 			jumpToPS(item) {
@@ -98,7 +100,7 @@
 							}
 							this.problemSet.push(t);
 						}
-						this.loadData()
+						
 					}
 					else if (res.statusCode == 401) {
 						myRequest.redirectToLogin()

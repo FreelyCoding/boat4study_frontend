@@ -68,7 +68,7 @@
 			
 			jumpToPS(item) {
 				uni.navigateTo({
-					url: "/pages/problemSet/problemSetDetail"
+					url: "/pages/problemSet/problemSetDetail?id="+item.id
 				})
 			}
 			
@@ -76,7 +76,7 @@
 		onLoad() {
 			myRequest.checkLogin()
 			uni.request({
-				url: myRequest.interfaceUrl() + '/user/favorite/problemset',
+				url: myRequest.interfaceUrl() + '/user/favorite/problem_set',
 				method: 'GET',
 				header: {
 					'X-Token': myRequest.getToken()
@@ -85,18 +85,18 @@
 				success: (res) => {
 					console.log(res)
 					if (res.statusCode == 200) {
-						for (var i = 0; i < res.data.length; i ++) {
+						for (var i = 0; i < res.data.problem_set.length; i ++) {
 							var t = {
-								id: res.data[i].id,
-								description: res.data[i].description,
-								name: res.data[i].name,
+								id: res.data.problem_set[i].id,
+								description: res.data.problem_set[i].description,
+								name: res.data.problem_set[i].name,
 								pic: "../../static/pic/dataStructure.jpg",
-								created_at: res.data[i].created_at.slice(0, 10),
-								problem_number: res.data[i].problem_count,
+								created_at: res.data.problem_set[i].created_at.slice(0, 10),
+								problem_number: res.data.problem_set[i].problem_count,
 							}
 							this.problemSet.push(t);
 						}
-						this.loadData()
+						
 					}
 					else if (res.statusCode == 401) {
 						myRequest.redirectToLogin()

@@ -230,7 +230,7 @@
 				</u-col>
 				<u-col span="2"></u-col>
 				<u-col span="3">
-					<u-button type="success" shape="circle" text="收藏"></u-button>
+					<u-button type="success" shape="circle" text="收藏" @click="starPS()"></u-button>
 				</u-col>
 				<u-col span="2"></u-col>
 			</u-row>
@@ -330,9 +330,7 @@
 				})
 			},
 			back() {
-				uni.navigateTo({
-					url: "/pages/personal/personalProblemSet"
-				})
+				uni.navigateBack()
 			},
 			deletePS() {
 				uni.request({
@@ -365,7 +363,32 @@
 						myRequest.toast()
 					}
 				})
-			}
+			},
+			starPS() {
+				uni.request({
+					url: myRequest.interfaceUrl() + '/problem_set/favorite/' + this.problem_set_id,
+					method: 'POST',
+					header: {
+						'X-Token': myRequest.getToken()
+					},
+			
+					success: (res) => {
+						console.log(res)
+						if (res.statusCode == 200) {
+							myRequest.toast('收藏成功', 1000, true)
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else {
+							myRequest.toast()
+						}
+					},
+			
+					fail: (res) => {
+						console.log(res)
+						myRequest.toast()
+					}
+				})
+			},
 
 
 		},

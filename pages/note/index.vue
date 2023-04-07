@@ -167,7 +167,6 @@
 			},
 			refresh() {
 				myRequest.checkLogin()
-				
 				this.notes = []
 				
 				uni.request({

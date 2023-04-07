@@ -4,9 +4,9 @@
 		<view>
 			<!--自定义navbar-->
 			<uni-nav-bar title="顺序练习" background-color="#00aaff" color="#FFFFFF" status-bar="true">
-				<block slot="left" @click="back()">
+				<block slot="left">
 					<view class="note-navbar">
-						<uni-icons type="left" color="#FFFFFF" size="18" />
+						<uni-icons type="left" color="#FFFFFF" size="18"  @click="back()"/>
 					</view>
 				</block>
 			</uni-nav-bar>
@@ -146,7 +146,7 @@
 			var _this = this
 			
 			uni.request({
-				url: myRequest.interfaceUrl() + '/problem_set/'+this.problem_set_id+'/all_problem?is_favorite='+0,
+				url: myRequest.interfaceUrl() + '/problem_set/'+this.problem_set_id+'/all_problem',
 				method: 'GET',
 				header: {
 					'X-Token': myRequest.getToken()
@@ -155,13 +155,13 @@
 				success: (res1) => {
 					console.log(res1)
 					if (res1.statusCode == 200) {
-						this.problem_id_list = JSON.parse(JSON.stringify(res1.data))
+						this.problem_id_list = JSON.parse(JSON.stringify(res1.data.problems))
 						
 						for (var i=0;i<this.problem_id_list.length;i++) {
 							if (this.problem_id_list[i].problem_type_id == 0) {
 
 								uni.request({
-									url: myRequest.interfaceUrl() + '/problem/choice/'+this.problem_id_list[i].problem_id,
+									url: myRequest.interfaceUrl() + '/problem/choice/'+this.problem_id_list[i].id,
 									method: 'GET',
 									header: {
 										'X-Token': myRequest.getToken()
@@ -236,7 +236,7 @@
 						item.selected = 0;
 					})
 					uni.request({
-						url: myRequest.interfaceUrl() + '/problem/choice/answer/'+this.problem_id_list[pr_i].problem_id,
+						url: myRequest.interfaceUrl() + '/problem/choice/answer/'+this.problem_id_list[pr_i].id,
 						method: 'GET',
 						header: {
 							'X-Token': myRequest.getToken()

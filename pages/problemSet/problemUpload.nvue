@@ -17,8 +17,7 @@
 							<uni-row>
 								<uni-col span="8">				
 									<view>
-										<u-icon :name="item.iconPath" size="80px"
-										 customStyle="margin-top: 20px; margin-bottom:10px ; margin-left: 10px"></u-icon>
+										<image :src="item.iconPath" style="width: 90px; height: 90px; margin-top: 20px; margin-left: 10px;"></image>
 									</view>
 								</uni-col>
 		
@@ -46,6 +45,7 @@
 				problem_set_id: 0,
 				list : [
 					{
+				
 						iconPath: "../../static/pic/single.svg",
 						title: "单题导入",
 						description: "单题手动逐一录入题库",

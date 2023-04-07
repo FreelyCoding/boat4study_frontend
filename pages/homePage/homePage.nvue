@@ -239,7 +239,7 @@
 				})
 			},
 			jumpoToUploadProblem() {
-				uni.navigateTo({
+				uni.redirectTo({
 					url: "/pages/problemCreate/problemCreate"
 				})
 			},
@@ -254,7 +254,7 @@
 				})
 			},
 			jumpToProblemSetDetail(item) {
-				uni.navigateTo({
+				uni.redirectTo({
 					url: "/pages/problemSet/problemSetDetail?id=" + item.id 
 				})
 			},
@@ -264,50 +264,53 @@
 			search(e) {
 				console.log('searchChange', e);
 			},
-		},
-		onLoad() {
-			myRequest.checkLogin()
-			uni.request({
-				url: myRequest.interfaceUrl() + '/user/problem_set',
-				method: 'GET',
-				header: {
-					'X-Token': myRequest.getToken()
-				},
-
-				success: (res) => {
-					console.log(res)
-					if (res.statusCode == 200) {
-						for (var i = 0; i < Math.min(4, res.data.length); i++) {
-							var t = {
-								id: res.data[i].id,
-								description: res.data[i].description,
-								name: res.data[i].name,
-								pic: "../../static/pic/dataStructure.jpg",
-								created_at: res.data[i].created_at.slice(0, 10),
-								problem_number: res.data[i].problem_count,
+			refresh() {
+				myRequest.checkLogin()
+				uni.request({
+					url: myRequest.interfaceUrl() + '/user/problem_set',
+					method: 'GET',
+					header: {
+						'X-Token': myRequest.getToken()
+					},
+				
+					success: (res) => {
+						console.log(res)
+						if (res.statusCode == 200) {
+							for (var i = 0; i < Math.min(4, res.data.length); i++) {
+								var t = {
+									id: res.data[i].id,
+									description: res.data[i].description,
+									name: res.data[i].name,
+									pic: "../../static/pic/dataStructure.jpg",
+									created_at: res.data[i].created_at.slice(0, 10),
+									problem_number: res.data[i].problem_count,
+								}
+								this.problemSet.push(t);
 							}
-							this.problemSet.push(t);
-						}
-						this.loadData()
-					} else if (res.statusCode == 401) {
-						if (myRequest.isLogin()) {
-							myRequest.toast('请重新登录')
+							this.loadData()
+						} else if (res.statusCode == 401) {
+							if (myRequest.isLogin()) {
+								myRequest.toast('请重新登录')
+							} else {
+								myRequest.toast('请登录')
+							}
+							uni.navigateTo({
+								url: '/pages/login/login'
+							})
 						} else {
-							myRequest.toast('请登录')
+							myRequest.toast()
 						}
-						uni.navigateTo({
-							url: '/pages/login/login'
-						})
-					} else {
+					},
+				
+					fail: (res) => {
+						console.log(res)
 						myRequest.toast()
 					}
-				},
-
-				fail: (res) => {
-					console.log(res)
-					myRequest.toast()
-				}
-			})
+				})
+			}
+		},
+		onLoad: function() {
+			this.refresh()
 		}
 	}
 </script>

@@ -191,32 +191,32 @@
 				console.log('searchChange', e);
 			},
 			jumpToProblemSet() {
-				uni.navigateTo({
+				uni.redirectTo({
 					url: "/pages/personal/personalProblemSet"
 				})
 			},
 			jumpToMyNote() {
-				uni.navigateTo({
+				uni.redirectTo({
 					url: "/pages/personal/personalNote"
 				})
 			},
 			jumpToStarProblemSet() {
-				uni.navigateTo({
+				uni.redirectTo({
 					url: '/pages/personal/starProblemSet'
 				})
 			},
 			jumpToStarNote() {
-				uni.navigateTo({
+				uni.redirectTo({
 					url: '/pages/personal/starNotes'
 				})
 			},
 			jumpToStarProblem() {
-				uni.navigateTo({
+				uni.redirectTo({
 					url: '/pages/personal/starProblem'
 				})
 			},
 			jumpToWrongProblem() {
-				uni.navigateTo({
+				uni.redirectTo({
 					url: '/pages/personal/wrongProblem'
 				})
 			},
