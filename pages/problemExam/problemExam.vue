@@ -14,7 +14,7 @@
 		<view class="contain">
 
 			<view class="page_nav">
-				<uni-pagination :show-icon="true" :total="problem.length" pageSize="1" v-model="cur_page" @change="load_next_pro()"/>
+				<uni-pagination :show-icon="true" :total="problem_id_list.length" pageSize="1" v-model="cur_page" @change="load_next_pro()"/>
 			</view>
 
 			<view class="problem_title">
@@ -58,7 +58,7 @@
 			</view>
 			
 			<!-- 多选题 -->
-			<view v-if="problem[cur_page-1].type === 1 && problem[cur_page-1].is_multiple === true">
+			<view v-if="problem[cur_page-1].type === 0 && problem[cur_page-1].is_multiple === true">
 				<view class="option_group">
 					<view v-for="(item, index) in problem[cur_page-1].options" :key="index">
 						<view class="option_item" :class="{'selected_option_item':problem[cur_page-1].options[index].selected==1,
@@ -66,7 +66,9 @@
 							 'right_option_item':problem[cur_page-1].options[index].selected==3}" @click="select_multi_option(index)">
 							<u-row>
 								<u-col span="1">
-									<view class="option_letter_box">{{letter[index]}}</view>
+									<view class="option_letter_box" :class="{'selected_option_letter_box':problem[cur_page-1].options[index].selected==1,
+							 'wrong_option_letter_box':problem[cur_page-1].options[index].selected==2,
+							 'right_option_letter_box':problem[cur_page-1].options[index].selected==3}">{{letter[index]}}</view>
 								</u-col>
 								<u-col span="11">
 									<view class="option_item_content"
@@ -84,9 +86,11 @@
 			<!-- 填空题 -->
 			<view v-if="problem[cur_page-1].type === 1">
 				<view class="block_answer_box">
-					<uni-easyinput class="block_answer_box" v-model="baseFormData.analyse" placeholder="请输入答案" />
+					<view class="block_answer_item">
+						<uni-easyinput class="" v-model="problem[cur_page-1].my_answer" placeholder="请输入答案" />
+					</view>
+					<button class="button" size="mini" type="primary" @click="submit_block_answer()">提交</button>
 				</view>
-				<button class="button" size="mini" type="primary" @click="submit_block_answer()">提交</button>
 			</view>
 			
 			<!-- 判断题 -->
@@ -109,6 +113,16 @@
 							</u-row>
 						</view>
 					</view>
+				</view>
+			</view>
+			
+			<view v-if="problem[cur_page-1].answer_show == true">
+				<view class="problem_answer_box_title">
+					答案
+				</view>
+				<view class="problem_answer_box">
+					<p>正确答案：{{problem[cur_page-1].correct_answer}}</p>
+					<p>我的答案：{{problem[cur_page-1].my_answer}}</p>
 				</view>
 			</view>
 			
@@ -138,6 +152,13 @@
 
 			}
 		},
+		watch: {
+				cur_page(new_page, old_page) {
+					if (new_page > this.problem.length) {
+						this.load_one_problem_detail(new_page - 1)
+					}
+				}
+		},
 		onLoad: function(option) {
 			myRequest.checkLogin()
 			
@@ -155,52 +176,8 @@
 				success: (res1) => {
 					console.log(res1)
 					if (res1.statusCode == 200) {
-						this.problem_id_list = JSON.parse(JSON.stringify(res1.data.problems))
-						
-						for (var i=0;i<this.problem_id_list.length;i++) {
-							if (this.problem_id_list[i].problem_type_id == 0) {
-
-								uni.request({
-									url: myRequest.interfaceUrl() + '/problem/choice/'+this.problem_id_list[i].id,
-									method: 'GET',
-									header: {
-										'X-Token': myRequest.getToken()
-									},
-									success: (res2) => {
-										console.log(res2)
-										if (res2.statusCode == 200) {
-											this.problem.push({
-												type: 0,
-												is_multiple: res2.data.is_multiple,
-												done: 0,
-												right: 0,
-												title: res2.data.description,
-												options: [],
-											})
-											for (var j=0;j<res2.data.choices.length;j++) {
-												this.problem[this.problem.length-1].options.push({
-													name: res2.data.choices[j].description,
-													selected: 0,
-												})
-											}
-											console.log(this.problem)
-										
-										}
-										else if (res2.statusCode == 401) {
-											myRequest.redirectToLogin()
-										}
-										else {
-											myRequest.toast()
-										}
-									},
-									
-									fail: (res2) => {					
-										console.log(res2)
-										myRequest.toast()
-									},
-								})
-							}
-						}
+						this.problem_id_list = res1.data.problems
+						this.load_one_problem_detail(0)
 					}
 					else if (res1.statusCode == 401) {
 						myRequest.redirectToLogin()
@@ -219,9 +196,9 @@
 		},
 		methods: {
 			back() {
-				uni.navigateTo({
-					url: "/pages/problemSet/problemSetDetail?id="+this.problem_set_id
-				})
+				uni.navigateBack({
+				    delta: 1
+				});
 			},
 			groupChange(n) {
 				console.log('groupChange', n);
@@ -229,12 +206,91 @@
 			radioChange(n) {
 				console.log('radioChange', n);
 			},
+			load_one_problem_detail(index) {
+				if (this.problem_id_list[index].problem_type_id == 0) {
+					uni.request({
+						url: myRequest.interfaceUrl() + '/problem/choice/all?id='+this.problem_id_list[index].id,
+						method: 'GET',
+						header: {
+							'X-Token': myRequest.getToken()
+						},
+						success: (res2) => {
+							console.log(res2)
+							if (res2.statusCode == 200) {
+								this.problem.push({
+									type: 0,
+									is_multiple: res2.data.problems[0].is_multiple,
+									done: 0,
+									right: 0,
+									title: res2.data.problems[0].description,
+									options: [],
+									my_answer: '',
+									correct_answer: '',
+									answer_show: 0,
+								})
+								for (var j=0;j<res2.data.problems[0].choices.length;j++) {
+									this.problem[this.problem.length-1].options.push({
+										name: res2.data.problems[0].choices[j].description,
+										selected: 0,
+									})
+								}
+								console.log(this.problem)
+							
+							}
+							else if (res2.statusCode == 401) {
+								myRequest.redirectToLogin()
+							}
+							else {
+								myRequest.toast()
+							}
+						},
+						fail: (res2) => {					
+							console.log(res2)
+							myRequest.toast()
+						},
+					})
+				} else if (this.problem_id_list[index].problem_type_id == 1) {
+					uni.request({
+						url: myRequest.interfaceUrl() + '/problem/blank/all?id='+this.problem_id_list[index].id,
+						method: 'GET',
+						header: {
+							'X-Token': myRequest.getToken()
+						},
+						success: (res2) => {
+							console.log(res2)
+							if (res2.statusCode == 200) {
+								this.problem.push({
+									type: 1,
+									is_multiple: false,
+									done: 0,
+									right: 0,
+									title: res2.data.problems[0].description,
+									options: [],
+									my_answer: '',
+									correct_answer: '',
+									answer_show: 0,
+								})
+								console.log(this.problem)
+							}
+							else if (res2.statusCode == 401) {
+								myRequest.redirectToLogin()
+							}
+							else {
+								myRequest.toast()
+							}
+						},
+						fail: (res2) => {					
+							console.log(res2)
+							myRequest.toast()
+						},
+					})
+				}
+			},
 			select_single_option(i) {
 				let pr_i = this.cur_page - 1
 				if (this.problem[pr_i].done == 0) {
-					this.problem[pr_i].options.forEach((item) => {
-						item.selected = 0;
-					})
+					this.problem[pr_i].done = 1;
+					
 					uni.request({
 						url: myRequest.interfaceUrl() + '/problem/choice/answer/'+this.problem_id_list[pr_i].id,
 						method: 'GET',
@@ -245,12 +301,20 @@
 						success: (res1) => {
 							console.log(res1)
 							if (res1.statusCode == 200) {
-								var answer_index = res1.data[0].choice.charCodeAt(0) - 'A'.charCodeAt(0)
-								if (i == answer_index) {
-									this.problem[pr_i].options[answer_index].selected = 3;
-								} else {
-									this.problem[pr_i].options[i].selected = 2;
-									this.problem[pr_i].options[answer_index].selected = 3;
+								for (var k=0;k<res1.data.length;k++) {
+									if (res1.data[k].is_correct == true) {
+										this.problem[pr_i].correct_answer += String.fromCharCode(65+k);
+									}
+									if (i == k) {
+										this.problem[pr_i].my_answer += String.fromCharCode(65+k);
+									}
+									if(res1.data[k].is_correct == true && i == k) {
+										this.problem[pr_i].options[k].selected = 3;
+									} else if (res1.data[k].is_correct == false && i == k) {
+										this.problem[pr_i].options[k].selected = 2;
+									} else if (res1.data[k].is_correct == true && i != k) {
+										this.problem[pr_i].options[k].selected = 3;
+									}
 								}
 							}
 							else if (res1.statusCode == 401) {
@@ -267,7 +331,7 @@
 						},
 					})
 					
-					this.problem[pr_i].done = 1;
+					this.problem[pr_i].answer_show = 1;
 				}
 			},
 			select_multi_option(i) {
@@ -282,20 +346,84 @@
 			},
 			submit_multi_option_answer() {
 				let pr_i = this.cur_page - 1
-				let index = 0
-				let answer_index = 0
 				if (this.problem[pr_i].done == 0) {
 					this.problem[pr_i].done = 1;
-					this.problem[pr_i].options.forEach((item) => {
-						if (item.selected != 0) {
-							item.selected = 2
-						}
-						if(answer_index < this.problem[pr_i].answer.length && this.problem[pr_i].answer[answer_index] == index) {
-							item.selected = 3
-							answer_index = answer_index + 1
-						}
-						index = index + 1
+					
+					uni.request({
+						url: myRequest.interfaceUrl() + '/problem/choice/answer/'+this.problem_id_list[pr_i].id,
+						method: 'GET',
+						header: {
+							'X-Token': myRequest.getToken()
+						},
+						
+						success: (res1) => {
+							console.log(res1)
+							if (res1.statusCode == 200) {
+								for (var k=0;k<res1.data.length;k++) {
+									if (res1.data[k].is_correct == true) {
+										this.problem[pr_i].correct_answer += String.fromCharCode(65+k);
+									}
+									if (this.problem[pr_i].options[k].selected == 1) {
+										this.problem[pr_i].my_answer += String.fromCharCode(65+k);
+									}
+									if(res1.data[k].is_correct == true && this.problem[pr_i].options[k].selected == 1) {
+										this.problem[pr_i].options[k].selected = 3;
+									} else if (res1.data[k].is_correct == false && this.problem[pr_i].options[k].selected == 1) {
+										this.problem[pr_i].options[k].selected = 2;
+									} else if (res1.data[k].is_correct == true && this.problem[pr_i].options[k].selected != 1) {
+										this.problem[pr_i].options[k].selected = 3;
+									}
+								}
+							}
+							else if (res1.statusCode == 401) {
+								myRequest.redirectToLogin()
+							}
+							else {
+								myRequest.toast()
+							}
+						},
+						
+						fail: (res1) => {					
+							console.log(res1)
+							myRequest.toast()
+						},
 					})
+					
+					this.problem[pr_i].answer_show = 1;
+				}
+			},
+			submit_block_answer() {
+				let pr_i = this.cur_page - 1
+				if (this.problem[pr_i].done == 0) {
+					this.problem[pr_i].done = 1;
+					
+					uni.request({
+						url: myRequest.interfaceUrl() + '/problem/blank/answer/'+this.problem_id_list[pr_i].id,
+						method: 'GET',
+						header: {
+							'X-Token': myRequest.getToken()
+						},
+						
+						success: (res1) => {
+							console.log(res1)
+							if (res1.statusCode == 200) {
+								this.problem[pr_i].correct_answer = res1.data;
+							}
+							else if (res1.statusCode == 401) {
+								myRequest.redirectToLogin()
+							}
+							else {
+								myRequest.toast()
+							}
+						},
+						
+						fail: (res1) => {					
+							console.log(res1)
+							myRequest.toast()
+						},
+					})
+					
+					this.problem[pr_i].answer_show = 1;
 				}
 			}
 		},
@@ -346,19 +474,27 @@
 		display: flex;
 		align-items: center;
 		margin: 10px 0 10px 0;
+		border: #dadada solid 1px;
+		transition: 0.2s;
 		//background-color: #ebebeb;
 	}
 
 	.selected_option_item {
-		background-color: #55aaff;
+		border: #55aaff solid 1px;
+		transition: 0.2s;
+		//background-color: #55aaff;
 	}
 
 	.wrong_option_item {
-		background-color: #c30421;
+		border: #c30421 solid 1px;
+		transition: 0.2s;
+		//background-color: #c30421;
 	}
 
 	.right_option_item {
-		background-color: #0ca006;
+		border: #0ca006 solid 1px;
+		transition: 0.2s;
+		//background-color: #0ca006;
 	}
 
 	.option_letter_box {
@@ -371,19 +507,23 @@
 		width: 15px;
 		padding: 5px;
 		margin-left: 10px;
-		background-color: #c3c3c3;
+		background-color: #e0e0e0;
+		transition: 0.2s;
 	}
 	.selected_option_letter_box {
 		background-color: #55aaff;
 		color: #ffffff;
+		transition: 0.2s;
 	}
 	.wrong_option_letter_box {
 		background-color: #c30421;
 		color: #ffffff;
+		transition: 0.2s;
 	}
 	.right_option_letter_box {
 		background-color: #0ca006;
 		color: #ffffff;
+		transition: 0.2s;
 	}
 
 	.option_item_content {
@@ -392,8 +532,8 @@
 	}
 
 	.selected_option_item_content {
-		margin-left: 35px;
-		color: #ffffff;
+		//margin-left: 35px;
+		//color: #ffffff;
 	}
 
 	.option_group {
@@ -401,6 +541,27 @@
 	}
 	
 	.block_answer_box {
+		margin: 0 0 50px 0;
+	}
+	.block_answer_item {
 		margin: 20px 0 20px 0;
+	}
+	
+	.problem_answer_box_title {
+		margin-bottom: 10px;
+		font-size: 18px;
+		background-color: #00aaff;
+		color: white;
+		width: 50px;
+		justify-content: center;
+		text-align: center;
+		height: 25px;
+		border-radius: 10px;
+	}
+	.problem_answer_box {
+		font-size: 16px;
+		p {
+			margin-bottom: 5px;
+		}
 	}
 </style>

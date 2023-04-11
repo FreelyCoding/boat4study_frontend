@@ -230,7 +230,8 @@
 				</u-col>
 				<u-col span="2"></u-col>
 				<u-col span="3">
-					<u-button type="success" shape="circle" text="收藏" @click="starPS()"></u-button>
+					<u-button v-if="proDetail.is_favorite == true" type="success" shape="circle" text="已收藏" @click="unstarPS()"></u-button>
+					<u-button v-if="proDetail.is_favorite == false" type="success" shape="circle" text="收藏" @click="starPS()"></u-button>
 				</u-col>
 				<u-col span="2"></u-col>
 			</u-row>
@@ -249,7 +250,8 @@
 					title: "",
 					ownerName: "丁真",
 					totalNum: 0,
-					descrip: ''
+					descrip: '',
+					is_favorite: false,
 				},
 				problem_set_id: 0,
 
@@ -273,7 +275,8 @@
 						this.proDetail.title = res.data.problem_set[0].name
 						this.proDetail.totalNum = res.data.problem_set[0].problem_count
 						this.proDetail.descrip = res.data.problem_set[0].description
-						console.log(res.data.problem_set)
+						this.proDetail.is_favorite = res.data.problem_set[0].is_favorite
+						console.log(this.proDetail)
 						uni.request({
 							url: myRequest.interfaceUrl() +
 								`/user/info/${res.data.problem_set[0].user_id}`,
@@ -377,6 +380,7 @@
 					success: (res) => {
 						console.log(res)
 						if (res.statusCode == 200) {
+							this.proDetail.is_favorite = true
 							myRequest.toast('收藏成功', 1000, true)
 						} else if (res.statusCode == 401) {
 							myRequest.redirectToLogin()
@@ -385,6 +389,32 @@
 						}
 					},
 			
+					fail: (res) => {
+						console.log(res)
+						myRequest.toast()
+					}
+				})
+			},
+			unstarPS() {
+				uni.request({
+					url: myRequest.interfaceUrl() + '/problem_set/unfavorite/' + this.problem_set_id,
+					method: 'DELETE',
+					header: {
+						'X-Token': myRequest.getToken()
+					},
+							
+					success: (res) => {
+						console.log(res)
+						if (res.statusCode == 200) {
+							this.proDetail.is_favorite = false
+							myRequest.toast('取消收藏成功', 1000, true)
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else {
+							myRequest.toast()
+						}
+					},
+							
 					fail: (res) => {
 						console.log(res)
 						myRequest.toast()

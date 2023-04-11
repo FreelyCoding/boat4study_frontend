@@ -111,8 +111,28 @@
 			</uni-section>
 			
 			<view class="button-group">
-				<button class="button" size="mini" type="primary"
-					@click="create_problem()" style="background-color: #00aaff; text-align: center; margin: auto;">添加试题</button>
+				<view v-if="problem_type_select === 0 || problem_type_select === 1">
+					<button class="button" size="mini" type="primary"
+						@click="create_choice_problem()" 
+						style="background-color: #00aaff; text-align: center; margin: auto;">
+						添加试题
+					</button>
+				</view>
+				<view v-if="problem_type_select === 2">
+					<button class="button" size="mini" type="primary"
+						@click="" 
+						style="background-color: #00aaff; text-align: center; margin: auto;">
+						暂不支持添加判断题
+					</button>
+				</view>
+				<view v-if="problem_type_select === 3">
+					<button class="button" size="mini" type="primary"
+						@click="create_blank_problem()" 
+						style="background-color: #00aaff; text-align: center; margin: auto;">
+						添加试题
+					</button>
+				</view>
+
 			</view>
 		</view>
 	</view>
@@ -240,7 +260,7 @@ import list from '../../uni_modules/uview-ui/libs/config/props/list';
 				this.dynamicLists.splice(index, 1)
 				this.option_name.splice(len_option - 1, 1)
 			},
-			async create_problem() {
+			async create_choice_problem() {
 				if (!myRequest.isLogin()) {
 					uni.redirectTo({
 						url: '/pages/login/login'
@@ -300,7 +320,6 @@ import list from '../../uni_modules/uview-ui/libs/config/props/list';
 					function(res) {
 						console.log(res)
 						if (res.statusCode == 200) {
-							myRequest.toast('题目添加成功', 1500, true)
 							
 							myRequest.request('/problem_set/'+temp_problem_set_id+'/add?problem_id='+res.data.id, 'POST', data).then(
 								function(res2) {
@@ -310,7 +329,7 @@ import list from '../../uni_modules/uview-ui/libs/config/props/list';
 										setTimeout(() => {
 											uni.hideToast();
 											//关闭提示后跳转
-											uni.navigateTo({
+											uni.redirectTo({
 												url: '/pages/problem/problemCreate?id='+temp_problem_set_id
 											});
 										}, 1000)
@@ -327,6 +346,81 @@ import list from '../../uni_modules/uview-ui/libs/config/props/list';
 								}
 							)
 
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else {
+							myRequest.toast()
+						}
+					}
+				).catch(
+					function(res) {
+						console.log(res)
+						myRequest.toast()
+					}
+				)
+				
+			},
+			
+			async create_blank_problem() {
+				if (!myRequest.isLogin()) {
+					uni.redirectTo({
+						url: '/pages/login/login'
+					})
+					return;
+				}
+				console.log(uni.getStorageSync('token'))
+				var temp_problem_set_id = this.problem_set_id
+				console.log(this.baseFormData)
+				if (!this.baseFormData.title) {
+					myRequest.toast('题目内容不能为空')
+					return;
+				}
+				if (!this.baseFormData.answer) {
+					if (this.baseFormData.answer != 0) {
+						myRequest.toast('题目答案不能为空')
+						return;
+					}
+				}
+				
+				var data = {
+					"answer": this.baseFormData.answer,
+					"description": this.baseFormData.title,
+					"is_public": true,
+				}
+				
+				console.log(data)
+				data = JSON.stringify(data)
+				
+				myRequest.request('/problem/blank/create', 'POST', data).then(
+					function(res) {
+						console.log(res)
+						if (res.statusCode == 200) {
+							
+							myRequest.request('/problem_set/'+temp_problem_set_id+'/add?problem_id='+res.data.id, 'POST', data).then(
+								function(res2) {
+									console.log(res2)
+									if (res2.statusCode == 200) {
+										myRequest.toast('试题添加成功', 1500, true)
+										setTimeout(() => {
+											uni.hideToast();
+											//关闭提示后跳转
+											uni.redirectTo({
+												url: '/pages/problem/problemCreate?id='+temp_problem_set_id
+											});
+										}, 1000)
+									} else if (res2.statusCode == 401) {
+										myRequest.redirectToLogin()
+									} else {
+										myRequest.toast()
+									}
+								}
+							).catch(
+								function(res) {
+									console.log(res)
+									myRequest.toast()
+								}
+							)
+				
 						} else if (res.statusCode == 401) {
 							myRequest.redirectToLogin()
 						} else {
