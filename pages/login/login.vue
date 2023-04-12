@@ -42,6 +42,7 @@
 	import tuiToast from '@/components/tui-toast/tui-toast.vue'
 	
 	import util from '@/util/thor_utils/util.js'
+import myRequest from '../../common/request'
 	export default {
 		data() {
 			return {
@@ -71,9 +72,37 @@
 								key: 'token',
 								data: res.data.token
 							})
-							uni.switchTab({
-								url: '/pages/homePage/homePage'
+							
+							uni.request({
+								url: myRequest.interfaceUrl() + '/user/info',
+								method: 'GET',
+								header: {
+									"X-Token": res.data.token,	
+								},
+								
+								success: (res) => {
+									console.log(res)
+									if (res.statusCode == 200) {
+										uni.setStorage({
+											key: 'user_id',
+											data: res.data.user_id
+										})
+										
+										uni.switchTab({
+											url: '/pages/homePage/homePage'
+										})
+									}
+									else {
+										myRequest.toast()
+									}
+								},
+								
+								fail: res => {
+									console.log(res)
+									myRequest.toast()
+								}
 							})
+											
 						}
 						else {
 							this.tui.toast('用户名或密码错误')

@@ -257,13 +257,22 @@
 									console.log("data")
 									console.log(data)
 									
-									this.title = data.title;
-									this.note_html = data.content;
-									this.note_id = data.id;
+									if (data.user_id != myRequest.getUID()) {
+										console.log('无权限')
+										uni.switchTab({
+											url: '/pages/note/index'
+										})
+									}
+									else {
 									
-									this.editorCtx.setContents({
-										html: this.note_html
-									})
+										this.title = data.title;
+										this.note_html = data.content;
+										this.note_id = data.id;
+										
+										this.editorCtx.setContents({
+											html: this.note_html
+										})
+									}
 								}
 								else if (res.statusCode == 401) {
 									myRequest.toast('请先登录')

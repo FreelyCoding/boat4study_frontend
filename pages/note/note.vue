@@ -89,6 +89,9 @@
 				valid: false,
 				note_html: "",
 				note_id: "",
+
+				remove_index: 0,
+				edit_index: 1,
 				
 				like_index: 2, 
 				star_index: 3,
@@ -239,6 +242,14 @@
 										this.fabContent[this.star_index].active = true
 									}
 									
+									if (data.user_id != myRequest.getUID()) {
+										this.fabContent = this.fabContent.slice(2)
+										this.like_index = 0
+										this.star_index = 1
+										this.remove_index = 1000
+										this.edit_index = 1000
+									}
+									
 									this.editorCtx.setContents({
 										html: this.note_html
 									})
@@ -287,10 +298,10 @@
 				this.fabContent[e.index].active = !e.item.active
 				var t = this.fabContent[e.index].active
 
-				if (e.index == 0) {
+				if (e.index == this.remove_index) {
 					this.show = true;
 				}
-				if (e.index == 1) {
+				if (e.index == this.edit_index) {
 					uni.redirectTo({
 						url: `/pages/note/edit_note?id=${this.note_id}`
 					})
@@ -299,15 +310,26 @@
 				
 				if (e.index == this.like_index || e.index == this.star_index) {
 					
-					var url;
-					if (e.index == this.like_index && !t) url = `/note/unlike/${this.note_id}`
-					else if (e.index == this.like_index && t) url = `/note/like/${this.note_id}`
-					else if (e.index == this.star_index && !t) url = `/note/unfavorite/${this.note_id}`
-					else url = `/note/favorite/${this.note_id}`
-					
+					var url, method;
+					if (e.index == this.like_index && !t) {
+						url = `/note/unlike/${this.note_id}`
+						method = 'POST'
+					}
+					else if (e.index == this.like_index && t) {
+						url = `/note/like/${this.note_id}`
+						method = 'POST'
+					}
+					else if (e.index == this.star_index && !t) {
+						url = `/note/unfavorite/${this.note_id}`	
+						method = 'DELETE'
+					}
+					else {
+						url = `/note/favorite/${this.note_id}`
+						method = 'POST'
+					}					
 					uni.request({
 						url: myRequest.interfaceUrl() + url,
-						method: 'POST',
+						method: method,
 						header: {
 							'X-Token': myRequest.getToken()
 						},
@@ -364,13 +386,13 @@
 		},
 
 		onLoad() {
-			var pages = getCurrentPages();
-			var curRoutes = pages[pages.length - 1].route
-			var curParam = pages[pages.length - 1].options;
+			// var pages = getCurrentPages();
+			// var curRoutes = pages[pages.length - 1].route
+			// var curParam = pages[pages.length - 1].options;
 			
-			var id = curParam['id']
+			// var id = curParam['id']
 			
-			if (id) this.note_id = id
+			// if (id) this.note_id = id
 		},
 	}
 </script>

@@ -170,7 +170,7 @@
 				this.notes = []
 				
 				uni.request({
-					url: myRequest.interfaceUrl() + '/user/note',
+					url: myRequest.interfaceUrl() + '/note/all',
 					method: 'GET',
 					header: {
 						'X-Token': myRequest.getToken()
@@ -187,8 +187,8 @@
 									pic: "",
 									create_time:  res.data.notes[i].created_at.slice(0,10),
 									id: res.data.notes[i].id,
-									like_count: res.data.notes[i].is_liked ? 1 : 0,
-									star_count: res.data.notes[i].is_favorite ? 1 : 0 
+									like_count: res.data.notes[i].like_count,
+									star_count: res.data.notes[i].favorite_count 
 								}
 								this.notes.push(t);
 							}

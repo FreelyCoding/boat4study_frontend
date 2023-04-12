@@ -173,6 +173,10 @@ const myRequest = {
 	getToken() {
 		return uni.getStorageSync("token")
 	},
+	getUID() {
+		return uni.getStorageSync("user_id")
+	},
+	
 	getUserId() {
 		uni.request({
 			url: myRequest.interfaceUrl() + '/user/info',
