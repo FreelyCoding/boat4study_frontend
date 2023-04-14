@@ -99,10 +99,12 @@
 					<view v-for="(item, index) in problem[cur_page-1].options" :key="index">
 						<view class="option_item" :class="{'selected_option_item':problem[cur_page-1].options[index].selected==1,
 							 'wrong_option_item':problem[cur_page-1].options[index].selected==2,
-							 'right_option_item':problem[cur_page-1].options[index].selected==3}" @click="select_single_option(index)">
+							 'right_option_item':problem[cur_page-1].options[index].selected==3}" @click="submit_judge_answer(index)">
 							<u-row>
 								<u-col span="1">
-									<view class="option_letter_box">{{letter[index]}}</view>
+									<view class="option_letter_box" :class="{'selected_option_letter_box':problem[cur_page-1].options[index].selected==1,
+							 'wrong_option_letter_box':problem[cur_page-1].options[index].selected==2,
+							 'right_option_letter_box':problem[cur_page-1].options[index].selected==3}">{{letter[index]}}</view>
 								</u-col>
 								<u-col span="11">
 									<view class="option_item_content"
@@ -284,6 +286,50 @@
 							myRequest.toast()
 						},
 					})
+				} else if (this.problem_id_list[index].problem_type_id == 2) {
+					uni.request({
+						url: myRequest.interfaceUrl() + '/problem/judge/all?id='+this.problem_id_list[index].id,
+						method: 'GET',
+						header: {
+							'X-Token': myRequest.getToken()
+						},
+						success: (res2) => {
+							console.log(res2)
+							if (res2.statusCode == 200) {
+								this.problem.push({
+									type: 2,
+									is_multiple: false,
+									done: 0,
+									right: 0,
+									title: res2.data.problems[0].description,
+									options: [
+										{
+											name: "正确",
+											selected: 0,
+										},
+										{
+											name: "错误",
+											selected: 0,
+										}
+									],
+									my_answer: '',
+									correct_answer: '',
+									answer_show: 0,
+								})
+								console.log(this.problem)
+							}
+							else if (res2.statusCode == 401) {
+								myRequest.redirectToLogin()
+							}
+							else {
+								myRequest.toast()
+							}
+						},
+						fail: (res2) => {					
+							console.log(res2)
+							myRequest.toast()
+						},
+					})
 				}
 			},
 			select_single_option(i) {
@@ -408,6 +454,57 @@
 							console.log(res1)
 							if (res1.statusCode == 200) {
 								this.problem[pr_i].correct_answer = res1.data;
+							}
+							else if (res1.statusCode == 401) {
+								myRequest.redirectToLogin()
+							}
+							else {
+								myRequest.toast()
+							}
+						},
+						
+						fail: (res1) => {					
+							console.log(res1)
+							myRequest.toast()
+						},
+					})
+					
+					this.problem[pr_i].answer_show = 1;
+				}
+			},
+			submit_judge_answer(index) {
+				let pr_i = this.cur_page - 1
+				if (this.problem[pr_i].done == 0) {
+					this.problem[pr_i].done = 1;
+					
+					uni.request({
+						url: myRequest.interfaceUrl() + '/problem/judge/answer/'+this.problem_id_list[pr_i].id,
+						method: 'GET',
+						header: {
+							'X-Token': myRequest.getToken()
+						},
+						
+						success: (res1) => {
+							console.log(res1)
+							if (res1.statusCode == 200) {
+								if (res1.data) {
+									this.problem[pr_i].options[0].selected = 3;
+									this.problem[pr_i].correct_answer = "正确";
+									if (index == 1) {
+										this.problem[pr_i].options[1].selected = 2;
+									}
+								} else {
+									this.problem[pr_i].options[1].selected = 3;
+									this.problem[pr_i].correct_answer = "错误";
+									if (index == 0) {
+										this.problem[pr_i].options[0].selected = 2;
+									}
+								}
+								if (index == 1) {
+									this.problem[pr_i].my_answer = "错误";
+								} else {
+									this.problem[pr_i].my_answer = "正确";
+								}
 							}
 							else if (res1.statusCode == 401) {
 								myRequest.redirectToLogin()

@@ -120,9 +120,9 @@
 				</view>
 				<view v-if="problem_type_select === 2">
 					<button class="button" size="mini" type="primary"
-						@click="" 
+						@click="create_judge_problem()" 
 						style="background-color: #00aaff; text-align: center; margin: auto;">
-						暂不支持添加判断题
+						添加试题
 					</button>
 				</view>
 				<view v-if="problem_type_select === 3">
@@ -434,6 +434,83 @@ import list from '../../uni_modules/uview-ui/libs/config/props/list';
 					}
 				)
 				
+			},
+			
+			async create_judge_problem() {
+				if (!myRequest.isLogin()) {
+					uni.redirectTo({
+						url: '/pages/login/login'
+					})
+					return;
+				}
+				console.log(uni.getStorageSync('token'))
+				var temp_problem_set_id = this.problem_set_id
+				console.log(this.baseFormData)
+				if (!this.baseFormData.title) {
+					myRequest.toast('题目内容不能为空')
+					return;
+				}
+				if (!this.baseFormData.answer) {
+					if (this.baseFormData.answer != 0) {
+						myRequest.toast('题目答案不能为空')
+						return;
+					}
+				}
+				
+				var data = {
+					"description": this.baseFormData.title,
+					"is_correct": true,
+					"is_public": true,
+				}
+				if (this.baseFormData.answer == 1) {
+					data.is_correct = false;
+				}
+				
+				console.log(data)
+				data = JSON.stringify(data)
+				
+				myRequest.request('/problem/judge/create', 'POST', data).then(
+					function(res) {
+						console.log(res)
+						if (res.statusCode == 200) {
+							
+							myRequest.request('/problem_set/'+temp_problem_set_id+'/add?problem_id='+res.data.id, 'POST', data).then(
+								function(res2) {
+									console.log(res2)
+									if (res2.statusCode == 200) {
+										myRequest.toast('试题添加成功', 1500, true)
+										setTimeout(() => {
+											uni.hideToast();
+											//关闭提示后跳转
+											uni.redirectTo({
+												url: '/pages/problem/problemCreate?id='+temp_problem_set_id
+											});
+										}, 1000)
+									} else if (res2.statusCode == 401) {
+										myRequest.redirectToLogin()
+									} else {
+										myRequest.toast()
+									}
+								}
+							).catch(
+								function(res) {
+									console.log(res)
+									myRequest.toast()
+								}
+							)
+				
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else {
+							myRequest.toast()
+						}
+					}
+				).catch(
+					function(res) {
+						console.log(res)
+						myRequest.toast()
+					}
+				)
 			}
 		}
 	};
