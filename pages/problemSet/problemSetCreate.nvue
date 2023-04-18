@@ -49,6 +49,7 @@
 </template>
 
 <script>
+	import api from '@/common/api.js';
 	import myRequest from '../../common/request';
 	import toast from '../../uni_modules/uview-ui/libs/config/props/toast';
 	import {
@@ -95,12 +96,11 @@
 				// TODO: 后续更改is_public字段
 				var data = JSON.stringify({
 					"description": this.problemSet.description,
-					"name": this.problemSet.name
+					"name": this.problemSet.name,
+					"is_public": true,
 				})
 
-				var is_public = true
-
-				myRequest.request(`/problem_set/create?is_public=${is_public}`, 'POST', data).then(
+				myRequest.request(api.problem_set_create(), 'POST', data).then(
 					function(res) {
 						console.log(res)
 						if (res.statusCode == 200) {
@@ -110,14 +110,6 @@
 								//关闭提示后跳转
 								uni.navigateBack({
 										delta: 1,
-										/*
-										success() {
-											let pages = getCurrentPages();  //获取所有页面栈实例列表
-											let prePage = pages[ pages.length - 2];
-											console.log(prePage.$vm)
-											if (!prePage) return;
-											prePage.$vm.refresh(); //如果页面存在，则重新刷新页面
-										}*/
 								});
 							}, 1000)
 						} else if (res.statusCode == 401) {

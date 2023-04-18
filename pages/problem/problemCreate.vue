@@ -140,8 +140,9 @@
 
 <script>
 	import myRequest from '../../common/request';
-import list from '../../uni_modules/uview-ui/libs/config/props/list';
+	import list from '../../uni_modules/uview-ui/libs/config/props/list';
 	import toast from '../../uni_modules/uview-ui/libs/config/props/toast';
+	import api from '@/common/api.js';
 	
 	export default {
 		data() {
@@ -226,10 +227,6 @@ import list from '../../uni_modules/uview-ui/libs/config/props/list';
 				uni.navigateBack({
 				    delta: 1
 				});
-				/*
-				uni.navigateTo({
-					url: "/pages/problemSet/problemSetDetail?id="+this.problem_set_id
-				})*/
 			},
 			change(e) {
 				console.log("e:", e);
@@ -316,7 +313,7 @@ import list from '../../uni_modules/uview-ui/libs/config/props/list';
 				console.log(data)
 				data = JSON.stringify(data)
 				
-				myRequest.request('/problem/choice/create', 'POST', data).then(
+				myRequest.request(api.problem_choice_create(), 'POST', data).then(
 					function(res) {
 						console.log(res)
 						if (res.statusCode == 200) {
@@ -391,7 +388,7 @@ import list from '../../uni_modules/uview-ui/libs/config/props/list';
 				console.log(data)
 				data = JSON.stringify(data)
 				
-				myRequest.request('/problem/blank/create', 'POST', data).then(
+				myRequest.request(api.problem_blank_create(), 'POST', data).then(
 					function(res) {
 						console.log(res)
 						if (res.statusCode == 200) {
@@ -469,7 +466,7 @@ import list from '../../uni_modules/uview-ui/libs/config/props/list';
 				console.log(data)
 				data = JSON.stringify(data)
 				
-				myRequest.request('/problem/judge/create', 'POST', data).then(
+				myRequest.request(api.problem_judge_create(), 'POST', data).then(
 					function(res) {
 						console.log(res)
 						if (res.statusCode == 200) {

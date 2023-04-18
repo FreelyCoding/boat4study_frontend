@@ -137,6 +137,7 @@
 
 <script>
 	import myRequest from '../../common/request';
+	import api from '@/common/api.js'
 		
 	export default {
 		data() {
@@ -169,7 +170,7 @@
 			var _this = this
 			
 			uni.request({
-				url: myRequest.interfaceUrl() + '/problem_set/'+this.problem_set_id+'/all_problem',
+				url: myRequest.interfaceUrl() + api.problem_set_all_problem({id:this.problem_set_id}),
 				method: 'GET',
 				header: {
 					'X-Token': myRequest.getToken()
@@ -211,7 +212,7 @@
 			load_one_problem_detail(index) {
 				if (this.problem_id_list[index].problem_type_id == 0) {
 					uni.request({
-						url: myRequest.interfaceUrl() + '/problem/choice/all?id='+this.problem_id_list[index].id,
+						url: myRequest.interfaceUrl() + api.problem_choice_all({id:this.problem_id_list[index].id}),
 						method: 'GET',
 						header: {
 							'X-Token': myRequest.getToken()
@@ -253,7 +254,7 @@
 					})
 				} else if (this.problem_id_list[index].problem_type_id == 1) {
 					uni.request({
-						url: myRequest.interfaceUrl() + '/problem/blank/all?id='+this.problem_id_list[index].id,
+						url: myRequest.interfaceUrl() + api.problem_blank_all({id: this.problem_id_list[index].id}),
 						method: 'GET',
 						header: {
 							'X-Token': myRequest.getToken()
@@ -288,7 +289,7 @@
 					})
 				} else if (this.problem_id_list[index].problem_type_id == 2) {
 					uni.request({
-						url: myRequest.interfaceUrl() + '/problem/judge/all?id='+this.problem_id_list[index].id,
+						url: myRequest.interfaceUrl() + api.problem_judge_all({id:this.problem_id_list[index].id}),
 						method: 'GET',
 						header: {
 							'X-Token': myRequest.getToken()
@@ -338,7 +339,7 @@
 					this.problem[pr_i].done = 1;
 					
 					uni.request({
-						url: myRequest.interfaceUrl() + '/problem/choice/answer/'+this.problem_id_list[pr_i].id,
+						url: myRequest.interfaceUrl() + api.problem_choice_answer(this.problem_id_list[pr_i].id),
 						method: 'GET',
 						header: {
 							'X-Token': myRequest.getToken()
@@ -396,7 +397,7 @@
 					this.problem[pr_i].done = 1;
 					
 					uni.request({
-						url: myRequest.interfaceUrl() + '/problem/choice/answer/'+this.problem_id_list[pr_i].id,
+						url: myRequest.interfaceUrl() + api.problem_choice_answer(this.problem_id_list[pr_i].id),
 						method: 'GET',
 						header: {
 							'X-Token': myRequest.getToken()
@@ -444,7 +445,7 @@
 					this.problem[pr_i].done = 1;
 					
 					uni.request({
-						url: myRequest.interfaceUrl() + '/problem/blank/answer/'+this.problem_id_list[pr_i].id,
+						url: myRequest.interfaceUrl() + api.problem_blank_answer(this.problem_id_list[pr_i].id),
 						method: 'GET',
 						header: {
 							'X-Token': myRequest.getToken()
@@ -478,7 +479,7 @@
 					this.problem[pr_i].done = 1;
 					
 					uni.request({
-						url: myRequest.interfaceUrl() + '/problem/judge/answer/'+this.problem_id_list[pr_i].id,
+						url: myRequest.interfaceUrl() + api.problem_judge_answer(this.problem_id_list[pr_i].id),
 						method: 'GET',
 						header: {
 							'X-Token': myRequest.getToken()

@@ -241,6 +241,7 @@
 </template>
 
 <script>
+	import api from '@/common/api.js';
 	import myRequest from '../../common/request';
 
 	export default {
@@ -339,7 +340,7 @@
 			},
 			deletePS() {
 				uni.request({
-					url: myRequest.interfaceUrl() + '/problem_set/delete/' + this.problem_set_id,
+					url: myRequest.interfaceUrl() + api.problem_set_delete(this.problem_set_id),
 					method: 'DELETE',
 					header: {
 						'X-Token': myRequest.getToken()
@@ -371,7 +372,7 @@
 			},
 			starPS() {
 				uni.request({
-					url: myRequest.interfaceUrl() + '/problem_set/favorite/' + this.problem_set_id,
+					url: myRequest.interfaceUrl() + api.problem_set_favorite(this.problem_set_id),
 					method: 'POST',
 					header: {
 						'X-Token': myRequest.getToken()
@@ -397,7 +398,7 @@
 			},
 			unstarPS() {
 				uni.request({
-					url: myRequest.interfaceUrl() + '/problem_set/unfavorite/' + this.problem_set_id,
+					url: myRequest.interfaceUrl() + api.problem_set_unfavorite(this.problem_set_id),
 					method: 'DELETE',
 					header: {
 						'X-Token': myRequest.getToken()
