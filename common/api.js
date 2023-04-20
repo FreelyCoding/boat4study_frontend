@@ -188,12 +188,12 @@ export default {
 	},
 	
 	problem_set_add(id, problem_id) {
-		let api = "/problem_set/" + id + "/add?problem_id=" + problem_id;
+		let api = "/problem_set/add/"+ id + "?problem_id=" + problem_id;
 		return api;
 	},
 	
 	problem_set_all_problem(params) {
-		let api = "/problem_set/"+params.id+"/all_problem";
+		let api = "/problem_set/all_problem/"+params.id;
 		if (params.is_favorite != null) {
 			api += "?is_favorite=" + params.is_favorite;
 			if (params.problem_type_id != null) {
@@ -206,8 +206,8 @@ export default {
 	},
 	
 	problem_set_remove(id) {
-		let api = "/problem_set/"+id+"/remove";
+		let api = "/problem_set/remove/" + id;
 		return api;
 	}
-	
+
 }

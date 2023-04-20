@@ -288,6 +288,7 @@
 				console.log(this.dynamicLists)
 
 				var data = {
+					"analysis": this.baseFormData.analyse,
 					"choices": [],
 					"description": this.baseFormData.title,
 					"is_public": true,
@@ -318,7 +319,7 @@
 						console.log(res)
 						if (res.statusCode == 200) {
 							
-							myRequest.request('/problem_set/'+temp_problem_set_id+'/add?problem_id='+res.data.id, 'POST', data).then(
+							myRequest.request(api.problem_set_add(temp_problem_set_id, res.data.id), 'POST', data).then(
 								function(res2) {
 									console.log(res2)
 									if (res2.statusCode == 200) {
@@ -380,6 +381,7 @@
 				}
 				
 				var data = {
+					"analysis": this.baseFormData.analyse,
 					"answer": this.baseFormData.answer,
 					"description": this.baseFormData.title,
 					"is_public": true,
@@ -393,7 +395,7 @@
 						console.log(res)
 						if (res.statusCode == 200) {
 							
-							myRequest.request('/problem_set/'+temp_problem_set_id+'/add?problem_id='+res.data.id, 'POST', data).then(
+							myRequest.request(api.problem_set_add(temp_problem_set_id, res.data.id), 'POST', data).then(
 								function(res2) {
 									console.log(res2)
 									if (res2.statusCode == 200) {
@@ -455,6 +457,7 @@
 				}
 				
 				var data = {
+					"analysis": this.baseFormData.analyse,
 					"description": this.baseFormData.title,
 					"is_correct": true,
 					"is_public": true,
@@ -471,7 +474,7 @@
 						console.log(res)
 						if (res.statusCode == 200) {
 							
-							myRequest.request('/problem_set/'+temp_problem_set_id+'/add?problem_id='+res.data.id, 'POST', data).then(
+							myRequest.request(api.problem_set_add(temp_problem_set_id, res.data.id), 'POST', data).then(
 								function(res2) {
 									console.log(res2)
 									if (res2.statusCode == 200) {

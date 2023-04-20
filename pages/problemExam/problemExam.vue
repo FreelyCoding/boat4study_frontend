@@ -126,6 +126,12 @@
 					<p>正确答案：{{problem[cur_page-1].correct_answer}}</p>
 					<p>我的答案：{{problem[cur_page-1].my_answer}}</p>
 				</view>
+				<view class="problem_answer_box_title">
+					解析
+				</view>
+				<view class="problem_answer_box">
+					<p>{{problem[cur_page-1].analysis}}</p>
+				</view>
 			</view>
 			
 			<view>
@@ -137,7 +143,7 @@
 
 <script>
 	import myRequest from '../../common/request';
-	import api from '@/common/api.js'
+	import api from '@/common/api.js';
 		
 	export default {
 		data() {
@@ -229,6 +235,7 @@
 									options: [],
 									my_answer: '',
 									correct_answer: '',
+									analysis: '',
 									answer_show: 0,
 								})
 								for (var j=0;j<res2.data.problems[0].choices.length;j++) {
@@ -271,6 +278,7 @@
 									options: [],
 									my_answer: '',
 									correct_answer: '',
+									analysis: '',
 									answer_show: 0,
 								})
 								console.log(this.problem)
@@ -315,6 +323,7 @@
 									],
 									my_answer: '',
 									correct_answer: '',
+									analysis: '',
 									answer_show: 0,
 								})
 								console.log(this.problem)
@@ -344,22 +353,23 @@
 						header: {
 							'X-Token': myRequest.getToken()
 						},
-						
 						success: (res1) => {
 							console.log(res1)
+							var answer = res1.data.choice_problem_answer
+							this.problem[pr_i].analysis = res1.data.analysis
 							if (res1.statusCode == 200) {
-								for (var k=0;k<res1.data.length;k++) {
-									if (res1.data[k].is_correct == true) {
+								for (var k=0;k<answer.length;k++) {
+									if (answer[k].is_correct == true) {
 										this.problem[pr_i].correct_answer += String.fromCharCode(65+k);
 									}
 									if (i == k) {
 										this.problem[pr_i].my_answer += String.fromCharCode(65+k);
 									}
-									if(res1.data[k].is_correct == true && i == k) {
+									if(answer[k].is_correct == true && i == k) {
 										this.problem[pr_i].options[k].selected = 3;
-									} else if (res1.data[k].is_correct == false && i == k) {
+									} else if (answer[k].is_correct == false && i == k) {
 										this.problem[pr_i].options[k].selected = 2;
-									} else if (res1.data[k].is_correct == true && i != k) {
+									} else if (answer[k].is_correct == true && i != k) {
 										this.problem[pr_i].options[k].selected = 3;
 									}
 								}
@@ -405,19 +415,21 @@
 						
 						success: (res1) => {
 							console.log(res1)
+							var answer = res1.data.choice_problem_answer
+							this.problem[pr_i].analysis = res1.data.analysis
 							if (res1.statusCode == 200) {
-								for (var k=0;k<res1.data.length;k++) {
-									if (res1.data[k].is_correct == true) {
+								for (var k=0;k<answer.length;k++) {
+									if (answer[k].is_correct == true) {
 										this.problem[pr_i].correct_answer += String.fromCharCode(65+k);
 									}
 									if (this.problem[pr_i].options[k].selected == 1) {
 										this.problem[pr_i].my_answer += String.fromCharCode(65+k);
 									}
-									if(res1.data[k].is_correct == true && this.problem[pr_i].options[k].selected == 1) {
+									if(answer[k].is_correct == true && this.problem[pr_i].options[k].selected == 1) {
 										this.problem[pr_i].options[k].selected = 3;
-									} else if (res1.data[k].is_correct == false && this.problem[pr_i].options[k].selected == 1) {
+									} else if (answer[k].is_correct == false && this.problem[pr_i].options[k].selected == 1) {
 										this.problem[pr_i].options[k].selected = 2;
-									} else if (res1.data[k].is_correct == true && this.problem[pr_i].options[k].selected != 1) {
+									} else if (answer[k].is_correct == true && this.problem[pr_i].options[k].selected != 1) {
 										this.problem[pr_i].options[k].selected = 3;
 									}
 								}
@@ -454,7 +466,8 @@
 						success: (res1) => {
 							console.log(res1)
 							if (res1.statusCode == 200) {
-								this.problem[pr_i].correct_answer = res1.data;
+								this.problem[pr_i].correct_answer = res1.data.answer;
+								this.problem[pr_i].analysis = res1.data.analysis;
 							}
 							else if (res1.statusCode == 401) {
 								myRequest.redirectToLogin()
@@ -487,8 +500,10 @@
 						
 						success: (res1) => {
 							console.log(res1)
+							var answer = res1.data.answer;
+							this.problem[pr_i].analysis = res1.data.analysis;
 							if (res1.statusCode == 200) {
-								if (res1.data) {
+								if (answer) {
 									this.problem[pr_i].options[0].selected = 3;
 									this.problem[pr_i].correct_answer = "正确";
 									if (index == 1) {
@@ -646,6 +661,7 @@
 	}
 	
 	.problem_answer_box_title {
+		margin-top: 10px;
 		margin-bottom: 10px;
 		font-size: 18px;
 		background-color: #00aaff;
