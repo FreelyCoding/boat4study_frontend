@@ -196,27 +196,27 @@
 				})
 			},
 			jumpToMyNote() {
-				uni.redirectTo({
+				uni.navigateTo({
 					url: "/pages/personal/personalNote"
 				})
 			},
 			jumpToStarProblemSet() {
-				uni.redirectTo({
+				uni.navigateTo({
 					url: '/pages/personal/starProblemSet'
 				})
 			},
 			jumpToStarNote() {
-				uni.redirectTo({
+				uni.navigateTo({
 					url: '/pages/personal/starNotes'
 				})
 			},
 			jumpToStarProblem() {
-				uni.redirectTo({
+				uni.navigateTo({
 					url: '/pages/personal/starProblem'
 				})
 			},
 			jumpToWrongProblem() {
-				uni.redirectTo({
+				uni.navigateTo({
 					url: '/pages/personal/wrongProblem'
 				})
 			},

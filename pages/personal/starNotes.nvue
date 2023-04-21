@@ -3,12 +3,12 @@
 		<uni-nav-bar title="笔记收藏" background-color="#00aaff" color="#FFFFFF" status-bar="true">
 			<block slot="left">
 				<view class="note-navbar">
-					<uni-icons type="left" color="#FFFFFF" size="18" @click="back"/>
+					<uni-icons type="left" color="#FFFFFF" size="18" @click="back()"/>
 				</view>
 			</block>
 		</uni-nav-bar>
 		
-		<view v-if="notes && notes.length != 0" style="margin-top: 15px;">
+		<view v-if="notes && notes.length != 0" style="margin-top: 10px;">
 			<view v-for="(item, index) in notes" :key="index">
 				<uni-card isShadow border padding="15px 5px 0px 5px"
 					margin="0px 15px 15px 15px" style="border-radius: 10px;" @click="cardClick(item)">
@@ -101,6 +101,12 @@
 			this.refresh()
 		},
 		methods: {
+			search(res) {
+				uni.showToast({
+					title: '搜索：' + res.value,
+					icon: 'none'
+				})
+			},
 			extractImage(htmlStr) {
 				// 从html中提取出第一个图片
 				var img = htmlStr.match(/<img.*?(?:>|\/>)/gi);
@@ -143,22 +149,20 @@
 				
 			cardClick(item) {
 				console.log(item)
+				
 				uni.navigateTo({
 					url: `/pages/note/note?id=${item.id}`,
 				})
 			},
 			back() {
-				uni.switchTab({
-					url: '/pages/personal/personal'
-				})
+				uni.navigateBack()
 			},
 			refresh() {
 				myRequest.checkLogin()
-				
 				this.notes = []
-				
+				let uid = myRequest.getUID();
 				uni.request({
-					url: myRequest.interfaceUrl() + '/user/favorite/note',
+					url: myRequest.interfaceUrl() + '/note/all?is_favorite=true' ,
 					method: 'GET',
 					header: {
 						'X-Token': myRequest.getToken()
@@ -175,8 +179,8 @@
 									pic: "",
 									create_time:  res.data.notes[i].created_at.slice(0,10),
 									id: res.data.notes[i].id,
-									like_count: res.data.notes[i].is_liked ? 1 : 0,
-									star_count: res.data.notes[i].is_favorite ? 1 : 0 
+									like_count: res.data.notes[i].like_count,
+									star_count: res.data.notes[i].favorite_count 
 								}
 								this.notes.push(t);
 							}
