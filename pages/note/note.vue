@@ -294,6 +294,12 @@
 			},
 
 			trigger(e) {
+				this.editorCtx.getContents({
+					success: res => {
+						console.log(res.html)
+					}
+				})
+				
 				// console.log(e)
 				this.fabContent[e.index].active = !e.item.active
 				var t = this.fabContent[e.index].active

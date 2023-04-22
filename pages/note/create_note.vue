@@ -122,9 +122,46 @@
 						<view class="iconfont icon-shanchu" @tap="clear"></view>
 						<view :class="formats.direction === 'rtl' ? 'ql-active' : ''"
 							class="iconfont icon-direction-rtl" data-name="direction" data-value="rtl"></view>
+							
+						<view class="iconfont icon-charulianjie" @tap="showProblem"></view>
+						
 					</view>
 				</view>
 			</view>
+			
+			<!--弹出层选择要插入的题目-->
+			<view>
+				<u-popup
+					:safeAreaInsetBottom="true"
+					:safeAreaInsetTop="true"
+					mode="bottom"
+					:show="problemSelectShow"
+					:overlay="true"
+					:closeable="true"
+					:closeOnClickOverlay="true"
+					@close="problemSelectClose"
+				>
+					<scroll-view
+						class="u-popup-slot"
+						:style="{
+							width: '750rpx',
+							marginTop: '0',
+						}"
+						scroll-y="true"
+					>
+					
+						<view>
+							<tui-list-view title="所有题目" style="width: 100%;">
+								<tui-list-cell v-for="(item, index) in problemList" :key="item.id" @click="insertProblem(item)">
+									{{ item.description }}
+								</tui-list-cell>
+							</tui-list-view>
+						</view>
+					
+					</scroll-view>
+				</u-popup>			
+			</view>
+		
 		</view>
 	</view>
 </template>
@@ -134,12 +171,15 @@
 	import tuiModal from '@/components/tui-modal/tui-modal.vue';
 	import tuiBubblePopup from '@/components/tui-bubble-popup/tui-bubble-popup.vue';
 	import tRtPopup from '@/components/t-rt-popup/t-rt-popup';
+	import uPopup from '@/uni_modules/uview-ui/components/u-popup/u-popup.vue'
+	import tuiListView from '@/components/tui-list-view/tui-list-view.vue'
 
 	export default {
 		components: {
 			tuiModal,
 			tuiBubblePopup,
-			tRtPopup
+			tRtPopup,
+			uPopup
 		},
 		data() {
 			return {
@@ -154,7 +194,8 @@
 				content_placeholder: "笔记内容",
 				token: "",
 
-				itemList: [{
+				itemList: 
+				[{
 						title: '保存',
 						icon: 'save-fill'
 					},
@@ -163,10 +204,20 @@
 						icon: 'delete-back-fill'
 					}
 				],
-				popupShow: false
+				
+				problemList: [
+					
+				],
+				
+				popupShow: false,
+				problemSelectShow: false
 			}
 		},
 		methods: {
+			problemSelectClose() {
+				this.problemSelectShow = false;
+			},
+		
 			toggle() {
 				this.popupShow = !this.popupShow;
 			},
@@ -290,6 +341,77 @@
 						})
 					}
 				})
+			},
+			
+			showProblem() {
+				this.problemSelectShow = true;
+				
+				if (!myRequest.isLogin()) {
+					uni.redirectTo({
+						url: '/pages/login/login'
+					})
+					return
+				}
+				
+				uni.request({
+					url: myRequest.interfaceUrl() + '/problem/blank/all',
+					header: {
+						"X-Token": myRequest.getToken()
+					},
+					success: (res) => {
+						if (res.statusCode == 200) {
+							this.problemList = res.data.problems
+							console.log(this.problemList)
+						}
+						else {
+							myRequest.toast()
+						}
+					}
+				})
+				
+			},
+			
+			insertProblem(item) {
+				let that = this
+				
+				console.log(item)
+				
+				var flagStr = 'insertinsertinsertinsertinsertinsertinsertProblem'
+				
+				// 无法直接在光标处插入链接，只能先通过insertText插入后再进行替换
+				
+				this.editorCtx.insertText({
+					text: "\n" + flagStr + "\n",
+					success: res => {
+						this.editorCtx.getContents({
+							success: res => {
+								var html = res.html
+								
+								// TODO: 后续更改一下url
+								
+								// #ifdef H5
+									html = html.replace(flagStr,
+									`<a href="/#/pages/problem/problemDetail?id=${item.id}" style="text-decoration: none;">${item.description}</a>`)
+								// #endif
+								
+								// #ifdef MP-WEIXIN
+									html = html.replace(flagStr,
+									`<a href="/#/pages/problem/problemDetail?id=${item.id}" style="text-decoration: none;">${item.description}</a>`)
+								// #endif
+								
+								
+								this.editorCtx.setContents({
+									html: html,
+									
+									success: res => {
+										that.problemSelectShow = false
+									}
+								})
+							}
+						})
+					}
+				})
+				
 			},
 
 			async submit() {
@@ -540,5 +662,13 @@
 
 	.tui-item-active {
 		background-color: #444;
+	}
+	
+	.u-popup-slot {
+		width: 200px;
+		height: 500px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
 </style>
