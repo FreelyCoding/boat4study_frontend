@@ -12,7 +12,7 @@
 			<u-list customStyle="width: 94%; margin: auto; margin-top: 10px;">
 				<u-list-item v-for="(item, index) in list" :key="index">
 					<uni-card spacing="0" padding="0" margin="20px 0px 0px 0px" isShadow="true" border="true"
-						@click="jumpToSingelProUpload()">
+						@click="jumpTo(index)">
 						<view style="margin-bottom: 20px;">
 							<uni-row>
 								<uni-col span="8">				
@@ -49,6 +49,13 @@
 						iconPath: "../../static/pic/single.svg",
 						title: "单题导入",
 						description: "单题手动逐一录入题库",
+						url: "/pages/problem/problemCreate?id="
+					},
+					{
+						iconPath: "../../static/pic/personal_pb1.svg",
+						title: "其他题库导入",
+						description: "从其他题库中导入题目",
+						url: "/pages/problem/problemCreateFromPS?id="
 					},
 					{
 						iconPath: "../../static/pic/word.svg",
@@ -59,7 +66,7 @@
 						iconPath: "../../static/pic/PDF.svg",
 						title: "PDF导入",
 						description: "参考模板调整文档格式内容, 上传文档"
-					}
+					},
 				]
 			}
 		},
@@ -84,9 +91,9 @@
 				})
 			},
 			
-			jumpTo(url) {
+			jumpTo(index) {
 				uni.navigateTo({
-					url: url
+					url: this.list[index].url + this.problem_set_id
 				})
 			}
 		}

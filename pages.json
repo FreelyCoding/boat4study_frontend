@@ -135,6 +135,24 @@
 				"navigationBarTextStyle": "white"
 			}
 		},
+		{
+			"path": "pages/problem/problemCreateFromPS",
+			"style": {
+				"navigationBarTitleText": "从其他题库录入",
+				"navigationStyle": "custom",
+				"enablePullDownRefresh": false,
+				"navigationBarTextStyle": "white"
+			}
+		},
+		{
+			"path": "pages/problem/problemCreateFromPSPList",
+			"style": {
+				"navigationBarTitleText": "从其他题库录入",
+				"navigationStyle": "custom",
+				"enablePullDownRefresh": false,
+				"navigationBarTextStyle": "white"
+			}
+		},
 
 		{
 			"path": "pages/problemExam/problemExam",
