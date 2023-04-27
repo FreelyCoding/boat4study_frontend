@@ -3,12 +3,12 @@
 		<uni-nav-bar title="学习小组详情" background-color="#00aaff" color="#FFFFFF" status-bar="true">
 			<block slot="left">
 				<view class="note-navbar">
-					<uni-icons type="left" color="#FFFFFF" size="18" @click="back()"/>
+					<uni-icons type="left" color="#FFFFFF" size="18" @click="back()" />
 				</view>
 			</block>
 		</uni-nav-bar>
-		
-		
+
+
 		<div class="background-light-blue">
 			<view style="width: 90%; margin: auto; margin-top: 20px; margin-bottom: 20px;">
 				<uni-row>
@@ -20,7 +20,7 @@
 							<p class="group_introduction">{{group.introduction}}</p>
 						</view>
 					</uni-col>
-					
+
 					<uni-col :span="8">
 						<view>
 							<image style="width: 120px; height: 120px; background-color: #b2daf8;" mode="aspectFill"
@@ -30,19 +30,53 @@
 				</uni-row>
 			</view>
 		</div>
-		
+
 		<view>
 			<div style="background-color: #f7f7f7;">
-				
+
 				<view>
-					<uni-card>
-						
+					<uni-card :isShadow="true" :border="true">
+						<view class="m-middle-2">
+							<uni-row>
+								<uni-col :span="12">
+									<view>
+										<p class="homePage-header" style="color: black;"> 小组成员</p>
+									</view>
+								</uni-col>
+
+								<uni-col :span="12">
+									<view>
+										<p class="check-all" style="padding-top: 3px;" @click="jumpToAllProblemSet()">
+											查看全部</p>
+									</view>
+								</uni-col>
+							</uni-row>
+						</view>
+
+						<view>
+							<u-scroll-list indicatorColor="#fff0f0" indicatorActiveColor="#00aaff"
+								indicatorStyle="margin-top : 0">
+								<view class="scroll-list" style="flex-direction: row;">
+									<view class="scroll-list__goods-item" v-for="(item, index) in group_members"
+										:key="index">
+										<p>
+											<image style="width: 60px; height: 60px; background-color: white;"
+												mode="aspectFill" :src="group.avatar"></image>
+										</p>
+										<p>
+											{{item.name}}
+										</p>
+									</view>
+								</view>
+							</u-scroll-list>
+						</view>
+
 					</uni-card>
 				</view>
 			</div>
 		</view>
-		
-		
+
+
 	</view>
 </template>
 
@@ -54,37 +88,53 @@
 					name: "OS interests",
 					avatar: "/static/pic/student.png",
 					introduction: "如果你也喜欢操作系统的话，欢迎加入我们！"
-				}
+				},
+				group_members: [{
+						name: "Longxmas",
+						avatar: "/static/pic/student.png",
+					},
+					{
+						name: "praynext",
+						avatar: "/static/pic/student.png",
+					},
+					{
+						name: "ScongLi",
+						avatar: "/static/pic/student.png",
+					},
+					{
+						name: "FlyingLandloard",
+						avatar: "/static/pic/student.png",
+					},
+				]
 			}
 		},
 		methods: {
 			back() {
 				uni.navigateBack()
 			},
-			
+
 		}
 	}
 </script>
 
 <style>
 	@import url('../homePage/homePage.css');
-	
+
 	.background-light-blue {
 		background-color: #a8dbfb;
 	}
-	
+
 	.group_name {
 		color: black;
 		font-family: shuhei;
 		font-size: 20px;
 		margin-bottom: 8px;
 	}
-	
+
 	.group_introduction {
 		color: black;
 		font-size: 14px;
 		margin-bottom: 8px;
 		max-width: 200px;
 	}
-	
 </style>
