@@ -4,14 +4,14 @@
 			<div class="background-blue">
 				<view style="width: 90%; margin: auto; margin-top: 60px; margin-bottom: 30px;">
 					<uni-row>
-						<uni-col span="8">
+						<uni-col :span="8">
 							<view>
 								<image style="width: 100px; height: 100px; background-color: #00aaff;" mode="aspectFill"
 									:src="user.avatar"></image>
 							</view>
 						</uni-col>
 
-						<uni-col span="18">
+						<uni-col :span="18">
 							<view style="margin: 20px 0px 10px 0px;">
 								<p class="user_name">{{user.user_name}}</p>
 								<p class="uid">uid: &ensp; {{user.uid}}</p>
@@ -88,37 +88,37 @@
 
 						<view class="m-middle-5" style="margin-top: 30px; margin-bottom: 30px;">
 							<u-row @click="jumpToStarProblemSet()">
-								<u-col span="2">
+								<u-col :span="2">
 									<u-icon name="/static/pic/star.svg" size="40px"></u-icon>
 								</u-col>
-								<u-col span="9">
+								<u-col :span="9">
 									<p class="star-title"> 题库收藏</p>
 								</u-col>
-								<u-col span="1">
+								<u-col :span="1">
 									<u-icon name="arrow-right" size="20px"></u-icon>
 								</u-col>
 							</u-row>
 							<u-divider style="margin-bottom: 15px;"></u-divider>
 							<u-row @click="jumpToStarProblem()">
-								<u-col span="2">
+								<u-col :span="2">
 									<u-icon name="/static/pic/star.svg" size="40px"></u-icon>
 								</u-col>
-								<u-col span="9">
+								<u-col :span="9">
 									<p class="star-title"> 题目收藏</p>
 								</u-col>
-								<u-col span="1">
+								<u-col :span="1">
 									<u-icon name="arrow-right" size="20px"></u-icon>
 								</u-col>
 							</u-row>
 							<u-divider style="margin-bottom: 15px;"></u-divider>
 							<u-row @click="jumpToStarNote()">
-								<u-col span="2">
+								<u-col :span="2">
 									<u-icon name="/static/pic/star.svg" size="40px"></u-icon>
 								</u-col>
-								<u-col span="9">
+								<u-col :span="9">
 									<p class="star-title"> 笔记收藏 </p>
 								</u-col>
-								<u-col span="1">
+								<u-col :span="1">
 									<u-icon name="arrow-right" size="20px"></u-icon>
 								</u-col>
 							</u-row>

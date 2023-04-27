@@ -274,7 +274,17 @@
                 "enablePullDownRefresh": false
             }
             
-        }
+        },
+		{
+		    "path" : "pages/StudyGroup/StudyGroup",
+		    "style" :                                                                                    
+		    {
+		        "navigationBarTitleText": "学习小组详情",
+		        "navigationStyle": "custom",
+		        "enablePullDownRefresh": false
+		    }
+		    
+		}
     ],
 	"subPackages": [{
 		"root": "pages/componentsA",

@@ -1,0 +1,90 @@
+<template>
+	<view>
+		<uni-nav-bar title="学习小组详情" background-color="#00aaff" color="#FFFFFF" status-bar="true">
+			<block slot="left">
+				<view class="note-navbar">
+					<uni-icons type="left" color="#FFFFFF" size="18" @click="back()"/>
+				</view>
+			</block>
+		</uni-nav-bar>
+		
+		
+		<div class="background-light-blue">
+			<view style="width: 90%; margin: auto; margin-top: 20px; margin-bottom: 20px;">
+				<uni-row>
+					<uni-col :span="16">
+						<view style="margin: 10px 0px 10px 0px;">
+							<p class="group_name">小组名</p>
+							<p class="group_name">{{group.name}}</p>
+							<p class="group_name" style="margin-top: 30px;">小组简介</p>
+							<p class="group_introduction">{{group.introduction}}</p>
+						</view>
+					</uni-col>
+					
+					<uni-col :span="8">
+						<view>
+							<image style="width: 120px; height: 120px; background-color: #b2daf8;" mode="aspectFill"
+								:src="group.avatar"></image>
+						</view>
+					</uni-col>
+				</uni-row>
+			</view>
+		</div>
+		
+		<view>
+			<div style="background-color: #f7f7f7;">
+				
+				<view>
+					<uni-card>
+						
+					</uni-card>
+				</view>
+			</div>
+		</view>
+		
+		
+	</view>
+</template>
+
+<script>
+	export default {
+		data() {
+			return {
+				group: {
+					name: "OS interests",
+					avatar: "/static/pic/student.png",
+					introduction: "如果你也喜欢操作系统的话，欢迎加入我们！"
+				}
+			}
+		},
+		methods: {
+			back() {
+				uni.navigateBack()
+			},
+			
+		}
+	}
+</script>
+
+<style>
+	@import url('../homePage/homePage.css');
+	
+	.background-light-blue {
+		background-color: #a8dbfb;
+	}
+	
+	.group_name {
+		color: black;
+		font-family: shuhei;
+		font-size: 20px;
+		margin-bottom: 8px;
+	}
+	
+	.group_introduction {
+		color: black;
+		font-size: 14px;
+		margin-bottom: 8px;
+		max-width: 200px;
+	}
+	
+</style>

@@ -37,11 +37,11 @@
 							</view>
 						</uni-col>
 						<uni-col :span="6">
-							<view style="margin: auto;">
+							<view style="margin: auto;" @click="jumpToStudyGroup()">
 								<u-icon name="/static/pic/note.svg" size="40px" color="white"></u-icon>
 							</view>
 							<view style="margin: auto;">
-								<p style="color: white; font-size: 14px;"> 优质题库 </p>
+								<p style="color: white; font-size: 14px;"> 学习小组   </p>
 							</view>
 						</uni-col>
 					</uni-row>
@@ -239,8 +239,13 @@
 				})
 			},
 			jumpoToUploadProblem() {
-				uni.redirectTo({
+				uni.navigateTo({
 					url: "/pages/problemCreate/problemCreate"
+				})
+			},
+			jumpToStudyGroup() {
+				uni.navigateTo({
+					url: "/pages/StudyGroup/StudyGroup"
 				})
 			},
 			jumpToAllNote() {
@@ -258,6 +263,7 @@
 					url: "/pages/problemSet/problemSetDetail?id=" + item.id 
 				})
 			},
+			
 			click1(e) {
 				console.log('click1', e);
 			},
