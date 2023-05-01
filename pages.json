@@ -285,6 +285,16 @@
 		    }
 		    
 		}
+        ,{
+            "path" : "pages/StudyGroup/StudyGroupProblemSet",
+            "style" :                                                                                    
+            {
+                "navigationStyle": "custom",
+                "enablePullDownRefresh": false
+
+            }
+            
+        }
     ],
 	"subPackages": [{
 		"root": "pages/componentsA",

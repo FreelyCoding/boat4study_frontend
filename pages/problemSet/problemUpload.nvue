@@ -52,7 +52,7 @@
 						url: "/pages/problem/problemCreate?id="
 					},
 					{
-						iconPath: "../../static/pic/personal_pb1.svg",
+						iconPath: "../../static/pic/personal_pb2.svg",
 						title: "其他题库导入",
 						description: "从其他题库中导入题目",
 						url: "/pages/problem/problemCreateFromPS?id="
