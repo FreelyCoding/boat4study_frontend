@@ -179,17 +179,78 @@
 						</view>
 
 						<view>
-							<p style="text-align: center; margin-bottom: 20px;" v-if="this.isMember">
+							<p style="text-align: center; margin-bottom: 10px;" v-if="this.isMember">
 								<button style="background-color: #00aaff; color: white;" @click="jumpToAddProblemSet()">
 									添加题库
 								</button>
 							</p>
 						</view>
-
 					</uni-card>
 				</view>
 			</div>
 
+			<view v-if="isAdministrator">
+				<div style="background-color: #f7f7f7;">
+					<uni-card :isShadow="true" :border="true" padding="10px 0px 0px 0px" margin="0px 15px 10px 15px">
+						<view>
+							<p style="text-align: center; margin-bottom: 10px;" v-if="this.isMember">
+								<button style="background-color: #5ac725; color: white;"
+									@click="invitationDialogToggle()">
+									生成邀请码
+								</button>
+							</p>
+
+							<p style="text-align: center; margin-bottom: 10px;" v-if="this.isMember">
+								<button style="color: white;" type="warn" @click="deleteGroup">
+									删除小组
+								</button>
+							</p>
+						</view>
+					</uni-card>
+				</div>
+			</view>
+
+			<view>
+				<uni-popup ref="invitationDialog" type="dialog">
+					<uni-card>
+						<p style="text-align: center;font-size: 24px;margin-bottom: 20px;margin-top: 10px;"
+							class="shuhei">
+							邀请码
+						</p>
+						<p style="text-align: center;font-size: 20px; margin-bottom: 10px;">
+							{{this.invitation}}
+						</p>
+					</uni-card>
+				</uni-popup>
+			</view>
+
+			<view v-if="!isAdministrator && isMember">
+				<div style="background-color: #f7f7f7;">
+					<uni-card :isShadow="true" :border="true" padding="10px 0px 0px 0px" margin="0px 15px 10px 15px">
+						<view>
+							<p style="text-align: center; margin-bottom: 10px;" v-if="this.isMember">
+								<button style="color: white;" type="warn">
+									退出小组
+								</button>
+							</p>
+						</view>
+					</uni-card>
+				</div>
+			</view>
+
+			<view v-if="!isAdministrator && isMember">
+				<div style="background-color: #f7f7f7;">
+					<uni-card :isShadow="true" :border="true" padding="10px 0px 0px 0px" margin="0px 15px 10px 15px">
+						<view>
+							<p style="text-align: center; margin-bottom: 10px;" v-if="this.isMember">
+								<button style="color: white;" type="warn">
+									退出小组
+								</button>
+							</p>
+						</view>
+					</uni-card>
+				</div>
+			</view>
 
 		</view>
 
@@ -203,18 +264,18 @@
 		data() {
 			return {
 				isAdministrator: true,
-				isMember: false, 
+				isMember: false,
+				invitation: "abCd",
 				group: {
 					id: 1,
 					owner_id: 1,
-					name: "OS interests",
+					name: "",
 					avatar: "/static/pic/student.png",
-					introduction: "如果你也喜欢操作系统的话，欢迎加入我们！",
-					editName: "OS interests",
-					editIntroduction: "如果你也喜欢操作系统的话，欢迎加入我们！",
+					introduction: "",
+					editName: "",
+					editIntroduction: "",
 				},
-				group_members: [
-				],
+				group_members: [],
 				problemSet: [{
 						id: "1",
 						name: "数据结构",
@@ -243,10 +304,9 @@
 			}
 		},
 		onLoad: function(option) {
-			this.refresh(option)	
-				
+			this.refresh(option)
 		},
-		
+
 		methods: {
 			back() {
 				uni.navigateBack()
@@ -256,14 +316,14 @@
 				myRequest.checkLogin()
 				this.group.id = option.id
 				console.log('this.group_id: ' + this.group.id); //打印出上个页面传递的参数。
-				
+
 				uni.request({
 					url: myRequest.interfaceUrl() + '/group/all?id=' + this.group.id,
 					method: 'GET',
 					header: {
 						'X-Token': myRequest.getToken()
 					},
-				
+
 					success: (res) => {
 						console.log(res)
 						if (res.statusCode == 200) {
@@ -277,32 +337,32 @@
 								this.isAdministrator = true;
 							} else {
 								this.isAdministrator = false;
-							}				
+							}
 						} else if (res.statusCode == 401) {
 							myRequest.redirectToLogin()
 						} else {
 							myRequest.toast()
 						}
 					},
-				
+
 					fail: (res) => {
 						console.log(res)
 						myRequest.toast()
 					}
 				})
-				
+
 				uni.request({
 					url: myRequest.interfaceUrl() + '/group/all_user/' + this.group.id,
 					method: 'GET',
 					header: {
 						'X-Token': myRequest.getToken()
 					},
-				
+
 					success: (res) => {
 						console.log(res)
 						this.group_members = []
 						if (res.statusCode == 200) {
-							for (var i = 0; i < res.data.user.length;i++) {
+							for (var i = 0; i < res.data.user.length; i++) {
 								this.group_members.push(res.data.user[i])
 								if (uid == res.data.user[i].user_id) {
 									this.isMember = true;
@@ -314,13 +374,13 @@
 							myRequest.toast()
 						}
 					},
-				
+
 					fail: (res) => {
 						console.log(res)
 						myRequest.toast()
 					}
 				})
-				
+
 				console.log(this.isMember)
 			},
 			jumpToAllProblemSet() {
@@ -355,16 +415,71 @@
 				this.$refs.inputDialog.open()
 			},
 			inputDialogClose() {
-				uni.showLoading({
-					title: '1秒后会关闭'
-				})
 				setTimeout(() => {
-					uni.hideLoading()
 					this.group.editIntroduction = this.group.introduction
 					this.group.editName = this.group.name
 					this.$refs.inputDialog.close()
-				}, 1000)
+				}, 100)
 			},
+
+			invitationDialogToggle() {
+				this.$refs.invitationDialog.open()
+				uni.request({
+					url: myRequest.interfaceUrl() + '/group/invitation/' + this.group.id,
+					method: 'GET',
+					header: {
+						'X-Token': myRequest.getToken()
+					},
+
+					success: (res) => {
+						console.log(res)
+						if (res.statusCode == 200) {
+							this.invitation = res.data
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else {
+							myRequest.toast()
+						}
+					},
+
+					fail: (res) => {
+						console.log(res)
+						myRequest.toast()
+					}
+				})
+			},
+
+
+			deleteGroup() {
+				myRequest.request(api.study_group_delete(this.group.id), 'DELETE').then(
+					function(res) {
+						console.log(res)
+						if (res.statusCode == 200) {
+							myRequest.toast('删除成功', 1500, true)
+							setTimeout(() => {
+								uni.hideToast();
+								//关闭提示后跳转
+								uni.navigateBack({
+									delta: 1,
+								});
+							}, 1000)
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else if (res.statusCode == 403) {
+							myRequest.toast("您没有权限哦~")
+						} else if (res.statusCode == 404) {
+							myRequest.toast("小组不存在~")
+						} else {
+							myRequest.toast("")
+						}
+					}
+				).catch(
+					function(res) {
+						console.log(res)
+						myRequest.toast()
+					}
+				)
+			}
 		},
 
 	}

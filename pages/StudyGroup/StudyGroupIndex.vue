@@ -12,7 +12,8 @@
 		<uni-search-bar @confirm="search" :focus="true" v-model="searchValue" placeholder="请输入要搜索的学习小组名称"
 			cancelButton="none" maxlength="50" style="margin-left: 5px; margin-right: 5px;">
 		</uni-search-bar>
-
+		
+		
 		<view v-if="groups && groups.length != 0" style="margin-top: 5px;">
 			<view v-for="(item, index) in groups" :key="index">
 				<uni-card  :title="item.name" :extra="'创建于' + item.create_time" :thumbnail="item.pic"
@@ -27,13 +28,12 @@
 		<view v-else style="text-align: center;">
 			<image src="../../static/pic/note/no_note.png"
 				style="margin: auto; margin-top: 30px; height: 200px; width: 200px;"></image>
-			<p style="font-size: 20px;margin-top: 30px;">暂无学习小组</p>
+			<p style="font-size: 20px;margin-top: 30px;">暂无学习小组 </p>
 		</view>
 
-
-		<view class="btn-box">
-			<p style="text-align: center; margin-bottom: 20px; text-justify: ;">
-				<button style="background-color: #00aaff; color: white; max-width: 80%;" >
+		<view>
+			<p style="text-align: center; margin-bottom: 30px;">
+				<button style="background-color: #00aaff; color: white; max-width: 92%;" @click="jumpToCreateGroup">
 					创建小组
 				</button>
 			</p>
@@ -59,7 +59,7 @@
 				groups: []
 			}
 		},
-		onLoad: function() {
+		onShow: function() {
 			this.refresh()
 		},
 		methods: {
@@ -78,18 +78,23 @@
 
 			cardClick(item) {
 				console.log(item)
-
 				uni.navigateTo({
 					url: `/pages/StudyGroup/StudyGroup?id=` + item.id,
 				})
 			},
+			jumpToCreateGroup() {
+				uni.navigateTo({
+					url: '/pages/StudyGroup/StudyGroupCreate'
+				})
+			},
+			
 
 			back() {
 				uni.navigateBack()
 			},
 			refresh() {
 				myRequest.checkLogin()
-				this.notes = []
+				this.groups = []
 
 				uni.request({
 					url: myRequest.interfaceUrl() + '/group/all',
