@@ -31,7 +31,7 @@
 						</view>
 						<view>
 							<p style="text-align: center; margin-top: 10px;" v-if="isAdministrator">
-								<button size="mini" style="background-color: #f9ae3d; color: white;"
+								<button size="mini" style="background-color: #f9ae3d; color: white; width: 100px;"
 									@click="inputDialogToggle">
 									编辑信息
 								</button>
@@ -210,6 +210,35 @@
 				</div>
 			</view>
 
+			<view v-else-if="isMember">
+				<div style="background-color: #f7f7f7;">
+					<uni-card :isShadow="true" :border="true" padding="10px 0px 0px 0px" margin="0px 15px 10px 15px">
+						<view>
+							<p style="text-align: center; margin-bottom: 10px;">
+								<button style="color: white;" type="warn">
+									退出小组
+								</button>
+							</p>
+						</view>
+					</uni-card>
+				</div>
+			</view>
+
+			<view v-else-if="!isMember">
+				<div style="background-color: #f7f7f7;">
+					<uni-card :isShadow="true" :border="true" padding="10px 0px 0px 0px" margin="0px 15px 10px 15px">
+						<view>
+							<p style="text-align: center; margin-bottom: 10px;">
+								<button style="background-color: #5ac725;color: white;" type="warn"
+									@click="addGroupDialogToggle()">
+									加入小组
+								</button>
+							</p>
+						</view>
+					</uni-card>
+				</div>
+			</view>
+
 			<view>
 				<uni-popup ref="invitationDialog" type="dialog">
 					<uni-card>
@@ -224,32 +253,39 @@
 				</uni-popup>
 			</view>
 
-			<view v-if="!isAdministrator && isMember">
-				<div style="background-color: #f7f7f7;">
-					<uni-card :isShadow="true" :border="true" padding="10px 0px 0px 0px" margin="0px 15px 10px 15px">
-						<view>
-							<p style="text-align: center; margin-bottom: 10px;" v-if="this.isMember">
-								<button style="color: white;" type="warn">
-									退出小组
-								</button>
-							</p>
-						</view>
-					</uni-card>
-				</div>
-			</view>
+			<view>
+				<uni-popup ref="addGroupDialog" type="dialog" :isMaskClick="false">
+					<uni-card>
+						<p style="text-align: center;font-size: 24px;margin-bottom: 20px;margin-top: 10px;"
+							class="shuhei">
+							请输入邀请码
+						</p>
+						<u-input class="tui-input" name="invitation" maxlength="20" v-model="addGroupCode" />
 
-			<view v-if="!isAdministrator && isMember">
-				<div style="background-color: #f7f7f7;">
-					<uni-card :isShadow="true" :border="true" padding="10px 0px 0px 0px" margin="0px 15px 10px 15px">
-						<view>
-							<p style="text-align: center; margin-bottom: 10px;" v-if="this.isMember">
-								<button style="color: white;" type="warn">
-									退出小组
-								</button>
-							</p>
-						</view>
+						<p style="margin-top: 20px;">
+
+						</p>
+
+						<uni-row>
+							<uni-col :span="12">
+								<p style="text-align: center;">
+									<button size="mini" style="background-color: #00aaff; color: white; width: 90px;"
+										@click="addGroupDialogClose">
+										取消输入
+									</button>
+								</p>
+							</uni-col>
+							<uni-col :span="12">
+								<p style="text-align: center;">
+									<button size="mini" style="background-color: #5ac725; color: white; width: 90px;"
+										@click="addGroupDialogInputConfirm">
+										确认提交
+									</button>
+								</p>
+							</uni-col>
+						</uni-row>
 					</uni-card>
-				</div>
+				</uni-popup>
 			</view>
 
 		</view>
@@ -258,14 +294,21 @@
 </template>
 
 <script>
+	import form from '@/components/tui-validation/tui-validation.js'
+	import tuiButton from '@/components/tui-button/tui-button.vue'
+	import tuiIcon from '@/components/tui-icon/tui-icon.vue'
+	import tuiToast from '@/components/tui-toast/tui-toast.vue'
+
+	import util from '@/util/thor_utils/util.js'
 	import api from '@/common/api.js';
 	import myRequest from '../../common/request';
 	export default {
 		data() {
 			return {
-				isAdministrator: true,
+				isAdministrator: false,
 				isMember: false,
 				invitation: "abCd",
+				addGroupCode: "",
 				group: {
 					id: 1,
 					owner_id: 1,
@@ -381,7 +424,8 @@
 					}
 				})
 
-				console.log(this.isMember)
+				console.log("member = " + this.isMember)
+				console.log("ad = " + this.isAdministrator)
 			},
 			jumpToAllProblemSet() {
 				uni.navigateTo({
@@ -421,7 +465,7 @@
 					this.$refs.inputDialog.close()
 				}, 100)
 			},
-
+			
 			invitationDialogToggle() {
 				this.$refs.invitationDialog.open()
 				uni.request({
@@ -449,6 +493,29 @@
 				})
 			},
 
+			addGroupDialogToggle() {
+				this.$refs.addGroupDialog.open()
+			},
+			
+			addGroupDialogClose() {
+				setTimeout(() => {
+					this.addGroupCode = ""
+					this.$refs.addGroupDialog.close()
+				}, 100)
+			},
+			
+			addGroupDialogInputConfirm() {
+				uni.showLoading({
+					title: '验证中'
+				})
+
+				setTimeout(() => {
+					uni.hideLoading()
+					// 关闭窗口后，恢复默认内容
+					this.addGroupCode = ""
+					this.$refs.addGroupDialog.close()
+				}, 1000)
+			},
 
 			deleteGroup() {
 				myRequest.request(api.study_group_delete(this.group.id), 'DELETE').then(
