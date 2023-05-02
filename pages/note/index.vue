@@ -180,6 +180,7 @@
 					success: (res) => {
 						console.log(res)
 						if (res.statusCode == 200) {
+							this.notes = []
 							for (var i = 0; i < res.data.notes.length; i ++) {
 								var t = {
 									note_content: "", 

@@ -174,7 +174,41 @@ const myRequest = {
 		return uni.getStorageSync("token")
 	},
 	getUID() {
-		return uni.getStorageSync("user_id")
+		return uni.getStorageSync("user_info").user_id
+	},
+	getUserAvatar() {
+		return uni.getStorageSync("user_info").avatar_path
+	},
+	getUserName() {
+		return uni.getStorageSync('user_info').user_name
+	},
+	
+	queryUserInfo() {
+		uni.request({
+			url: myRequest.interfaceUrl() + '/user/info',
+			method: 'GET',
+			header: {
+				'X-Token': myRequest.getToken()
+			},
+			
+			success: (res) => {
+				console.log(res)
+				if (res.statusCode == 200) {
+					return res.data;
+				}
+				else if (res.statusCode == 401) {
+					myRequest.redirectToLogin()
+				}
+				else {
+					myRequest.toast()
+				}
+			},
+			
+			fail: (res) => {					
+				console.log(res)
+				myRequest.toast()
+			}
+		})
 	},
 	
 	getUserId() {

@@ -52,7 +52,7 @@
 			<u-line></u-line>
 
 			<!--评论-->
-			<comment-eg :articleId="'article1'"></comment-eg>
+			<comment-eg :articleId="this.note_id"></comment-eg>
 
 			<!-- <uni-list :border="false"> -->
 
@@ -89,6 +89,7 @@
 				valid: false,
 				note_html: "",
 				note_id: "",
+				reqFlag: false,
 
 				remove_index: 0,
 				edit_index: 1,
@@ -390,18 +391,22 @@
 					})
 				}
 			},
-
+			
 		},
 
 		onLoad() {
+			console.log(uni.getStorageSync('user_info'))
+			console.log(myRequest.getUID())
+			console.log(myRequest.getUserAvatar())
 			// var pages = getCurrentPages();
 			// var curRoutes = pages[pages.length - 1].route
 			// var curParam = pages[pages.length - 1].options;
 			
 			// var id = curParam['id']
 			
-			// if (id) this.note_id = id
+			// if (id) this.note_id = id	
 		},
+		
 	}
 </script>
 

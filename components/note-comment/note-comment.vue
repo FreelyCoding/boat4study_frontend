@@ -1,26 +1,26 @@
 <template>
 	<view class="hb-comment">
 		<!-- 阅读数-start -->
-		<view>
+		<!-- <view> -->
 			<!-- <i-icon name="eye-line" color="#666" size="20px"></i-icon> -->
-			<uni-icons type="eye" color="#666" size="22px"></uni-icons>
+			<!-- <uni-icons type="eye" color="#666" size="22px"></uni-icons> -->
 			<!-- <span class="top-read">{{commentData.readNumer}}</span> -->
-			<span class="top-read"><u--text :text="192" size="18px" type="info"></u--text></span>
-		</view>
+			<!-- <span class="top-read"><u--text :text="192" size="18px" type="info"></u--text></span> -->
+		<!-- </view> -->
 		<!-- 阅读数-end -->
 		<!-- 阅读数下边那条线-start -->
-		<view class="seg_line_box">
+		<!-- <view class="seg_line_box">
 			<view class="seg_line"></view>
 			<view class="seg_dot"></view>
 			<view class="seg_line"></view>
-		</view>
+		</view> -->
 		<!-- 阅读数下边那条线-end -->
 		
 		<!-- 评论主体-start -->
 		<view class="comment-list" v-if="commentData.comment.length != 0">
 			<!-- 评论主体-顶部数量及发表评论按钮-start -->
 			<view class="comment-num">
-				<view><uni-section :title="'共' + commentData.commentSize + '条评论'" titleColor="#666" type="line"></uni-section></view>
+				<view><uni-section :title="'共' + commentData.comment.length + '条评论'" titleColor="#666" type="line"></uni-section></view>
 				<view class="add-btn">
 					<button type="primary" size="mini" @click="commentInput">发表评论</button>
 				</view>
@@ -74,7 +74,7 @@
 						
 						<view class="comment-main-foot">
 							<view class="foot-time">{{item.createTime}}</view>
-							<view class="foot-btn" @click="reply(item.nickName,item.nickName,item.id)">回复</view>
+							<!-- <view class="foot-btn" @click="reply(item.nickName,item.nickName,item.id)">回复</view> -->
 							<view class="foot-btn" v-if="item.owner" @click="confirmDelete(item.id)">删除</view>
 						</view>
 						<!-- 父评论体-end -->
@@ -204,7 +204,8 @@
 					});
 					return
 				}
-				this.$emit('add', this.commentReq);
+				
+				this.$emit('add', this.commentReq.content);
 			},
 			// 点赞评论
 			like(commentId) {
