@@ -245,7 +245,7 @@
 			},
 			jumpToStudyGroup() {
 				uni.navigateTo({
-					url: "/pages/StudyGroup/StudyGroup"
+					url: "/pages/StudyGroup/StudyGroupIndex"
 				})
 			},
 			jumpToAllNote() {

@@ -118,7 +118,7 @@
 										</p>
 										<p
 											style="max-width: 80px;word-wrap:break-word;word-break:normal;text-align:center; ">
-											{{item.name}}
+											{{item.user_name}}
 										</p>
 									</view>
 								</view>
@@ -179,7 +179,7 @@
 						</view>
 
 						<view>
-							<p style="text-align: center; margin-bottom: 20px;" >
+							<p style="text-align: center; margin-bottom: 20px;" v-if="this.isMember">
 								<button style="background-color: #00aaff; color: white;" @click="jumpToAddProblemSet()">
 									添加题库
 								</button>
@@ -197,35 +197,23 @@
 </template>
 
 <script>
+	import api from '@/common/api.js';
+	import myRequest from '../../common/request';
 	export default {
 		data() {
 			return {
 				isAdministrator: true,
-				isMember: true, 
+				isMember: false, 
 				group: {
 					id: 1,
+					owner_id: 1,
 					name: "OS interests",
 					avatar: "/static/pic/student.png",
 					introduction: "如果你也喜欢操作系统的话，欢迎加入我们！",
 					editName: "OS interests",
-					editIntroduction: "如果你也喜欢操作系统的话，欢迎加入我们！"
+					editIntroduction: "如果你也喜欢操作系统的话，欢迎加入我们！",
 				},
-				group_members: [{
-						name: "Longxmas",
-						avatar: "/static/pic/student.png",
-					},
-					{
-						name: "praynext",
-						avatar: "/static/pic/student.png",
-					},
-					{
-						name: "ScongLi",
-						avatar: "/static/pic/student.png",
-					},
-					{
-						name: "陈总",
-						avatar: "/static/pic/student.png",
-					},
+				group_members: [
 				],
 				problemSet: [{
 						id: "1",
@@ -254,9 +242,86 @@
 				]
 			}
 		},
+		onLoad: function(option) {
+			this.refresh(option)	
+				
+		},
+		
 		methods: {
 			back() {
 				uni.navigateBack()
+			},
+			refresh(option) {
+				let uid = myRequest.getUID();
+				myRequest.checkLogin()
+				this.group.id = option.id
+				console.log('this.group_id: ' + this.group.id); //打印出上个页面传递的参数。
+				
+				uni.request({
+					url: myRequest.interfaceUrl() + '/group/all?id=' + this.group.id,
+					method: 'GET',
+					header: {
+						'X-Token': myRequest.getToken()
+					},
+				
+					success: (res) => {
+						console.log(res)
+						if (res.statusCode == 200) {
+							this.group.name = res.data.group[0].name
+							this.group.introduction = res.data.group[0].description
+							this.group.created_at = res.data.group[0].created_at
+							this.group.editIntroduction = this.group.introduction
+							this.group.editName = this.group.name
+							this.group.owner_id = res.data.group[0].owner_id
+							if (uid == this.group.owner_id) {
+								this.isAdministrator = true;
+							} else {
+								this.isAdministrator = false;
+							}				
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else {
+							myRequest.toast()
+						}
+					},
+				
+					fail: (res) => {
+						console.log(res)
+						myRequest.toast()
+					}
+				})
+				
+				uni.request({
+					url: myRequest.interfaceUrl() + '/group/all_user/' + this.group.id,
+					method: 'GET',
+					header: {
+						'X-Token': myRequest.getToken()
+					},
+				
+					success: (res) => {
+						console.log(res)
+						this.group_members = []
+						if (res.statusCode == 200) {
+							for (var i = 0; i < res.data.user.length;i++) {
+								this.group_members.push(res.data.user[i])
+								if (uid == res.data.user[i].user_id) {
+									this.isMember = true;
+								}
+							}
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else {
+							myRequest.toast()
+						}
+					},
+				
+					fail: (res) => {
+						console.log(res)
+						myRequest.toast()
+					}
+				})
+				
+				console.log(this.isMember)
 			},
 			jumpToAllProblemSet() {
 				uni.navigateTo({

@@ -301,6 +301,15 @@
 				"navigationStyle": "custom"
 			}
 		}
+        ,{
+            "path" : "pages/StudyGroup/StudyGroupCreate",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"subPackages": [{
 		"root": "pages/componentsA",
