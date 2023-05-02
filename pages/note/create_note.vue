@@ -52,7 +52,7 @@
 
 			<!--分界线-->
 			<u-line></u-line>
-
+			
 			<!--笔记内容-->
 			<view class="page-body">
 				<view class='wrapper'>
@@ -62,6 +62,7 @@
 							@statuschange="onStatusChange" :read-only="readOnly" @ready="onEditorReady">
 						</editor>
 					</view>
+					
 
 					<view class='toolbar' @tap="format" style="height: 120px;overflow-y: auto;">
 						<view :class="formats.bold ? 'ql-active' : ''" class="iconfont icon-zitijiacu" data-name="bold">
@@ -152,9 +153,9 @@
 					
 						<view>
 							<tui-list-view title="所有题目" style="width: 100%;">
-								<tui-list-cell v-for="(item, index) in problemList" :key="item.id" @click="insertProblem(item)">
-									{{ item.description }}
-								</tui-list-cell>
+									<tui-list-cell v-for="(item, index) in problemList" :key="item.id" @click="insertProblem(item)">			
+										<text>{{ item.id + '. ' + item.description }}</text>
+									</tui-list-cell>
 							</tui-list-view>
 						</view>
 					
@@ -193,6 +194,10 @@
 				title_maxlength: 50,
 				content_placeholder: "笔记内容",
 				token: "",
+
+				relativeProblem: [
+					
+				],
 
 				itemList: 
 				[{

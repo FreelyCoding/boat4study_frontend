@@ -294,7 +294,13 @@
 
             }
             
-        }
+        },
+		{
+			"path": "pages/StudyGroup/StudyGroupIndex",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		}
     ],
 	"subPackages": [{
 		"root": "pages/componentsA",
