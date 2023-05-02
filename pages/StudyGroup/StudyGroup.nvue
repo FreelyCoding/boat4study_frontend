@@ -30,7 +30,7 @@
 
 						</view>
 						<view>
-							<p style="text-align: center; margin-top: 10px;">
+							<p style="text-align: center; margin-top: 10px;" v-if="isAdministrator">
 								<button size="mini" style="background-color: #f9ae3d; color: white;"
 									@click="inputDialogToggle">
 									编辑信息
@@ -46,40 +46,41 @@
 			<!-- 输入框示例 -->
 			<uni-popup ref="inputDialog" type="dialog" :isMaskClick="false">
 				<uni-card>
-					<p style="text-align: center;">
-						编辑小组信息
-					</p>
+					<form :report-submit="true" @submit="formLogin">
+						<p style="text-align: center;">
+							编辑小组信息
+						</p>
+						<uni-section title="小组名" type="line">
+							<u-input type="text" placeholder="请输入小组名" v-model="group.editName" />
+						</uni-section>
+						<uni-section title="小组简介" type="line">
+							<u-input type="textarea" placeholder="请输入小组简介" custom-style="height: 300px;"
+								v-model="group.editIntroduction" />
+						</uni-section>
 
-					<uni-section title="小组名" type="line">
-						<u-input type="text" placeholder="请输入小组名" v-model="group.editName" />
-					</uni-section>
-					<uni-section title="小组简介" type="line">
-						<u-input type="textarea" placeholder="请输入小组简介" custom-style="height: 300px;"
-							v-model="group.editIntroduction" />
-					</uni-section>
+						<p style="margin-top: 20px;">
 
-					<p style="margin-top: 20px;">
+						</p>
 
-					</p>
-
-					<uni-row>
-						<uni-col :span="12">
-							<p style="text-align: center;">
-								<button size="mini" style="background-color: #00aaff; color: white; width: 90px;"
-									@click="inputDialogClose()">
-									取消编辑
-								</button>
-							</p>
-						</uni-col>
-						<uni-col :span="12">
-							<p style="text-align: center;">
-								<button size="mini" style="background-color: #5ac725; color: white; width: 90px;"
-									@click="dialogInputConfirm()">
-									确认提交
-								</button>
-							</p>
-						</uni-col>
-					</uni-row>
+						<uni-row>
+							<uni-col :span="12">
+								<p style="text-align: center;">
+									<button size="mini" style="background-color: #00aaff; color: white; width: 90px;"
+										@click="inputDialogClose">
+										取消编辑
+									</button>
+								</p>
+							</uni-col>
+							<uni-col :span="12">
+								<p style="text-align: center;">
+									<button size="mini" style="background-color: #5ac725; color: white; width: 90px;"
+										@click="dialogInputConfirm">
+										确认提交
+									</button>
+								</p>
+							</uni-col>
+						</uni-row>
+					</form>
 				</uni-card>
 			</uni-popup>
 		</view>
@@ -178,7 +179,7 @@
 						</view>
 
 						<view>
-							<p style="text-align: center; margin-bottom: 20px;">
+							<p style="text-align: center; margin-bottom: 20px;" >
 								<button style="background-color: #00aaff; color: white;" @click="jumpToAddProblemSet()">
 									添加题库
 								</button>
@@ -199,6 +200,8 @@
 	export default {
 		data() {
 			return {
+				isAdministrator: true,
+				isMember: true, 
 				group: {
 					id: 1,
 					name: "OS interests",
@@ -287,9 +290,15 @@
 				this.$refs.inputDialog.open()
 			},
 			inputDialogClose() {
-				this.group.editIntroduction = this.group.introduction
-				this.group.editName = this.group.editName
-				this.$refs.inputDialog.close()
+				uni.showLoading({
+					title: '1秒后会关闭'
+				})
+				setTimeout(() => {
+					uni.hideLoading()
+					this.group.editIntroduction = this.group.introduction
+					this.group.editName = this.group.name
+					this.$refs.inputDialog.close()
+				}, 1000)
 			},
 		},
 
