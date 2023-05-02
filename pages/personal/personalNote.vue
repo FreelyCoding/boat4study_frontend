@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<uni-nav-bar title="笔记收藏" background-color="#00aaff" color="#FFFFFF" status-bar="true">
+		<uni-nav-bar title="我的笔记" background-color="#00aaff" color="#FFFFFF" status-bar="true">
 			<block slot="left">
 				<view class="note-navbar">
 					<uni-icons type="left" color="#FFFFFF" size="18" @click="back()"/>
@@ -101,12 +101,6 @@
 			this.refresh()
 		},
 		methods: {
-			search(res) {
-				uni.showToast({
-					title: '搜索：' + res.value,
-					icon: 'none'
-				})
-			},
 			extractImage(htmlStr) {
 				// 从html中提取出第一个图片
 				var img = htmlStr.match(/<img.*?(?:>|\/>)/gi);
