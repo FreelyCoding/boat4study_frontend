@@ -84,8 +84,8 @@ import myRequest from '../../common/request'
 									console.log(res)
 									if (res.statusCode == 200) {
 										uni.setStorage({
-											key: 'user_id',
-											data: res.data.user_id
+											key: 'user_info',
+											data: res.data
 										})
 										
 										uni.switchTab({
