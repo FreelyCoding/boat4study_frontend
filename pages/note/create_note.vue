@@ -135,7 +135,7 @@
 				<u-popup
 					:safeAreaInsetBottom="true"
 					:safeAreaInsetTop="true"
-					mode="bottom"
+					mode="center"
 					:show="problemSelectShow"
 					:overlay="true"
 					:closeable="true"
@@ -145,7 +145,7 @@
 					<scroll-view
 						class="u-popup-slot"
 						:style="{
-							width: '750rpx',
+							width: '300px',
 							marginTop: '0',
 						}"
 						scroll-y="true"
@@ -153,14 +153,63 @@
 					
 						<view>
 							<tui-list-view title="所有题目" style="width: 100%;">
-									<tui-list-cell v-for="(item, index) in problemList" :key="item.id" @click="insertProblem(item)">			
+									<tui-list-cell v-for="(item, index) in problemList" :key="item.id" @click="addProblem(item)">			
 										<text>{{ item.id + '. ' + item.description }}</text>
 									</tui-list-cell>
 							</tui-list-view>
 						</view>
-					
 					</scroll-view>
 				</u-popup>			
+			</view>
+			
+			<!--相关题目弹出层-->
+			<view>
+				<u-popup 
+					:safeAreaInsetBottom="true"
+					:safeAreaInsetTop="true"
+					:show="relativeProblemShow" 
+					mode="left"
+					:overlay="true"
+					:closeable="true"
+					:closeOnClickOverlay="true"
+					@close="relativeProblemClose"
+				>
+					
+					<scroll-view
+						class="u-popup-slot"
+						:style="{
+							height: '100%',
+							width: '280px',
+							marginTop: '0',
+						}"
+						scroll-y="true"
+					>
+					
+						<view>
+							<tui-list-view title="笔记相关题目">
+															
+								<tui-list-cell v-for="(item, index) in relativeProblem" :key="item.id">			
+									
+									<uni-row>
+										<uni-col span="20">
+											<text style="font-size: 15px;">{{ item.id + '. ' + item.description }}</text>
+										</uni-col>
+										
+										<uni-col span="4">
+											<i-icon name="delete-bin-fill" color="red" :size="15" style="float: right;" @click="removeRelativeProblem(index)"></i-icon>
+										</uni-col>
+										
+									</uni-row>
+									
+									
+								</tui-list-cell>
+							</tui-list-view>
+						</view>
+					</scroll-view>
+					
+					<u-button type="success" text="添加相关题目" @click="showProblem"></u-button>
+					
+				</u-popup>
 			</view>
 		
 		</view>
@@ -174,6 +223,9 @@
 	import tRtPopup from '@/components/t-rt-popup/t-rt-popup';
 	import uPopup from '@/uni_modules/uview-ui/components/u-popup/u-popup.vue'
 	import tuiListView from '@/components/tui-list-view/tui-list-view.vue'
+	
+	import uSwipeAction from '@/uni_modules/uview-ui/components/u-swipe-action/u-swipe-action.vue'
+	import uSwipeActionItem from '@/uni_modules/uview-ui/components/u-swipe-action-item/u-swipe-action-item.vue'
 
 	export default {
 		components: {
@@ -195,18 +247,28 @@
 				content_placeholder: "笔记内容",
 				token: "",
 
+				relativeProblemShow: false,
 				relativeProblem: [
 					
 				],
+				
+				options1: [{
+					text: '删除'
+				}],
 
 				itemList: 
-				[{
+				[
+					{
 						title: '保存',
 						icon: 'save-fill'
 					},
 					{
 						title: '取消',
 						icon: 'delete-back-fill'
+					},
+					{
+						title: '相关题目',
+						icon: 'link'
 					}
 				],
 				
@@ -219,6 +281,14 @@
 			}
 		},
 		methods: {
+			relativeProblemClose() {
+				this.relativeProblemShow = false;
+			},
+			
+			removeRelativeProblem(index) {
+				this.relativeProblem.splice(index, 1)
+			},
+			
 			problemSelectClose() {
 				this.problemSelectShow = false;
 			},
@@ -229,8 +299,12 @@
 			handleClick(index) {
 				if (index == 0) {
 					this.submit()
-				} else if (index == 1) {
+				} 
+				else if (index == 1) {
 					this.show = true;
+				}
+				else if (index == 2) {
+					this.relativeProblemShow = true;
 				}
 
 				this.toggle()
@@ -350,6 +424,7 @@
 			
 			showProblem() {
 				this.problemSelectShow = true;
+				this.relativeProblemShow = false
 				
 				if (!myRequest.isLogin()) {
 					uni.redirectTo({
@@ -373,7 +448,16 @@
 						}
 					}
 				})
-				
+			},
+			
+			addProblem(item) {
+				if (this.relativeProblem.indexOf(item) == -1) {
+					this.relativeProblem.push(item)
+					myRequest.toast('添加题目成功')
+				}
+				else {
+					myRequest.toast('已添加过该题目')
+				}
 			},
 			
 			insertProblem(item) {

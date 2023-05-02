@@ -103,9 +103,10 @@
 				]
 			}
 		},
-		onLoad: function() {
+		onShow: function() {
 			this.refresh()
 		},
+		
 		methods: {
 			search(res) {
 				uni.showToast({

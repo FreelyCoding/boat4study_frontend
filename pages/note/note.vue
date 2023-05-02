@@ -161,15 +161,17 @@
 								uni.switchTab({
 									url: '/pages/note/index',
 									success() {
-										console.log(getCurrentPages())
-										let page = getCurrentPages().pop(); //跳转页面成功之后
-										if (!page) return;
-										console.log(page.route)
-										if (page.route == 'pages/note/index' 
-												|| page.route == '/pages/personal/personalNote'
-												|| page.route == '/pages/personal/starNotes') {
-											page.$vm.refresh(); //如果页面存在，则重新刷新页面
-										}
+										// console.log(getCurrentPages())
+										// let page = getCurrentPages().pop(); //跳转页面成功之后
+										// if (!page) return;
+										// console.log(page.route)
+										// if (page.route == 'pages/note/index' 
+										// 		|| page.route == '/pages/personal/personalNote'
+										// 		|| page.route == '/pages/personal/starNotes') {
+										// 	page.$vm.refresh(); //如果页面存在，则重新刷新页面
+										// }
+										
+										uni.navigateBack()
 									}
 								})
 							} else if (res.statusCode == 401) {
