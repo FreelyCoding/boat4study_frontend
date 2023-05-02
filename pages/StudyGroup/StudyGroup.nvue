@@ -193,14 +193,14 @@
 				<div style="background-color: #f7f7f7;">
 					<uni-card :isShadow="true" :border="true" padding="10px 0px 0px 0px" margin="0px 15px 10px 15px">
 						<view>
-							<p style="text-align: center; margin-bottom: 10px;" v-if="this.isMember">
+							<p style="text-align: center; margin-bottom: 10px;">
 								<button style="background-color: #5ac725; color: white;"
 									@click="invitationDialogToggle()">
 									生成邀请码
 								</button>
 							</p>
 
-							<p style="text-align: center; margin-bottom: 10px;" v-if="this.isMember">
+							<p style="text-align: center; margin-bottom: 10px;">
 								<button style="color: white;" type="warn" @click="deleteGroup">
 									删除小组
 								</button>
