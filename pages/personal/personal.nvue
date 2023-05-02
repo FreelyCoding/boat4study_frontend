@@ -40,7 +40,8 @@
 								</uni-col>
 								<uni-col :span="6">
 									<view style="margin: auto;">
-										<u-icon name="/static/pic/personal_group.svg" size="50px" color="white">
+										<u-icon name="/static/pic/personal_group.svg" size="50px" color="white"
+										@click="jumpToMyGroup()()">
 										</u-icon>
 									</view>
 									<view style="margin: auto;">
@@ -220,6 +221,11 @@
 					url: '/pages/personal/wrongProblem'
 				})
 			},
+			jumpToMyGroup() {
+				uni.navigateTo({
+					url: '/pages/personal/personalGroup'
+				})
+			}
 
 
 		},
