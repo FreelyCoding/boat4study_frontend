@@ -1,7 +1,6 @@
 <template>
 	<view>
-		<view class="status-bar"></view>
-		<view>
+		<view class="status-bar">
 			<!--自定义navbar-->
 			<uni-nav-bar title="从其他题库录入" background-color="#00aaff" color="#FFFFFF" status-bar="true">
 				<block slot="left">
@@ -121,4 +120,10 @@
 </script>
 
 <style>
+	.status-bar {
+		width: 100%;
+		position: sticky;
+		top: 0;
+		z-index: 10;
+	}
 </style>

@@ -1,8 +1,7 @@
 <template>
 	<!-- 单体编辑录入界面 -->
 	<view>
-		<view class="status-bar"></view>
-		<view>
+		<view class="status-bar">
 			<!--自定义navbar-->
 			<uni-nav-bar title="编辑题目" background-color="#00aaff" color="#FFFFFF" status-bar="true">
 				<block slot="left">
@@ -327,10 +326,10 @@ import list from '../../uni_modules/uview-ui/libs/config/props/list';
 
 <style lang="scss">
 	.status-bar {
-		height: var(--status-bar-height);
 		width: 100%;
-		position: fixed;
+		position: sticky;
 		top: 0;
+		z-index: 10;
 	}
 
 	.note-navbar {

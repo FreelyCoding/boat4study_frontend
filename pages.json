@@ -136,6 +136,24 @@
 			}
 		},
 		{
+			"path": "pages/problem/problemDetail",
+			"style": {
+				"navigationBarTitleText": "题目详情",
+				"navigationStyle": "custom",
+				"enablePullDownRefresh": false,
+				"navigationBarTextStyle": "white"
+			}
+		},
+		{
+			"path": "pages/problem/problemEdit",
+			"style": {
+				"navigationBarTitleText": "题目编辑",
+				"navigationStyle": "custom",
+				"enablePullDownRefresh": false,
+				"navigationBarTextStyle": "white"
+			}
+		},
+		{
 			"path": "pages/problem/problemCreateFromPS",
 			"style": {
 				"navigationBarTitleText": "从其他题库录入",

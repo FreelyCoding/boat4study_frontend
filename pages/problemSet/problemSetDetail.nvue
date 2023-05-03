@@ -1,6 +1,6 @@
 <template>
 	<view class="container">
-		<view>
+		<view class="status-bar">
 			<!--自定义navbar-->
 			<uni-nav-bar title="题库详情" background-color="#00aaff" color="#FFFFFF" status-bar="true">
 				<block slot="left">
@@ -202,10 +202,10 @@
 								<uni-row>
 									<uni-col :span="18">
 										<view class="practise-card-title">
-											试题搜索
+											错题练习
 										</view>
 										<view class="practise-card-detail">
-											快速查找试题
+											针对错题进行练习
 										</view>
 									</uni-col>
 									<uni-col :span="6">
@@ -429,6 +429,13 @@
 </script>
 
 <style lang="scss">
+	.status-bar {
+		width: 100%;
+		position: sticky;
+		top: 0;
+		z-index: 10;
+	}
+	
 	.container {
 		height: 100%;
 	}
