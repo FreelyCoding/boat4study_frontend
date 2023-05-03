@@ -4,6 +4,12 @@ const {
 // 获取菜单
 export const fetchMenu = (params, config = {}) => http.post('/ebapi/public_api/index', params, config)
 export default {
+	
+	problem_set_migrate_problem(set_id, problem_id) {
+		let api = "/problem_set/migrate/" + set_id + "?problem_id=" + problem_id;
+		return api;
+	},
+	
 	problem_blank_all(params) {
 		let api = "/problem/blank/all";
 		if (params.id != null) {

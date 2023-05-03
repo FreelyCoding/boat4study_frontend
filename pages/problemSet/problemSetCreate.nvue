@@ -1,12 +1,14 @@
 <template>
 	<view>
-		<uni-nav-bar title="创建题库" background-color="#00aaff" color="#FFFFFF" status-bar="true">
-			<block slot="left">
-				<view class="note-navbar">
-					<uni-icons type="left" color="#FFFFFF" size="18" @click="back()" />
-				</view>
-			</block>
-		</uni-nav-bar>
+		<view>
+			<uni-nav-bar title="创建题库" background-color="#00aaff" color="#FFFFFF" status-bar="true">
+				<block slot="left">
+					<view class="note-navbar">
+						<uni-icons type="left" color="#FFFFFF" size="18" @click="back()" />
+					</view>
+				</block>
+			</uni-nav-bar>
+		</view>
 
 		<view class="m-middle-5" style="margin-top: 30px;margin-bottom: 30px;">
 			<uni-row>

@@ -1,7 +1,6 @@
 <template>
 	<view>
-		<view class="status-bar"></view>
-		<view>
+		<view class="status-bar">
 			<!--自定义navbar-->
 			<uni-nav-bar title="顺序练习" background-color="#00aaff" color="#FFFFFF" status-bar="true">
 				<block slot="left">
@@ -156,7 +155,6 @@
 					'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
 					'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
 				],
-
 				problem: [],
 
 			}
@@ -545,10 +543,10 @@
 
 <style lang="scss">
 	.status-bar {
-		height: var(--status-bar-height);
 		width: 100%;
-		position: fixed;
+		position: sticky;
 		top: 0;
+		z-index: 10;
 	}
 
 	.note-navbar {

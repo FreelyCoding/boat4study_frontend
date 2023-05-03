@@ -1,8 +1,7 @@
 <template>
 	<!-- 单体编辑录入界面 -->
 	<view>
-		<view class="status-bar"></view>
-		<view>
+		<view class="status-bar">
 			<!--自定义navbar-->
 			<uni-nav-bar title="单题编辑录入" background-color="#00aaff" color="#FFFFFF" status-bar="true">
 				<block slot="left">
@@ -518,10 +517,10 @@
 
 <style lang="scss">
 	.status-bar {
-		height: var(--status-bar-height);
 		width: 100%;
-		position: fixed;
+		position: sticky;
 		top: 0;
+		z-index: 10;
 	}
 
 	.note-navbar {
