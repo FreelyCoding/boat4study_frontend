@@ -131,7 +131,7 @@
 			</view>
 			
 			<!--弹出层选择要插入的题目-->
-			<view>
+			<!-- <view>
 				<u-popup
 					:safeAreaInsetBottom="true"
 					:safeAreaInsetTop="true"
@@ -160,7 +160,128 @@
 						</view>
 					</scroll-view>
 				</u-popup>			
-			</view>
+			</view> -->
+			
+			<!--选择题库弹出层-->
+			<u-popup
+				:safeAreaInsetBottom="true"
+				:safeAreaInsetTop="true"
+				mode="center"
+				:show="problemSetSelectShow"
+				:overlay="true"
+				:closeable="true"
+				:closeOnClickOverlay="true"
+				@open="loadProblemSet"
+				@close="problemSetSelectClose"
+			>
+				
+				<scroll-view
+					class="u-popup-slot"
+					:style="{
+						width: '300px',
+						marginTop: '0',
+					}"
+					scroll-y="true"
+				>
+				
+					<u-list customStyle="width: 94%; margin: auto; margin-top: 15px;">
+						<u-list-item v-for="(item, index) in this.problemSet" :key="index">
+							<uni-card spacing="0" padding="0" margin="10px 0px 0px 10px" 
+									@click="loadProblemList(item.id)">
+								<view>
+									<uni-row>
+										<uni-col :span="5" align="start">
+											<view>
+												<u-icon name="/static/pic/qb.svg" size="50px"></u-icon>
+											</view>
+										</uni-col>
+							
+										<uni-col :span="18" align="start">
+											<div class="shuhei" style="margin-bottom: 5px;">
+												<p style="font-size: 20px;">{{item.name}}</p>
+											</div>
+											<div style="font-size: 16px;">
+												{{item.problem_number}} 道题目
+												&ensp; &ensp;
+												{{item.created_at}}
+											</div>
+										</uni-col>
+									</uni-row>
+									<u-divider v-if="(index != Math.min(3,problemSet.length - 1))"> </u-divider>
+								</view>
+							</uni-card>
+							
+						</u-list-item>
+					</u-list>
+				</scroll-view>
+			</u-popup>
+			
+			<u-popup
+				:safeAreaInsetBottom="true"
+				:safeAreaInsetTop="true"
+				mode="center"
+				:show="problemListSelectShow"
+				:overlay="true"
+				:closeable="true"
+				:closeOnClickOverlay="true"
+				@close="problemListSelectClose"
+			>
+				<scroll-view
+					class="u-popup-slot"
+					:style="{
+						width: '300px',
+						marginTop: '0',
+					}"
+					scroll-y="true"
+				>
+					
+					<u-list customStyle="width: 94%; margin: auto; margin-top: 25px;">
+						<u-list-item v-for="(item, index) in this.problemList" :key="index">
+							<uni-card spacing="0" padding="0" margin="10px 0px 0px 10px" 
+								@click="select(item)">
+								<view>
+									<uni-row>
+										<uni-col :span="6" align="start">
+											<uni-tag text="选择题" type="primary" customStyle="background-color: #00aaff"
+												v-if="item.type===0" />
+											<uni-tag text="填空题" type="primary" customStyle="background-color: #00aaff"
+												v-if="item.type===1" />
+											<uni-tag text="判断题" type="primary" customStyle="background-color: #00aaff"
+												v-if="item.type===2" />
+										</uni-col>
+										<uni-col :span="14" align="start">
+											<div class="shuhei problem-title" style="margin-bottom: 5px;">
+												<p style="font-size: 20px;">{{item.description}}</p>
+											</div>
+										</uni-col>
+										<uni-col :span="4" align="start">
+											<u-icon name="/static/pic/problemSet/fxxz.svg" size="25px" v-if="item.selected === 1"></u-icon>
+											<u-icon name="/static/pic/problemSet/fxwxz.svg" size="25px" v-if="item.selected === 0"></u-icon>
+										</uni-col>
+									</uni-row>
+									<u-divider> </u-divider>
+								</view>
+							</uni-card>
+				
+						</u-list-item>
+						
+						<u-list-item style="margin-top: 15px; margin-bottom: 15px;">
+							<u-row>
+								<!-- <u-col span="4"></u-col> -->
+								<u-col span="3" offset="2">
+									<u-button type="primary" text="添加" @click="addToRelativeProblem"></u-button>
+								</u-col>
+								<u-col span="3" offset="2">
+									<u-button type="success" text="全选" @click="selectAll"></u-button>
+								</u-col>
+							</u-row>
+						</u-list-item>
+						
+					
+					</u-list>
+				</scroll-view>
+			</u-popup>
+			
 			
 			<!--相关题目弹出层-->
 			<view>
@@ -185,29 +306,47 @@
 						scroll-y="true"
 					>
 					
-						<view>
-							<tui-list-view title="笔记相关题目">
-															
-								<tui-list-cell v-for="(item, index) in relativeProblem" :key="item.id">			
-									
-									<uni-row>
-										<uni-col span="20">
-											<text style="font-size: 15px;">{{ item.id + '. ' + item.description }}</text>
-										</uni-col>
+						<u-list customStyle="width: 94%; margin: auto; margin-top: 15px;">
+							<u-list-item style="margin-bottom: 15px;">
+								<u-row>
+									<u-col span="6" offset="3">
+										<u-button type="success" text="添加相关题目" @click="showProblemSet"></u-button>
+									</u-col>
+								</u-row>
+							</u-list-item>
+							
+							<u-list-item v-for="(item, index) in this.relativeProblem" :key="index">
+								<uni-card spacing="0" padding="0" margin="10px 0px 0px 10px" 
+									@click="select(item)">
+									<view>
+										<uni-row>
+											<uni-col :span="6" align="start">
+												<uni-tag text="选择题" type="primary" customStyle="background-color: #00aaff"
+													v-if="item.type===0" />
+												<uni-tag text="填空题" type="primary" customStyle="background-color: #00aaff"
+													v-if="item.type===1" />
+												<uni-tag text="判断题" type="primary" customStyle="background-color: #00aaff"
+													v-if="item.type===2" />
+											</uni-col>
+											<uni-col :span="12" align="start">
+												<div class="shuhei problem-title" style="margin-bottom: 5px;">
+													<p style="font-size: 20px;">{{item.description}}</p>
+												</div>
+											</uni-col>
+											
+											<uni-col span="4" align="start">
+												<i-icon name="delete-bin-fill" color="red" :size="15" style="float: right;" @click="removeRelativeProblem(index)"></i-icon>
+											</uni-col>
 										
-										<uni-col span="4">
-											<i-icon name="delete-bin-fill" color="red" :size="15" style="float: right;" @click="removeRelativeProblem(index)"></i-icon>
-										</uni-col>
+										</uni-row>
+										<u-divider> </u-divider>
+									</view>
+								</uni-card>
 										
-									</uni-row>
-									
-									
-								</tui-list-cell>
-							</tui-list-view>
-						</view>
+							</u-list-item>
+							
+						</u-list>
 					</scroll-view>
-					
-					<u-button type="success" text="添加相关题目" @click="showProblem"></u-button>
 					
 				</u-popup>
 			</view>
@@ -246,6 +385,8 @@
 				title_maxlength: 50,
 				content_placeholder: "笔记内容",
 				token: "",
+				
+				problemSet: [],
 
 				relativeProblemShow: false,
 				relativeProblem: [
@@ -272,15 +413,144 @@
 					}
 				],
 				
+				problemListSelectShow: false,
 				problemList: [
 					
 				],
 				
 				popupShow: false,
-				problemSelectShow: false
+				
+				problemSetSelectShow: false
 			}
 		},
 		methods: {
+			
+			selectAll() {
+				for (var i = 0; i < this.problemList.length; i ++) {
+					this.problemList[i].selected = 1
+				}
+			},
+			
+			select(item) {
+				item.selected = 1 - item.selected
+			},
+			
+			addToRelativeProblem() {
+				for (var i = 0; i < this.problemList.length; i ++) {
+					var item = this.problemList[i]
+					
+					if (item.selected == 0) continue;
+					
+					if (this.relativeProblem.indexOf(item) == -1) {
+						this.relativeProblem.push(item)
+					}
+				}
+				if (this.problemList.length > 0) {
+					myRequest.toast('添加题目成功')
+				}
+			},
+			
+			loadProblemList(problemSetId) {
+				this.problemSetSelectShow = false
+				this.problemListSelectShow = true
+				
+				console.log('yyy')
+				console.log(problemSetId)
+				
+				this.initProblemList(problemSetId)
+			},
+			
+			initProblemList(problemSetId) {
+				console.log('initProblemList')
+				var ret;
+				
+				uni.request({
+					url: myRequest.interfaceUrl() + `/problem_set/all_problem/${problemSetId}`,
+					method: 'GET',
+					header: {
+						'X-Token': myRequest.getToken()
+					},
+					
+					success: (res) => {
+						if (res.statusCode == 200) {
+							ret = res.data.problems
+							
+							this.problemList = []
+							
+							for (var i = 0; i < ret.length; i ++) {
+								this.problemList.push({
+									id: ret[i].id,
+									type: ret[i].problem_type_id,
+									selected: 0,
+									description: ret[i].description,
+								})
+							}
+							
+						} else if (res.statusCode == 401) {
+							uni.redirectTo({
+								url: '/pages/login/login'
+							})
+						} else {
+							this.problemListSelectShow = false
+							myRequest.toast()
+						}
+					},
+					
+					fail: res => {
+						this.problemListSelectShow = false
+						myRequest.toast()
+					}
+					
+				})
+				
+			},
+			
+			loadProblemSet() {
+				
+				myRequest.checkLogin()
+				uni.request({
+					url: myRequest.interfaceUrl() + '/user/problem_set',
+					method: 'GET',
+					header: {
+						'X-Token': myRequest.getToken()
+					},
+				
+					success: (res) => {
+						console.log(res)
+						if (res.statusCode == 200) {
+							this.problemSet = []
+							for (var i = 0; i < res.data.length; i++) {
+								var t = {
+									id: res.data[i].id,
+									description: res.data[i].description,
+									name: res.data[i].name,
+									pic: "../../static/pic/dataStructure.jpg",
+									created_at: res.data[i].created_at.slice(0, 10),
+									problem_number: res.data[i].problem_count,
+								}
+								this.problemSet.push(t);
+							}
+						} else if (res.statusCode == 401) {
+							if (myRequest.isLogin()) {
+								myRequest.toast('请重新登录')
+							} else {
+								myRequest.toast('请登录')
+							}
+							uni.navigateTo({
+								url: '/pages/login/login'
+							})
+						} else {
+							myRequest.toast()
+						}
+					},
+				
+					fail: (res) => {
+						console.log(res)
+						myRequest.toast()
+					}
+				})
+			},
+			
 			relativeProblemClose() {
 				this.relativeProblemShow = false;
 			},
@@ -289,8 +559,12 @@
 				this.relativeProblem.splice(index, 1)
 			},
 			
-			problemSelectClose() {
-				this.problemSelectShow = false;
+			problemSetSelectClose() {
+				this.problemSetSelectShow = false;
+			},
+			
+			problemListSelectClose() {
+				this.problemListSelectShow = false;
 			},
 		
 			toggle() {
@@ -422,8 +696,8 @@
 				})
 			},
 			
-			showProblem() {
-				this.problemSelectShow = true;
+			showProblemSet() {
+				this.problemSetSelectShow = true;
 				this.relativeProblemShow = false
 				
 				if (!myRequest.isLogin()) {
@@ -493,7 +767,7 @@
 									html: html,
 									
 									success: res => {
-										that.problemSelectShow = false
+										that.problemSetSelectShow = false
 									}
 								})
 							}
