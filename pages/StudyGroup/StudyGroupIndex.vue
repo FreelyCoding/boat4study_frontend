@@ -1,13 +1,14 @@
 <template>
 	<view class="box">
-		<uni-nav-bar title="学习小组" background-color="#00aaff" color="#FFFFFF" status-bar="true">
-			<block slot="left">
-				<view class="note-navbar">
-					<uni-icons type="left" color="#FFFFFF" size="18" @click="back" />
-				</view>
-			</block>
-		</uni-nav-bar>
-
+		<view class="status-bar">
+			<uni-nav-bar title="学习小组" background-color="#00aaff" color="#FFFFFF" status-bar="true">
+				<block slot="left">
+					<view class="note-navbar">
+						<uni-icons type="left" color="#FFFFFF" size="18" @click="back()" />
+					</view>
+				</block>
+			</uni-nav-bar>
+		</view>
 
 		<uni-search-bar @confirm="search" :focus="true" v-model="searchValue" placeholder="请输入要搜索的学习小组名称"
 			cancelButton="none" maxlength="50" style="margin-left: 5px; margin-right: 5px;">
@@ -136,6 +137,13 @@
 
 <style>
 	@import url('../homePage/homePage.css');
+
+	.status-bar {
+		width: 100%;
+		position: sticky;
+		top: 0;
+		z-index: 10;
+	}
 
 	page {
 		background: #EDEDED;
