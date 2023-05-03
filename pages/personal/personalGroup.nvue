@@ -1,22 +1,154 @@
 <template>
-	<view>
+	<view class="box">
+		<uni-nav-bar title="我的小组" background-color="#00aaff" color="#FFFFFF" status-bar="true">
+			<block slot="left">
+				<view class="note-navbar">
+					<uni-icons type="left" color="#FFFFFF" size="18" @click="back" />
+				</view>
+			</block>
+		</uni-nav-bar>	
 		
+		<view v-if="groups && groups.length != 0" style="margin-top: 20px;">
+			<view v-for="(item, index) in groups" :key="index">
+				<uni-card  :title="item.name" :extra="'创建于' + item.create_time" :thumbnail="item.pic"
+					@click="cardClick(item)"
+					isShadow border padding="15px 5px 15px 5px"
+					margin="0px 15px 15px 15px" style="border-radius: 10px;">
+					<text class="uni-body">{{item.description}}</text>
+				</uni-card>
+			</view>
+		</view>
+
+		<view v-else style="text-align: center;">
+			<image src="../../static/pic/note/no_note.png"
+				style="margin: auto; margin-top: 30px; height: 200px; width: 200px;"></image>
+			<p style="font-size: 20px;margin-top: 30px;">暂无学习小组 </p>
+		</view>
+
 	</view>
 </template>
 
 <script>
+	import tuiCard from '@/components/tui-card/tui-card.vue';
+	import tuiListCell from '@/components/tui-list-cell/tui-list-cell.vue';
+	import tuiNoData from '@/components/tui-no-data/tui-no-data.vue';
+	import myRequest from '../../common/request';
+
 	export default {
+		components: {
+			tuiNoData
+		},
 		data() {
 			return {
-				
+				searchValue: "",
+				flag: false,
+				groups: []
 			}
 		},
+		onShow: function() {
+			this.refresh()
+		},
 		methods: {
+			search(res) {
+				uni.showToast({
+					title: '搜索：' + res.value,
+					icon: 'none'
+				})
+			},
+
+			onBackPress() {
+				// #ifdef APP-PLUS
+				plus.key.hideSoftKeybord();
+				// #endif
+			},
+
+			cardClick(item) {
+				console.log(item)
+				uni.navigateTo({
+					url: `/pages/StudyGroup/StudyGroup?id=` + item.id,
+				})
+			},
+			jumpToCreateGroup() {
+				uni.navigateTo({
+					url: '/pages/StudyGroup/StudyGroupCreate'
+				})
+			},
 			
-		}
+
+			back() {
+				uni.navigateBack()
+			},
+			refresh() {
+				let uid = myRequest.getUID()
+				myRequest.checkLogin()
+				this.groups = []
+
+				uni.request({
+					url: myRequest.interfaceUrl() + '/group/all?user_id=' + uid,
+					method: 'GET',
+					header: {
+						'X-Token': myRequest.getToken()
+					},
+
+					success: (res) => {
+						console.log(res)
+						if (res.statusCode == 200) {
+							for (var i = 0; i < res.data.group.length; i++) {
+								var t = {
+									description: res.data.group[i].description,
+									name: res.data.group[i].name,
+									pic: "/static/pic/personal_group.svg",
+									create_time: res.data.group[i].created_at.slice(0, 10),
+									id: res.data.group[i].id,
+								}
+								this.groups.push(t);
+							}
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else {
+							myRequest.toast()
+						}
+					},
+
+					fail: (res) => {
+						console.log(res)
+						myRequest.toast()
+					}
+				})
+			}
+		},
+
 	}
 </script>
 
 <style>
+	@import url('../homePage/homePage.css');
 
+	page {
+		background: #EDEDED;
+	}
+
+	.container {
+		padding-bottom: env(safe-area-inset-bottom);
+	}
+
+
+	.note-img {
+		max-height: 150px;
+	}
+
+	.note-title {
+		font-size: 18px;
+		color: black;
+		font-weight: bold;
+		margin-bottom: 5px;
+	}
+
+	.btn-box {
+		position: absolute;
+		bottom: 10px;
+		margin: auto;
+		left: 0;
+		right: 0;
+	}
 </style>
