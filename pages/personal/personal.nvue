@@ -6,14 +6,18 @@
 					<uni-row>
 						<uni-col :span="8">
 							<view>
-								<image style="width: 100px; height: 100px; background-color: #00aaff;" mode="aspectFill"
-									:src="user.avatar"></image>
+								<p style="text-align: center;" >
+									<image style="width: 100px; height: 100px; background-color: #00aaff;" mode="aspectFill"
+										:src="user.avatar"></image>
+								</p>
+						
 							</view>
+
 						</uni-col>
 
-						<uni-col :span="18">
-							<view style="margin: 20px 0px 10px 0px;">
-								<p class="user_name">{{user.user_name}}</p>
+						<uni-col :span="16">
+							<view style="margin: 20px 0px 10px 30px;">
+								<p class="user_name">{{user.name}}</p>
 								<p class="uid">uid: &ensp; {{user.uid}}</p>
 							</view>
 						</uni-col>
@@ -23,12 +27,50 @@
 		</view>
 
 		<view>
+			<!-- 输入框示例 -->
+			<uni-popup ref="inputDialog" type="dialog" :isMaskClick="false">
+				<uni-card>
+					<p style="text-align: center;">
+						编辑用户信息
+					</p>
+					<uni-section title="用户名" type="line">
+						<u-input type="text" placeholder="请输入用户名" v-model="user.editName" />
+					</uni-section>
+
+					<p style="margin-top: 20px;">
+
+					</p>
+
+					<uni-row>
+						<uni-col :span="12">
+							<p style="text-align: center;">
+								<button size="mini" style="background-color: #00aaff; color: white; width: 90px;"
+									@click="inputDialogClose">
+									取消编辑
+								</button>
+							</p>
+						</uni-col>
+						<uni-col :span="12">
+							<p style="text-align: center;">
+								<button size="mini" style="background-color: #5ac725; color: white; width: 90px;"
+									@click="dialogInputConfirm">
+									确认提交
+								</button>
+							</p>
+						</uni-col>
+					</uni-row>
+				</uni-card>
+			</uni-popup>
+		</view>
+
+
+		<view>
 			<div style="background-color: #f7f7f7;">
 
 				<view>
 					<div style="background-color: white;">
 						<view class="u-demo-block__content" style="margin-top: 20px; margin-bottom: 10px;">
-							<uni-row class="demo-uni-row" :gutter="gutter" :width="nvueWidth">
+							<uni-row class="demo-uni-row"  >
 								<uni-col :span="6">
 									<view style="margin: auto;">
 										<u-icon name="/static/pic/homeNote.svg" size="50px" @click="jumpToMyNote()">
@@ -41,7 +83,7 @@
 								<uni-col :span="6">
 									<view style="margin: auto;">
 										<u-icon name="/static/pic/personal_group.svg" size="50px" color="white"
-										@click="jumpToMyGroup()()">
+											@click="jumpToMyGroup()">
 										</u-icon>
 									</view>
 									<view style="margin: auto;">
@@ -142,7 +184,8 @@
 				user: {
 					avatar: "/static/pic/student.png",
 					uid: 1,
-					user_name: "",
+					name: "",
+					editNmae: "",
 				},
 				searchValue: "",
 				tabValue: 0,
@@ -162,23 +205,22 @@
 				header: {
 					'X-Token': myRequest.getToken()
 				},
-				
+
 				success: (res) => {
 					console.log(res)
 					if (res.statusCode == 200) {
 						this.user.avatar = "/static/pic/student.png";
-						this.user.user_name = res.data.user_name;
+						this.user.name = res.data.user_name;
+						this.user.editName = res.data.user_name;
 						this.user.uid = res.data.user_id;
-					}
-					else if (res.statusCode == 401) {
+					} else if (res.statusCode == 401) {
 						myRequest.redirectToLogin()
-					}
-					else {
+					} else {
 						myRequest.toast()
 					}
 				},
-				
-				fail: (res) => {					
+
+				fail: (res) => {
 					console.log(res)
 					myRequest.toast()
 				}
@@ -225,7 +267,29 @@
 				uni.navigateTo({
 					url: '/pages/personal/personalGroup'
 				})
-			}
+			},
+			
+			dialogInputConfirm() {
+				uni.showLoading({
+					title: '1秒后会关闭'
+				})
+			
+				setTimeout(() => {
+					uni.hideLoading()
+					this.user.name = this.user.editName
+					// 关闭窗口后，恢复默认内容
+					this.$refs.inputDialog.close()
+				}, 1000)
+			},
+			inputDialogToggle() {
+				this.$refs.inputDialog.open()
+			},
+			inputDialogClose() {
+				setTimeout(() => {
+					this.user.editName = this.user.name
+					this.$refs.inputDialog.close()
+				}, 100)
+			},
 
 
 		},
@@ -233,7 +297,6 @@
 </script>
 
 <style lang="scss">
-
 	.u-page {
 		padding: 0;
 

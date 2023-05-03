@@ -46,41 +46,39 @@
 			<!-- 输入框示例 -->
 			<uni-popup ref="inputDialog" type="dialog" :isMaskClick="false">
 				<uni-card>
-					<form :report-submit="true" @submit="formLogin">
-						<p style="text-align: center;">
-							编辑小组信息
-						</p>
-						<uni-section title="小组名" type="line">
-							<u-input type="text" placeholder="请输入小组名" v-model="group.editName" />
-						</uni-section>
-						<uni-section title="小组简介" type="line">
-							<u-input type="textarea" placeholder="请输入小组简介" custom-style="height: 300px;"
-								v-model="group.editIntroduction" />
-						</uni-section>
+					<p style="text-align: center;">
+						编辑小组信息
+					</p>
+					<uni-section title="小组名" type="line">
+						<u-input type="text" placeholder="请输入小组名" v-model="group.editName" />
+					</uni-section>
+					<uni-section title="小组简介" type="line">
+						<u-input type="textarea" placeholder="请输入小组简介" custom-style="height: 300px;"
+							v-model="group.editIntroduction" />
+					</uni-section>
 
-						<p style="margin-top: 20px;">
+					<p style="margin-top: 20px;">
 
-						</p>
+					</p>
 
-						<uni-row>
-							<uni-col :span="12">
-								<p style="text-align: center;">
-									<button size="mini" style="background-color: #00aaff; color: white; width: 90px;"
-										@click="inputDialogClose">
-										取消编辑
-									</button>
-								</p>
-							</uni-col>
-							<uni-col :span="12">
-								<p style="text-align: center;">
-									<button size="mini" style="background-color: #5ac725; color: white; width: 90px;"
-										@click="dialogInputConfirm">
-										确认提交
-									</button>
-								</p>
-							</uni-col>
-						</uni-row>
-					</form>
+					<uni-row>
+						<uni-col :span="12">
+							<p style="text-align: center;">
+								<button size="mini" style="background-color: #00aaff; color: white; width: 90px;"
+									@click="inputDialogClose">
+									取消编辑
+								</button>
+							</p>
+						</uni-col>
+						<uni-col :span="12">
+							<p style="text-align: center;">
+								<button size="mini" style="background-color: #5ac725; color: white; width: 90px;"
+									@click="dialogInputConfirm">
+									确认提交
+								</button>
+							</p>
+						</uni-col>
+					</uni-row>
 				</uni-card>
 			</uni-popup>
 		</view>
@@ -196,12 +194,12 @@
 							<p style="text-align: center; margin-bottom: 10px;">
 								<button style="background-color: #5ac725; color: white;"
 									@click="invitationDialogToggle()">
-									生成邀请码
+									获取邀请码
 								</button>
 							</p>
 
 							<p style="text-align: center; margin-bottom: 10px;">
-								<button style="color: white;" type="warn" @click="deleteGroup">
+								<button style="color: white;" type="warn" @click="deleteGroupDialogToggle">
 									删除小组
 								</button>
 							</p>
@@ -247,7 +245,7 @@
 							邀请码
 						</p>
 						<p style="text-align: center;font-size: 20px; margin-bottom: 10px;">
-							{{this.invitation}}
+							{{invitation}}
 						</p>
 					</uni-card>
 				</uni-popup>
@@ -289,6 +287,41 @@
 			</view>
 
 			<view>
+				<uni-popup ref="deleteGroupDialog" type="dialog" :isMaskClick="false">
+					<uni-card>
+						<p style="text-align: center;font-size: 24px;margin-bottom: 20px;margin-top: 10px;"
+							class="shuhei">
+							您确定要删除小组吗
+						</p>
+						<p style="margin-top: 20px;width: 240px;">
+
+						</p>
+
+						<uni-row>
+							<uni-col :span="12">
+								<p style="text-align: center;">
+									<button size="mini" style="background-color: #00aaff; color: white; width: 90px;"
+										@click="deleteGroupDialogClose">
+										取消删除
+									</button>
+								</p>
+							</uni-col>
+
+							<uni-col :span="12">
+								<p style="text-align: center;">
+									<button size="mini" style="background-color: #e64340; color: white; width: 90px;"
+										@click="deleteGroupDialogConfirm">
+										确认删除
+									</button>
+								</p>
+							</uni-col>
+						</uni-row>
+					</uni-card>
+				</uni-popup>
+			</view>
+
+
+			<view>
 				<uni-popup ref="quitGroupDialog" type="dialog" :isMaskClick="false">
 					<uni-card>
 						<p style="text-align: center;font-size: 24px;margin-bottom: 20px;margin-top: 10px;"
@@ -308,7 +341,7 @@
 									</button>
 								</p>
 							</uni-col>
-							
+
 							<uni-col :span="12">
 								<p style="text-align: center;">
 									<button size="mini" style="background-color: #e64340; color: white; width: 90px;"
@@ -502,7 +535,6 @@
 			},
 
 			invitationDialogToggle() {
-				this.$refs.invitationDialog.open()
 				uni.request({
 					url: myRequest.interfaceUrl() + '/group/invitation/' + this.group.id,
 					method: 'GET',
@@ -512,8 +544,10 @@
 
 					success: (res) => {
 						console.log(res)
+						console.log(res.data)
 						if (res.statusCode == 200) {
 							this.invitation = res.data
+							console.log(this.invitation)
 						} else if (res.statusCode == 401) {
 							myRequest.redirectToLogin()
 						} else {
@@ -526,6 +560,7 @@
 						myRequest.toast()
 					}
 				})
+				this.$refs.invitationDialog.open()
 			},
 
 			addGroupDialogToggle() {
@@ -554,7 +589,7 @@
 						"invitation": this.addGroupCode
 					}
 					let option = {
-						"id" : this.group.id,
+						"id": this.group.id,
 					}
 					let that = this
 
@@ -599,12 +634,7 @@
 			},
 
 			quitGroupDialogConfirm() {
-				let uid = myRequest.getUID()
-				let data = {
-					"id": this.group.id,
-					"user_id": uid,
-				}
-				myRequest.request(api.study_group_remove(data), 'DELETE').then(
+				myRequest.request(api.study_group_quit(this.group.id), 'DELETE').then(
 					function(res) {
 						console.log(res)
 						if (res.statusCode == 200) {
@@ -634,8 +664,15 @@
 				)
 			},
 
+			deleteGroupDialogToggle() {
+				this.$refs.deleteGroupDialog.open()
+			},
 
-			deleteGroup() {
+			deleteGroupDialogClose() {
+				this.$refs.deleteGroupDialog.close()
+			},
+
+			deleteGroupDialogConfirm() {
 				myRequest.request(api.study_group_delete(this.group.id), 'DELETE').then(
 					function(res) {
 						console.log(res)
@@ -664,7 +701,8 @@
 						myRequest.toast()
 					}
 				)
-			}
+			},
+
 		},
 
 	}
