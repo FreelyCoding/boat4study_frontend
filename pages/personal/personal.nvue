@@ -41,7 +41,7 @@
 								<uni-col :span="6">
 									<view style="margin: auto;">
 										<u-icon name="/static/pic/personal_group.svg" size="50px" color="white"
-										@click="jumpToMyGroup()()">
+										@click="jumpToMyGroup()">
 										</u-icon>
 									</view>
 									<view style="margin: auto;">

@@ -381,7 +381,7 @@
 	}
 </script>
 
-<style>
+<style lang="scss">
 	.status-bar {
 		width: 100%;
 		position: sticky;

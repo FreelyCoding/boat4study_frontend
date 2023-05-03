@@ -1,13 +1,14 @@
 <template>
 	<view>
-		<uni-nav-bar title="学习小组详情" background-color="#00aaff" color="#FFFFFF" status-bar="true">
-			<block slot="left">
-				<view class="note-navbar">
-					<uni-icons type="left" color="#FFFFFF" size="18" @click="back()" />
-				</view>
-			</block>
-		</uni-nav-bar>
-
+		<view class="status-bar">
+			<uni-nav-bar title="学习小组详情" background-color="#00aaff" color="#FFFFFF" status-bar="true">
+				<block slot="left">
+					<view class="note-navbar">
+						<uni-icons type="left" color="#FFFFFF" size="18" @click="back()" />
+					</view>
+				</block>
+			</uni-nav-bar>
+		</view>
 
 		<div class="background-light-blue">
 			<view style="width: 90%; margin: auto; margin-top: 10px; margin-bottom: 10px;">
@@ -31,7 +32,7 @@
 						</view>
 						<view>
 							<p style="text-align: center; margin-top: 10px;" v-if="isAdministrator">
-								<button size="mini" style="background-color: #f9ae3d; color: white; width: 100px;"
+								<button size="mini" style="background-color: #f9ae3d; color: white;"
 									@click="inputDialogToggle">
 									编辑信息
 								</button>
@@ -193,45 +194,16 @@
 				<div style="background-color: #f7f7f7;">
 					<uni-card :isShadow="true" :border="true" padding="10px 0px 0px 0px" margin="0px 15px 10px 15px">
 						<view>
-							<p style="text-align: center; margin-bottom: 10px;">
+							<p style="text-align: center; margin-bottom: 10px;" v-if="this.isMember">
 								<button style="background-color: #5ac725; color: white;"
 									@click="invitationDialogToggle()">
 									生成邀请码
 								</button>
 							</p>
 
-							<p style="text-align: center; margin-bottom: 10px;">
+							<p style="text-align: center; margin-bottom: 10px;" v-if="this.isMember">
 								<button style="color: white;" type="warn" @click="deleteGroup">
 									删除小组
-								</button>
-							</p>
-						</view>
-					</uni-card>
-				</div>
-			</view>
-
-			<view v-else-if="isMember">
-				<div style="background-color: #f7f7f7;">
-					<uni-card :isShadow="true" :border="true" padding="10px 0px 0px 0px" margin="0px 15px 10px 15px">
-						<view>
-							<p style="text-align: center; margin-bottom: 10px;">
-								<button style="color: white;" type="warn" @click="quitGroupDialogToggle">
-									退出小组
-								</button>
-							</p>
-						</view>
-					</uni-card>
-				</div>
-			</view>
-
-			<view v-else-if="!isMember">
-				<div style="background-color: #f7f7f7;">
-					<uni-card :isShadow="true" :border="true" padding="10px 0px 0px 0px" margin="0px 15px 10px 15px">
-						<view>
-							<p style="text-align: center; margin-bottom: 10px;">
-								<button style="background-color: #5ac725;color: white;" type="warn"
-									@click="addGroupDialogToggle()">
-									加入小组
 								</button>
 							</p>
 						</view>
@@ -253,75 +225,33 @@
 				</uni-popup>
 			</view>
 
-			<view>
-				<uni-popup ref="addGroupDialog" type="dialog" :isMaskClick="false">
-					<uni-card>
-						<p style="text-align: center;font-size: 24px;margin-bottom: 20px;margin-top: 10px;"
-							class="shuhei">
-							请输入邀请码
-						</p>
-						<u-input class="tui-input" name="invitation" v-model="addGroupCode" />
-
-						<p style="margin-top: 20px;">
-
-						</p>
-
-						<uni-row>
-							<uni-col :span="12">
-								<p style="text-align: center;">
-									<button size="mini" style="background-color: #00aaff; color: white; width: 90px;"
-										@click="addGroupDialogClose">
-										取消输入
-									</button>
-								</p>
-							</uni-col>
-							<uni-col :span="12">
-								<p style="text-align: center;">
-									<button size="mini" style="background-color: #5ac725; color: white; width: 90px;"
-										@click="addGroupDialogInputConfirm">
-										确认提交
-									</button>
-								</p>
-							</uni-col>
-						</uni-row>
+			<view v-if="!isAdministrator && isMember">
+				<div style="background-color: #f7f7f7;">
+					<uni-card :isShadow="true" :border="true" padding="10px 0px 0px 0px" margin="0px 15px 10px 15px">
+						<view>
+							<p style="text-align: center; margin-bottom: 10px;" v-if="this.isMember">
+								<button style="color: white;" type="warn">
+									退出小组
+								</button>
+							</p>
+						</view>
 					</uni-card>
-				</uni-popup>
+				</div>
 			</view>
 
-			<view>
-				<uni-popup ref="quitGroupDialog" type="dialog" :isMaskClick="false">
-					<uni-card>
-						<p style="text-align: center;font-size: 24px;margin-bottom: 20px;margin-top: 10px;"
-							class="shuhei">
-							您确定要退出吗
-						</p>
-						<p style="margin-top: 20px;width: 240px;">
-
-						</p>
-
-						<uni-row>
-							<uni-col :span="12">
-								<p style="text-align: center;">
-									<button size="mini" style="background-color: #00aaff; color: white; width: 90px;"
-										@click="quitGroupDialogClose">
-										取消退出
-									</button>
-								</p>
-							</uni-col>
-							
-							<uni-col :span="12">
-								<p style="text-align: center;">
-									<button size="mini" style="background-color: #e64340; color: white; width: 90px;"
-										@click="quitGroupDialogConfirm">
-										确认退出
-									</button>
-								</p>
-							</uni-col>
-						</uni-row>
+			<view v-if="!isAdministrator && isMember">
+				<div style="background-color: #f7f7f7;">
+					<uni-card :isShadow="true" :border="true" padding="10px 0px 0px 0px" margin="0px 15px 10px 15px">
+						<view>
+							<p style="text-align: center; margin-bottom: 10px;" v-if="this.isMember">
+								<button style="color: white;" type="warn">
+									退出小组
+								</button>
+							</p>
+						</view>
 					</uni-card>
-				</uni-popup>
+				</div>
 			</view>
-
 
 		</view>
 
@@ -329,21 +259,14 @@
 </template>
 
 <script>
-	import form from '@/components/tui-validation/tui-validation.js'
-	import tuiButton from '@/components/tui-button/tui-button.vue'
-	import tuiIcon from '@/components/tui-icon/tui-icon.vue'
-	import tuiToast from '@/components/tui-toast/tui-toast.vue'
-
-	import util from '@/util/thor_utils/util.js'
 	import api from '@/common/api.js';
 	import myRequest from '../../common/request';
 	export default {
 		data() {
 			return {
-				isAdministrator: false,
+				isAdministrator: true,
 				isMember: false,
 				invitation: "abCd",
-				addGroupCode: "",
 				group: {
 					id: 1,
 					owner_id: 1,
@@ -459,8 +382,7 @@
 					}
 				})
 
-				console.log("member = " + this.isMember)
-				console.log("ad = " + this.isAdministrator)
+				console.log(this.isMember)
 			},
 			jumpToAllProblemSet() {
 				uni.navigateTo({
@@ -528,112 +450,6 @@
 				})
 			},
 
-			addGroupDialogToggle() {
-				this.$refs.addGroupDialog.open()
-			},
-
-			addGroupDialogClose() {
-				setTimeout(() => {
-					this.addGroupCode = ""
-					this.$refs.addGroupDialog.close()
-				}, 100)
-			},
-
-			addGroupDialogInputConfirm() {
-				uni.showLoading({
-					title: '验证中'
-				})
-
-				setTimeout(() => {
-					uni.hideLoading()
-					// 关闭窗口后，恢复默认内容
-					let uid = myRequest.getUID()
-					let data = {
-						"id": this.group.id,
-						"user_id": uid,
-						"invitation": this.addGroupCode
-					}
-					let option = {
-						"id" : this.group.id,
-					}
-					let that = this
-
-					myRequest.request(api.study_group_add(data), 'POST').then(
-						function(res) {
-							console.log(res)
-							if (res.statusCode == 200) {
-								myRequest.toast('加入成功', 1500, true)
-								setTimeout(() => {
-									uni.hideToast();
-									//关闭提示后刷新
-									that.refresh(option)
-								}, 1000)
-							} else if (res.statusCode == 401) {
-								myRequest.redirectToLogin()
-							} else if (res.statusCode == 403) {
-								myRequest.toast("请您再检查一遍邀请码~")
-							} else if (res.statusCode == 404) {
-								myRequest.toast("小组不存在~")
-							} else {
-								myRequest.toast("")
-							}
-						}
-					).catch(
-						function(res) {
-							console.log(res)
-							myRequest.toast()
-						}
-					)
-
-					this.addGroupCode = ""
-					this.$refs.addGroupDialog.close()
-				}, 500)
-			},
-
-			quitGroupDialogToggle() {
-				this.$refs.quitGroupDialog.open()
-			},
-
-			quitGroupDialogClose() {
-				this.$refs.quitGroupDialog.close()
-			},
-
-			quitGroupDialogConfirm() {
-				let uid = myRequest.getUID()
-				let data = {
-					"id": this.group.id,
-					"user_id": uid,
-				}
-				myRequest.request(api.study_group_remove(data), 'DELETE').then(
-					function(res) {
-						console.log(res)
-						if (res.statusCode == 200) {
-							myRequest.toast('退出成功', 1500, true)
-							setTimeout(() => {
-								uni.hideToast();
-								//关闭提示后跳转
-								uni.navigateBack({
-									delta: 1,
-								});
-							}, 1000)
-						} else if (res.statusCode == 401) {
-							myRequest.redirectToLogin()
-						} else if (res.statusCode == 403) {
-							myRequest.toast("您没有权限哦~")
-						} else if (res.statusCode == 404) {
-							myRequest.toast("小组不存在~")
-						} else {
-							myRequest.toast("")
-						}
-					}
-				).catch(
-					function(res) {
-						console.log(res)
-						myRequest.toast()
-					}
-				)
-			},
-
 
 			deleteGroup() {
 				myRequest.request(api.study_group_delete(this.group.id), 'DELETE').then(
@@ -672,6 +488,13 @@
 
 <style>
 	@import url('../homePage/homePage.css');
+	
+	.status-bar {
+		width: 100%;
+		position: sticky;
+		top: 0;
+		z-index: 10;
+	}
 
 	.background-light-blue {
 		background-color: #a8dbfb;
