@@ -237,6 +237,7 @@
 							if (res2.statusCode == 200) {
 								this.problem.push({
 									type: 0,
+									favorite: res2.data.problems[0].is_favorite,
 									is_multiple: res2.data.problems[0].is_multiple,
 									done: 0,
 									right: 0,
@@ -280,6 +281,7 @@
 							if (res2.statusCode == 200) {
 								this.problem.push({
 									type: 1,
+									favorite: res2.data.problems[0].is_favorite,
 									is_multiple: false,
 									done: 0,
 									right: 0,
@@ -316,6 +318,7 @@
 							if (res2.statusCode == 200) {
 								this.problem.push({
 									type: 2,
+									favorite: res2.data.problems[0].is_favorite,
 									is_multiple: false,
 									done: 0,
 									right: 0,
