@@ -59,22 +59,22 @@
 							v-model="group.editIntroduction" />
 					</uni-section>
 
-					<p style="margin-top: 20px;">
+					<p style="margin-top: 30px; width: 300px;">
 
 					</p>
 
 					<uni-row>
-						<uni-col :span="12">
+						<uni-col :span="11" :offset = "1">
 							<p style="text-align: center;">
-								<button size="mini" style="background-color: #00aaff; color: white; width: 90px;"
+								<button  style="background-color: #00aaff; color: white; width: 100px;"
 									@click="inputDialogClose">
 									取消编辑
 								</button>
 							</p>
 						</uni-col>
-						<uni-col :span="12">
+						<uni-col :span="12" :offset="3">
 							<p style="text-align: center;">
-								<button size="mini" style="background-color: #5ac725; color: white; width: 90px;"
+								<button style="background-color: #5ac725; color: white; width: 100px;"
 									@click="dialogInputConfirm">
 									确认提交
 								</button>
@@ -262,22 +262,22 @@
 						</p>
 						<u-input class="tui-input" name="invitation" v-model="addGroupCode" />
 
-						<p style="margin-top: 20px;">
+						<p style="margin-top: 20px; width: 240px;">
 
 						</p>
 
 						<uni-row>
-							<uni-col :span="12">
-								<p style="text-align: center;">
-									<button size="mini" style="background-color: #00aaff; color: white; width: 90px;"
+							<uni-col :span="7" >
+								<p>
+									<button style="background-color: #00aaff; color: white; width: 100px;"
 										@click="addGroupDialogClose">
 										取消输入
 									</button>
 								</p>
 							</uni-col>
-							<uni-col :span="12">
-								<p style="text-align: center;">
-									<button size="mini" style="background-color: #5ac725; color: white; width: 90px;"
+							<uni-col :span="10" :offset="7">
+								<p>
+									<button  style="background-color: #5ac725; color: white; width: 100px;"
 										@click="addGroupDialogInputConfirm">
 										确认提交
 									</button>
@@ -300,18 +300,18 @@
 						</p>
 
 						<uni-row>
-							<uni-col :span="12">
-								<p style="text-align: center;">
-									<button size="mini" style="background-color: #00aaff; color: white; width: 90px;"
+							<uni-col :span="7" >
+								<p style="text-align: center; margin-bottom: 10px;">
+									<button  style="background-color: #00aaff; color: white; width: 100px;"
 										@click="deleteGroupDialogClose">
 										取消删除
 									</button>
 								</p>
 							</uni-col>
 
-							<uni-col :span="12">
-								<p style="text-align: center;">
-									<button size="mini" style="background-color: #e64340; color: white; width: 90px;"
+							<uni-col :span="10" :offset="7">
+								<p style="text-align: center; margin-bottom: 10px;">
+									<button  style="background-color: #e64340; color: white; width: 100px;"
 										@click="deleteGroupDialogConfirm">
 										确认删除
 									</button>
@@ -377,7 +377,7 @@
 			return {
 				isAdministrator: false,
 				isMember: false,
-				invitation: "abCd",
+				invitation: "abcd",
 				addGroupCode: "",
 				group: {
 					id: 1,
@@ -451,6 +451,32 @@
 							} else {
 								this.isAdministrator = false;
 							}
+							if (this.isAdministrator) {
+								uni.request({
+									url: myRequest.interfaceUrl() + '/group/invitation/' + this.group
+										.id,
+									method: 'GET',
+									header: {
+										'X-Token': myRequest.getToken()
+									},
+
+									success: (res) => {
+										console.log("invitation = " + res)
+										if (res.statusCode == 200) {
+											this.invitation = res.data
+										} else if (res.statusCode == 401) {
+											myRequest.redirectToLogin()
+										} else {
+											myRequest.toast()
+										}
+									},
+
+									fail: (res) => {
+										console.log(res)
+										myRequest.toast()
+									}
+								})
+							}
 						} else if (res.statusCode == 401) {
 							myRequest.redirectToLogin()
 						} else {
@@ -463,6 +489,7 @@
 						myRequest.toast()
 					}
 				})
+
 
 				uni.request({
 					url: myRequest.interfaceUrl() + '/group/all_user/' + this.group.id,
@@ -513,17 +540,56 @@
 				})
 			},
 			dialogInputConfirm() {
-				uni.showLoading({
-					title: '1秒后会关闭'
+				let model = {
+					"description": this.group.editIntroduction,
+					"invitation": this.invitation,
+					"name": this.group.editName
+				}
+				let that = this
+				let option = {
+					"id": this.group.id,
+				}
+
+				
+				uni.request({
+					url: myRequest.interfaceUrl() + '/group/update/' + this.group.id,
+					method: 'PUT',
+					data: model,
+					header: {
+						'X-Token': myRequest.getToken()
+					},
+				
+					success: (res) => {
+						console.log(res)
+						if (res.statusCode == 200) {
+							myRequest.toast('编辑成功', 1500, true)
+							setTimeout(() => {
+								uni.hideToast();
+								//关闭提示后刷新
+								that.refresh(option)
+							}, 1000)
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else {
+							myRequest.toast()
+						}
+					},
+				
+					fail: (res) => {
+						console.log(res)
+						myRequest.toast()
+					}
 				})
 
-				setTimeout(() => {
-					uni.hideLoading()
+
+				this.$refs.inputDialog.close()
+				
+				/*setTimeout(() => {
 					this.group.introduction = this.group.editIntroduction
 					this.group.name = this.group.editName
 					// 关闭窗口后，恢复默认内容
-					this.$refs.inputDialog.close()
-				}, 1000)
+
+				}, 500)*/
 			},
 			inputDialogToggle() {
 				this.$refs.inputDialog.open()
@@ -545,13 +611,14 @@
 					},
 
 					success: (res) => {
-						console.log(res)
-						console.log(res.data)
 						if (res.statusCode == 200) {
 							this.invitation = res.data
-							console.log(this.invitation)
 						} else if (res.statusCode == 401) {
 							myRequest.redirectToLogin()
+						} else if (res.statusCode == 403) {
+							myRequest.toast("您没有权限哦~")
+						} else if (res.statusCode == 404) {
+							myRequest.toast("小组不存在~")
 						} else {
 							myRequest.toast()
 						}
@@ -636,6 +703,10 @@
 			},
 
 			quitGroupDialogConfirm() {
+				let that = this
+				let option = {
+					"id": this.group.id,
+				}
 				myRequest.request(api.study_group_quit(this.group.id), 'DELETE').then(
 					function(res) {
 						console.log(res)
@@ -644,9 +715,7 @@
 							setTimeout(() => {
 								uni.hideToast();
 								//关闭提示后跳转
-								uni.navigateBack({
-									delta: 1,
-								});
+								that.refresh(option)
 							}, 1000)
 						} else if (res.statusCode == 401) {
 							myRequest.redirectToLogin()
@@ -658,12 +727,15 @@
 							myRequest.toast("")
 						}
 					}
+
 				).catch(
 					function(res) {
 						console.log(res)
 						myRequest.toast()
 					}
 				)
+
+				this.$refs.quitGroupDialog.close()
 			},
 
 			deleteGroupDialogToggle() {

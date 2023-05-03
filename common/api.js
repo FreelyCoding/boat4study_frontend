@@ -248,6 +248,10 @@ export default {
 		return api + "/" + id
 	},
 	
+	study_group_update(id) {
+		let api = "/group/update"
+		return api + "/" + id
+	},
 	
 	//user
 	user_updatae(data) {
