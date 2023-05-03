@@ -262,6 +262,35 @@ export default {
 	logout() {
 		let api = "/logout"
 		return api
+	},
+	
+	user_wrong_record() {
+		let api = "/user/wrong_record"
+		return api
+	},
+	
+	//special
+	wrong_problem_set() {
+		let api = "/special/wrong_problem_set"
+		return api
+	},
+	
+	favorite_problem_set() {
+		let api = "/favorite_problem_set"
+		return api
+	},
+	
+	
+	//problemSet
+	problem_set_contains(id) {
+		let api = "/problem_set/all"
+		return api + "?contain=" + id
+	},
+	
+	problem_set_wrong(id) {
+		let api = "/problem_set/all_problem"
+		return api + "/" + id + "?iswrong=true"
 	}
+	
 
 }
