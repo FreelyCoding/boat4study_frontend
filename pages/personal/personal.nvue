@@ -6,11 +6,11 @@
 					<uni-row>
 						<uni-col :span="8">
 							<view>
-								<p style="text-align: center;" >
-									<image style="width: 100px; height: 100px; background-color: #00aaff;" mode="aspectFill"
-										:src="user.avatar"></image>
+								<p style="text-align: center;">
+									<image style="width: 100px; height: 100px; background-color: #00aaff;"
+										mode="aspectFill" :src="user.avatar"></image>
 								</p>
-						
+
 							</view>
 
 						</uni-col>
@@ -70,7 +70,7 @@
 				<view>
 					<div style="background-color: white;">
 						<view class="u-demo-block__content" style="margin-top: 20px; margin-bottom: 10px;">
-							<uni-row class="demo-uni-row"  >
+							<uni-row class="demo-uni-row">
 								<uni-col :span="6">
 									<view style="margin: auto;">
 										<u-icon name="/static/pic/homeNote.svg" size="50px" @click="jumpToMyNote()">
@@ -171,8 +171,40 @@
 			</div>
 		</view>
 
+		
+		<view style="margin-top: 80px;">
+		
+			<uni-card padding="10px 0px 0px 0px" margin="0px 15px 10px 15px">
+				<uni-row>
+					<uni-col :span="12">
+						<p style="text-align: center; margin-bottom: 10px;">
+							<button style="background-color: #00aaff;color: white; width: 150px;" type="warn"
+								@click="inputDialogToggle()">
+								编辑个人信息
+							</button>
+						</p>
+					</uni-col>
+					
+					<uni-col :span="12">
+						<p style="text-align: center; margin-bottom: 10px; ">
+							<button style="color: white; width: 150px;" type="warn"
+								@click="logout()">
+								退出登录
+							</button>
+						</p>
+					</uni-col>
+				</uni-row>
+				
+			</uni-card>
+		
+		
+		
+		</view>
+		
 
 	</view>
+
+
 </template>
 
 <script>
@@ -268,18 +300,22 @@
 					url: '/pages/personal/personalGroup'
 				})
 			},
-			
+
 			dialogInputConfirm() {
-				uni.showLoading({
-					title: '1秒后会关闭'
-				})
-			
 				setTimeout(() => {
-					uni.hideLoading()
+					
+					
+					
+					myRequest.toast('修改成功', 1500, true)
+					setTimeout(() => {
+						uni.hideToast();
+						//关闭提示后刷新
+						that.refresh(option)
+					}, 1000)
 					this.user.name = this.user.editName
 					// 关闭窗口后，恢复默认内容
 					this.$refs.inputDialog.close()
-				}, 1000)
+				}, 500)
 			},
 			inputDialogToggle() {
 				this.$refs.inputDialog.open()
