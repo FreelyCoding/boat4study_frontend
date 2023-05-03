@@ -1,6 +1,6 @@
 <template>
 	<view class="box">
-		<view>
+		<view class="status-bar">
 			<uni-nav-bar title="学习小组" background-color="#00aaff" color="#FFFFFF" status-bar="true">
 				<block slot="left">
 					<view class="note-navbar">

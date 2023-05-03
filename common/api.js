@@ -241,7 +241,11 @@ export default {
 	study_group_remove(data) {
 		let api = "/group/remove"
 		return api + "/" + data.id + "?user_id=" + data.user_id
-		
+	},
+	
+	study_group_quit(id) {
+		let api = "/group/quit"
+		return api + "/" + id
 	}
 
 }
