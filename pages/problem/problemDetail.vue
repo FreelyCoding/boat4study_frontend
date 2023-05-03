@@ -512,9 +512,6 @@
 	}
 	.problem_answer_box {
 		font-size: 16px;
-		p {
-			margin-bottom: 5px;
-		}
 	}
 	
 </style>

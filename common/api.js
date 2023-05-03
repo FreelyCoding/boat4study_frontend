@@ -246,6 +246,14 @@ export default {
 	study_group_quit(id) {
 		let api = "/group/quit"
 		return api + "/" + id
+	},
+	
+	
+	
+	
+	//user
+	user_updatae(data) {
+		
 	}
 
 }
