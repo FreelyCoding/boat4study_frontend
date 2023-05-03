@@ -225,6 +225,17 @@ export default {
 	study_group_invitation(id) {
 		let api = "/group/invitation";
 		return api + "/" + id;
+	},
+	
+	study_group_add(data) {
+		let api = "/group/add"
+		return api + "/" + data.id + "?user_id=" + data.user_id + "&invitation=" + data.invitation
+	},
+	
+	study_group_remove(data) {
+		let api = "/group/remove"
+		return api + "/" + data.id + "?user_id=" + data.user_id
+		
 	}
 
 }
