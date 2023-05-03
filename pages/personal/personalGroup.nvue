@@ -6,14 +6,13 @@
 					<uni-icons type="left" color="#FFFFFF" size="18" @click="back" />
 				</view>
 			</block>
-		</uni-nav-bar>	
-		
+		</uni-nav-bar>
+
 		<view v-if="groups && groups.length != 0" style="margin-top: 20px;">
 			<view v-for="(item, index) in groups" :key="index">
-				<uni-card  :title="item.name" :extra="'创建于' + item.create_time" :thumbnail="item.pic"
-					@click="cardClick(item)"
-					isShadow border padding="15px 5px 15px 5px"
-					margin="0px 15px 15px 15px" style="border-radius: 10px;">
+				<uni-card :title="item.name" :extra="'创建于' + item.create_time" :thumbnail="item.pic"
+					@click="cardClick(item)" isShadow border padding="15px 5px 15px 5px" margin="0px 15px 15px 15px"
+					style="border-radius: 10px;">
 					<text class="uni-body">{{item.description}}</text>
 				</uni-card>
 			</view>
@@ -73,7 +72,7 @@
 					url: '/pages/StudyGroup/StudyGroupCreate'
 				})
 			},
-			
+
 
 			back() {
 				uni.navigateBack()
@@ -93,15 +92,17 @@
 					success: (res) => {
 						console.log(res)
 						if (res.statusCode == 200) {
-							for (var i = 0; i < res.data.group.length; i++) {
-								var t = {
-									description: res.data.group[i].description,
-									name: res.data.group[i].name,
-									pic: "/static/pic/personal_group.svg",
-									create_time: res.data.group[i].created_at.slice(0, 10),
-									id: res.data.group[i].id,
+							if (res.data.group && res.data.group.length > 0) {
+								for (var i = 0; i < res.data.group.length; i++) {
+									var t = {
+										description: res.data.group[i].description,
+										name: res.data.group[i].name,
+										pic: "/static/pic/personal_group.svg",
+										create_time: res.data.group[i].created_at.slice(0, 10),
+										id: res.data.group[i].id,
+									}
+									this.groups.push(t);
 								}
-								this.groups.push(t);
 							}
 						} else if (res.statusCode == 401) {
 							myRequest.redirectToLogin()

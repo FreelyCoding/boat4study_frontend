@@ -3,37 +3,37 @@
 		<uni-nav-bar title="题目收藏" background-color="#00aaff" color="#FFFFFF" status-bar="true">
 			<block slot="left">
 				<view class="note-navbar">
-					<uni-icons type="left" color="#FFFFFF" size="18" @click="back()"/>
+					<uni-icons type="left" color="#FFFFFF" size="18" @click="back()" />
 				</view>
 			</block>
 		</uni-nav-bar>
-		<view v-if="this.wrongProblem.length != 0">
+		<view v-if="this.ps.length != 0">
 			<view class="u-demo-block">
 				<u-list customStyle="width: 94%; margin: auto; margin-top: 15px;">
-					<u-list-item v-for="(item, index) in wrongProblem" :key="index">
+					<u-list-item v-for="(item, index) in ps" :key="index">
 						<uni-card spacing="0" padding="0" margin="10px 0px 0px 0px">
 							<view>
 								<uni-row>
 									<uni-col :span="7">
 										<view>
 											<u-icon name="/static/pic/wrongProblem.svg" size="80px"
-											 customStyle="margin-top: 10px; margin-bottom:10px; margin-left: 10px"></u-icon>
+												customStyle="margin-top: 10px; margin-bottom:10px ; margin-left: 10px"></u-icon>
 										</view>
 									</uni-col>
 
 									<uni-col :span="11">
-										<div class="shuhei" style="padding-top: 22px;" @click="jumpToPS()">
-											<p style="font-size: 24px;">{{item.problemSetName}}</p>
+										<div class="shuhei" style="padding-top: 22px;">
+											<p style="font-size: 24px;">{{item.name}}</p>
 										</div>
 										<div style="margin-top: 14px;font-size: 16px">
-											{{item.number}} 道题目
+											{{item.problem_count}} 道题目
 										</div>
 									</uni-col>
-									
+
 									<uni-col :span="5">
 										<view>
 											<u-button text="练习" :plain="true" color="#00aaff" shape="circle"
-												@click="jumpToProblemExam()"
+												@click="jumpToProblemSet(item.id)"
 												customStyle="margin: 30px 0px 20px 0px;"></u-button>
 										</view>
 									</uni-col>
@@ -46,10 +46,10 @@
 		</view>
 
 		<view v-else style="text-align: center;">
-			<image src="../../static/pic/note/no_note.png" style="margin: auto; margin-top: 30px;"></image>
+			<image src="../../static/pic/note/no_note.png"
+				style="margin: auto; margin-top: 30px; height: 200px; width: 200px;"></image>
 			<p style="font-size: 20px;margin-top: 30px;">暂无错题</p>
 		</view>
-
 
 
 	</view>
@@ -58,33 +58,55 @@
 <script>
 	import note from '@/pages/note/note.vue'
 	import index from '@/pages/note/index.vue'
-	
+	import myRequest from '../../common/request';
+	import api from '@/common/api.js';
 	export default {
 		data() {
 			return {
-				wrongProblem: [
-					{
-						problemSetName: "数据结构",
-						number: 3,
-					},
-					{
-						problemSetName: "航空航天概论",
-						number: 5,
-					},
-					
-				]
+				ps: [],
 			}
+		},
+		onShow() {
+			this.refresh()
 		},
 		methods: {
 			back() {
 				note.methods.back()
 			},
-			jumpToProblemExam() {
+			jumpToProblemSet(id) {
 				uni.navigateTo({
-					url: '/pages/problemExam/problemExam'
+					url: '/pages/problemSet/problemSetDetail?id=' + id 
+				})
+			},
+			refresh() {
+				myRequest.checkLogin()
+				uni.request({
+					url: myRequest.interfaceUrl() + '/special/favorite_problem_set',
+					method: 'GET',
+					header: {
+						'X-Token': myRequest.getToken()
+					},
+				
+					success: (res) => {
+						console.log(res)
+						this.ps = []
+						if (res.statusCode == 200) {
+							if (res.data.ProblemSets && res.data.ProblemSets.length > 0) {
+								this.ps = res.data.ProblemSets
+							}
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else {
+							myRequest.toast()
+						}
+					},
+				
+					fail: (res) => {
+						console.log(res)
+						myRequest.toast()
+					}
 				})
 			}
-			
 		}
 	}
 </script>
@@ -93,5 +115,4 @@
 	page {
 		background: #EDEDED;
 	}
-
 </style>
