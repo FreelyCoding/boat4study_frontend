@@ -175,7 +175,7 @@
 		<view style="margin-top: 80px;">
 			<uni-card padding="10px 0px 0px 0px" margin="0px 15px 10px 15px">
 				<p style="text-align: center; margin-bottom: 10px; ">
-					<button style="color: white;" type="warn" @click="logout()">
+					<button style="color: white;" type="warn" @click="logout">
 						退出登录
 					</button>
 				</p>
@@ -190,6 +190,7 @@
 
 <script>
 	import homePage from "@/pages/homePage/homePage"
+	import api from '@/common/api.js';
 	import myRequest from '../../common/request'
 	export default {
 		data() {
@@ -306,7 +307,7 @@
 			},
 
 			logout() {
-				myRequest.request(api.logouut(), 'GET').then(
+				myRequest.request(api.logout(), 'GET').then(
 					function(res) {
 						console.log(res)
 						if (res.statusCode == 200) {
@@ -314,9 +315,9 @@
 							setTimeout(() => {
 								uni.hideToast();
 								//关闭提示后跳转
-								uni.navigateBack({
-									delta: 1,
-								});
+								uni.reLaunch({
+									url: "/pages/login/login"
+								})
 							}, 1000)
 						} else {
 							myRequest.toast()

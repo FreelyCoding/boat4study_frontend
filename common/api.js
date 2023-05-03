@@ -253,7 +253,7 @@ export default {
 	user_updatae(data) {
 		let api = "/user/update"
 		return api
-	}
+	},
 	
 	logout() {
 		let api = "/logout"
