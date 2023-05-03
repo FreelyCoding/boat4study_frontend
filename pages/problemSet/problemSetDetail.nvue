@@ -143,7 +143,7 @@
 				<view class="practise-box-row">
 					<uni-row>
 						<uni-col :span="12">
-							<view class="practise-card">
+							<view class="practise-card" @click="jumpToRandomPractice()">
 								<uni-row>
 									<uni-col :span="18">
 										<view class="practise-card-title">
@@ -318,6 +318,11 @@
 
 		},
 		methods: {
+			jumpToRandomPractice() {
+				uni.navigateTo({
+					url: "/pages/problemExam/problemRandomExam?id=" + this.problem_set_id
+				})
+			},
 			jumpToProblemUpload() {
 				uni.navigateTo({
 					url: "/pages/problemSet/problemUpload?id=" + this.problem_set_id
