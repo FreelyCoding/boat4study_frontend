@@ -332,7 +332,7 @@
             "path" : "pages/StudyGroup/StudyGroupCreate",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+				"navigationStyle": "custom",
                 "enablePullDownRefresh": false
             }
             

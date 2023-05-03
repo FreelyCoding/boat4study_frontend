@@ -171,36 +171,17 @@
 			</div>
 		</view>
 
-		
+
 		<view style="margin-top: 80px;">
-		
 			<uni-card padding="10px 0px 0px 0px" margin="0px 15px 10px 15px">
-				<uni-row>
-					<uni-col :span="12">
-						<p style="text-align: center; margin-bottom: 10px;">
-							<button style="background-color: #00aaff;color: white; width: 150px;" type="warn"
-								@click="inputDialogToggle()">
-								编辑个人信息
-							</button>
-						</p>
-					</uni-col>
-					
-					<uni-col :span="12">
-						<p style="text-align: center; margin-bottom: 10px; ">
-							<button style="color: white; width: 150px;" type="warn"
-								@click="logout()">
-								退出登录
-							</button>
-						</p>
-					</uni-col>
-				</uni-row>
-				
+				<p style="text-align: center; margin-bottom: 10px; ">
+					<button style="color: white;" type="warn" @click="logout">
+						退出登录
+					</button>
+				</p>
 			</uni-card>
-		
-		
-		
 		</view>
-		
+
 
 	</view>
 
@@ -209,6 +190,7 @@
 
 <script>
 	import homePage from "@/pages/homePage/homePage"
+	import api from '@/common/api.js';
 	import myRequest from '../../common/request'
 	export default {
 		data() {
@@ -303,9 +285,6 @@
 
 			dialogInputConfirm() {
 				setTimeout(() => {
-					
-					
-					
 					myRequest.toast('修改成功', 1500, true)
 					setTimeout(() => {
 						uni.hideToast();
@@ -327,6 +306,30 @@
 				}, 100)
 			},
 
+			logout() {
+				myRequest.request(api.logout(), 'GET').then(
+					function(res) {
+						console.log(res)
+						if (res.statusCode == 200) {
+							myRequest.toast('已退出', 1500, true)
+							setTimeout(() => {
+								uni.hideToast();
+								//关闭提示后跳转
+								uni.reLaunch({
+									url: "/pages/login/login"
+								})
+							}, 1000)
+						} else {
+							myRequest.toast()
+						}
+					}
+				).catch(
+					function(res) {
+						console.log(res)
+						myRequest.toast()
+					}
+				)
+			}
 
 		},
 	}
