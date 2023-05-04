@@ -760,11 +760,19 @@
 						} else {
 							var is_public = true
 							
+							var problems = []
+							
+							for (var i = 0; i < this.relativeProblem.length; i ++) {
+								var item = this.relativeProblem[i]
+								problems.push(item.id)
+							}
+							
 							// TODO: 后续更改is_public字段
 							var data = JSON.stringify({
 								"content": html_content,
 								"title": this.title,
-								"is_public": is_public
+								"is_public": is_public,
+								"problems": problems
 							})
 
 							myRequest.request(`/note/create`, 'POST', data).then(
