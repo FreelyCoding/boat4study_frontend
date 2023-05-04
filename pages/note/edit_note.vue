@@ -147,36 +147,43 @@
 					}"
 					scroll-y="true"
 				>
+					
+					<view v-if="problemSet.length > 0">
 				
-					<u-list customStyle="width: 94%; margin: auto; margin-top: 15px;">
-						<u-list-item v-for="(item, index) in problemSet" :key="index">
-							<uni-card spacing="0" padding="0" margin="10px 0px 0px 10px" 
-									@click="loadProblemList(item.id)">
-								<view>
-									<uni-row>
-										<uni-col :span="5" align="start">
-											<view>
-												<u-icon name="/static/pic/qb.svg" size="50px"></u-icon>
-											</view>
-										</uni-col>
-							
-										<uni-col :span="18" align="start">
-											<div class="shuhei" style="margin-bottom: 5px;">
-												<p style="font-size: 20px;">{{item.name}}</p>
-											</div>
-											<div style="font-size: 16px;">
-												{{item.problem_number}} 道题目
-												&ensp; &ensp;
-												{{item.created_at}}
-											</div>
-										</uni-col>
-									</uni-row>
-									<u-divider v-if="(index != Math.min(3,problemSet.length - 1))"> </u-divider>
-								</view>
-							</uni-card>
-							
-						</u-list-item>
-					</u-list>
+						<u-list customStyle="width: 94%; margin: auto; margin-top: 15px;">
+							<u-list-item v-for="(item, index) in problemSet" :key="index">
+								<uni-card spacing="0" padding="0" margin="10px 0px 0px 10px" 
+										@click="loadProblemList(item.id)">
+									<view>
+										<uni-row>
+											<uni-col :span="5" align="start">
+												<view>
+													<u-icon name="/static/pic/qb.svg" size="50px"></u-icon>
+												</view>
+											</uni-col>
+								
+											<uni-col :span="18" align="start">
+												<div class="shuhei" style="margin-bottom: 5px;">
+													<p style="font-size: 20px;">{{item.name}}</p>
+												</div>
+												<div style="font-size: 16px;">
+													{{item.problem_number}} 道题目
+													&ensp; &ensp;
+													{{item.created_at}}
+												</div>
+											</uni-col>
+										</uni-row>
+										<u-divider v-if="(index != Math.min(3,problemSet.length - 1))"> </u-divider>
+									</view>
+								</uni-card>
+								
+							</u-list-item>
+						</u-list>
+					</view>
+					
+					<view v-else>
+						<tui-no-data imgUrl="/static/pic/note/no_note.png">暂无题库</tui-no-data>
+					</view>
 				</scroll-view>
 			</u-popup>
 			
@@ -200,50 +207,58 @@
 					scroll-y="true"
 				>
 					
-					<u-list customStyle="width: 94%; margin: auto; margin-top: 25px;">
-						<u-list-item v-for="(item, index) in problemList" :key="index">
-							<uni-card spacing="0" padding="0" margin="10px 0px 0px 10px" 
-								@click="select(item)">
-								<view>
-									<uni-row>
-										<uni-col :span="6" align="start">
-											<uni-tag text="选择题" type="primary" customStyle="background-color: #00aaff"
-												v-if="item.type===0" />
-											<uni-tag text="填空题" type="primary" customStyle="background-color: #00aaff"
-												v-if="item.type===1" />
-											<uni-tag text="判断题" type="primary" customStyle="background-color: #00aaff"
-												v-if="item.type===2" />
-										</uni-col>
-										<uni-col :span="14" align="start">
-											<div class="shuhei problem-title" style="margin-bottom: 5px;">
-												<p style="font-size: 20px;">{{item.description}}</p>
-											</div>
-										</uni-col>
-										<uni-col :span="4" align="start">
-											<u-icon name="/static/pic/problemSet/fxxz.svg" size="25px" v-if="item.selected === 1"></u-icon>
-											<u-icon name="/static/pic/problemSet/fxwxz.svg" size="25px" v-if="item.selected === 0"></u-icon>
-										</uni-col>
-									</uni-row>
-									<u-divider> </u-divider>
-								</view>
-							</uni-card>
-				
-						</u-list-item>
-						
-						<u-list-item style="margin-top: 15px; margin-bottom: 15px;">
-							<u-row>
-								<!-- <u-col span="4"></u-col> -->
-								<u-col span="3" offset="2">
-									<u-button type="primary" text="添加" @click="addToRelativeProblem"></u-button>
-								</u-col>
-								<u-col span="3" offset="2">
-									<u-button type="success" text="全选" @click="selectAll"></u-button>
-								</u-col>
-							</u-row>
-						</u-list-item>
-						
+					<view v-if="problemList.length > 0">
 					
-					</u-list>
+						<u-list customStyle="width: 94%; margin: auto; margin-top: 25px;">
+							<u-list-item v-for="(item, index) in problemList" :key="index">
+								<uni-card spacing="0" padding="0" margin="10px 0px 0px 10px" 
+									@click="select(item)">
+									<view>
+										<uni-row>
+											<uni-col :span="6" align="start">
+												<uni-tag text="选择题" type="primary" customStyle="background-color: #00aaff"
+													v-if="item.type===0" />
+												<uni-tag text="填空题" type="primary" customStyle="background-color: #00aaff"
+													v-if="item.type===1" />
+												<uni-tag text="判断题" type="primary" customStyle="background-color: #00aaff"
+													v-if="item.type===2" />
+											</uni-col>
+											<uni-col :span="14" align="start">
+												<div class="shuhei problem-title" style="margin-bottom: 5px;">
+													<p style="font-size: 20px;">{{item.description}}</p>
+												</div>
+											</uni-col>
+											<uni-col :span="4" align="start">
+												<u-icon name="/static/pic/problemSet/fxxz.svg" size="25px" v-if="item.selected === 1"></u-icon>
+												<u-icon name="/static/pic/problemSet/fxwxz.svg" size="25px" v-if="item.selected === 0"></u-icon>
+											</uni-col>
+										</uni-row>
+										<u-divider> </u-divider>
+									</view>
+								</uni-card>
+					
+							</u-list-item>
+							
+							<u-list-item style="margin-top: 15px; margin-bottom: 15px;">
+								<u-row>
+									<!-- <u-col span="4"></u-col> -->
+									<u-col span="3" offset="2">
+										<u-button type="primary" text="添加" @click="addToRelativeProblem"></u-button>
+									</u-col>
+									<u-col span="3" offset="2">
+										<u-button type="success" text="全选" @click="selectAll"></u-button>
+									</u-col>
+								</u-row>
+							</u-list-item>
+							
+						
+						</u-list>
+					</view>
+					
+					<view v-else>
+						<tui-no-data imgUrl="/static/pic/note/no_note.png">暂无题目</tui-no-data>
+					</view>
+					
 				</scroll-view>
 			</u-popup>
 			
@@ -280,36 +295,44 @@
 								</u-row>
 							</u-list-item>
 							
-							<u-list-item v-for="(item, index) in relativeProblem" :key="index">
-								<uni-card spacing="0" padding="0" margin="10px 0px 0px 10px" 
-									@click="select(item)">
-									<view>
-										<uni-row>
-											<uni-col :span="6" align="start">
-												<uni-tag text="选择题" type="primary" customStyle="background-color: #00aaff"
-													v-if="item.type===0" />
-												<uni-tag text="填空题" type="primary" customStyle="background-color: #00aaff"
-													v-if="item.type===1" />
-												<uni-tag text="判断题" type="primary" customStyle="background-color: #00aaff"
-													v-if="item.type===2" />
-											</uni-col>
-											<uni-col :span="12" align="start">
-												<div class="shuhei problem-title" style="margin-bottom: 5px;">
-													<p style="font-size: 20px;">{{item.description}}</p>
-												</div>
-											</uni-col>
+							<view v-if="relativeProblem.length > 0">
+								
+								<u-list-item v-for="(item, index) in relativeProblem" :key="index">
+									<uni-card spacing="0" padding="0" margin="10px 0px 0px 10px" 
+										@click="select(item)">
+										<view>
+											<uni-row>
+												<uni-col :span="6" align="start">
+													<uni-tag text="选择题" type="primary" customStyle="background-color: #00aaff"
+														v-if="item.type===0" />
+													<uni-tag text="填空题" type="primary" customStyle="background-color: #00aaff"
+														v-if="item.type===1" />
+													<uni-tag text="判断题" type="primary" customStyle="background-color: #00aaff"
+														v-if="item.type===2" />
+												</uni-col>
+												<uni-col :span="12" align="start">
+													<div class="shuhei problem-title" style="margin-bottom: 5px;">
+														<p style="font-size: 20px;">{{item.description}}</p>
+													</div>
+												</uni-col>
+												
+												<uni-col span="4" align="start">
+													<i-icon name="delete-bin-fill" color="red" :size="15" style="float: right;" @click="removeRelativeProblem(item, index)"></i-icon>
+												</uni-col>
 											
-											<uni-col span="4" align="start">
-												<i-icon name="delete-bin-fill" color="red" :size="15" style="float: right;" @click="removeRelativeProblem(item, index)"></i-icon>
-											</uni-col>
-										
-										</uni-row>
-										<u-divider> </u-divider>
-									</view>
-								</uni-card>
-										
-							</u-list-item>
+											</uni-row>
+											<u-divider> </u-divider>
+										</view>
+									</uni-card>
+											
+								</u-list-item>
+							</view>
 							
+							<u-list-item v-else style="text-align: center;">
+								<image src="../../static/pic/note/no_note.png"
+									style="margin: auto; margin-top: 30px; height: 150px; width: 150px;"></image>
+								<p style="font-size: 20px; margin-top: 30px;">暂无题目</p>
+							</u-list-item>
 						</u-list>
 					</scroll-view>
 					
@@ -325,6 +348,7 @@
 	import tuiModal from '@/components/tui-modal/tui-modal.vue';
 	import tuiBubblePopup from '@/components/tui-bubble-popup/tui-bubble-popup.vue';
 	import tRtPopup from '@/components/t-rt-popup/t-rt-popup';
+	import tuiNoData from '@/components/tui-no-data/tui-no-data.vue'
 
 	export default {
 		components: {
