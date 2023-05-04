@@ -18,15 +18,44 @@
 					</view>
 				</block>-->
 			</uni-nav-bar>
-
 		</view>
+		
 
 		<view class="container">
+			<!--作者信息, 笔记创建时间等信息-->
+			
 			<view class="title_wrapper">
 				<textarea class="title" :maxlength="title_maxlength" :value="title" disabled="true"></textarea>
 			</view>
 
 			<!--分界线-->
+			<u-line></u-line>
+
+			<view>
+				<u-row>
+					<u-col :span="1.6">
+						<u-avatar :src="this.authorInfo.avatar" style="margin-left: 15px; display: inline;">
+						</u-avatar>
+						
+					</u-col>
+					
+					<u-col :span="4">
+						<view>
+							<text> {{ this.authorInfo.nickName }} </text>
+						</view>
+						
+					</u-col>
+					
+					<u-col :span="6.4">
+						<view style="display: flex; justify-content: flex-end; margin-right: 15px;">
+							<text>{{ this.created_at }}</text>
+							
+						</view>
+						
+					</u-col>
+				</u-row>
+			</view>
+			
 			<u-line></u-line>
 
 			<!--笔记内容-->
@@ -279,6 +308,13 @@
 				like_index: 2, 
 				star_index: 3,
 
+				authorInfo: {
+					avatar: null,
+					nickName: null
+				},
+				
+				created_at: null,
+
 				fabContent: [
 					{
 						iconPath: '/static/pic/note/delete-bin-line.png',
@@ -361,10 +397,6 @@
 					}
 					
 				})
-			},
-			
-			addRelativeProblem() {
-				
 			},
 			
 			selectAll() {
@@ -687,6 +719,7 @@
 									this.title = data.title;
 									this.note_html = data.content;
 									this.note_id = data.id;
+									this.created_at = data.created_at.slice(0, 10)
 									
 									if (data.is_liked) {
 										this.fabContent[this.like_index].active = true
@@ -706,6 +739,8 @@
 									this.editorCtx.setContents({
 										html: this.note_html
 									})
+									
+									this.loadAuthorInfo(data.user_id)
 									
 									this.getRelativeProblem()
 								}
@@ -843,6 +878,41 @@
 					})
 				}
 			},
+			
+			loadAuthorInfo(userId) {
+				uni.request({
+					url: myRequest.interfaceUrl() + `/user/info/${userId}`,
+					method: 'GET',
+					header: {
+						'X-Token': myRequest.getToken()
+					},
+					
+					success: res => {
+						if (res.statusCode == 200) {
+							var data = res.data
+							this.authorInfo.avatar = myRequest.imageUrl() + '/public/' + data.avatar_path
+							this.authorInfo.nickName = data.nick_name
+							
+							console.log('avatar')
+							console.log(this.authorInfo.avatar)
+						}
+						else if (res.statusCode == 401) {
+							myRequest.toast('请先登录')
+							uni.redirectTo({
+								url: '/pages/login/login'
+							})
+						}
+						else {
+							console.log('wrong')
+							myRequest.toast()
+						}
+					},
+					
+					fail: res => {
+						myRequest.toast()
+					}
+				})
+			}
 			
 		},
 
