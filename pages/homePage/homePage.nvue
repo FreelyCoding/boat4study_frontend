@@ -77,9 +77,9 @@
 									<view>
 										<text class="note-title">{{item.note_title}}</text>
 
-										<uni-row v-if="item.pic" style="margin-top: 15px; height:90px;" >
+										<uni-row v-if="item.pic" style="margin-top: 15px;" >
 											<uni-col :span="12">
-												<view>
+												<view style=" height:90px;">
 													<p class="note-content">
 														{{item.note_content ? item.note_content : "..."}}
 													</p>
@@ -87,16 +87,16 @@
 											</uni-col>
 											<uni-col :offset="3" :span="9">
 												<view>
-													<u--image :src="item.pic" width="250rpx" height="180rpx"
+													<u--image :src="item.pic" width="250rpx" height="160rpx"
 														radius="15"></u--image>
 												</view>
 											</uni-col>
 										</uni-row>
 
-										<uni-row v-else style="margin-top: 15px;  height: 90px;">
+										<uni-row v-else style="margin-top: 15px; ">
 											<uni-col :span="24">
-												<view>
-													<p class="note-content"> {{item.note_content}}</p>
+												<view style=" height:90px;">
+													<p class="note-content" > {{item.note_content}}</p>
 												</view>
 											</uni-col>
 										</uni-row>
