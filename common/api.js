@@ -5,6 +5,14 @@ const {
 export const fetchMenu = (params, config = {}) => http.post('/ebapi/public_api/index', params, config)
 export default {
 	
+	wrong_record_create(id) {
+		return "/wrong_record/create/" + id;
+	},
+	wrong_record_delete(id) {
+		return "/wrong_record/delete/" + id;
+	},
+	
+	
 	problem_set_migrate_problem(set_id, problem_id) {
 		let api = "/problem_set/migrate/" + set_id + "?problem_id=" + problem_id;
 		return api;
@@ -206,9 +214,16 @@ export default {
 			api += "?is_favorite=" + params.is_favorite;
 			if (params.problem_type_id != null) {
 				api += "&problem_type_id=" + params.problem_type_id;
+			} else if (params.is_wrong != null) {
+				api += "&is_wrong=" + params.is_wrong;
 			}
 		} else if (params.problem_type_id != null) {
 			api += "?problem_type_id=" + params.problem_type_id;
+			if (params.is_wrong != null) {
+				api += "&is_wrong=" + params.is_wrong;
+			}
+		} else if (params.is_wrong != null) {
+			api += "?is_wrong=" + params.is_wrong;
 		}
 		return api;
 	},
@@ -262,6 +277,35 @@ export default {
 	logout() {
 		let api = "/logout"
 		return api
+	},
+	
+	user_wrong_record() {
+		let api = "/user/wrong_record"
+		return api
+	},
+	
+	//special
+	wrong_problem_set() {
+		let api = "/special/wrong_problem_set"
+		return api
+	},
+	
+	favorite_problem_set() {
+		let api = "/favorite_problem_set"
+		return api
+	},
+	
+	
+	//problemSet
+	problem_set_contains(id) {
+		let api = "/problem_set/all"
+		return api + "?contain=" + id
+	},
+	
+	problem_set_wrong(id) {
+		let api = "/problem_set/all_problem"
+		return api + "/" + id + "?iswrong=true"
 	}
+	
 
 }

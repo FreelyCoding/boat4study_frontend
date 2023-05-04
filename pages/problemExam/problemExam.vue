@@ -16,15 +16,31 @@
 				<uni-pagination :show-icon="true" :total="problem_id_list.length" pageSize="1" v-model="cur_page" @change="load_next_pro()"/>
 			</view>
 
-			<view class="problem_title">
-				<uni-tag text="单选题" type="primary" customStyle="background-color: #00aaff"
-					v-if="problem[cur_page-1].type===0 && problem[cur_page-1].is_multiple === false" />
-				<uni-tag text="多选题" type="primary" customStyle="background-color: #00aaff"
-					v-if="problem[cur_page-1].type===0 && problem[cur_page-1].is_multiple === true" />
-				<uni-tag text="填空题" type="primary" customStyle="background-color: #00aaff"
-					v-if="problem[cur_page-1].type===1" />
-				<uni-tag text="判断题" type="primary" customStyle="background-color: #00aaff"
-					v-if="problem[cur_page-1].type===2" />
+			<view class="problem_title" align="start">
+				<uni-row>
+					<uni-col span="12">
+						<uni-tag text="单选题" type="primary" class="tag-pro_type"
+							v-if="problem[cur_page-1].type===0 && problem[cur_page-1].is_multiple === false" />
+						<uni-tag text="多选题" type="primary" class="tag-pro_type"
+							v-if="problem[cur_page-1].type===0 && problem[cur_page-1].is_multiple === true" />
+						<uni-tag text="填空题" type="primary" class="tag-pro_type"
+							v-if="problem[cur_page-1].type===1" />
+						<uni-tag text="判断题" type="primary" class="tag-pro_type"
+							v-if="problem[cur_page-1].type===2" />
+					</uni-col>
+					<uni-col span="12" align="end" >
+						<view style="text-align: right;">
+							<uni-tag text="收藏" type="primary" class="tag-unfav"
+							 custom-style="font-size: 16px;background-color: #e8e8e8;color: #000000;border: 0px;"
+							@click="fav_pro(cur_page-1)"
+								v-if="!problem[cur_page-1].favorite" />
+							<uni-tag text="已收藏" type="primary" class="tag-fav" 
+							 custom-style="background-color: #f9ae3d;font-size: 16px;border: 0px;"
+							@click="unfav_pro(cur_page-1)"
+								v-if="problem[cur_page-1].favorite" />
+						</view>
+					</uni-col>
+				</uni-row>
 			</view>
 
 			<view class="problem_content">
@@ -213,6 +229,44 @@
 			radioChange(n) {
 				console.log('radioChange', n);
 			},
+			
+			fav_pro(index) {
+				myRequest.request(api.problem_favorite(this.problem_id_list[index].id), 'POST', {}).then(
+					function(res) {
+						console.log(res)
+						if (res.statusCode == 200) {
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else {
+							myRequest.toast()
+						}
+					}
+				).catch(
+					function(res) {
+						console.log(res)
+						myRequest.toast()
+				})
+				this.problem[index].favorite = true;
+			},
+			unfav_pro(index) {
+				myRequest.request(api.problem_unfavorite(this.problem_id_list[index].id), 'DELETE', {}).then(
+					function(res) {
+						console.log(res)
+						if (res.statusCode == 200) {
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else {
+							myRequest.toast()
+						}
+					}
+				).catch(
+					function(res) {
+						console.log(res)
+						myRequest.toast()
+				})
+				this.problem[index].favorite = false;
+			},
+			
 			load_one_problem_detail(index) {
 				if (this.problem_id_list[index].problem_type_id == 0) {
 					uni.request({
@@ -226,6 +280,7 @@
 							if (res2.statusCode == 200) {
 								this.problem.push({
 									type: 0,
+									favorite: res2.data.problems[0].is_favorite,
 									is_multiple: res2.data.problems[0].is_multiple,
 									done: 0,
 									right: 0,
@@ -269,6 +324,7 @@
 							if (res2.statusCode == 200) {
 								this.problem.push({
 									type: 1,
+									favorite: res2.data.problems[0].is_favorite,
 									is_multiple: false,
 									done: 0,
 									right: 0,
@@ -305,6 +361,7 @@
 							if (res2.statusCode == 200) {
 								this.problem.push({
 									type: 2,
+									favorite: res2.data.problems[0].is_favorite,
 									is_multiple: false,
 									done: 0,
 									right: 0,
@@ -340,6 +397,31 @@
 					})
 				}
 			},
+			record_wrong(i) {
+				uni.request({
+					url: myRequest.interfaceUrl() + api.wrong_record_create(this.problem_id_list[i].id),
+					method: 'POST',
+					header: {
+						'X-Token': myRequest.getToken()
+					},
+					success: (res1) => {
+						console.log(res1)
+						if (res1.statusCode == 200) {
+						}
+						else if (res1.statusCode == 401) {
+							myRequest.redirectToLogin()
+						}
+						else {
+							myRequest.toast()
+						}
+					},
+					
+					fail: (res1) => {					
+						console.log(res1)
+						myRequest.toast()
+					},
+				})
+			},
 			select_single_option(i) {
 				let pr_i = this.cur_page - 1
 				if (this.problem[pr_i].done == 0) {
@@ -369,6 +451,7 @@
 										this.problem[pr_i].options[k].selected = 2;
 									} else if (answer[k].is_correct == true && i != k) {
 										this.problem[pr_i].options[k].selected = 3;
+										this.record_wrong(pr_i);
 									}
 								}
 							}
@@ -385,6 +468,7 @@
 							myRequest.toast()
 						},
 					})
+					
 					
 					this.problem[pr_i].answer_show = 1;
 				}
@@ -414,6 +498,7 @@
 						success: (res1) => {
 							console.log(res1)
 							var answer = res1.data.choice_problem_answer
+							var if_right = true;
 							this.problem[pr_i].analysis = res1.data.analysis
 							if (res1.statusCode == 200) {
 								for (var k=0;k<answer.length;k++) {
@@ -427,9 +512,14 @@
 										this.problem[pr_i].options[k].selected = 3;
 									} else if (answer[k].is_correct == false && this.problem[pr_i].options[k].selected == 1) {
 										this.problem[pr_i].options[k].selected = 2;
+										if_right = false;
 									} else if (answer[k].is_correct == true && this.problem[pr_i].options[k].selected != 1) {
 										this.problem[pr_i].options[k].selected = 3;
+										if_right = false;
 									}
+								}
+								if (!if_right) {
+									this.record_wrong(pr_i);
 								}
 							}
 							else if (res1.statusCode == 401) {
@@ -506,12 +596,14 @@
 									this.problem[pr_i].correct_answer = "正确";
 									if (index == 1) {
 										this.problem[pr_i].options[1].selected = 2;
+										this.record_wrong(pr_i);
 									}
 								} else {
 									this.problem[pr_i].options[1].selected = 3;
 									this.problem[pr_i].correct_answer = "错误";
 									if (index == 0) {
 										this.problem[pr_i].options[0].selected = 2;
+										this.record_wrong(pr_i);
 									}
 								}
 								if (index == 1) {
@@ -562,6 +654,23 @@
 
 	.contain {
 		margin: 5% 5% 20% 5%;
+	}
+	
+	.tag-pro_type {
+		background-color: #00aaff;
+		border: 0px;
+		font-size: 16px;
+	}
+	.tag-unfav {
+		font-size: 16px;
+		background-color: #e8e8e8;
+		color: #000000;
+		border: 0px;
+	}
+	.tag-fav {
+		background-color: #f9ae3d;
+		font-size: 16px;
+		border: 0px;
 	}
 
 	.page_nav {

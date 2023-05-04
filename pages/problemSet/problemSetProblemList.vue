@@ -136,5 +136,6 @@
 	.problem-title {
 		width: 90%;
 		overflow: hidden;
+		height: 20px;
 	}
 </style>

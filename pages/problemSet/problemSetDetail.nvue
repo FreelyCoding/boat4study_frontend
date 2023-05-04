@@ -13,22 +13,22 @@
 
 		<view class="main-body">
 			<view class="title-line">
-				<u-row>
-					<u-col span="6">
+				<uni-row>
+					<uni-col span="12">
 						<view style="font-size: 20px; font-weight: bold;">
 							{{proDetail.title}}
 						</view>
 						<view style="font-size: 14px; color: darkgrey;">
 							{{proDetail.descrip}}
 						</view>
-					</u-col>
-					<u-col span="3">
+					</uni-col>
+					<uni-col span="6">
 						<button class="mini-btn" type="primary" size="mini">编辑</button>
-					</u-col>
-					<u-col span="3">
+					</uni-col>
+					<uni-col span="6">
 						<button class="mini-btn" type="warn" size="mini" @click="deletePS()">删除</button>
-					</u-col>
-				</u-row>
+					</uni-col>
+				</uni-row>
 			</view>
 			<view class="owner_info_box">
 				<u-row>
@@ -69,22 +69,22 @@
 							我的错题
 						</view>
 						<view class="" style="text-align: center; font-size: 12px; color: darkgrey;">
-							(0)
+							({{proDetail.wrong_problem_count}})
 						</view>
 					</uni-col>
 					<uni-col :span="8">
-						<view class="" style="text-align: center; margin: auto;">
+						<view class="" style="margin: auto;">
 							<u-icon name="/static/pic/problemSet/envolop.svg" size="40px"></u-icon>
 						</view>
 						<view class="" style="text-align: center; font-size: 15px;">
 							我的收藏
 						</view>
 						<view class="" style="text-align: center; font-size: 12px; color: darkgrey;">
-							(0)
+							({{proDetail.fav_problem_count}})
 						</view>
 					</uni-col>
 					<uni-col :span="8">
-						<view class="" style="text-align: center; margin: auto;">
+						<view class="" style="margin: auto;">
 							<u-icon name="/static/pic/homeNote.png" size="40px"></u-icon>
 						</view>
 						<view class="" style="text-align: center; font-size: 15px;">
@@ -143,7 +143,7 @@
 				<view class="practise-box-row">
 					<uni-row>
 						<uni-col :span="12">
-							<view class="practise-card">
+							<view class="practise-card" @click="jumpToRandomPractice()">
 								<uni-row>
 									<uni-col :span="18">
 										<view class="practise-card-title">
@@ -253,6 +253,8 @@
 					totalNum: 0,
 					descrip: '',
 					is_favorite: false,
+					wrong_problem_count: 0,
+					fav_problem_count: 0,
 				},
 				problem_set_id: 0,
 
@@ -262,9 +264,10 @@
 			myRequest.checkLogin()
 			this.problem_set_id = option.id
 			console.log('this.problem_set_id: ' + this.problem_set_id); //打印出上个页面传递的参数。
-
+		},
+		onShow: function() {
 			uni.request({
-				url: myRequest.interfaceUrl() + '/problem_set/all?id=' + option.id,
+				url: myRequest.interfaceUrl() + '/problem_set/all?id=' + this.problem_set_id,
 				method: 'GET',
 				header: {
 					'X-Token': myRequest.getToken()
@@ -315,9 +318,66 @@
 					myRequest.toast()
 				}
 			})
+			
+			uni.request({
+				url: myRequest.interfaceUrl() + api.problem_set_all_problem({id:this.problem_set_id, is_wrong:true}),
+				method: 'GET',
+				header: {
+					'X-Token': myRequest.getToken()
+				},
+				
+				success: (res1) => {
+					console.log(res1)
+					if (res1.statusCode == 200) {
+						this.proDetail.wrong_problem_count = res1.data.problems.length
+					}
+					else if (res1.statusCode == 401) {
+						myRequest.redirectToLogin()
+					}
+					else {
+						myRequest.toast()
+					}
+				},
+				
+				fail: (res1) => {					
+					console.log(res1)
+					myRequest.toast()
+				},
+			})
+			
+			uni.request({
+				url: myRequest.interfaceUrl() + api.problem_set_all_problem({id:this.problem_set_id, is_favorite:true}),
+				method: 'GET',
+				header: {
+					'X-Token': myRequest.getToken()
+				},
+				
+				success: (res1) => {
+					console.log(res1)
+					if (res1.statusCode == 200) {
+						this.proDetail.fav_problem_count = res1.data.problems.length
+					}
+					else if (res1.statusCode == 401) {
+						myRequest.redirectToLogin()
+					}
+					else {
+						myRequest.toast()
+					}
+				},
+				
+				fail: (res1) => {					
+					console.log(res1)
+					myRequest.toast()
+				},
+			})
 
 		},
 		methods: {
+			jumpToRandomPractice() {
+				uni.navigateTo({
+					url: "/pages/problemExam/problemRandomExam?id=" + this.problem_set_id
+				})
+			},
 			jumpToProblemUpload() {
 				uni.navigateTo({
 					url: "/pages/problemSet/problemUpload?id=" + this.problem_set_id

@@ -181,6 +181,15 @@
 				"navigationBarTextStyle": "white"
 			}
 		},
+		{
+			"path": "pages/problemExam/problemRandomExam",
+			"style": {
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom",
+				"enablePullDownRefresh": false,
+				"navigationBarTextStyle": "white"
+			}
+		},
 		
 		{
 			"path": "pages/problemSet/problemSetList",

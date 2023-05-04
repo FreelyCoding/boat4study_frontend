@@ -13,14 +13,13 @@
 		<uni-search-bar @confirm="search" :focus="true" v-model="searchValue" placeholder="请输入要搜索的学习小组名称"
 			cancelButton="none" maxlength="50" style="margin-left: 5px; margin-right: 5px;">
 		</uni-search-bar>
-		
-		
+
+
 		<view v-if="groups && groups.length != 0" style="margin-top: 5px;">
 			<view v-for="(item, index) in groups" :key="index">
-				<uni-card  :title="item.name" :extra="'创建于' + item.create_time" :thumbnail="item.pic"
-					@click="cardClick(item)"
-					isShadow border padding="15px 5px 15px 5px"
-					margin="0px 15px 15px 15px" style="border-radius: 10px;">
+				<uni-card :title="item.name" :extra="'创建于' + item.create_time" :thumbnail="item.pic"
+					@click="cardClick(item)" isShadow border padding="15px 5px 15px 5px" margin="0px 15px 15px 15px"
+					style="border-radius: 10px;">
 					<text class="uni-body">{{item.description}}</text>
 				</uni-card>
 			</view>
@@ -32,9 +31,10 @@
 			<p style="font-size: 20px;margin-top: 30px;">暂无学习小组 </p>
 		</view>
 
-		<view>
-			<p style="text-align: center; margin-bottom: 30px;">
-				<button style="background-color: #00aaff; color: white; max-width: 92%;" @click="jumpToCreateGroup">
+		<view style="padding-bottom: 20px;">
+			<p style="text-align: center;">
+				<button style="background-color: #00aaff; color: white; max-width: 92%;
+				 margin-bottom: 10px;" @click="jumpToCreateGroup">
 					创建小组
 				</button>
 			</p>
@@ -88,7 +88,7 @@
 					url: '/pages/StudyGroup/StudyGroupCreate'
 				})
 			},
-			
+
 
 			back() {
 				uni.navigateBack()
