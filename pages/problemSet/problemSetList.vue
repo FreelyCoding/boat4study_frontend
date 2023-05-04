@@ -27,23 +27,15 @@
 			<view class="left-bar">
 				<view class="nav-tab-item" :class="{'nav-tab-item-now':scroll_attention == 1}" @click="scroll_to(1)">
 					<view class="tag" :class="{'tag-now':scroll_attention == 1}"></view>
-					<view>中考高考</view>
+					<view>驾校考试</view>
 				</view>
 				<view class="nav-tab-item" :class="{'nav-tab-item-now':scroll_attention == 2}" @click="scroll_to(2)">
 					<view class="tag" :class="{'tag-now':scroll_attention == 2}"></view>
-					<view>大学科目</view>
+					<view>金融考试</view>
 				</view>
 				<view class="nav-tab-item" :class="{'nav-tab-item-now':scroll_attention == 3}" @click="scroll_to(3)">
 					<view class="tag" :class="{'tag-now':scroll_attention == 3}"></view>
-					<view>英语考试</view>
-				</view>
-				<view class="nav-tab-item" :class="{'nav-tab-item-now':scroll_attention == 4}" @click="scroll_to(4)">
-					<view class="tag" :class="{'tag-now':scroll_attention == 4}"></view>
-					<view>考公考编</view>
-				</view>
-				<view class="nav-tab-item" :class="{'nav-tab-item-now':scroll_attention == 5}" @click="scroll_to(5)">
-					<view class="tag" :class="{'tag-now':scroll_attention == 5}"></view>
-					<view>考研笔试</view>
+					<view>计算机</view>
 				</view>
 				
 				
@@ -52,157 +44,39 @@
 				
 				<div class="subject-list" id="list_1">
 					<view class="subject-title" :class="{'subject_title_now':scroll_attention == 1}">
-						中考高考
+						驾校考试
 					</view>
 					<view class="subject-list-box">
-						<view class="subject-list-item">
-							语文
-						</view>
-						<view class="subject-list-item">
-							数学
-						</view>
-						<view class="subject-list-item">
-							英语
-						</view>
-						<view class="subject-list-item">
-							物理
-						</view>
-						<view class="subject-list-item">
-							历史
-						</view>
-						<view class="subject-list-item">
-							化学
-						</view>
-						<view class="subject-list-item">
-							政治
-						</view>
-						<view class="subject-list-item">
-							生物
-						</view>
-						<view class="subject-list-item">
-							地理
+						<view class="subject-list-item" @click="jumpToPSDetail(6)">
+							科目一
 						</view>
 					</view>
 				</div>
 				
 				<div class="subject-list" id="list_2">
 					<view class="subject-title" :class="{'subject_title_now':scroll_attention == 2}">
-						大学科目
+						金融考试
 					</view>
 					<view class="subject-list-box">
-						<view class="subject-list-item">
-							高等数学
-						</view>
-						<view class="subject-list-item">
-							线性代数
-						</view>
-						<view class="subject-list-item">
-							C语言程序设计
-						</view>
-						<view class="subject-list-item">
-							大学物理
-						</view>
-						<view class="subject-list-item">
-							马克思主义
-						</view>
-						<view class="subject-list-item">
-							习近平概论
+						<view class="subject-list-item" @click="jumpToPSDetail(1)">
+							金融法律
 						</view>
 					</view>
 				</div>
 				
 				<div class="subject-list" id="list_3">
 					<view class="subject-title" :class="{'subject_title_now':scroll_attention == 3}">
-						英语考试
+						计算机
 					</view>
 					<view class="subject-list-box">
-						<view class="subject-list-item">
-							CET4
+						<view class="subject-list-item" @click="jumpToPSDetail(9)">
+							计算机基础
 						</view>
-						<view class="subject-list-item">
-							CET6
-						</view>
-						<view class="subject-list-item">
-							专业八级
-						</view>
-						<view class="subject-list-item">
-							雅思
-						</view>
-						<view class="subject-list-item">
-							托福
-						</view>
-					</view>
-				</div>
-				
-				<div class="subject-list" id="list_4">
-					<view class="subject-title" :class="{'subject_title_now':scroll_attention == 4}">
-						考公考编
-					</view>
-					<view class="subject-list-box">
-						<view class="subject-list-item">
-							教师招聘
-						</view>
-						<view class="subject-list-item">
-							国家公务员
-						</view>
-						<view class="subject-list-item">
-							公安政法干警
-						</view>
-						<view class="subject-list-item">
-							社区工作者招聘
-						</view>
-						<view class="subject-list-item">
-							军队文职
-						</view>
-						<view class="subject-list-item">
-							三支一扶
-						</view>
-						<view class="subject-list-item">
-							事业单位联考
-						</view>
-						<view class="subject-list-item">
-							事业单位非联考
-						</view>
-					</view>
-				</div>
-				
-				<div class="subject-list" id="list_5">
-					<view class="subject-title" :class="{'subject_title_now':scroll_attention == 5}">
-						考研笔试
-					</view>
-					<view class="subject-list-box">
-						<view class="subject-list-item">
-							考研政治
-						</view>
-						<view class="subject-list-item">
-							考研英语一
-						</view>
-						<view class="subject-list-item">
-							考研英语二
-						</view>
-						<view class="subject-list-item">
-							考研数学一
-						</view>
-						<view class="subject-list-item">
-							考研数学二
-						</view>
-						<view class="subject-list-item">
-							数据结构
-						</view>
-						<view class="subject-list-item">
-							计算机组成
-						</view>
-						<view class="subject-list-item">
-							操作系统
-						</view>
-						<view class="subject-list-item">
+						<view class="subject-list-item" @click="jumpToPSDetail(7)">
 							计算机网络
 						</view>
-						<view class="subject-list-item">
-							408综合
-						</view>
-						<view class="subject-list-item">
-							912综合
+						<view class="subject-list-item" @click="jumpToPSDetail(8)">
+							操作系统
 						</view>
 					</view>
 				</div>
@@ -235,6 +109,11 @@
 
 		},
 		methods: {
+			jumpToPSDetail(problem_set_id) {
+				uni.navigateTo({
+					url: "/pages/problemSet/problemSetDetailOfficial?id=" + problem_set_id
+				})
+			},
 			scrollEvent (e) {
 				console.log(e.detail.scrollTop);
 				for(let i = 0; i < this.list_height.length; i++) {

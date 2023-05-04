@@ -398,6 +398,16 @@
             }
             
         }
+        ,{
+            "path" : "pages/problemSet/problemSetDetailOfficial",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+								"navigationStyle": "custom",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"subPackages": [{
 		"root": "pages/componentsA",

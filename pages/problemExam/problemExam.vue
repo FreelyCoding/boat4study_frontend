@@ -221,7 +221,7 @@
 				},
 				
 				success: (res1) => {
-					console.log(res1)
+					//console.log(res1)
 					if (res1.statusCode == 200) {
 						this.problem_id_list = res1.data.problems
 						this.load_one_problem_detail(0)
@@ -235,7 +235,7 @@
 				},
 				
 				fail: (res1) => {					
-					console.log(res1)
+					//console.log(res1)
 					myRequest.toast()
 				},
 			})
@@ -300,7 +300,7 @@
 							'X-Token': myRequest.getToken()
 						},
 						success: (res2) => {
-							console.log(res2)
+							//console.log(res2)
 							if (res2.statusCode == 200) {
 								this.problem.push({
 									type: 0,
@@ -736,7 +736,9 @@
 
 	.option_item {
 		border-radius: 5px;
-		height: 40px;
+		//height: 40px;
+		padding-top: 8px;
+		padding-bottom: 8px;
 		display: flex;
 		align-items: center;
 		margin: 10px 0 10px 0;
@@ -795,6 +797,7 @@
 	.option_item_content {
 		font-size: 16px;
 		margin-left: 35px;
+		width: 270px;
 	}
 
 	.selected_option_item_content {
