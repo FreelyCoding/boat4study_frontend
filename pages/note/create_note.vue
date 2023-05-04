@@ -123,8 +123,6 @@
 						<view class="iconfont icon-shanchu" @tap="clear"></view>
 						<view :class="formats.direction === 'rtl' ? 'ql-active' : ''"
 							class="iconfont icon-direction-rtl" data-name="direction" data-value="rtl"></view>
-							
-						<view class="iconfont icon-charulianjie" @tap="showProblem"></view>
 						
 					</view>
 				</view>
