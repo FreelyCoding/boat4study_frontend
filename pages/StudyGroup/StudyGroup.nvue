@@ -123,7 +123,7 @@
 										</p>
 										<p
 											style="max-width: 80px;word-wrap:break-word;word-break:normal;text-align:center; ">
-											{{item.user_name}}
+											{{item.nick_name}}
 										</p>
 									</view>
 								</view>
@@ -184,7 +184,7 @@
 						</view>
 
 						<view>
-							<p style="text-align: center; margin-bottom: 10px;" v-if="this.isMember">
+							<p style="text-align: center; margin-bottom: 10px;" v-show="isMember">
 								<button style="background-color: #00aaff; color: white;" @click="jumpToAddProblemSet()">
 									添加题库
 								</button>
@@ -388,7 +388,7 @@
 					id: 1,
 					owner_id: 1,
 					name: "",
-					avatar: "/static/pic/student.png",
+					avatar: "/static/pic/personal_group.svg",
 					introduction: "",
 					editName: "",
 					editIntroduction: "",
@@ -424,12 +424,22 @@
 		onLoad: function(option) {
 			this.refresh(option)
 		},
+		
+		onShow: function() {
+			let query = this.$route.query
+			let option = {
+				"id": query.id
+			}
+			this.refresh(option)
+		},
 
 		methods: {
 			back() {
 				uni.navigateBack()
 			},
 			refresh(option) {
+				let query = this.$route.query
+				console.log("refresh : group_id  = " + query.id)
 				let uid = myRequest.getUID();
 				myRequest.checkLogin()
 				this.group.id = option.id
