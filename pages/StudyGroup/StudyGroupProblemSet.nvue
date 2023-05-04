@@ -1,15 +1,12 @@
 <template>
 	<view>
-		<view class="status-bar">
-			<uni-nav-bar title="小组题库" background-color="#00aaff" color="#FFFFFF" status-bar="true">
-				<block slot="left">
-					<view class="note-navbar">
-						<uni-icons type="left" color="#FFFFFF" size="18" @click="back()" />
-					</view>
-				</block>
-			</uni-nav-bar>
-		</view>
-
+		<uni-nav-bar title="小组题库" background-color="#00aaff" color="#FFFFFF" status-bar="true">
+			<block slot="left">
+				<view class="note-navbar">
+					<uni-icons type="left" color="#FFFFFF" size="18" @click="back()" />
+				</view>
+			</block>
+		</uni-nav-bar>
 		<view v-if="this.problemSet.length != 0">
 			<view class="u-demo-block">
 				<u-list customStyle="margin: auto; margin-top: 10px;">
@@ -76,50 +73,46 @@
 				uni.navigateTo({
 					url: "/pages/problemSet/problemSetDetail?id=" + item.id
 				})
-			},
-
-			refresh(option) {
-				myRequest.checkLogin()
-				uni.request({
-					url: myRequest.interfaceUrl() + '/problem_set/all?group_id=' + option.group_id,
-					method: 'GET',
-					header: {
-						'X-Token': myRequest.getToken()
-					},
-
-					success: (res) => {
-						console.log(res)
-						if (res.statusCode == 200) {
-							if (res.data.problem_set && res.data.problem_set.length) {
-								for (var i = 0; i < res.data.problem_set.length; i++) {
-									var t = {
-										id: res.data.problem_set[i].id,
-										description: res.data.problem_set[i].description,
-										name: res.data.problem_set[i].name,
-										pic: "../../static/pic/dataStructure.jpg",
-										created_at: res.data.problem_set[i].created_at.slice(0, 10),
-										problem_number: res.data.problem_set[i].problem_count,
-									}
-									this.problemSet.push(t);
-								}
-							}
-						} else if (res.statusCode == 401) {
-							myRequest.redirectToLogin()
-						} else {
-							myRequest.toast()
-						}
-					},
-
-					fail: (res) => {
-						console.log(res)
-						myRequest.toast()
-					}
-				})
 			}
 
 		},
 		onLoad(option) {
-			this.refresh(option)
+			myRequest.checkLogin()
+			uni.request({
+				url: myRequest.interfaceUrl() + '/problem_set/all?group_id=' + option.group_id,
+				method: 'GET',
+				header: {
+					'X-Token': myRequest.getToken()
+				},
+
+				success: (res) => {
+					console.log(res)
+					if (res.statusCode == 200) {
+						if (res.data.problem_set && res.data.problem_set.length > 0) {
+							for (var i = 0; i < res.data.problem_set.length; i++) {
+								var t = {
+									id: res.data.problem_set[i].id,
+									description: res.data.problem_set[i].description,
+									name: res.data.problem_set[i].name,
+									pic: "../../static/pic/dataStructure.jpg",
+									created_at: res.data.problem_set[i].created_at.slice(0, 10),
+									problem_number: res.data.problem_set[i].problem_count,
+								}
+								this.problemSet.push(t);
+							}
+						}
+					} else if (res.statusCode == 401) {
+						myRequest.redirectToLogin()
+					} else {
+						myRequest.toast()
+					}
+				},
+
+				fail: (res) => {
+					console.log(res)
+					myRequest.toast()
+				}
+			})
 		}
 	}
 </script>
@@ -127,12 +120,5 @@
 <style>
 	page {
 		background: #EDEDED;
-	}
-
-	.status-bar {
-		width: 100%;
-		position: sticky;
-		top: 0;
-		z-index: 10;
 	}
 </style>
