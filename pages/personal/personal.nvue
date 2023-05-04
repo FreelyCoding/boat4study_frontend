@@ -7,12 +7,11 @@
 						<uni-col :span="8">
 							<view>
 								<p style="text-align: center;">
-									<u-avatar :src="user.avatar" size="100px" @click="clickImg(user.avatar)"></u-avatar>
+									<u-avatar :src="myRequest.imageUrl() + '/public' + user.avatar" size="100px" @click="clickImg(user.avatar)"></u-avatar>
 									<!--
 									<u-ava style="width: 100px; height: 100px; background-color: #00aaff;"
 										mode="aspectFill" :src="user.avatar"></image> -->
 								</p>
-
 							</view>
 
 						</uni-col>
@@ -36,10 +35,16 @@
 						编辑个人信息
 					</p>
 					<uni-section title="用户名" type="line">
-						<u-input type="text" placeholder="请输入用户名" v-model="user.editName" />
+						<p style="margin-left: 10px;">
+							{{user.name}}
+						</p>
+					</uni-section>
+					
+					<uni-section title="用户昵称" type="line">
+						<u-input type="text" placeholder="请输入用户昵称" v-model="user.editName" />
 					</uni-section>
 
-					<p style="margin-top: 20px; width: 240px;">
+					<p style="margin-top: 10px; width: 240px;">
 
 					</p>
 
@@ -238,7 +243,7 @@
 					uid: 1,
 					name: "",
 					nickName: "",
-					editNmae: "",
+					editName: "",
 					phone: "",
 					email: "",
 				},
@@ -310,9 +315,9 @@
 					success: (res) => {
 						console.log(res)
 						if (res.statusCode == 200) {
-							this.user.avatar = myRequest.imageUrl() + "/public" + res.data.avatar_path;
+							this.user.avatar = res.data.avatar_path;
 							this.user.name = res.data.user_name;
-							this.nickName = res.data.nick_name;
+							this.user.nickName = res.data.nick_name;
 							this.user.editName = res.data.nick_name;
 							this.user.email = res.data.email;
 							this.user.phone = res.data.phone;
@@ -336,13 +341,12 @@
 					"avatar_path": this.user.avatar,
 					"email": this.user.email,
 					"phone": this.user.phone,
-					"nick_name": this.user.editNmae
+					"nick_name": this.user.editName
 				}
 				let that = this
-			
 				
 				uni.request({
-					url: myRequest.interfaceUrl() + '/user/update/',
+					url: myRequest.interfaceUrl() + '/user/update',
 					method: 'PUT',
 					data: model,
 					header: {

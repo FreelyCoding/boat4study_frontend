@@ -64,9 +64,9 @@
 					</p>
 
 					<uni-row>
-						<uni-col :span="11" :offset = "1">
+						<uni-col :span="11" :offset="1">
 							<p style="text-align: center;">
-								<button  style="background-color: #00aaff; color: white; width: 100px;"
+								<button style="background-color: #00aaff; color: white; width: 100px;"
 									@click="inputDialogClose">
 									取消编辑
 								</button>
@@ -112,13 +112,18 @@
 									<view v-for="(item, index) in group_members" :key="index"
 										style="margin-left: 10px; margin-right: 10px; margin-bottom: 10px;">
 										<p style="text-align: center;">
+											<u-avatar :src="myRequest.imageUrl() + '/public' + item.avatar_path" 
+											size="70px"
+												></u-avatar>
+											
+											<!--
 											<image
 												style="width: 60px; height: 60px; background-color: white; margin: auto;"
-												mode="aspectFill" :src="group.avatar"></image>
+												mode="aspectFill" :src="group.avatar"></image> -->
 										</p>
 										<p
 											style="max-width: 80px;word-wrap:break-word;word-break:normal;text-align:center; ">
-											{{item.user_name}}
+											{{item.nick_name}}
 										</p>
 									</view>
 								</view>
@@ -179,7 +184,7 @@
 						</view>
 
 						<view>
-							<p style="text-align: center; margin-bottom: 10px;" v-if="this.isMember">
+							<p style="text-align: center; margin-bottom: 10px;" v-show="isMember">
 								<button style="background-color: #00aaff; color: white;" @click="jumpToAddProblemSet()">
 									添加题库
 								</button>
@@ -267,7 +272,7 @@
 						</p>
 
 						<uni-row>
-							<uni-col :span="7" >
+							<uni-col :span="7">
 								<p>
 									<button style="background-color: #00aaff; color: white; width: 100px;"
 										@click="addGroupDialogClose">
@@ -277,7 +282,7 @@
 							</uni-col>
 							<uni-col :span="10" :offset="7">
 								<p>
-									<button  style="background-color: #5ac725; color: white; width: 100px;"
+									<button style="background-color: #5ac725; color: white; width: 100px;"
 										@click="addGroupDialogInputConfirm">
 										确认提交
 									</button>
@@ -300,9 +305,9 @@
 						</p>
 
 						<uni-row>
-							<uni-col :span="7" >
+							<uni-col :span="7">
 								<p style="text-align: center; margin-bottom: 10px;">
-									<button  style="background-color: #00aaff; color: white; width: 100px;"
+									<button style="background-color: #00aaff; color: white; width: 100px;"
 										@click="deleteGroupDialogClose">
 										取消删除
 									</button>
@@ -311,7 +316,7 @@
 
 							<uni-col :span="10" :offset="7">
 								<p style="text-align: center; margin-bottom: 10px;">
-									<button  style="background-color: #e64340; color: white; width: 100px;"
+									<button style="background-color: #e64340; color: white; width: 100px;"
 										@click="deleteGroupDialogConfirm">
 										确认删除
 									</button>
@@ -383,7 +388,7 @@
 					id: 1,
 					owner_id: 1,
 					name: "",
-					avatar: "/static/pic/student.png",
+					avatar: "/static/pic/personal_group.svg",
 					introduction: "",
 					editName: "",
 					editIntroduction: "",
@@ -419,12 +424,22 @@
 		onLoad: function(option) {
 			this.refresh(option)
 		},
+		
+		onShow: function() {
+			let query = this.$route.query
+			let option = {
+				"id": query.id
+			}
+			this.refresh(option)
+		},
 
 		methods: {
 			back() {
 				uni.navigateBack()
 			},
 			refresh(option) {
+				let query = this.$route.query
+				console.log("refresh : group_id  = " + query.id)
 				let uid = myRequest.getUID();
 				myRequest.checkLogin()
 				this.group.id = option.id
@@ -520,20 +535,20 @@
 						myRequest.toast()
 					}
 				})
-				
+
 				uni.request({
 					url: myRequest.interfaceUrl() + '/problem_set/all?group_id=' + this.group.id,
 					method: 'GET',
 					header: {
 						'X-Token': myRequest.getToken()
 					},
-				
+
 					success: (res) => {
 						console.log(res)
 						this.problemSet = []
 						if (res.statusCode == 200) {
 							if (res.data.problem_set && res.data.problem_set.length) {
-								for (var i = 0; i < Math.min(4,res.data.problem_set.length); i++) {
+								for (var i = 0; i < Math.min(4, res.data.problem_set.length); i++) {
 									var t = {
 										id: res.data.problem_set[i].id,
 										description: res.data.problem_set[i].description,
@@ -551,7 +566,7 @@
 							myRequest.toast()
 						}
 					},
-				
+
 					fail: (res) => {
 						console.log(res)
 						myRequest.toast()
@@ -562,14 +577,28 @@
 				console.log("ad = " + this.isAdministrator)
 			},
 			jumpToAllProblemSet() {
-				uni.navigateTo({
-					url: "/pages/StudyGroup/StudyGroupProblemSet?group_id=" + this.group.id
-				})
+				if (this.isMember) {
+					uni.navigateTo({
+						url: "/pages/StudyGroup/StudyGroupProblemSet?group_id=" + this.group.id
+					})
+				} else {
+					myRequest.toast('您没有查看权限哦~', 1000)
+					setTimeout(() => {
+						uni.hideToast();
+					}, 1000)
+				}
 			},
 			jumpToProblemSetDetail(item) {
-				uni.navigateTo({
-					url: "/pages/problemSet/problemSetDetail?id=" + item.id
-				})
+				if (this.isMember) {
+					uni.navigateTo({
+						url: "/pages/problemSet/problemSetDetail?id=" + item.id
+					})
+				} else {
+					myRequest.toast('您没有查看权限哦~', 1000)
+					setTimeout(() => {
+						uni.hideToast();
+					}, 1000)
+				}
 			},
 			jumpToAddProblemSet() {
 				uni.navigateTo({
@@ -587,7 +616,7 @@
 					"id": this.group.id,
 				}
 
-				
+
 				uni.request({
 					url: myRequest.interfaceUrl() + '/group/update/' + this.group.id,
 					method: 'PUT',
@@ -595,7 +624,7 @@
 					header: {
 						'X-Token': myRequest.getToken()
 					},
-				
+
 					success: (res) => {
 						console.log(res)
 						if (res.statusCode == 200) {
@@ -611,16 +640,14 @@
 							myRequest.toast()
 						}
 					},
-				
+
 					fail: (res) => {
 						console.log(res)
 						myRequest.toast()
 					}
 				})
-
-
 				this.$refs.inputDialog.close()
-				
+
 				/*setTimeout(() => {
 					this.group.introduction = this.group.editIntroduction
 					this.group.name = this.group.editName
@@ -813,6 +840,9 @@
 					}
 				)
 			},
+			
+
+			
 
 		},
 
