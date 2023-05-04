@@ -95,7 +95,7 @@ import myRequest from '../../common/request';
 							
 							for (var i = 0; i < data.note_reviews.length; i ++) {
 								var review = data.note_reviews[i]
-								var avatar = myRequest.imageUrl() + myRequest.getUserAvatar()
+								var avatar = myRequest.imageUrl() + '/public/' + myRequest.getUserAvatar()
 								
 								var t = {									
 									"id": review.id,
@@ -103,7 +103,7 @@ import myRequest from '../../common/request';
 									"hasLike": review.is_liked,
 									"likeNum": review.like_count,
 									"avatarUrl": avatar ,
-									"nickName": myRequest.getUserName(),
+									"nickName": myRequest.getNickName(),
 									"content": review.content,
 									"parentId": null,
 									"createTime": review.created_at.slice(0, 10)

@@ -183,6 +183,10 @@ const myRequest = {
 		return uni.getStorageSync('user_info').user_name
 	},
 	
+	getNickName() {
+		return uni.getStorageSync('user_info').nick_name
+	},
+	
 	queryUserInfo() {
 		uni.request({
 			url: myRequest.interfaceUrl() + '/user/info',
