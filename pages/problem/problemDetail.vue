@@ -334,12 +334,12 @@
 									success: (res1) => {
 										console.log(res1)
 										if (res1.statusCode == 200) {
-											var answer = res1.data.answer;
-											this.problem[pr_i].analysis = res1.data.analysis;
+											var answer = res1.data.is_correct;
+											this.problem[0].analysis = res1.data.analysis;
 											if (answer) {
-												this.problem[pr_i].correct_answer = "正确";
+												this.problem[0].correct_answer = "正确";
 											} else {
-												this.problem[pr_i].correct_answer = "错误";
+												this.problem[0].correct_answer = "错误";
 											}
 										}
 										else if (res1.statusCode == 401) {
