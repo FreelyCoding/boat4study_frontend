@@ -100,21 +100,23 @@
 			
 			async add_to_ps() {
 				for (var i=0;i<this.problem_id_list.length;i++) {
-					 await myRequest.request(api.problem_set_migrate_problem(this.problem_set_id, this.problem_id_list[i].id), 'POST', {}).then(
-						function(res) {
-							console.log(res)
-							if (res.statusCode == 200) {
-							} else if (res.statusCode == 401) {
-								myRequest.redirectToLogin()
-							} else {
-								myRequest.toast()
+					if (this.problem_id_list[i].selected != 0) {
+						await myRequest.request(api.problem_set_migrate_problem(this.problem_set_id, this.problem_id_list[i].id), 'POST', {}).then(
+							function(res) {
+								console.log(res)
+								if (res.statusCode == 200) {
+								} else if (res.statusCode == 401) {
+									myRequest.redirectToLogin()
+								} else {
+									myRequest.toast()
+								}
 							}
-						}
-					).catch(
-						function(res) {
-							console.log(res)
-							myRequest.toast()
-					})
+						).catch(
+							function(res) {
+								console.log(res)
+								myRequest.toast()
+						})
+					}
 				}
 			},
 			
