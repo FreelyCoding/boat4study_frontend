@@ -617,8 +617,6 @@
 						myRequest.toast()
 					}
 				})
-
-
 				this.$refs.inputDialog.close()
 				
 				/*setTimeout(() => {
