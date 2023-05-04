@@ -2,7 +2,7 @@
 	<view>
 		<view class="status-bar">
 			<!--自定义navbar-->
-			<uni-nav-bar title="顺序练习" background-color="#00aaff" color="#FFFFFF" status-bar="true">
+			<uni-nav-bar title="模拟考试" background-color="#00aaff" color="#FFFFFF" status-bar="true">
 				<block slot="left">
 					<view class="note-navbar">
 						<uni-icons type="left" color="#FFFFFF" size="18"  @click="back()"/>
@@ -190,6 +190,7 @@
 				problem_set_id: 0,
 				problem_id_list:[],
 				cur_page: 1,
+				problem_num: 0,
 
 				letter: [
 					'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
@@ -211,6 +212,7 @@
 			
 			console.log(option.id); //打印出上个页面传递的参数。
 			this.problem_set_id = option.id
+			this.problem_num = option.problem_num
 			var _this = this
 			
 			uni.request({
@@ -223,7 +225,7 @@
 				success: (res1) => {
 					console.log(res1)
 					if (res1.statusCode == 200) {
-						this.problem_id_list = res1.data.problems
+						this.problem_id_list = this.shuffle(res1.data.problems).slice(0, this.problem_num)
 						this.load_one_problem_detail(0)
 					}
 					else if (res1.statusCode == 401) {
@@ -242,6 +244,16 @@
 			
 		},
 		methods: {
+			shuffle(arr) {
+					var len = arr.length;
+					for (var i = 0; i < len - 1; i++) {
+							var index = parseInt(Math.random() * (len - i));
+							var temp = arr[index];
+							arr[index] = arr[len - i - 1];
+							arr[len - i - 1] = temp;
+					}
+					return arr;
+			},
 			back() {
 				uni.navigateBack({
 				    delta: 1

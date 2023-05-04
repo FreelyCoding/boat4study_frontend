@@ -59,9 +59,7 @@
 						class="shuhei">
 						您确定要删除题库吗
 					</p>
-					<p style="margin-top: 20px;width: 240px;">
-		
-					</p>
+					<p style="margin-top: 20px;width: 240px;"></p>
 		
 					<uni-row>
 						<uni-col :span="7" >
@@ -78,6 +76,67 @@
 								<button  style="background-color: #e64340; color: white; width: 100px;"
 									@click="deleteProSetDialogConfirm">
 									确认删除
+								</button>
+							</p>
+						</uni-col>
+					</uni-row>
+				</uni-card>
+			</uni-popup>
+		</view>
+		
+		<view>
+			<uni-popup ref="selectProNumDialog" type="dialog" :isMaskClick="false">
+				<uni-card style="width: 280px;">
+					<uni-section title="请选择题目数量" type="line">
+						<slider value="1" @change="selectProNum" min="1" block-size="14" :max="proDetail.totalNum" show-value />
+					</uni-section>
+		
+					<uni-row>
+						<uni-col :span="7" >
+							<p style="text-align: center; margin-bottom: 10px;">
+								<button  style="background-color: #00aaff; color: white; width: 100px;" size="mini"
+									@click="selectProNumDialogClose">
+									返回
+								</button>
+							</p>
+						</uni-col>
+		
+						<uni-col :span="10" :offset="7">
+							<p style="text-align: center; margin-bottom: 10px;">
+								<button  style="background-color: #55aa00; color: white; width: 100px;" size="mini"
+									@click="jumpToSimuPractice()">
+									开始做题
+								</button>
+							</p>
+						</uni-col>
+					</uni-row>
+				</uni-card>
+			</uni-popup>
+		</view>
+		
+		<view>
+			<uni-popup ref="selectProTypeDialog" type="dialog" :isMaskClick="false">
+				<uni-card style="width: 280px; height: 220px;">
+					<uni-section title="请选择题目类型" type="line" style="margin-bottom: 20px;">
+						<uni-data-select v-model="problem_type_select" :localdata="problem_type" @change="change"
+							:clear="false" ></uni-data-select>
+					</uni-section>
+		
+					<uni-row>
+						<uni-col :span="7" >
+							<p style="text-align: center; margin-bottom: 10px;">
+								<button  style="background-color: #00aaff; color: white; width: 100px;" size="mini"
+									@click="selectProTypeDialogClose">
+									返回
+								</button>
+							</p>
+						</uni-col>
+		
+						<uni-col :span="10" :offset="7">
+							<p style="text-align: center; margin-bottom: 10px;">
+								<button  style="background-color: #55aa00; color: white; width: 100px;" size="mini"
+									@click="jumpToTypePractice()">
+									开始做题
 								</button>
 							</p>
 						</uni-col>
@@ -150,7 +209,7 @@
 		<view class="main-body">
 			<view class="title-line">
 				<uni-row>
-					<uni-col span="12">
+					<uni-col :span="12">
 						<view style="font-size: 20px; font-weight: bold;">
 							{{proDetail.title}}
 						</view>
@@ -158,33 +217,34 @@
 							{{proDetail.descrip}}
 						</view>
 					</uni-col>
-					<uni-col span="6">
+					<uni-col :span="6">
 						<button class="mini-btn" type="primary" size="mini" @click="editPS()" >编辑</button>
 					</uni-col>
-					<uni-col span="6">
+					<uni-col :span="6">
 						<button class="mini-btn" type="warn" size="mini" @click="deletePS()">删除</button>
 					</uni-col>
 				</uni-row>
 			</view>
 			<view class="owner_info_box">
 				<u-row>
-					<u-col span="2">
-						<u--image width="50px" height="50px" src="https://cdn.uviewui.com/uview/album/1.jpg"
-							shape="circle"></u--image>
+					<u-col :span="2">
+						<u-avatar :src="myRequest.imageUrl() + '/public' + proDetail.ownerAvatar"
+						size="55px"
+							></u-avatar>
 					</u-col>
-					<u-col span="9">
+					<u-col :span="9">
 						<view class="" style="font-size: 16px;">
 							{{proDetail.ownerName}}
 						</view>
 						<view class="" style="font-size: 14px; color: darkgray;">
 							<u-row>
-								<u-col span="4">
+								<u-col :span="4">
 									{{proDetail.created_at}}
 								</u-col>
-								<u-col span="4">
+								<u-col :span="4">
 									{{proDetail.totalNum}}题
 								</u-col>
-								<u-col span="4">
+								<u-col :span="4">
 									<view class="button-group">
 										<button class="button" size="mini" type="primary" @click="jumpToProblemUpload()"
 											style="background-color: #00aaff; text-align: center; margin: auto;">添加试题</button>
@@ -264,7 +324,7 @@
 							</view>
 						</uni-col>
 						<uni-col :span="12">
-							<view class="practise-card">
+							<view class="practise-card" @click="openProNumSelectDialog()">
 								<uni-row>
 									<uni-col :span="18">
 										<view class="practise-card-title">
@@ -302,7 +362,7 @@
 							</view>
 						</uni-col>
 						<uni-col :span="12">
-							<view class="practise-card">
+							<view class="practise-card" @click="openSelectProTypeDialog()">
 								<uni-row>
 									<uni-col :span="18">
 										<view class="practise-card-title">
@@ -392,7 +452,8 @@
 				proDetail: {
 					title: "",
 					created_at: '',
-					ownerName: "丁真",
+					ownerName: "",
+					ownerAvatar: "",
 					totalNum: 0,
 					descrip: '',
 					is_favorite: false,
@@ -405,7 +466,22 @@
 					descrip: '',
 				},
 				problem_set_id: 0,
-
+				practice_proNum: 1,
+				
+				problem_type_select: 0,
+				problem_type: [{
+						value: 0,
+						text: "选择题"
+					},
+					{
+						value: 2,
+						text: "判断题"
+					},
+					{
+						value: 3,
+						text: "填空题"
+					},
+				],
 			}
 		},
 		onLoad: function(option) { //option为object类型，会序列化上个页面传递的参数
@@ -442,6 +518,7 @@
 								console.log(res2)
 								if (res2.statusCode == 200) {
 									this.proDetail.ownerName = res2.data.user_name
+									this.proDetail.ownerAvatar = res2.data.avatar_path
 								} else if (res2.statusCode == 401) {
 									myRequest.redirectToLogin()
 								} else {
@@ -582,6 +659,18 @@
 					})
 				}
 			},
+			jumpToSimuPractice() {
+				this.$refs.selectProNumDialog.close()
+				uni.navigateTo({
+					url: "/pages/problemExam/problemSimuExam?id=" + this.problem_set_id + "&problem_num=" + this.practice_proNum
+				})
+			},
+			jumpToTypePractice() {
+				this.$refs.selectProTypeDialog.close()
+				uni.navigateTo({
+					url: "/pages/problemExam/problemTypeExam?id=" + this.problem_set_id + "&problem_type=" + this.problem_type_select
+				})
+			},
 			
 			jumpToProblemUpload() {
 				uni.navigateTo({
@@ -608,6 +697,37 @@
 			confirmErrorNoWrongDialog() {
 				setTimeout(() => {
 					this.$refs.errorNoWrongDialog.close()
+				}, 100)
+			},
+			
+			openProNumSelectDialog() {
+				if (this.proDetail.totalNum == 0) {
+					this.$refs.errorNoProDialog.open()
+				} else {
+					this.$refs.selectProNumDialog.open()
+				}
+			},
+			selectProNumDialogClose() {
+				this.practice_proNum = 1
+				setTimeout(() => {
+					this.$refs.selectProNumDialog.close()
+				}, 100)
+			},
+			selectProNum(event) {
+				console.log(event.detail.value)
+				this.practice_proNum = event.detail.value
+			},
+			
+			openSelectProTypeDialog() {
+				if (this.proDetail.totalNum == 0) {
+					this.$refs.errorNoProDialog.open()
+				} else {
+					this.$refs.selectProTypeDialog.open()
+				}
+			},
+			selectProTypeDialogClose() {
+				setTimeout(() => {
+					this.$refs.selectProTypeDialog.close()
 				}, 100)
 			},
 			
@@ -656,13 +776,21 @@
 			},
 			
 			deletePS() {
+				this.$refs.deleteProSetDialog.open()
+			},
+			deleteProSetDialogClose() {
+				setTimeout(() => {
+					this.$refs.deleteProSetDialog.close()
+				}, 100)
+			},
+			deleteProSetDialogConfirm() {
 				uni.request({
 					url: myRequest.interfaceUrl() + api.problem_set_delete(this.problem_set_id),
 					method: 'DELETE',
 					header: {
 						'X-Token': myRequest.getToken()
 					},
-
+				
 					success: (res) => {
 						console.log(res)
 						if (res.statusCode == 200) {
@@ -680,13 +808,14 @@
 							myRequest.toast()
 						}
 					},
-
+				
 					fail: (res) => {
 						console.log(res)
 						myRequest.toast()
 					}
 				})
 			},
+
 			starPS() {
 				uni.request({
 					url: myRequest.interfaceUrl() + api.problem_set_favorite(this.problem_set_id),

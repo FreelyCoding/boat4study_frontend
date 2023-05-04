@@ -378,6 +378,26 @@
             }
             
         }
+        ,{
+            "path" : "pages/problemExam/problemSimuExam",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+								"navigationStyle": "custom",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/problemExam/problemTypeExam",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+								"navigationStyle": "custom",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"subPackages": [{
 		"root": "pages/componentsA",
