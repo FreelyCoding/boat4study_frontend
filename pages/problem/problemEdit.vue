@@ -6,7 +6,7 @@
 			<uni-nav-bar title="编辑题目" background-color="#00aaff" color="#FFFFFF" status-bar="true">
 				<block slot="left">
 					<view class="note-navbar">
-						<uni-icons type="left" color="#FFFFFF" size="18" />
+						<uni-icons type="left" color="#FFFFFF" size="18"  @click="back()"/>
 					</view>
 				</block>
 			</uni-nav-bar>
@@ -15,7 +15,7 @@
 
 			<uni-section title="试题类型" type="line" class="select_box">
 				<uni-data-select v-model="problem_type_select" :localdata="problem_type" @change="change"
-					:clear="false"></uni-data-select>
+					:clear="false" disabled></uni-data-select>
 			</uni-section>
 
 			<uni-section v-if="problem_type_select === 0" title="试题内容" type="line" class="select_box">
@@ -30,7 +30,7 @@
 						<view class="form-item">
 							<uni-easyinput v-model="dynamicLists[index].description" placeholder="请输入选项" />
 							<button class="button" v-if="index>=2" size="mini" type="warn"
-								@click="del_option(item.id)">删除</button>
+								@click="del_option(index)">删除</button>
 						</view>
 					</uni-forms-item>
 				</uni-forms>
@@ -57,7 +57,7 @@
 						<view class="form-item">
 							<uni-easyinput v-model="dynamicLists[index].description" placeholder="请输入选项" />
 							<button class="button" v-if="index>=2" size="mini" type="warn"
-								@click="del_option(item.id)">删除</button>
+								@click="del_option(index)">删除</button>
 						</view>
 					</uni-forms-item>
 				</uni-forms>
@@ -110,8 +110,28 @@
 			</uni-section>
 			
 			<view class="button-group">
-				<button class="button" size="mini" type="primary"
-					@click="create_problem()" style="background-color: #00aaff; text-align: center; margin: auto;">添加试题</button>
+				<view v-if="problem_type_select === 0 || problem_type_select === 1">
+					<button class="button" size="mini" type="primary"
+						@click="update_choice_problem()" 
+						style="background-color: #00aaff; text-align: center; margin: auto;">
+						完成编辑
+					</button>
+				</view>
+				<view v-if="problem_type_select === 2">
+					<button class="button" size="mini" type="primary"
+						@click="update_judge_problem()" 
+						style="background-color: #00aaff; text-align: center; margin: auto;">
+						完成编辑
+					</button>
+				</view>
+				<view v-if="problem_type_select === 3">
+					<button class="button" size="mini" type="primary"
+						@click="update_blank_problem()" 
+						style="background-color: #00aaff; text-align: center; margin: auto;">
+						完成编辑
+					</button>
+				</view>
+
 			</view>
 		</view>
 	</view>
@@ -119,27 +139,25 @@
 
 <script>
 	import myRequest from '../../common/request';
-import list from '../../uni_modules/uview-ui/libs/config/props/list';
+	import list from '../../uni_modules/uview-ui/libs/config/props/list';
 	import toast from '../../uni_modules/uview-ui/libs/config/props/toast';
+	import api from '@/common/api.js';
 	
 	export default {
 		data() {
 			return {
+				problem_set_id:0,
+				
+				problem_id: 0,
+				problem_type_id: 0,
+				
 				problem_difficulty_select: 0,
 
 				letter: [
 					'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
 					'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
 				],
-				option_name: [{
-						"value": 0,
-						"text": "A"
-					},
-					{
-						"value": 1,
-						"text": "B",
-					},
-				],
+				
 				judge_option_name: [{
 						"value": 0,
 						"text": "正确"
@@ -168,41 +186,28 @@ import list from '../../uni_modules/uview-ui/libs/config/props/list';
 						text: "填空题"
 					},
 				],
+				
 				// 题目信息
 				baseFormData: {
 					title: '',
-					answer: '',
+					answer: [],
 					analyse: '',
 					difficulty: 0,
 				},
-				dynamicLists: [{
-					label: 'A',
-					description: '',
-					rules: [{
-						'required': true,
-						errorMessage: '选项必填'
-					}],
-					id: Date.now()
-				}, {
-					label: 'B',
-					description: '',
-					rules: [{
-						'required': true,
-						errorMessage: '选项必填'
-					}],
-					id: Date.now()
-				}],
+				dynamicLists: [],
+				option_name: [],
 			};
 		},
 		onLoad: function (option) {
-			this.problem_set_id = option.id
-			console.log("problem_set_id: "+this.problem_set_id)
+			this.problem_id = option.problem_id;
+			this.problem_type_id = option.problem_type_id;
+			this.load_one_problem_detail();
 		},
 		methods: {
 			back() {
-				uni.navigateTo({
-					url: "/pages/problemSet/problemSetDetail?id="+this.problem_set_id
-				})
+				uni.navigateBack({
+				    delta: 1
+				});
 			},
 			change(e) {
 				console.log("e:", e);
@@ -214,26 +219,24 @@ import list from '../../uni_modules/uview-ui/libs/config/props/list';
 			add_option() {
 				let temp = this.option_name.length
 				this.dynamicLists.push({
-					label: this.letter[temp],
 					description: '',
 					rules: [{
 						'required': true,
 						errorMessage: '选项必填'
 					}],
-					id: Date.now()
 				})
 				this.option_name.push({
 					"value": temp,
 					"text": this.letter[temp],
 				})
 			},
-			del_option(id) {
+			del_option(index) {
 				let len_option = this.option_name.length
-				let index = this.dynamicLists.findIndex(v => v.id === id)
 				this.dynamicLists.splice(index, 1)
 				this.option_name.splice(len_option - 1, 1)
 			},
-			async create_problem() {
+			
+			async update_choice_problem() {
 				if (!myRequest.isLogin()) {
 					uni.redirectTo({
 						url: '/pages/login/login'
@@ -241,6 +244,7 @@ import list from '../../uni_modules/uview-ui/libs/config/props/list';
 					return;
 				}
 				console.log(uni.getStorageSync('token'))
+				var temp_problem_set_id = this.problem_set_id
 				console.log(this.baseFormData)
 				if (!this.baseFormData.title) {
 					myRequest.toast('题目内容不能为空')
@@ -263,22 +267,25 @@ import list from '../../uni_modules/uview-ui/libs/config/props/list';
 				console.log(this.dynamicLists)
 
 				var data = {
+					"analysis": this.baseFormData.analyse,
 					"choices": [],
 					"description": this.baseFormData.title,
 					"is_public": true,
+					"id": parseInt(this.problem_id),
 				}
 				var k=0
 				for (var i=0;i<this.dynamicLists.length;i++) {
-					if (i == this.baseFormData.answer[k]) {
+					if ((i == this.baseFormData.answer[k] && this.problem_type_select == 1) 
+						|| (i == this.baseFormData.answer && this.problem_type_select == 0)) {
 						data.choices.push({
-							"choice": this.dynamicLists[i].label,
+							"choice": this.option_name[i].text,
 							"description": this.dynamicLists[i].description,
 							"is_correct": true
 						})
 						k++;
 					} else {
 						data.choices.push({
-							"choice": this.dynamicLists[i].label,
+							"choice": this.option_name[i].text,
 							"description": this.dynamicLists[i].description,
 							"is_correct": false
 						})
@@ -287,27 +294,12 @@ import list from '../../uni_modules/uview-ui/libs/config/props/list';
 				console.log(data)
 				data = JSON.stringify(data)
 				
-				myRequest.request('/problem/choice/create', 'POST', data).then(
+				myRequest.request(api.problem_choice_update(), 'PUT', data).then(
 					function(res) {
 						console.log(res)
 						if (res.statusCode == 200) {
-							myRequest.toast('题目添加成功', 1500, true)
-							/*setTimeout(() => {
-								uni.hideToast();
-								//关闭提示后跳转
-								uni.navigateTo({
-									url: '/pages/problemSet/problemUpload'
-								});
-							}, 1000)*/
 						} else if (res.statusCode == 401) {
-							if (myRequest.isLogin()) {
-								myRequest.toast('请重新登录')
-							} else {
-								myRequest.toast('请登录')
-							}
-							uni.redirectTo({
-								url: '/pages/login/login'
-							})
+							myRequest.redirectToLogin()
 						} else {
 							myRequest.toast()
 						}
@@ -319,7 +311,317 @@ import list from '../../uni_modules/uview-ui/libs/config/props/list';
 					}
 				)
 				
-			}
+			},
+			
+			async update_blank_problem() {
+				if (!myRequest.isLogin()) {
+					uni.redirectTo({
+						url: '/pages/login/login'
+					})
+					return;
+				}
+				console.log(uni.getStorageSync('token'))
+				var temp_problem_set_id = this.problem_set_id
+				console.log(this.baseFormData)
+				if (!this.baseFormData.title) {
+					myRequest.toast('题目内容不能为空')
+					return;
+				}
+				if (!this.baseFormData.answer) {
+					if (this.baseFormData.answer != 0) {
+						myRequest.toast('题目答案不能为空')
+						return;
+					}
+				}
+				
+				var data = {
+					"analysis": this.baseFormData.analyse,
+					"answer": this.baseFormData.answer,
+					"description": this.baseFormData.title,
+					"is_public": true,
+					"id": parseInt(this.problem_id),
+				}
+				
+				console.log(data)
+				data = JSON.stringify(data)
+				
+				myRequest.request(api.problem_blank_update(), 'PUT', data).then(
+					function(res) {
+						console.log(res)
+						if (res.statusCode == 200) {
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else {
+							myRequest.toast()
+						}
+					}
+				).catch(
+					function(res) {
+						console.log(res)
+						myRequest.toast()
+					}
+				)
+				
+			},
+			
+			async update_judge_problem() {
+				if (!myRequest.isLogin()) {
+					uni.redirectTo({
+						url: '/pages/login/login'
+					})
+					return;
+				}
+				console.log(uni.getStorageSync('token'))
+				var temp_problem_set_id = this.problem_set_id
+				console.log(this.baseFormData)
+				if (!this.baseFormData.title) {
+					myRequest.toast('题目内容不能为空')
+					return;
+				}
+				if (!this.baseFormData.answer) {
+					if (this.baseFormData.answer != 0) {
+						myRequest.toast('题目答案不能为空')
+						return;
+					}
+				}
+				
+				var data = {
+					"analysis": this.baseFormData.analyse,
+					"description": this.baseFormData.title,
+					"is_correct": true,
+					"is_public": true,
+					"id": parseInt(this.problem_id),
+				}
+				if (this.baseFormData.answer == 1) {
+					data.is_correct = false;
+				}
+				
+				console.log(data)
+				data = JSON.stringify(data)
+				
+				myRequest.request(api.problem_judge_update(), 'PUT', data).then(
+					function(res) {
+						console.log(res)
+						if (res.statusCode == 200) {
+							
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else {
+							myRequest.toast()
+						}
+					}
+				).catch(
+					function(res) {
+						console.log(res)
+						myRequest.toast()
+					}
+				)
+			},
+			
+			load_one_problem_detail(index) {
+				if (this.problem_type_id == 0) {
+					uni.request({
+						url: myRequest.interfaceUrl() + api.problem_choice_all({id:this.problem_id}),
+						method: 'GET',
+						header: {
+							'X-Token': myRequest.getToken()
+						},
+						success: (res2) => {
+							console.log(res2)
+							if (res2.statusCode == 200) {
+								
+								if (res2.data.problems[0].is_multiple) {
+									this.problem_type_select = 1
+								} else {
+									this.problem_type_select = 0
+								}
+								this.baseFormData.title = res2.data.problems[0].description
+								for (var j=0;j<res2.data.problems[0].choices.length;j++) {
+									let temp = this.option_name.length
+									this.dynamicLists.push({
+										description: res2.data.problems[0].choices[j].description,
+										rules: [{
+											'required': true,
+											errorMessage: '选项必填'
+										}],
+									})
+									this.option_name.push({
+										"value": temp,
+										"text": this.letter[temp],
+									})
+								}
+								
+								uni.request({
+									url: myRequest.interfaceUrl() + api.problem_choice_answer(this.problem_id),
+									method: 'GET',
+									header: {
+										'X-Token': myRequest.getToken()
+									},
+									success: (res1) => {
+										console.log(res1)
+										if (res1.statusCode == 200) {
+											var answer = res1.data.choice_problem_answer
+											this.baseFormData.analyse = res1.data.analysis
+											if (this.problem_type_select == 1) {
+												for (var k=0;k<answer.length;k++) {
+													if (answer[k].is_correct == true) {
+														this.baseFormData.answer.push(k);
+													}
+												}
+											} else {
+												for (var k=0;k<answer.length;k++) {
+													if (answer[k].is_correct == true) {
+														this.baseFormData.answer = k;
+														break;
+													}
+												}
+											}
+										}
+										else if (res1.statusCode == 401) {
+											myRequest.redirectToLogin()
+										}
+										else {
+											myRequest.toast()
+										}
+									},
+									
+									fail: (res1) => {					
+										console.log(res1)
+										myRequest.toast()
+									},
+								})
+								
+								console.log(this.problem)
+							
+							}
+							else if (res2.statusCode == 401) {
+								myRequest.redirectToLogin()
+							}
+							else {
+								myRequest.toast()
+							}
+						},
+						fail: (res2) => {					
+							console.log(res2)
+							myRequest.toast()
+						},
+					})
+				} else if (this.problem_type_id == 1) {
+					uni.request({
+						url: myRequest.interfaceUrl() + api.problem_blank_all({id: this.problem_id}),
+						method: 'GET',
+						header: {
+							'X-Token': myRequest.getToken()
+						},
+						success: (res2) => {
+							console.log(res2)
+							if (res2.statusCode == 200) {
+								
+								this.problem_type_select = 3
+								this.baseFormData.title = res2.data.problems[0].description
+								
+								uni.request({
+									url: myRequest.interfaceUrl() + api.problem_blank_answer(this.problem_id),
+									method: 'GET',
+									header: {
+										'X-Token': myRequest.getToken()
+									},
+									success: (res1) => {
+										console.log(res1)
+										if (res1.statusCode == 200) {
+											this.baseFormData.answer = res1.data.answer;
+											this.baseFormData.analyse = res1.data.analysis;
+										}
+										else if (res1.statusCode == 401) {
+											myRequest.redirectToLogin()
+										}
+										else {
+											myRequest.toast()
+										}
+									},
+									fail: (res1) => {					
+										console.log(res1)
+										myRequest.toast()
+									},
+								})
+								
+								console.log(this.problem)
+							}
+							else if (res2.statusCode == 401) {
+								myRequest.redirectToLogin()
+							}
+							else {
+								myRequest.toast()
+							}
+						},
+						fail: (res2) => {					
+							console.log(res2)
+							myRequest.toast()
+						},
+					})
+				} else if (this.problem_type_id == 2) {
+					uni.request({
+						url: myRequest.interfaceUrl() + api.problem_judge_all({id:this.problem_id}),
+						method: 'GET',
+						header: {
+							'X-Token': myRequest.getToken()
+						},
+						success: (res2) => {
+							console.log(res2)
+							if (res2.statusCode == 200) {
+								
+								this.problem_type_select = 2
+								this.baseFormData.title = res2.data.problems[0].description
+								
+								uni.request({
+									url: myRequest.interfaceUrl() + api.problem_judge_answer(this.problem_id),
+									method: 'GET',
+									header: {
+										'X-Token': myRequest.getToken()
+									},
+									success: (res1) => {
+										console.log(res1)
+										if (res1.statusCode == 200) {
+											var answer = res1.data.is_correct;
+											this.baseFormData.analyse = res1.data.analysis;
+											if (answer) {
+												this.baseFormData.answer = 0;
+											} else {
+												this.baseFormData.answer = 1;
+											}
+										}
+										else if (res1.statusCode == 401) {
+											myRequest.redirectToLogin()
+										}
+										else {
+											myRequest.toast()
+										}
+									},
+									fail: (res1) => {					
+										console.log(res1)
+										myRequest.toast()
+									},
+								})
+								
+								console.log(this.problem)
+							}
+							else if (res2.statusCode == 401) {
+								myRequest.redirectToLogin()
+							}
+							else {
+								myRequest.toast()
+							}
+						},
+						fail: (res2) => {					
+							console.log(res2)
+							myRequest.toast()
+						},
+					})
+				}
+			},
+			
+			
+			
 		}
 	};
 </script>

@@ -11,6 +11,9 @@ export default {
 	wrong_record_delete(id) {
 		return "/wrong_record/delete/" + id;
 	},
+	wrong_record_get(id) {
+		return "/wrong_record/get/" + id;
+	},
 	
 	
 	problem_set_migrate_problem(set_id, problem_id) {
@@ -191,6 +194,11 @@ export default {
 	problem_set_delete(id) {
 		let api = "/problem_set/delete";
 		return api + "/" + id;
+	},
+	
+	problem_set_update(id) {
+		let api = "/problem_set/update";
+		return api;
 	},
 
 	problem_set_favorite(id) {

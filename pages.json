@@ -337,6 +337,47 @@
             }
             
         }
+        ,{
+            "path" : "pages/problemSet/problemSetWrongProblems",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "题库错题列表",
+								"navigationStyle": "custom",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        
+        ,{
+            "path" : "pages/problemSet/problemSetFavProblems",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "navigationStyle": "custom",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/problemExam/problemWrongProExam",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "navigationStyle": "custom",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/problemExam/problemFavProExam",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+								"navigationStyle": "custom",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"subPackages": [{
 		"root": "pages/componentsA",

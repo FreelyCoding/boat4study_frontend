@@ -12,6 +12,9 @@ node_modules/
 unpackage/dist/build/
 unpackage/dist/dev/
 unpackage/resources/
+unpackage/release/
+unpackage/res/
+unpackage/cache/
 
 # python
 *.pyc
