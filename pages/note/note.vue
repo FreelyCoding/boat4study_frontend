@@ -235,12 +235,17 @@
 				>
 				
 					<u-list customStyle="width: 94%; margin: auto; margin-top: 15px;">
-						<u-list-item style="margin-bottom: 15px;">
-							<u-row>
-								<u-col span="6" offset="3">
-									<u-button type="success" text="添加相关题目" @click="showProblemSet"></u-button>
-								</u-col>
-							</u-row>
+						
+						<u-list-item style="margin-bottom: 15px;" >
+							<view v-if="authorInfo.id == userId">
+								<u-row>
+									<u-col span="6" offset="3">
+										<u-button type="success" text="添加相关题目" @click="showProblemSet"></u-button>
+									</u-col>
+								</u-row>
+								
+							</view>
+							
 						</u-list-item>
 						
 						<u-list-item v-for="(item, index) in this.relativeProblem" :key="index">
@@ -263,7 +268,10 @@
 										</uni-col>
 										
 										<uni-col span="4" align="start">
-											<i-icon name="delete-bin-fill" color="red" :size="15" style="float: right;" @click="removeRelativeProblem(item, index)"></i-icon>
+											<view v-if="authorInfo.id == userId">
+												<i-icon name="delete-bin-fill" color="red" :size="15" style="float: right;" @click="removeRelativeProblem(item, index)"></i-icon>
+											</view>
+											
 										</uni-col>
 									
 									</uni-row>
@@ -305,10 +313,13 @@
 				remove_index: 0,
 				edit_index: 1,
 				
+				userId: null,
+				
 				like_index: 2, 
 				star_index: 3,
 
 				authorInfo: {
+					id: null,
 					avatar: null,
 					nickName: null
 				},
@@ -698,6 +709,8 @@
 					else {
 						this.note_id = id;
 						
+						this.userId = myRequest.getUID()
+						
 						uni.request({
 							url: myRequest.interfaceUrl() + `/note/all?id=${id}`,
 							method: 'GET',
@@ -720,6 +733,8 @@
 									this.note_html = data.content;
 									this.note_id = data.id;
 									this.created_at = data.created_at.slice(0, 10)
+									
+									this.authorInfo.id = data.user_id
 									
 									if (data.is_liked) {
 										this.fabContent[this.like_index].active = true
