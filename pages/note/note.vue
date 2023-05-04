@@ -33,7 +33,7 @@
 
 			<view>
 				<u-row>
-					<u-col :span="1.6">
+					<u-col :span="2">
 						<u-avatar :src="this.authorInfo.avatar" style="margin-left: 15px; display: inline;">
 						</u-avatar>
 						
@@ -46,7 +46,7 @@
 						
 					</u-col>
 					
-					<u-col :span="6.4">
+					<u-col :span="6">
 						<view style="display: flex; justify-content: flex-end; margin-right: 15px;">
 							<text>{{ this.created_at }}</text>
 							
@@ -262,7 +262,7 @@
 												v-if="item.type===2" />
 										</uni-col>
 										<uni-col :span="12" align="start">
-											<div class="shuhei problem-title" style="margin-bottom: 5px;">
+											<div class="shuhei problem-title" style="margin-bottom: 5px;" @click="problemClick(item)">
 												<p style="font-size: 20px;">{{item.description}}</p>
 											</div>
 										</uni-col>
@@ -369,6 +369,14 @@
 			}
 		},
 		methods: {
+			problemClick(item) {
+				console.log('click')
+				uni.navigateTo({
+					url: `/pages/problem/problemDetail?problem_id=${item.id}&problem_type_id=${item.type}`
+				})
+				
+			},
+			
 			getRelativeProblem() {
 				this.relativeProblem = []
 				
