@@ -12,7 +12,6 @@
 									<u-ava style="width: 100px; height: 100px; background-color: #00aaff;"
 										mode="aspectFill" :src="user.avatar"></image> -->
 								</p>
-
 							</view>
 
 						</uni-col>
@@ -45,7 +44,7 @@
 						<u-input type="text" placeholder="请输入用户昵称" v-model="user.editName" />
 					</uni-section>
 
-					<p style="margin-top: 20px; width: 240px;">
+					<p style="margin-top: 10px; width: 240px;">
 
 					</p>
 
