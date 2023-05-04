@@ -112,10 +112,9 @@
 									<view v-for="(item, index) in group_members" :key="index"
 										style="margin-left: 10px; margin-right: 10px; margin-bottom: 10px;">
 										<p style="text-align: center;">
-											<u-avatar :src="myRequest.imageUrl() + '/public' + item.avatar_path" 
-											size="70px"
-												></u-avatar>
-											
+											<u-avatar :src="myRequest.imageUrl() + '/public' + item.avatar_path"
+												size="70px"></u-avatar>
+
 											<!--
 											<image
 												style="width: 60px; height: 60px; background-color: white; margin: auto;"
@@ -422,13 +421,14 @@
 			}
 		},
 		onLoad: function(option) {
-			this.refresh(option)
+			
 		},
-		
+
 		onShow: function() {
-			let query = this.$route.query
+			let params = this.getParam();
+			let id = params['id'];
 			let option = {
-				"id": query.id
+				"id": id
 			}
 			this.refresh(option)
 		},
@@ -437,9 +437,25 @@
 			back() {
 				uni.navigateBack()
 			},
+			getParam(){
+			  let routes = getCurrentPages(); // 获取当前打开过的页面路由数组
+			  let curRoute = routes[routes.length - 1].route //获取当前页面路由
+			  let curParam = routes[routes.length - 1].options; //获取路由参数
+			  // 拼接参数
+			  let param = ''
+			  for (let key in curParam) {
+			    param += '&' + key + '=' + curParam[key]
+			  }
+			                
+			  // 把参数保存为对像
+			  let obj = {}
+			  for (let key in curParam) {
+			    obj[key] = curParam[key]
+			  }
+			  return obj
+			},
+
 			refresh(option) {
-				let query = this.$route.query
-				console.log("refresh : group_id  = " + query.id)
 				let uid = myRequest.getUID();
 				myRequest.checkLogin()
 				this.group.id = option.id
@@ -840,9 +856,9 @@
 					}
 				)
 			},
-			
 
-			
+
+
 
 		},
 
