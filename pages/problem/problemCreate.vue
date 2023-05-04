@@ -15,7 +15,7 @@
 
 			<uni-section title="试题类型" type="line" class="select_box">
 				<uni-data-select v-model="problem_type_select" :localdata="problem_type" @change="change"
-					:clear="false"></uni-data-select>
+					:clear="false" ></uni-data-select>
 			</uni-section>
 
 			<uni-section v-if="problem_type_select === 0" title="试题内容" type="line" class="select_box">

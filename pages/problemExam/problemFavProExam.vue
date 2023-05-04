@@ -214,7 +214,7 @@
 			var _this = this
 			
 			uni.request({
-				url: myRequest.interfaceUrl() + api.problem_set_all_problem({id:this.problem_set_id}),
+				url: myRequest.interfaceUrl() + api.problem_set_all_problem({id:this.problem_set_id, is_favorite:true}),
 				method: 'GET',
 				header: {
 					'X-Token': myRequest.getToken()
