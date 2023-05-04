@@ -216,6 +216,7 @@
 				</scroll-view>
 			</u-popup>
 			
+			<!--选择题目弹出层-->
 			<u-popup
 				:safeAreaInsetBottom="true"
 				:safeAreaInsetTop="true"
@@ -385,8 +386,6 @@
 				title_maxlength: 50,
 				content_placeholder: "笔记内容",
 				token: "",
-				
-				problemSet: [],
 
 				relativeProblemShow: false,
 				relativeProblem: [
@@ -420,7 +419,8 @@
 				
 				popupShow: false,
 				
-				problemSetSelectShow: false
+				problemSetSelectShow: false,
+				problemSet: [],
 			}
 		},
 		methods: {
@@ -734,49 +734,6 @@
 				}
 			},
 			
-			insertProblem(item) {
-				let that = this
-				
-				console.log(item)
-				
-				var flagStr = 'insertinsertinsertinsertinsertinsertinsertProblem'
-				
-				// 无法直接在光标处插入链接，只能先通过insertText插入后再进行替换
-				
-				this.editorCtx.insertText({
-					text: "\n" + flagStr + "\n",
-					success: res => {
-						this.editorCtx.getContents({
-							success: res => {
-								var html = res.html
-								
-								// TODO: 后续更改一下url
-								
-								// #ifdef H5
-									html = html.replace(flagStr,
-									`<a href="/#/pages/problem/problemDetail?id=${item.id}" style="text-decoration: none;">${item.description}</a>`)
-								// #endif
-								
-								// #ifdef MP-WEIXIN
-									html = html.replace(flagStr,
-									`<a href="/#/pages/problem/problemDetail?id=${item.id}" style="text-decoration: none;">${item.description}</a>`)
-								// #endif
-								
-								
-								this.editorCtx.setContents({
-									html: html,
-									
-									success: res => {
-										that.problemSetSelectShow = false
-									}
-								})
-							}
-						})
-					}
-				})
-				
-			},
-
 			async submit() {
 				if (!myRequest.isLogin()) {
 					uni.redirectTo({
@@ -845,39 +802,8 @@
 						}
 					}
 				})
-
-				// // 找到html中的所有图片的临时地址src，将图片上传到服务器，获取到图片的url，替换html中的临时地址
-				// var imgReg = /<img.*?(?:>|\/>)/gi; // 匹配图片中的img标签
-				// // 匹配以blob开头的src
-				// var srcReg = /src=[\'\"]?blob:([^\'\"]*)[\'\"]?/i;
-
-				// var arr = html_content.match(imgReg); //筛选出所有的img
-				// var img_src = [];
-				// if (arr) {
-				// 	for (var i = 0; i < arr.length; i++) {
-				// 		var src = arr[i].match(srcReg);
-				// 		//获取图片地址
-				// 		if (src && src[1]) {
-				// 			img_src.push(src[1]);
-				// 		}
-				// 	}
-				// }
-
-				// for (var i = 0; i < img_src.length; i ++) {
-
-				// 	try {
-				// 		var result = await myRequest.uploadFile('/upload/public', img_src[i], "file", {})
-
-				// 		var data = JSON.parse(result.data);
-				// 		// 替换html中的临时地址
-				// 		html_content = html_content.replace(img_src[i], myRequest.imageUrl() + data.url);
-				// 		html_content = html_content.replace("data-local=\"" + img_src[i] + "\"", "")
-				// 	} catch(res) {
-				// 		myRequest.toast();
-				// 		break;
-				// 	}
-
-				// } 
+				
+				
 			}
 		},
 		onLoad() {
