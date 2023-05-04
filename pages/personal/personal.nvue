@@ -37,6 +37,10 @@
 						<u-input type="text" placeholder="请输入用户名" v-model="user.editName" />
 					</uni-section>
 
+					<uni-section title="上传用户头像" type="line">
+						
+					</uni-section>
+
 					<p style="margin-top: 20px;">
 
 					</p>
@@ -83,7 +87,7 @@
 								<uni-col :span="6">
 									<view style="margin: auto;">
 										<u-icon name="/static/pic/personal_group.svg" size="50px" color="white"
-										@click="jumpToMyGroup()">
+											@click="jumpToMyGroup()">
 										</u-icon>
 									</view>
 									<view style="margin: auto;">
@@ -173,14 +177,36 @@
 
 
 		<view style="margin-top: 100px;">
-			<uni-card padding="10px 0px 0px 0px" margin="0px 15px 10px 15px">
-				<p style="text-align: center; margin-bottom: 10px; ">
-					<button style="color: white;" type="warn" @click="logout">
-						退出登录
-					</button>
-				</p>
+			<uni-card padding="10px 0px 0px 0px" margin="0px 10px 10px 10px">
+				<uni-row>
+					<uni-col :span="12">
+						<p style="margin: auto">
+							<button style="background-color: #00aaff;color: white; width: 150px;"
+								@click="inputDialogToggle()">
+								编辑个人信息
+							</button>
+						</p>
+					</uni-col>
+
+					<uni-col :span="12" >
+						<p style="margin: auto">
+							<button style="color: white; width: 150px;" type="warn" @click="logout()">
+								退出登录
+							</button>
+						</p>
+					</uni-col>
+				</uni-row>
+
 			</uni-card>
 		</view>
+
+		<!--
+		<p style="text-align: center; margin-bottom: 10px; ">
+			<button style="color: white;" type="warn" @click="logout">
+				退出登录
+			</button>
+		</p>
+		-->
 
 
 	</view>
@@ -304,6 +330,37 @@
 					this.user.editName = this.user.name
 					this.$refs.inputDialog.close()
 				}, 100)
+			},
+			
+			insertImage() {
+				let that = this;
+				uni.chooseImage({
+					count: 1,
+					success: (res) => {
+						uni.uploadFile({
+							url: myRequest.interfaceUrl() + '/upload/public',
+							filePath: res.tempFilePaths[0],
+							name: 'file',
+							header: {
+								'X-Token': myRequest.getToken()
+							},
+							success: res => {
+								if (res.statusCode == 200) {
+									var data = JSON.parse(res.data);
+									that.editorCtx.insertImage({
+										src: myRequest.imageUrl() + data.url,
+										alt: '图像',
+										success: function() {
+											console.log('insert image success')
+										}
+									})
+								} else {
+									myRequest.toast()
+								}
+							}
+						})
+					}
+				})
 			},
 
 			logout() {
