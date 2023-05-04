@@ -228,8 +228,9 @@
 			<view class="owner_info_box">
 				<u-row>
 					<u-col :span="2">
-						<u--image width="50px" height="50px" src="https://cdn.uviewui.com/uview/album/1.jpg"
-							shape="circle"></u--image>
+						<u-avatar :src="myRequest.imageUrl() + '/public' + proDetail.ownerAvatar"
+						size="55px"
+							></u-avatar>
 					</u-col>
 					<u-col :span="9">
 						<view class="" style="font-size: 16px;">
@@ -451,7 +452,8 @@
 				proDetail: {
 					title: "",
 					created_at: '',
-					ownerName: "丁真",
+					ownerName: "",
+					ownerAvatar: "",
 					totalNum: 0,
 					descrip: '',
 					is_favorite: false,
@@ -516,6 +518,7 @@
 								console.log(res2)
 								if (res2.statusCode == 200) {
 									this.proDetail.ownerName = res2.data.user_name
+									this.proDetail.ownerAvatar = res2.data.avatar_path
 								} else if (res2.statusCode == 401) {
 									myRequest.redirectToLogin()
 								} else {
