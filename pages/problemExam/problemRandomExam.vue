@@ -266,7 +266,7 @@
 			},
 			
 			fav_pro(index) {
-				myRequest.request(api.problem_favorite(this.problem_id_list[index].id), 'POST', {}).then(
+				myRequest.request(api.problem_favorite(this.problem_id_list[index].id), 'POST', {}, null, null, true).then(
 					function(res) {
 						console.log(res)
 						if (res.statusCode == 200) {
@@ -284,7 +284,7 @@
 				this.problem[index].favorite = true;
 			},
 			unfav_pro(index) {
-				myRequest.request(api.problem_unfavorite(this.problem_id_list[index].id), 'DELETE', {}).then(
+				myRequest.request(api.problem_unfavorite(this.problem_id_list[index].id), 'DELETE', {}, null, null, true).then(
 					function(res) {
 						console.log(res)
 						if (res.statusCode == 200) {
@@ -645,7 +645,7 @@
 						
 						success: (res1) => {
 							console.log(res1)
-							var answer = res1.data.answer;
+							var answer = res1.data.is_correct;
 							this.problem[pr_i].analysis = res1.data.analysis;
 							if (res1.statusCode == 200) {
 								if (answer) {
