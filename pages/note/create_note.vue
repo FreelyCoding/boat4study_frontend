@@ -185,7 +185,7 @@
 				>
 				
 					<u-list customStyle="width: 94%; margin: auto; margin-top: 15px;">
-						<u-list-item v-for="(item, index) in this.problemSet" :key="index">
+						<u-list-item v-for="(item, index) in problemSet" :key="index">
 							<uni-card spacing="0" padding="0" margin="10px 0px 0px 10px" 
 									@click="loadProblemList(item.id)">
 								<view>
@@ -237,7 +237,7 @@
 				>
 					
 					<u-list customStyle="width: 94%; margin: auto; margin-top: 25px;">
-						<u-list-item v-for="(item, index) in this.problemList" :key="index">
+						<u-list-item v-for="(item, index) in problemList" :key="index">
 							<uni-card spacing="0" padding="0" margin="10px 0px 0px 10px" 
 								@click="select(item)">
 								<view>
@@ -316,7 +316,7 @@
 								</u-row>
 							</u-list-item>
 							
-							<u-list-item v-for="(item, index) in this.relativeProblem" :key="index">
+							<u-list-item v-for="(item, index) in relativeProblem" :key="index">
 								<uni-card spacing="0" padding="0" margin="10px 0px 0px 10px" 
 									@click="select(item)">
 									<view>

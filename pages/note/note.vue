@@ -34,21 +34,23 @@
 			<view>
 				<u-row>
 					<u-col :span="2">
-						<u-avatar :src="this.authorInfo.avatar" style="margin-left: 15px; display: inline;">
-						</u-avatar>
+						<view style="margin-left: 15px;">
+							<u-avatar :src="authorInfo.avatar">
+							</u-avatar>
+						</view>
 						
 					</u-col>
 					
 					<u-col :span="4">
 						<view>
-							<text> {{ this.authorInfo.nickName }} </text>
+							<text> {{ authorInfo.nickName }} </text>
 						</view>
 						
 					</u-col>
 					
 					<u-col :span="6">
 						<view style="display: flex; justify-content: flex-end; margin-right: 15px;">
-							<text>{{ this.created_at }}</text>
+							<text>{{ created_at }}</text>
 							
 						</view>
 						
@@ -112,7 +114,7 @@
 			>
 			
 				<u-list customStyle="width: 94%; margin: auto; margin-top: 15px;">
-					<u-list-item v-for="(item, index) in this.problemSet" :key="index">
+					<u-list-item v-for="(item, index) in problemSet" :key="index">
 						<uni-card spacing="0" padding="0" margin="10px 0px 0px 10px" 
 								@click="loadProblemList(item.id)">
 							<view>
@@ -164,7 +166,7 @@
 			>
 				
 				<u-list customStyle="width: 94%; margin: auto; margin-top: 25px;">
-					<u-list-item v-for="(item, index) in this.problemList" :key="index">
+					<u-list-item v-for="(item, index) in problemList" :key="index">
 						<uni-card spacing="0" padding="0" margin="10px 0px 0px 10px" 
 							@click="select(item)">
 							<view>
@@ -248,7 +250,7 @@
 							
 						</u-list-item>
 						
-						<u-list-item v-for="(item, index) in this.relativeProblem" :key="index">
+						<u-list-item v-for="(item, index) in relativeProblem" :key="index">
 							<uni-card spacing="0" padding="0" margin="10px 0px 0px 10px" 
 								@click="select(item)">
 								<view>
@@ -299,6 +301,9 @@
 	import tRtPopup from '@/components/t-rt-popup/t-rt-popup';
 	import uPopup from '@/uni_modules/uview-ui/components/u-popup/u-popup.vue'
 	import tuiListView from '@/components/tui-list-view/tui-list-view.vue'
+	import uRow from '@/uni_modules/uview-ui/components/u-row/u-row.vue'
+	import uCol from '@/uni_modules/uview-ui/components/u-col/u-col.vue'
+	import uAvatar from '@/uni_modules/uview-ui/components/u-avatar/u-avatar.vue'
 	
 	export default {
 		data() {
