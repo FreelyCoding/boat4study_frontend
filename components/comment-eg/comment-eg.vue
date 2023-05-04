@@ -329,14 +329,6 @@ import myRequest from '../../common/request';
 				
 				var index = this.id2Comment(commentId)
 				
-				console.log('id')
-				console.log(commentId)
-				
-				console.log('like?')
-				console.log(this.commentData.comment)
-				console.log(this.commentData.comment[index])
-				
-				
 				if (!this.commentData.comment[index].hasLike) {
 					
 					uni.request({
@@ -369,6 +361,7 @@ import myRequest from '../../common/request';
 								console.log('wrong')
 								myRequest.toast()
 							}
+							
 						},
 						
 						fail: res => {						
@@ -381,14 +374,13 @@ import myRequest from '../../common/request';
 				else {
 					
 					uni.request({
-						url: myRequest.interfaceUrl() + `note_review/unlike/${commentId}`,
+						url: myRequest.interfaceUrl() + `/note_review/unlike/${commentId}`,
 						method: 'POST',
 						header: {
 							'X-Token': myRequest.getToken()
 						},
 						
 						success: res => {
-							console.log('succ')
 							this.reqFlag = false
 							if (res.statusCode == 200) {
 								this.$refs.hbComment.likeComplete(commentId);
@@ -408,13 +400,11 @@ import myRequest from '../../common/request';
 								})
 							}
 							else {
-								console.log('wrong')
 								myRequest.toast()
 							}
 						},
 						
 						fail: res => {	
-							console.log('fai')
 							this.reqFlag = false
 							myRequest.toast()
 						}
