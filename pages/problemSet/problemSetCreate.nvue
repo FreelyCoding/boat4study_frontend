@@ -63,6 +63,7 @@
 				problemSet: {
 					name: "",
 					description: "",
+					group_id: 0
 				},
 				toast: {
 					type: 'default',
@@ -73,6 +74,13 @@
 				}
 			}
 		},
+		
+		onLoad(option) {
+			if (option.group_id && option.group_id != 0) {
+				this.problemSet.group_id = parseInt(option.group_id)
+			}
+		},
+		
 		methods: {
 			back() {
 				uni.navigateBack({
@@ -100,11 +108,12 @@
 					"description": this.problemSet.description,
 					"name": this.problemSet.name,
 					"is_public": true,
+					"group_id": this.problemSet.group_id,
 				})
 
 				myRequest.request(api.problem_set_create(), 'POST', data).then(
 					function(res) {
-						console.log(res)
+						console.log(data)
 						if (res.statusCode == 200) {
 							myRequest.toast('题库创建成功', 1500, true)
 							setTimeout(() => {

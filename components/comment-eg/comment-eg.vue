@@ -303,6 +303,16 @@ import myRequest from '../../common/request';
 				// this.$refs.hbComment.addComplete();
 				// this.getComment(this.articleId);
 			},
+			
+			id2Comment(commentId) {
+				for (var i = 0; i < this.commentData.comment.length; i ++) {
+					if (this.commentData.comment[i].id == commentId) {
+						return i;
+					}
+				}
+				return -1;
+			},
+			
 			// 点赞评论
 			like(commentId) {
 				if (!this.checkLogin()) {
@@ -316,6 +326,90 @@ import myRequest from '../../common/request';
 					return
 				}
 				this.reqFlag = true;
+				
+				var index = this.id2Comment(commentId)
+				
+				if (!this.commentData.comment[index].hasLike) {
+					
+					uni.request({
+						url: myRequest.interfaceUrl() + `/note_review/like/${commentId}`,
+						method: 'POST',
+						header: {
+							'X-Token': myRequest.getToken()
+						},
+						
+						success: res => {
+							this.reqFlag = false
+							if (res.statusCode == 200) {
+								this.$refs.hbComment.likeComplete(commentId);
+							}
+							else if (res.statusCode == 401) {
+								uni.showModal({
+									title: '提示',
+									content: '请先登录',
+									confirmText: '前往登录',
+									success: function(res) {
+										if (res.confirm) {
+											uni.redirectTo({
+												url: '/pages/login/login'
+											});
+										}
+									}
+								})
+							}
+							else {
+								console.log('wrong')
+								myRequest.toast()
+							}
+							
+						},
+						
+						fail: res => {						
+							this.reqFlag = false
+							myRequest.toast()
+						}
+						
+					})
+				}
+				else {
+					
+					uni.request({
+						url: myRequest.interfaceUrl() + `/note_review/unlike/${commentId}`,
+						method: 'POST',
+						header: {
+							'X-Token': myRequest.getToken()
+						},
+						
+						success: res => {
+							this.reqFlag = false
+							if (res.statusCode == 200) {
+								this.$refs.hbComment.likeComplete(commentId);
+							}
+							else if (res.statusCode == 401) {
+								uni.showModal({
+									title: '提示',
+									content: '请先登录',
+									confirmText: '前往登录',
+									success: function(res) {
+										if (res.confirm) {
+											uni.redirectTo({
+												url: '/pages/login/login'
+											});
+										}
+									}
+								})
+							}
+							else {
+								myRequest.toast()
+							}
+						},
+						
+						fail: res => {	
+							this.reqFlag = false
+							myRequest.toast()
+						}
+					})
+				}
 				// TODO 接入真实接口
 				// this.$u.api.commentLike(commentId).then(res => {
 				// 	this.$refs.hbComment.likeComplete(commentId);
@@ -324,8 +418,8 @@ import myRequest from '../../common/request';
 				// 	this.reqFlag = false;
 				// })
 				// 下边假装请求成功
-				this.reqFlag = false;
-				this.$refs.hbComment.likeComplete(commentId);
+				// this.reqFlag = false;
+				// this.$refs.hbComment.likeComplete(commentId);
 			},
 			// 删除评论
 			del(commentId) {
