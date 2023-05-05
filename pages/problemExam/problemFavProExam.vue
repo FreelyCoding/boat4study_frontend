@@ -2,7 +2,7 @@
 	<view>
 		<view class="status-bar">
 			<!--自定义navbar-->
-			<uni-nav-bar title="顺序练习" background-color="#00aaff" color="#FFFFFF" status-bar="true">
+			<uni-nav-bar title="藏题练习" background-color="#00aaff" color="#FFFFFF" status-bar="true">
 				<block slot="left">
 					<view class="note-navbar">
 						<uni-icons type="left" color="#FFFFFF" size="18"  @click="back()"/>
