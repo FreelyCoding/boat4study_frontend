@@ -136,8 +136,6 @@
 </script>
 
 <style>
-	@import url('../homePage/homePage.css');
-
 	.status-bar {
 		width: 100%;
 		position: sticky;

@@ -827,7 +827,6 @@
 </script>
 
 <style>
-	@import "./editor-icon.css";
 
 	/* navbar css */
 	/* $nav-height: 30px;

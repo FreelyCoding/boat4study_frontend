@@ -42,7 +42,8 @@
 	import tuiToast from '@/components/tui-toast/tui-toast.vue'
 	
 	import util from '@/util/thor_utils/util.js'
-import myRequest from '../../common/request'
+	import myRequest from '../../common/request'
+	
 	export default {
 		data() {
 			return {
@@ -60,12 +61,17 @@ import myRequest from '../../common/request'
 					"password": this.password
 				}
 				
+				
+				myRequest.toast('准备调用接口')
+				
 				uni.request({
 					url: "http://123.249.3.32:9000/login",
 					method: 'POST',
 					data: JSON.stringify(userInfo),
+					dataType: 'json',
 					
 					success: res => {
+						myRequest.toast("调用接口成功")
 						if (res.statusCode == 200) {
 							this.tui.toast('登录成功')
 							uni.setStorage({
@@ -110,7 +116,9 @@ import myRequest from '../../common/request'
 					},
 					
 					fail: res => {
-						this.uni.toast('发生错误')
+						myRequest.toast(res.statusCode, 100)
+						
+						// myRequest.toast("调用接口失败")
 					}
 				});				
 			},

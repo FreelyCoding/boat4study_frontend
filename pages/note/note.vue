@@ -966,9 +966,6 @@
 </script>
 
 <style>
-	@import "./editor-icon.css";
-	@import url('note.css');
-
 	/* navbar css */
 	/* $nav-height: 30px;
 	 */

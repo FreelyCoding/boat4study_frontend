@@ -1,5 +1,5 @@
 {
-    "name" : "示例项目",
+    "name" : "学舟",
     "appid" : "__UNI__EDAF76D",
     "description" : "多平台快速开发的UI框架",
     "versionName" : "1.0.0",
@@ -96,12 +96,12 @@
     },
     "quickapp" : {},
     "mp-weixin" : {
-        "appid" : "wx997102d02ee52e97",
+        "appid" : "wx5fa3b5765e65eb57",
         "setting" : {
             "urlCheck" : false,
-            "es6" : false,
-            "minified" : false,
-            "postcss" : false
+            "es6" : true,
+            "minified" : true,
+            "postcss" : true
         },
         "optimization" : {
             "subPackages" : true

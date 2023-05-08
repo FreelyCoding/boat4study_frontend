@@ -203,7 +203,6 @@
 </script>
 
 <style>
-	@import url('../homePage/homePage.css');
 	page {
 		background: #EDEDED;
 	}
