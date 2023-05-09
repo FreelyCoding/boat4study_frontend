@@ -76,7 +76,7 @@
 								id: res.data[i].id,
 								description: res.data[i].description,
 								name: res.data[i].name,
-								pic: "../../static/pic/dataStructure.jpg",
+								pic: "",
 								created_at: res.data[i].created_at.slice(0, 10),
 								problem_number: res.data[i].problem_count,
 							}
