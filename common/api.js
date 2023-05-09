@@ -292,6 +292,11 @@ export default {
 		return api
 	},
 	
+	user_info(id) {
+		let api = "/user/info"
+		return api + "/" + id
+	},
+	
 	//special
 	wrong_problem_set() {
 		let api = "/special/wrong_problem_set"

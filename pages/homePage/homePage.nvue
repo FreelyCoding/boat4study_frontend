@@ -71,13 +71,13 @@
 				<view class="scroll-list" style="flex-direction: row;">
 					<view class="scroll-list__goods-item" v-for="(item, index) in notes" :key="index">
 						<uni-card isShadow border padding="15px 5px 0px 5px" margin="15px 20px 20px 0px"
-							style="border-radius: 10px; width: 350px;" @click="cardClick(item)" >
+							style="border-radius: 10px; width: 350px;" @click="cardClick(item)">
 							<view class="u-demo-block">
 								<view>
 									<view>
 										<text class="note-title">{{item.note_title}}</text>
 
-										<uni-row v-if="item.pic" style="margin-top: 15px;" >
+										<uni-row v-if="item.pic" style="margin-top: 15px;">
 											<uni-col :span="12">
 												<view style=" height:90px;">
 													<p class="note-content">
@@ -96,7 +96,7 @@
 										<uni-row v-else style="margin-top: 15px; ">
 											<uni-col :span="24">
 												<view style=" height:90px;">
-													<p class="note-content" > {{item.note_content}}</p>
+													<p class="note-content"> {{item.note_content}}</p>
 												</view>
 											</uni-col>
 										</uni-row>
@@ -140,7 +140,7 @@
 			<uni-row>
 				<uni-col :span="12">
 					<view>
-						<p class="homePage-header"> 我的题库</p>
+						<p class="homePage-header"> 精选题库</p>
 					</view>
 				</uni-col>
 
@@ -152,6 +152,69 @@
 			</uni-row>
 		</view>
 
+
+		<view class="u-demo-block" v-if="problemSet && problemSet.length > 0">
+			<u-list customStyle="width: 94%; margin: auto; max-height: 350px; margin-top: 15px;">
+				<u-list-item v-for="(item, index) in problemSet" :key="index">
+					<uni-card spacing="0" padding="0" margin="10px 0px 0px 10px" @click="jumpToProblemSetDetail(item)">
+						<view>
+							<uni-row>
+								<uni-col :span="5" align="start">
+									<u-avatar :src="myRequest.imageUrl() + '/public'
+										 + item.user_info.avatar_path" size="60px"></u-avatar>
+									<p style="margin-left: 13%;">创建者</p>
+								</uni-col>
+
+								<uni-col :span="18" align="start">
+									<div class="shuhei" style="margin-bottom: 5px;">
+										<p style="font-size: 20px;">{{item.name}}</p>
+									</div>
+									<div style="font-size: 16px;">
+										{{item.problem_number}} 道题目
+										&ensp; &ensp;
+										{{item.created_at}}
+									</div>
+								</uni-col>
+							</uni-row>
+							<u-divider v-if="problemSet"> </u-divider>
+						</view>
+					</uni-card>
+				</u-list-item>
+			</u-list>
+		</view>
+
+
+		<view class="m-middle-2">
+			<uni-row>
+				<uni-col :span="12">
+					<view>
+						<p class="homePage-header"> 精选小组</p>
+					</view>
+				</uni-col>
+
+				<uni-col :span="12">
+					<view>
+						<p class="check-all" @click="jumpToStudyGroup()">查看全部</p>
+					</view>
+				</uni-col>
+			</uni-row>
+		</view>
+
+		<view class="u-demo-block" v-if="groups && groups.length > 0">
+			<u-list customStyle="width: 94%; margin: auto; max-height: 350px; margin-top: 15px;">
+				<u-list-item v-for="(item, index) in groups" :key="index">
+					<uni-card :title="item.name" :extra="'创建于' + item.create_time" :thumbnail="item.pic"
+						@click="cardClick(item)" isShadow border padding="15px 5px 15px 5px" margin="0px 15px 15px 15px"
+						style="border-radius: 10px;">
+						<text class="uni-body">{{item.description}}</text>
+					</uni-card>
+				</u-list-item>
+			</u-list>
+		</view>
+
+
+
+		<!--
 		<view class="u-demo-block" v-if="problemSet && problemSet.length > 0">
 			<u-list customStyle="width: 94%; margin: auto; max-height: 350px; margin-top: 15px;">
 				<u-list-item v-for="(item, index) in problemSet" :key="index">
@@ -181,6 +244,7 @@
 				</u-list-item>
 			</u-list>
 		</view>
+		-->
 
 		<view style="margin-bottom: 50px;">
 
@@ -191,6 +255,7 @@
 
 <script>
 	import myRequest from '../../common/request';
+	import api from '@/common/api.js';
 	export default {
 		data() {
 			return {
@@ -231,6 +296,8 @@
 					}
 				],
 				problemSet: [],
+				problemSetOwners: [],
+				groups: []
 			}
 		},
 		watch: {
@@ -292,15 +359,15 @@
 			search(e) {
 				console.log('searchChange', e);
 			},
-			
+
 			cardClick(item) {
 				console.log(item)
-			
+
 				uni.navigateTo({
 					url: `/pages/note/note?id=${item.id}`,
 				})
 			},
-			
+
 			sortby(p) {
 				return function(v1, v2) {
 					let a = v1[p]
@@ -399,7 +466,7 @@
 				})
 
 				uni.request({
-					url: myRequest.interfaceUrl() + '/problem_set/all?group_id=0&user_id=' + uid,
+					url: myRequest.interfaceUrl() + '/problem_set/all?group_id=0',
 					method: 'GET',
 					header: {
 						'X-Token': myRequest.getToken()
@@ -411,6 +478,7 @@
 							this.problemSet = []
 							if (res.data.problem_set && res.data.problem_set.length) {
 								for (var i = 0; i < res.data.problem_set.length; i++) {
+									let owner_id = res.data.problem_set[i].user_id
 									var t = {
 										id: res.data.problem_set[i].id,
 										description: res.data.problem_set[i].description,
@@ -418,6 +486,9 @@
 										pic: "",
 										created_at: res.data.problem_set[i].created_at.slice(0, 10),
 										problem_number: res.data.problem_set[i].problem_count,
+										user_id: res.data.problem_set[i].user_id,
+										group_id: res.data.problem_set[i].group_id,
+										user_info: res.data.problem_set[i].user_info,
 									}
 									this.problemSet.push(t);
 								}
@@ -441,6 +512,40 @@
 						myRequest.toast()
 					}
 				})
+
+				uni.request({
+					url: myRequest.interfaceUrl() + '/group/all',
+					method: 'GET',
+					header: {
+						'X-Token': myRequest.getToken()
+					},
+
+					success: (res) => {
+						console.log(res)
+						if (res.statusCode == 200) {
+							for (var i = 0; i < res.data.group.length; i++) {
+								var t = {
+									description: res.data.group[i].description,
+									name: res.data.group[i].name,
+									pic: "/static/pic/personal_group.svg",
+									create_time: res.data.group[i].created_at.slice(0, 10),
+									id: res.data.group[i].id,
+								}
+								this.groups.push(t);
+							}
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else {
+							myRequest.toast()
+						}
+					},
+
+					fail: (res) => {
+						console.log(res)
+						myRequest.toast()
+					}
+				})
+
 			}
 		},
 		onLoad: function() {
