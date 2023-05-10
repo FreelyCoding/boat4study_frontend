@@ -595,7 +595,7 @@
 				} else {
 					this.show = false;
 					uni.switchTab({
-						url: '/pages/note/index'
+						url: '/pages/homePage/noteIndex'
 					})
 				}
 			},
@@ -781,7 +781,7 @@
 									if (res.statusCode == 200) {
 										myRequest.toast('笔记创建成功')
 										uni.switchTab({
-											url: '/pages/note/index',
+											url: '/pages/homePage/noteIndex',
 											success() {
 												let page = getCurrentPages().pop(); //跳转页面成功之后
 												if (!page) return;

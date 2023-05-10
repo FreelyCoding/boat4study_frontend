@@ -671,13 +671,13 @@
 							console.log(res)
 							if (res.statusCode == 200) {
 								uni.switchTab({
-									url: '/pages/note/index',
+									url: '/pages/homePage/noteIndex',
 									success() {
 										// console.log(getCurrentPages())
 										// let page = getCurrentPages().pop(); //跳转页面成功之后
 										// if (!page) return;
 										// console.log(page.route)
-										// if (page.route == 'pages/note/index' 
+										// if (page.route == 'pages/homePage/noteIndex' 
 										// 		|| page.route == '/pages/personal/personalNote'
 										// 		|| page.route == '/pages/personal/starNotes') {
 										// 	page.$vm.refresh(); //如果页面存在，则重新刷新页面
@@ -721,7 +721,7 @@
 					
 					if (!id) {
 						uni.switchTab({
-							url: '/pages/note/index'
+							url: '/pages/homePage/noteIndex'
 						})
 					}
 					else {
@@ -741,7 +741,7 @@
 									if (res.data.notes == null) {
 										myRequest.toast()
 										uni.switchTab({
-											url: '/pages/note/index'
+											url: '/pages/homePage/noteIndex'
 										})
 										return
 									}
@@ -787,7 +787,7 @@
 									console.log('wrong')
 									myRequest.toast()
 									uni.switchTab({
-										url: '/pages/note/index'
+										url: '/pages/homePage/noteIndex'
 									})
 								}
 							},
@@ -795,7 +795,7 @@
 							fail: (res) => {
 								myRequest.toast()
 								uni.switchTab({
-									url: '/pages/note/index'
+									url: '/pages/homePage/noteIndex'
 								})
 							}
 						})	
@@ -876,7 +876,7 @@
 								console.log('wrong')
 								myRequest.toast()
 								uni.switchTab({
-									url: '/pages/note/index'
+									url: '/pages/homePage/noteIndex'
 								})
 							}
 						},
@@ -884,7 +884,7 @@
 						fail: (res) => {
 							myRequest.toast()
 							uni.switchTab({
-								url: '/pages/note/index'
+								url: '/pages/homePage/noteIndex'
 							})
 						}
 					})	
@@ -898,7 +898,7 @@
 				if (pages.length > 1) {
 					let page = pages[pages.length - 2]; //跳转页面成功之后
 					
-					if (page.route == 'pages/note/index'
+					if (page.route == 'pages/homePage/noteIndex'
 						|| page.route == 'pages/personal/personalNote'
 						|| page.route == 'pages/personal/starNotes') {
 						page.$vm.refresh(); //如果页面存在，则重新刷新页面
@@ -907,7 +907,7 @@
 				}
 				else {
 					uni.switchTab({
-						url: '/pages/note/index'
+						url: '/pages/homePage/noteIndex'
 					})
 				}
 			},

@@ -676,7 +676,7 @@
 				} else {
 					this.show = false;
 					uni.switchTab({
-						url: '/pages/note/index'
+						url: '/pages/homePage/noteIndex'
 					})
 				}
 			},
@@ -712,7 +712,7 @@
 					
 					if (!id) {
 						uni.switchTab({
-							url: '/pages/note/index'
+							url: '/pages/homePage/noteIndex'
 						})
 					}
 					else {
@@ -730,7 +730,7 @@
 									if (res.data.notes == null) {
 										myRequest.toast()
 										uni.switchTab({
-											url: '/pages/note/index'
+											url: '/pages/homePage/noteIndex'
 										})
 										return
 									}
@@ -741,7 +741,7 @@
 									if (data.user_id != myRequest.getUID()) {
 										console.log('无权限')
 										uni.switchTab({
-											url: '/pages/note/index'
+											url: '/pages/homePage/noteIndex'
 										})
 									}
 									else {
@@ -767,7 +767,7 @@
 									console.log('wrong')
 									myRequest.toast()
 									uni.switchTab({
-										url: '/pages/note/index'
+										url: '/pages/homePage/noteIndex'
 									})
 								}
 							},
@@ -775,7 +775,7 @@
 							fail: (res) => {
 								myRequest.toast()
 								uni.switchTab({
-									url: '/pages/note/index'
+									url: '/pages/homePage/noteIndex'
 								})
 							}
 						})	
