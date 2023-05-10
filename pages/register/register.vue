@@ -5,24 +5,38 @@
 			<image src="@/static/pic/login/mine_def_touxiang_3x.png" class="tui-photo"></image>
 			<view class="tui-login-name">学舟</view>
 		</view>
-		<form :report-submit="true" @submit="formLogin">
+		<form :report-submit="true" @submit="formRegister">
 			<view class="tui-login-from">
 				<view class="tui-line-cell">
 					<tui-icon name="people" :size="20" color="#6d7a87"></tui-icon>
 					<input placeholder-class="tui-phcolor" class="tui-input" name="username" placeholder="请输入用户名"
-						maxlength="20" v-model="username"/>
+						maxlength="35" v-model="username"/>
+				</view>
+				
+				<view class="tui-line-cell tui-top28">
+					<tui-icon name="mail" :size="20" color="#6d7a87"></tui-icon>
+					<input placeholder-class="tui-phcolor" class="tui-input" name="email" placeholder="请输入邮箱"
+						maxlength="256" v-model="email" />
+				</view>
+				
+				<view class="tui-line-cell tui-top28">
+					<tui-icon name="pwd" :size="20" color="#6d7a87"></tui-icon>
+					<input placeholder-class="tui-phcolor" class="tui-input" name="code" placeholder="请输入验证码"
+						maxlength="6" v-model="code" />
+					<tui-button width="182rpx" height="56rpx" :size="24" :type="type" shape="circle" :plain="true"
+						:disabled="disabled" @click="btnSend">{{ btnText }}</tui-button>
 				</view>
 				
 				<view class="tui-line-cell tui-top28">
 					<tui-icon name="pwd" :size="20" color="#6d7a87"></tui-icon>
 					<input placeholder-class="tui-phcolor" class="tui-input" name="password" placeholder="请输入密码" password="true"
-						maxlength="30" v-model="password"/>
+						maxlength="35" v-model="password"/>
 				</view>
 				
 				<view class="tui-line-cell tui-top28">
 					<tui-icon name="pwd" :size="20" color="#6d7a87"></tui-icon>
 					<input placeholder-class="tui-phcolor" class="tui-input" name="confirm" placeholder="请再次确认密码" password="true"
-						maxlength="30" v-model="confirm"/>
+						maxlength="35" v-model="confirm"/>
 				</view>
 				
 				
@@ -58,13 +72,100 @@
 				password: '',
 				confirm: '',
 				type: 'primary',
+				
+				btnText: '获取验证码',
+				email: '',
+				code: ''
 			};
 		},
 		methods: {
+			checkPassword() {
+				// 检查密码的强度
+				let password = this.password;
+				
+				// 最少8位,包含大小写字母、数字和特殊字符
+				let strongRegex = new RegExp(
+					"^(?=.{8,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*$",
+					"g"
+				);
+				
+				// 最少8位,包含大小写字母和数字	
+				let mediumRegex = new RegExp(
+					"^(?=.{8,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).*$",
+					"g"
+				);
+
+				if (strongRegex.test(password)) {
+					return 3;
+				} else if (mediumRegex.test(password)) {
+					return 2;
+				} else {
+					return 1;
+				}
+
+			},
+		
+			doLoop: function(seconds) {
+				seconds = seconds ? seconds : 60;
+				this.btnText = seconds + 's后获取';
+				let countdown = setInterval(() => {
+					if (seconds > 0) {
+						this.btnText = seconds + 's后获取';
+						--seconds;
+					} else {
+						this.btnText = '获取验证码';
+						this.disabled = false;
+						this.type = 'primary';
+						clearInterval(countdown);
+					}
+				}, 1000);
+			},
+			
+			btnSend: function() {
+				let rules = [{
+					name: 'email',
+					rule: ['required', 'isEmail'],
+					msg: ['请输入邮箱', '请输入正确的邮箱']
+				}];
+				//进行表单检查
+				let formData = {
+					email: this.email
+				};
+				let checkRes = form.validation(formData, rules);
+				if (!checkRes) {
+					this.disabled = true;
+					this.btnText = '请稍候...';
+					this.type = 'gray';
+			
+					setTimeout(() => {
+						this.doLoop(60);
+					}, 500);
+					
+					uni.request({
+						url: myRequest.interfaceUrl() + `/send-email?email=${this.email}`,
+						method: 'POST',
+						success: res => {
+							console.log(res)
+							if (res.statusCode == 200) {
+								this.tui.toast('已发送验证码')
+							}
+							else {
+								this.tui.toast()
+							}
+						}
+					})
+					
+				} else {
+					this.tui.toast(checkRes);
+				}
+			},
+			
 			register(e) {
 				let userInfo = {
 					"name": this.username,
-					"password": this.password
+					"password": this.password,
+					"email": this.email,
+					"v_code": this.code
 				}
 				uni.request({
 					url: "http://123.249.3.32:9000/register",
@@ -80,8 +181,10 @@
 								uni.redirectTo({
 									url: "/pages/login/login"
 								});
-							}, 800)
-							
+							}, 800)	
+						}
+						else if (res.statusCode == 400) {
+							this.tui.toast("验证码错误或已过期")
 						}
 						else if (res.statusCode == 409){
 							this.tui.toast("用户名已存在");
@@ -96,15 +199,28 @@
 				})
 				
 			},
-			formLogin: function(e) {
+			
+			formRegister: function(e) {
 				let password = e.detail.value.password;
 				let username = e.detail.value.username;
 				let confirm = e.detail.value.confirm;
+				let email = e.detail.value.email;
+				let code = e.detail.value.code;
 				let rules = [
 					{
 						name: 'username',
 						rule: ['required'],
-						msg: ['请输入用户名']
+						msg: ['请输入用户名'],
+					},
+					{
+						name: 'email',
+						rule: ['required', 'isEmail'],
+						msg: ['请输入邮箱', '请输入正确的邮箱']
+					},
+					{
+						name: 'code',
+						rule: ['required'],
+						msg: ['请输入验证码']
 					},
 					{
 						name: 'password',
@@ -120,6 +236,8 @@
 				//进行表单检查
 				let formData = {
 					username: username,
+					email: email,
+					code: code,
 					password: password,
 					confirm: confirm
 				};
@@ -129,6 +247,12 @@
 					this.tui.toast(checkRes);
 					return;
 				}
+				
+				if (this.checkPassword() == 1) {
+					this.tui.toast('密码强度过低，应至少为8位大小写字母和数字组合')
+					return;
+				}
+				
 				this.register(e)
 			},
 			toLogin() {

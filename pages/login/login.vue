@@ -116,8 +116,13 @@
 					},
 					
 					fail: res => {
-						myRequest.toast(res.statusCode, 100)
 						
+						if (res == null) {
+							myRequest.toast("res为null")
+						}
+						else {
+							
+						}
 						// myRequest.toast("调用接口失败")
 					}
 				});				
