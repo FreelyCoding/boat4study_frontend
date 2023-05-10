@@ -94,7 +94,7 @@
 							<uni-row class="demo-uni-row">
 								<uni-col :span="6">
 									<view style="margin: auto;">
-										<u-icon name="/static/pic/homeNote.svg" size="50px" @click="jumpToMyNote()">
+										<u-icon name="/static/pic/homeNote.png" size="50px" @click="jumpToMyNote()">
 										</u-icon>
 									</view>
 									<view style="margin: auto;">
@@ -239,7 +239,7 @@
 		data() {
 			return {
 				user: {
-					avatar: "/static/pic/student.png",
+					avatar: "",
 					uid: 1,
 					name: "",
 					nickName: "",
