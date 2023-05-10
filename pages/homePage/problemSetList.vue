@@ -2,7 +2,7 @@
 	<view class="container">
 		<view style="background-color: #f1f1f1;">
 			<!--自定义navbar-->
-			<uni-nav-bar title="题库分类" background-color="#00aaff" color="#FFFFFF" status-bar="true">
+			<uni-nav-bar title="选择题库" background-color="#00aaff" color="#FFFFFF" status-bar="true">
 				<block slot="left">
 					<view class="note-navbar">
 						<uni-icons type="left" color="#FFFFFF" size="18" />
@@ -11,7 +11,7 @@
 			</uni-nav-bar>
 			
 			<view class="m-middle-2" style="padding-top: 5px; padding-bottom: 5px; display: flex;">
-				<u--input placeholder="请输入想要搜索的考试名称" prefixIcon="search"
+				<u--input placeholder="请输入想要搜索的题库名称" prefixIcon="search"
 					prefixIconStyle="font-size: 20px;color: #909399" shape="circle" v-model="searchValue"
 					customStyle="background-color: white;">
 				</u--input>

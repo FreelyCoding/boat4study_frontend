@@ -4,7 +4,7 @@
 		<view class="u-page__item" style="margin-bottom: 20px;">
 			<div class="background-blue">
 				<view class="u-input m-middle-2" style="margin-top: 20px">
-					<u--input placeholder="搜索题库或试题答案" prefixIcon="search"
+					<u--input placeholder="请输入想要搜索的题库或小组名称" prefixIcon="search"
 						prefixIconStyle="font-size: 20px;color: #909399" shape="circle" v-model="searchValue"
 						customStyle="background-color: white;">
 					</u--input>
@@ -204,7 +204,7 @@
 		</view>
 
 		<view class="u-demo-block" v-if="groups && groups.length > 0">
-			<u-list customStyle="width: 94%; margin: auto; max-height: 380px; margin-top: 15px;">
+			<u-list customStyle="margin: auto; max-height: 380px; margin-top: 15px;">
 				<u-list-item v-for="(item, index) in groups" :key="index">
 					<uni-card :title="item.name" :extra="'创建于' + item.create_time" :thumbnail="item.pic"
 						@click="jumpToStudyGroup(item)" isShadow border padding="15px 5px 15px 5px" margin="0px 15px 15px 15px"

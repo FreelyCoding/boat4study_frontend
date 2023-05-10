@@ -76,7 +76,19 @@
 
 				</uni-card>
 			</view>
+				
+			<view style="padding-bottom: 20px;">
+				<p style="text-align: center;">
+					<button style="background-color: #00aaff; color: white; max-width: 92%;
+					 margin-bottom: 10px;" @click="jumpToCreateNote">
+						创建笔记
+					</button>
+				</p>
+			</view>
+			
 		</view>
+
+		
 
 		<view v-else style="text-align: center;">
 			<image src="../../static/pic/note/no_note.png"
@@ -166,6 +178,11 @@
 			back() {
 				uni.switchTab({
 					url: '/pages/homePage/homePage'
+				})
+			},
+			jumpToCreateNote() {
+				uni.navigateTo({
+					url: '/pages/note/create_note'
 				})
 			},
 			refresh() {

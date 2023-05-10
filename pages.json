@@ -38,7 +38,7 @@
 				"pagePath": "pages/homePage/problemSetList",
 				"iconPath": "static/pic/grid_unselect.png",
 				"selectedIconPath": "static/pic/grid.png",
-				"text": "分类"
+				"text": "做题"
 			},
 			{
 				"pagePath": "pages/homePage/noteIndex",
