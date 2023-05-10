@@ -10,7 +10,7 @@
 				<view class="tui-line-cell">
 					<tui-icon name="people" :size="20" color="#6d7a87"></tui-icon>
 					<input placeholder-class="tui-phcolor" class="tui-input" name="username" placeholder="请输入用户名"
-						maxlength="6" v-model="username"/>
+						maxlength="35" v-model="username"/>
 				</view>
 				
 				<view class="tui-line-cell tui-top28">
@@ -22,7 +22,7 @@
 				<view class="tui-line-cell tui-top28">
 					<tui-icon name="pwd" :size="20" color="#6d7a87"></tui-icon>
 					<input placeholder-class="tui-phcolor" class="tui-input" name="code" placeholder="请输入验证码"
-						maxlength="25" v-model="code" />
+						maxlength="6" v-model="code" />
 					<tui-button width="182rpx" height="56rpx" :size="24" :type="type" shape="circle" :plain="true"
 						:disabled="disabled" @click="btnSend">{{ btnText }}</tui-button>
 				</view>
@@ -30,13 +30,13 @@
 				<view class="tui-line-cell tui-top28">
 					<tui-icon name="pwd" :size="20" color="#6d7a87"></tui-icon>
 					<input placeholder-class="tui-phcolor" class="tui-input" name="password" placeholder="请输入密码" password="true"
-						maxlength="30" v-model="password"/>
+						maxlength="35" v-model="password"/>
 				</view>
 				
 				<view class="tui-line-cell tui-top28">
 					<tui-icon name="pwd" :size="20" color="#6d7a87"></tui-icon>
 					<input placeholder-class="tui-phcolor" class="tui-input" name="confirm" placeholder="请再次确认密码" password="true"
-						maxlength="30" v-model="confirm"/>
+						maxlength="35" v-model="confirm"/>
 				</view>
 				
 				
@@ -79,6 +79,32 @@
 			};
 		},
 		methods: {
+			checkPassword() {
+				// 检查密码的强度
+				let password = this.password;
+				
+				// 最少8位,包含大小写字母、数字和特殊字符
+				let strongRegex = new RegExp(
+					"^(?=.{8,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*$",
+					"g"
+				);
+				
+				// 最少8位,包含大小写字母和数字	
+				let mediumRegex = new RegExp(
+					"^(?=.{8,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).*$",
+					"g"
+				);
+
+				if (strongRegex.test(password)) {
+					return 3;
+				} else if (mediumRegex.test(password)) {
+					return 2;
+				} else {
+					return 1;
+				}
+
+			},
+		
 			doLoop: function(seconds) {
 				seconds = seconds ? seconds : 60;
 				this.btnText = seconds + 's后获取';
@@ -221,6 +247,12 @@
 					this.tui.toast(checkRes);
 					return;
 				}
+				
+				if (this.checkPassword() == 1) {
+					this.tui.toast('密码强度过低，应至少为8位大小写字母和数字组合')
+					return;
+				}
+				
 				this.register(e)
 			},
 			toLogin() {
