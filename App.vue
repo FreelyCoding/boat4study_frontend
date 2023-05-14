@@ -18,7 +18,6 @@
 	@import "@/static/iconfont.css";
 	@import "common/note.css";
 	@import "common/editor-icon.css";
-	@import "common/problem_exam.scss";
 	@import "common/homePage.css";
 	
 </style>

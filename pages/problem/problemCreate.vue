@@ -21,7 +21,20 @@
 			<uni-section v-if="problem_type_select === 0" title="试题内容" type="line" class="select_box">
 				<uni-forms ref="baseForm" :modelValue="baseFormData" label-position="top">
 					<uni-forms-item label="题目" required>
-						<uni-easyinput v-model="baseFormData.title" placeholder="请输入题目" />
+						<view class="form-item">
+							<uni-easyinput v-model="baseFormData.title" placeholder="请输入题目" />
+							<image class="item" @click="chooseImage(-1)" src="../../static/pic/problem/tupian.svg"
+							 style="height: 20px; width: 20px; margin-left: 10px;"></image>
+						</view>
+						<view v-if="baseFormData.title_pic !== ''" @click="viewImage(-1)">
+							<image
+							style="width: 100%; height: 200px; margin-top: 20px;"
+							:src="baseFormData.title_pic"></image>
+							<view @click.stop="DelImg(-1)"
+								style="position: absolute; top:60px; right:5px; background-color:aliceblue;">
+								<uni-icons type="closeempty" class="close" size="20"></uni-icons>
+							</view>
+						</view>
 					</uni-forms-item>
 					<uni-forms-item label="选项" required style="margin-bottom: 0ch;"></uni-forms-item>
 				</uni-forms>
@@ -31,6 +44,17 @@
 							<uni-easyinput v-model="dynamicLists[index].description" placeholder="请输入选项" />
 							<button class="button" v-if="index>=2" size="mini" type="warn"
 								@click="del_option(item.id)">删除</button>
+							<image class="item" @click="chooseImage(index)" src="../../static/pic/problem/tupian.svg"
+							 style="height: 20px; width: 20px; margin-left: 10px;"></image>
+						</view>
+						<view v-if="dynamicLists[index].option_pic !== ''" @click="viewImage(index)">
+							<image
+							style="width: 100%; height: 200px; margin-top: 20px;"
+							:src="dynamicLists[index].option_pic"></image>
+							<view @click.stop="DelImg(index)"
+								style="position: absolute; top:60px; right:5px; background-color:aliceblue;">
+								<uni-icons type="closeempty" class="close" size="20"></uni-icons>
+							</view>
 						</view>
 					</uni-forms-item>
 				</uni-forms>
@@ -48,7 +72,20 @@
 			<uni-section v-if="problem_type_select === 1" title="试题内容" type="line" class="select_box">
 				<uni-forms ref="baseForm" :modelValue="baseFormData" label-position="top">
 					<uni-forms-item label="题目" required>
-						<uni-easyinput v-model="baseFormData.title" placeholder="请输入题目" />
+						<view class="form-item">
+							<uni-easyinput v-model="baseFormData.title" placeholder="请输入题目" />
+							<image class="item" @click="chooseImage(-1)" src="../../static/pic/problem/tupian.svg"
+							 style="height: 20px; width: 20px; margin-left: 10px;"></image>
+						</view>
+						<view v-if="baseFormData.title_pic !== ''" @click="viewImage(-1)">
+							<image
+							style="width: 100%; height: 200px; margin-top: 20px;"
+							:src="baseFormData.title_pic"></image>
+							<view @click.stop="DelImg(-1)"
+								style="position: absolute; top:60px; right:5px; background-color:aliceblue;">
+								<uni-icons type="closeempty" class="close" size="20"></uni-icons>
+							</view>
+						</view>
 					</uni-forms-item>
 					<uni-forms-item label="选项" required style="margin-bottom: 0ch;"></uni-forms-item>
 				</uni-forms>
@@ -58,6 +95,17 @@
 							<uni-easyinput v-model="dynamicLists[index].description" placeholder="请输入选项" />
 							<button class="button" v-if="index>=2" size="mini" type="warn"
 								@click="del_option(item.id)">删除</button>
+							<image class="item" @click="chooseImage(index)" src="../../static/pic/problem/tupian.svg"
+							 style="height: 20px; width: 20px; margin-left: 10px;"></image>
+						</view>
+						<view v-if="dynamicLists[index].option_pic !== ''" @click="viewImage(index)">
+							<image
+							style="width: 100%; height: 200px; margin-top: 20px;"
+							:src="dynamicLists[index].option_pic"></image>
+							<view @click.stop="DelImg(index)"
+								style="position: absolute; top:60px; right:5px; background-color:aliceblue;">
+								<uni-icons type="closeempty" class="close" size="20"></uni-icons>
+							</view>
 						</view>
 					</uni-forms-item>
 				</uni-forms>
@@ -75,7 +123,20 @@
 			<uni-section v-if="problem_type_select === 2" title="试题内容" type="line" class="select_box">
 				<uni-forms ref="baseForm" :modelValue="baseFormData" label-position="top">
 					<uni-forms-item label="题目" required>
-						<uni-easyinput v-model="baseFormData.title" placeholder="请输入题目" />
+						<view class="form-item">
+							<uni-easyinput v-model="baseFormData.title" placeholder="请输入题目" />
+							<image class="item" @click="chooseImage(-1)" src="../../static/pic/problem/tupian.svg"
+							 style="height: 20px; width: 20px; margin-left: 10px;"></image>
+						</view>
+						<view v-if="baseFormData.title_pic !== ''" @click="viewImage(-1)">
+							<image
+							style="width: 100%; height: 200px; margin-top: 20px;"
+							:src="baseFormData.title_pic"></image>
+							<view @click.stop="DelImg(-1)"
+								style="position: absolute; top:60px; right:5px; background-color:aliceblue;">
+								<uni-icons type="closeempty" class="close" size="20"></uni-icons>
+							</view>
+						</view>
 					</uni-forms-item>
 				</uni-forms>
 				<uni-forms ref="baseForm" :modelValue="baseFormData" label-position="top">
@@ -88,12 +149,38 @@
 			<uni-section v-if="problem_type_select === 3" title="试题内容" type="line" class="select_box">
 				<uni-forms ref="baseForm" :modelValue="baseFormData" label-position="top">
 					<uni-forms-item label="题目" required>
-						<uni-easyinput v-model="baseFormData.title" placeholder="请输入题目" />
+						<view class="form-item">
+							<uni-easyinput v-model="baseFormData.title" placeholder="请输入题目" />
+							<image class="item" @click="chooseImage(-1)" src="../../static/pic/problem/tupian.svg"
+							 style="height: 20px; width: 20px; margin-left: 10px;"></image>
+						</view>
+						<view v-if="baseFormData.title_pic !== ''" @click="viewImage(-1)">
+							<image
+							style="width: 100%; height: 200px; margin-top: 20px;"
+							:src="baseFormData.title_pic"></image>
+							<view @click.stop="DelImg(-1)"
+								style="position: absolute; top:60px; right:5px; background-color:aliceblue;">
+								<uni-icons type="closeempty" class="close" size="20"></uni-icons>
+							</view>
+						</view>
 					</uni-forms-item>
 				</uni-forms>
 				<uni-forms ref="baseForm" :modelValue="baseFormData" label-position="top">
 					<uni-forms-item label="答案" required>
-						<uni-easyinput v-model="baseFormData.answer" placeholder="请输入答案" />
+						<view class="form-item">
+							<uni-easyinput v-model="baseFormData.answer" placeholder="请输入答案" />
+							<image class="item" @click="chooseImage(-2)" src="../../static/pic/problem/tupian.svg"
+							 style="height: 20px; width: 20px; margin-left: 10px;"></image>
+						</view>
+						<view v-if="baseFormData.answer !== ''" @click="viewImage(-2)">
+							<image
+							style="width: 100%; height: 200px; margin-top: 20px;"
+							:src="baseFormData.answer"></image>
+							<view @click.stop="DelImg(-2)"
+								style="position: absolute; top:60px; right:5px; background-color:aliceblue;">
+								<uni-icons type="closeempty" class="close" size="20"></uni-icons>
+							</view>
+						</view>
 					</uni-forms-item>
 				</uni-forms>
 			</uni-section>
@@ -101,7 +188,20 @@
 			<uni-section title="试题分析" type="line" class="select_box">
 				<uni-forms ref="baseForm" :modelValue="baseFormData" label-position="top">
 					<uni-forms-item label="解析">
-						<uni-easyinput v-model="baseFormData.analyse" placeholder="请输入解析" />
+						<view class="form-item">
+							<uni-easyinput v-model="baseFormData.analyse" placeholder="请输入解析" />
+							<image class="item" @click="chooseImage(-3)" src="../../static/pic/problem/tupian.svg"
+							 style="height: 20px; width: 20px; margin-left: 10px;"></image>
+						</view>
+						<view v-if="baseFormData.analyse_pic !== ''" @click="viewImage(-3)">
+							<image
+							style="width: 100%; height: 200px; margin-top: 20px;"
+							:src="baseFormData.analyse_pic"></image>
+							<view @click.stop="DelImg(-3)"
+								style="position: absolute; top:60px; right:5px; background-color:aliceblue;">
+								<uni-icons type="closeempty" class="close" size="20"></uni-icons>
+							</view>
+						</view>
 					</uni-forms-item>
 					<uni-forms-item label="难度" style="margin-bottom: 0ch;">
 						<uni-rate v-model="problem_difficulty_select" />
@@ -131,8 +231,16 @@
 						添加试题
 					</button>
 				</view>
-
 			</view>
+			
+			<view>
+				<!-- 分享示例 -->
+				<uni-popup ref="share" type="share" safeArea backgroundColor="#fff">
+					
+				</uni-popup>
+			</view>
+			
+			
 		</view>
 	</view>
 </template>
@@ -197,10 +305,14 @@
 					answer: '',
 					analyse: '',
 					difficulty: 0,
+					title_pic: '',
+					analyse_pic: '',
+					answer_pic: '',
 				},
 				dynamicLists: [{
 					label: 'A',
 					description: '',
+					option_pic: '',
 					rules: [{
 						'required': true,
 						errorMessage: '选项必填'
@@ -209,6 +321,7 @@
 				}, {
 					label: 'B',
 					description: '',
+					option_pic: '',
 					rules: [{
 						'required': true,
 						errorMessage: '选项必填'
@@ -227,6 +340,65 @@
 				    delta: 1
 				});
 			},
+			DelImg(index) {
+				if (index < 0) {
+					if (index == -1) {
+						this.baseFormData.title_pic = '';
+					} else if (index == -2) {
+						this.baseFormData.answer_pic = '';
+					} else if (index == -3) {
+						this.baseFormData.analyse_pic = '';
+					}
+				} else {
+					this.dynamicLists[index].option_pic = '';
+				}
+			},
+			viewImage(index) {
+				let imgurl = []
+				if (index < 0) {
+					if (index == -1) {
+						imgurl.push(this.baseFormData.title_pic)
+					} else if (index == -2) {
+						imgurl.push(this.baseFormData.answer_pic)
+					} else if (index == -3) {
+						imgurl.push(this.baseFormData.analyse_pic)
+					}
+				} else {
+					imgurl.push(this.dynamicLists[index].option_pic)
+				}
+				uni.previewImage({
+					urls: imgurl,
+					current: imgurl[0],
+				})
+			},
+			chooseImage(index) {
+				uni.chooseImage({
+						count: 1, //默认9
+						sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
+						sourceType: ['album'], //从相册选择
+						success: (res)=> {
+							console.log(res)
+							if (index < 0) {
+								if (index == -1) {
+									this.baseFormData.title_pic = res.tempFilePaths[0]
+								} else if (index == -2) { 
+									this.baseFormData.answer_pic = res.tempFilePaths[0]
+								} else if (index == -3) {
+									this.baseFormData.analyse_pic = res.tempFilePaths[0]
+								}
+							} else {
+								this.dynamicLists[index].option_pic = res.tempFilePaths[0]
+							}
+							
+							/*
+							console.log(this.newPath)
+							this.$store.commit('set_photo', this.newPath)
+							uni.navigateBack({
+									delta: 1
+							});*/
+						}
+				});
+			},
 			change(e) {
 				console.log("e:", e);
 				this.baseFormData.title = ''
@@ -239,6 +411,7 @@
 				this.dynamicLists.push({
 					label: this.letter[temp],
 					description: '',
+					option_pic: '',
 					rules: [{
 						'required': true,
 						errorMessage: '选项必填'
@@ -515,7 +688,7 @@
 	};
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	.status-bar {
 		width: 100%;
 		position: sticky;

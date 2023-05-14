@@ -679,7 +679,7 @@
 	};
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	.status-bar {
 		width: 100%;
 		position: sticky;

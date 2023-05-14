@@ -10,7 +10,7 @@ const store = new Vuex.Store({
         // 用户信息
         $userInfo: {
             id: 1
-        }
+        },
     }
 })
 

@@ -428,7 +428,7 @@
 			<u-row>
 				<u-col span="2"></u-col>
 				<u-col span="3">
-					<u-button type="primary" shape="circle" text="分享"></u-button>
+					<u-button type="primary" shape="circle" text="公开"></u-button>
 				</u-col>
 				<u-col span="2"></u-col>
 				<u-col span="3">
@@ -517,7 +517,7 @@
 							success: (res2) => {
 								console.log(res2)
 								if (res2.statusCode == 200) {
-									this.proDetail.ownerName = res2.data.user_name
+									this.proDetail.ownerName = res2.data.nick_name
 									this.proDetail.ownerAvatar = res2.data.avatar_path
 								} else if (res2.statusCode == 401) {
 									myRequest.redirectToLogin()

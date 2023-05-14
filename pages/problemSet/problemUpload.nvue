@@ -61,6 +61,12 @@
 						url: "/pages/problem/problemCreateFromPS?id="
 					},
 					{
+						iconPath: "../../static/pic/problem/paizhao.svg",
+						title: "照片导入",
+						description: "由照片自动导入题目",
+						url: "/pages/tools/camera?id="
+					},
+					{
 						iconPath: "../../static/pic/word.svg",
 						title: "Word导入",
 						description: "参考模板调整文档格式内容, 上传文档"

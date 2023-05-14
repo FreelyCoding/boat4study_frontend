@@ -99,6 +99,16 @@
 			}
 		}
         
+			,{
+				"path" : "pages/tools/camera",
+				"style" :                                                                                    
+				{
+						"navigationBarTitleText": "",
+						"navigationStyle": "custom",
+						"enablePullDownRefresh": false
+				}
+				
+			}
     ],
 	"subPackages": [
 		{

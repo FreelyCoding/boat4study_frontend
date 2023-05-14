@@ -25,6 +25,10 @@
 		
 			<view class="problem_content">
 				<p>{{problem[0].title}}</p>
+				<view v-if="true">
+					<image style="width: 100%; height: 200px; margin-top: 20px;"
+					src="https://pic1.zhimg.com/80/v2-1c2910a45821e277a6f5f59c0ee327cc_1440w.webp"></image>
+				</view>
 			</view>
 		
 			<!-- 单选题 -->
@@ -34,16 +38,20 @@
 						<view class="option_item" :class="{'selected_option_item':problem[0].options[index].selected==1,
 							 'wrong_option_item':problem[0].options[index].selected==2,
 							 'right_option_item':problem[0].options[index].selected==3}" @click="select_single_option(index)">
-							<u-row>
-								<u-col span="1">
+							<u-row style="width: 100%;">
+								<u-col :span="1">
 									<view class="option_letter_box" :class="{'selected_option_letter_box':problem[0].options[index].selected==1,
 							 'wrong_option_letter_box':problem[0].options[index].selected==2,
 							 'right_option_letter_box':problem[0].options[index].selected==3}">{{letter[index]}}</view>
 								</u-col>
-								<u-col span="11">
+								<u-col :span="11">
 									<view class="option_item_content"
 										:class="{'selected_option_item_content':problem[0].options[index].selected!=0}">
 										{{problem[0].options[index].name}}
+										<view v-if="true">
+											<image style="width: 80%; height: 150px; margin-top: 20px;"
+											src="https://pic1.zhimg.com/80/v2-1c2910a45821e277a6f5f59c0ee327cc_1440w.webp"></image>
+										</view>
 									</view>
 								</u-col>
 							</u-row>
@@ -116,12 +124,20 @@
 			</view>
 			<view class="problem_answer_box">
 				<p>{{problem[0].correct_answer}}</p>
+				<view v-if="true">
+					<image style="width: 100%; height: 200px; margin-top: 20px;"
+					src="https://pic1.zhimg.com/80/v2-1c2910a45821e277a6f5f59c0ee327cc_1440w.webp"></image>
+				</view>
 			</view>
 			<view class="problem_answer_box_title">
 				解析
 			</view>
 			<view class="problem_answer_box">
 				<p>{{problem[0].analysis}}</p>
+				<view v-if="true">
+					<image style="width: 100%; height: 200px; margin-top: 20px;"
+					src="https://pic1.zhimg.com/80/v2-1c2910a45821e277a6f5f59c0ee327cc_1440w.webp"></image>
+				</view>
 			</view>
 			
 			<view>
@@ -381,7 +397,7 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	.status-bar {
 		width: 100%;
 		position: sticky;
@@ -421,7 +437,7 @@
 	
 	.option_item {
 		border-radius: 5px;
-		height: 40px;
+		min-height: 40px;
 		display: flex;
 		align-items: center;
 		margin: 10px 0 10px 0;
@@ -479,7 +495,8 @@
 	
 	.option_item_content {
 		font-size: 16px;
-		margin-left: 35px;
+		margin: 10px 0 10px 30px;
+		width: 100%;
 	}
 	
 	.selected_option_item_content {

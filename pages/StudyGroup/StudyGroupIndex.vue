@@ -9,6 +9,40 @@
 				</block>
 			</uni-nav-bar>
 		</view>
+		
+		<view style="display: flex; align-items: center;">
+			<u-icon name="/static/pic/studyGroup/more.svg" size="25px" style="margin-left: 10px;"
+			@click="group_type_list_show = true"
+			></u-icon>
+			<u-tabs :list="group_type_list" @click="click"></u-tabs>
+			
+		</view>
+		
+		<u-popup :show="group_type_list_show" :round="10" mode="bottom" @close="close" @open="open">
+			<view style="margin: 10px 10px 10px 10px;">
+				<view style="display: flex; align-items: center; margin-bottom: 10px;">
+					<text style="font-size: 18px; font-weight: bold;">全部分区</text>
+					<text style="font-size: 14px; color: #8c8c8c; margin-left: 10px;">点击进入分区</text>
+					<u-icon name="/static/pic/studyGroup/close1.svg" size="25px"
+					 style="margin: 0 10px 0 10px; position: absolute; right: 0;"
+					@click="close"
+					></u-icon>
+				</view>
+				<u-grid
+					:border="false"
+					col="3"
+				>
+					<u-grid-item
+						v-for="(listItem,listIndex) in group_type_list"
+						:key="listIndex"
+					>
+						<view class="grid-item">{{listItem.name}}</view>
+					</u-grid-item>
+				</u-grid>
+				
+			</view>
+		</u-popup>
+		
 
 		<uni-search-bar @confirm="search" :focus="true" v-model="searchValue" placeholder="请输入要搜索的学习小组名称"
 			cancelButton="none" maxlength="50" style="margin-left: 5px; margin-right: 5px;">
@@ -31,7 +65,7 @@
 			<p style="font-size: 20px;margin-top: 30px;">暂无学习小组 </p>
 		</view>
 
-		<view style="padding-bottom: 20px;">
+		<view style="padding: 10px 0 10px 0; position: sticky; bottom: 0; background-color: #EDEDED;">
 			<p style="text-align: center;">
 				<button style="background-color: #00aaff; color: white; max-width: 92%;
 				 margin-bottom: 10px;" @click="jumpToCreateGroup">
@@ -57,7 +91,52 @@
 			return {
 				searchValue: "",
 				flag: false,
-				groups: []
+				groups: [],
+				group_type_list_show: false,
+				group_type_list: [{
+						name: '综合',
+				}, {
+						name: '计算机',
+				}, {
+						name: '经济金融'
+				}, {
+						name: '电子信息'
+				}, {
+						name: '数学'
+				}, {
+						name: '生物'
+				}, {
+						name: '医学'
+				}, {
+						name: '物理'
+				}, {
+						name: '化学'
+				}, {
+						name: '历史'
+				}, {
+						name: '建筑'
+				}, {
+						name: '交通'
+				}, {
+						name: '人文社科'
+				}, {
+						name: '外语'
+				}, {
+						name: '体育健康'
+				}, {
+						name: '公务员'
+				}, {
+						name: '教师'
+				}, {
+						name: '天文学'
+				}, {
+						name: '地理'
+				}, {
+						name: '政治'
+				}, {
+						name: '其他'
+				},
+				],
 			}
 		},
 		onShow: function() {
@@ -69,6 +148,9 @@
 					title: '搜索：' + res.value,
 					icon: 'none'
 				})
+			},
+			close() {
+				this.group_type_list_show = false;
 			},
 
 			onBackPress() {
@@ -151,6 +233,16 @@
 		padding-bottom: env(safe-area-inset-bottom);
 	}
 
+	.grid-item{
+		margin: 5px 0 5px 0;
+		width: 80%;
+		height: 30px;
+		border-radius: 15px;
+		align-items: center;
+		justify-content: center;
+		display: flex;
+		background-color: #f0f0f0;
+	}
 
 	.note-img {
 		max-height: 150px;

@@ -43,7 +43,7 @@
 				</uni-row>
 			</view>
 
-			<view class="problem_content">
+			<view class="problem_content_exam">
 				<p>{{problem[cur_page-1].title}}</p>
 			</view>
 
@@ -679,7 +679,7 @@
 	};
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	.status-bar {
 		width: 100%;
 		position: sticky;
@@ -728,7 +728,7 @@
 		font-size: 20px;
 	}
 
-	.problem_content {
+	.problem_content_exam {
 		font-size: 16px;
 		margin-bottom: 30px;
 		line-height: 30px;
