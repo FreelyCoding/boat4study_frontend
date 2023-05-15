@@ -1,0 +1,245 @@
+<template>
+	<view>
+		<view class="status-bar">
+			<uni-nav-bar title="题库" background-color="#00aaff" color="#FFFFFF" status-bar="true">
+				<block slot="left">
+					<view class="note-navbar">
+						<uni-icons type="left" color="#FFFFFF" size="18" @click="back()" />
+					</view>
+				</block>
+			</uni-nav-bar>
+		</view>
+		
+		<view style="display: flex; align-items: center;">
+			<u-icon name="/static/pic/studyGroup/more.svg" size="25px" style="margin-left: 10px;"
+			@click="problemSet_type_list_show = true"
+			></u-icon>
+			<u-tabs :list="problemSet_type_list" @click="click"></u-tabs>
+			
+		</view>
+		
+		<u-popup :show="problemSet_type_list_show" :round="10" mode="bottom" @close="close" @open="open">
+			<view style="margin: 10px 10px 10px 10px;">
+				<view style="display: flex; align-items: center; margin-bottom: 10px;">
+					<text style="font-size: 18px; font-weight: bold;">全部分区</text>
+					<text style="font-size: 14px; color: #8c8c8c; margin-left: 10px;">点击进入分区</text>
+					<u-icon name="/static/pic/studyGroup/close1.svg" size="25px"
+					 style="margin: 0 10px 0 10px; position: absolute; right: 0;"
+					@click="close"
+					></u-icon>
+				</view>
+				<u-grid
+					:border="false"
+					col="3"
+				>
+					<u-grid-item
+						v-for="(listItem,listIndex) in problemSet_type_list"
+						:key="listIndex"
+					>
+						<view class="grid-item">{{listItem.name}}</view>
+					</u-grid-item>
+				</u-grid>
+				
+			</view>
+		</u-popup>
+		
+		
+		
+		
+		<view v-if="this.problemSet.length != 0">
+			<view class="u-demo-block">
+				<u-list customStyle="margin: auto; margin-top: 10px;">
+					<u-list-item v-for="(item, index) in problemSet" :key="index">
+						<uni-card isShadow border padding="0" margin="0px 15px 15px 15px" style="border-radius: 10px;"
+							@click="jumpToPS(item)">
+							<view>
+								<uni-row>
+									<uni-col :span="8">
+
+										<u-icon name="/static/pic/personal_pb2.svg" size="75px"
+											customStyle="margin-top: 10px; margin-bottom:10px ; margin-left: 10px">
+										</u-icon>
+
+									</uni-col>
+
+									<uni-col :span="16">
+										<div class="shuhei" style="padding-top: 22px;">
+											<p style="font-size: 24px;">{{item.name}}</p>
+										</div>
+										<div style="margin-top: 14px;font-size: 16px">
+											{{item.problem_number}} 道题目
+											&ensp; &ensp;
+											{{item.created_at}}
+										</div>
+									</uni-col>
+								</uni-row>
+							</view>
+						</uni-card>
+
+					</u-list-item>
+				</u-list>
+			</view>
+		</view>
+
+		<view v-else style="text-align: center;">
+			<image src="../../static/pic/note/no_note.png"
+				style="margin: auto; margin-top: 30px; height: 200px; width: 200px;"></image>
+			<p style="font-size: 20px;margin-top: 30px;">暂无题库</p>
+		</view>
+		
+		<view style="padding: 10px 0 10px 0; position: sticky; bottom: 0; background-color: #EDEDED;">
+			<p style="text-align: center;">
+				<button style="background-color: #00aaff; color: white; max-width: 92%;
+				 margin-bottom: 10px;" @click="jumpToCreatePS">
+					创建题库
+				</button>
+			</p>
+		</view>
+
+
+	</view>
+</template>
+
+<script>
+	import tuiNoData from '@/components/tui-no-data/tui-no-data.vue';
+	import note from '@/pages/note/note.vue'
+	import myRequest from '../../common/request';
+
+	export default {
+		data() {
+			return {
+				searchValue: "",
+				problemSet: [],
+				problemSet_type_list_show: false,
+				problemSet_type_list: [{
+						name: '综合',
+				}, {
+						name: '计算机',
+				}, {
+						name: '经济金融'
+				}, {
+						name: '电子信息'
+				}, {
+						name: '数学'
+				}, {
+						name: '生物'
+				}, {
+						name: '医学'
+				}, {
+						name: '物理'
+				}, {
+						name: '化学'
+				}, {
+						name: '历史'
+				}, {
+						name: '建筑'
+				}, {
+						name: '交通'
+				}, {
+						name: '人文社科'
+				}, {
+						name: '外语'
+				}, {
+						name: '体育健康'
+				}, {
+						name: '公务员'
+				}, {
+						name: '教师'
+				}, {
+						name: '天文学'
+				}, {
+						name: '地理'
+				}, {
+						name: '政治'
+				}, {
+						name: '其他'
+				},
+				],
+			}
+		},
+		methods: {
+			back() {
+				uni.navigateBack()
+			},
+			close() {
+				this.problemSet_type_list_show = false;
+			},
+			jumpToCreatePS() {
+				uni.navigateTo({
+					url: "/pages/problemSet/problemSetCreate"
+				})
+			},
+
+			jumpToPS(item) {
+				uni.navigateTo({
+					url: "/pages/problemSet/problemSetDetail?id=" + item.id
+				})
+			}
+
+		},
+		onLoad() {
+			myRequest.checkLogin()
+			let uid = myRequest.getUID()
+			uni.request({
+				url: myRequest.interfaceUrl() + '/problem_set/all',
+				method: 'GET',
+				header: {
+					'X-Token': myRequest.getToken()
+				},
+
+				success: (res) => {
+					console.log(res)
+					if (res.statusCode == 200 ) {
+						if (res.data.problem_set && res.data.problem_set.length > 0) {
+							for (var i = 0; i < res.data.problem_set.length; i++) {
+								var t = {
+									id: res.data.problem_set[i].id,
+									description: res.data.problem_set[i].description,
+									name: res.data.problem_set[i].name,
+									pic: "",
+									created_at: res.data.problem_set[i].created_at.slice(0, 10),
+									problem_number: res.data.problem_set[i].problem_count,
+								}
+								this.problemSet.push(t);
+							}
+						}
+
+					} else if (res.statusCode == 401) {
+						myRequest.redirectToLogin()
+					} else {
+						myRequest.toast()
+					}
+				},
+
+				fail: (res) => {
+					console.log(res)
+					myRequest.toast()
+				}
+			})
+		}
+	}
+</script>
+
+<style>
+	page {
+		background: #EDEDED;
+	}
+	
+	.status-bar {
+		width: 100%;
+		position: sticky;
+		top: 0;
+		z-index: 10;
+	}
+	
+	.grid-item{
+		margin: 5px 0 5px 0;
+		width: 80%;
+		height: 30px;
+		border-radius: 15px;
+		align-items: center;
+		justify-content: center;
+		display: flex;
+		background-color: #f0f0f0;
+	}
+</style>

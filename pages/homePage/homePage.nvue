@@ -357,7 +357,7 @@
 			},
 			jumpToAllProblemSet() {
 				uni.navigateTo({
-					url: "/pages/personal/personalProblemSet"
+					url: "/pages/problemSet/problemSetList"
 				})
 			},
 			jumpToProblemSetDetail(item) {
