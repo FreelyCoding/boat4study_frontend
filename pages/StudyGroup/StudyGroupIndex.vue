@@ -10,12 +10,19 @@
 			</uni-nav-bar>
 		</view>
 		
-		<view style="display: flex; align-items: center;">
-			<u-icon name="/static/pic/studyGroup/more.svg" size="25px" style="margin-left: 10px;"
-			@click="group_type_list_show = true"
-			></u-icon>
-			<u-tabs :list="group_type_list" @click="click"></u-tabs>
-			
+		<view>
+			<uni-row>
+				<uni-col :span="2">
+					<view style="display: flex; justify-content: center; align-items: center; height: 44px;">
+						<u-icon name="/static/pic/studyGroup/more.svg" size="25px" style="margin-left: 10px;"
+						@click="group_type_list_show = true"
+						></u-icon>
+					</view>
+				</uni-col>
+				<uni-col :span="22">
+					<u-tabs :list="group_type_list" @click="click"></u-tabs>
+				</uni-col>
+			</uni-row>
 		</view>
 		
 		<u-popup :show="group_type_list_show" :round="10" mode="bottom" @close="close" @open="open">
