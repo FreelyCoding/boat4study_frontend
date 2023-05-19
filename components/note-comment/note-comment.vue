@@ -1,12 +1,12 @@
 <template>
 	<view class="hb-comment">
 		<!-- 阅读数-start -->
-		<!-- <view> -->
-			<!-- <i-icon name="eye-line" color="#666" size="20px"></i-icon> -->
-			<!-- <uni-icons type="eye" color="#666" size="22px"></uni-icons> -->
-			<!-- <span class="top-read">{{commentData.readNumer}}</span> -->
-			<!-- <span class="top-read"><u--text :text="192" size="18px" type="info"></u--text></span> -->
-		<!-- </view> -->
+		<!-- <view>
+			<i-icon name="eye-line" color="#666" size="20px"></i-icon>
+			<uni-icons type="eye" color="#666" size="22px"></uni-icons>
+			<span class="top-read">{{commentData.readNumer}}</span>
+			<span class="top-read"><u--text :text="192" size="18px" type="info"></u--text></span>
+		</view> -->
 		<!-- 阅读数-end -->
 		<!-- 阅读数下边那条线-start -->
 		<!-- <view class="seg_line_box">
@@ -17,7 +17,7 @@
 		<!-- 阅读数下边那条线-end -->
 		
 		<!-- 评论主体-start -->
-		<view class="comment-list" v-if="commentData.comment.length != 0">
+		<view class="comment-list" v-if="commentData && commentData.comment && commentData.comment.length != 0">
 			<!-- 评论主体-顶部数量及发表评论按钮-start -->
 			<view class="comment-num">
 				<view><uni-section :title="'共' + commentData.comment.length + '条评论'" titleColor="#666" type="line"></uni-section></view>
@@ -28,7 +28,7 @@
 			
 			<!-- 评论主体-顶部数量及发表评论按钮-end -->
 			<!-- 评论列表-start -->
-			<view class="comment-box" v-for="(item, index) in commentData.comment">
+			<view class="comment-box" v-for="(item, index) in commentData.comment" :key="item.id">
 				<view class="comment-box-item">
 					<view>
 						<u-avatar :src="item.avatarUrl || emptyAvatar" mode="aspectFill" :size="avatar_size"></u-avatar>

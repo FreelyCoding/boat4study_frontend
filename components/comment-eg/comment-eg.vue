@@ -61,7 +61,7 @@ import myRequest from '../../common/request';
 				this.checkLogin();
 			},
 			// 获取评论
-			getComment(articleId) {
+			async getComment(articleId) {
 				// TODO 接入真实接口
 				// this.$u.api.commentList(articleId).then(res => {
 				// this.commentData = {
@@ -80,7 +80,7 @@ import myRequest from '../../common/request';
 						'X-Token': myRequest.getToken()
 					},
 					
-					success: (res) => {
+					success: async (res) => {
 						if (res.statusCode == 200) {
 							var data = res.data
 							
@@ -95,21 +95,48 @@ import myRequest from '../../common/request';
 							
 							for (var i = 0; i < data.note_reviews.length; i ++) {
 								var review = data.note_reviews[i]
-								var avatar = myRequest.imageUrl() + '/public/' + myRequest.getUserAvatar()
 								
-								var t = {									
-									"id": review.id,
-									"owner": review.user_id == myRequest.getUID(),
-									"hasLike": review.is_liked,
-									"likeNum": review.like_count,
-									"avatarUrl": avatar ,
-									"nickName": myRequest.getNickName(),
-									"content": review.content,
-									"parentId": null,
-									"createTime": review.created_at.slice(0, 10)
+								var promise = await myRequest.request(`/user/info/${review.user_id}`, 'GET')
+								
+								console.log('i')
+								console.log(i)
+								console.log(promise)
+								
+										
+								if (promise.statusCode == 200) {
+									var avatar = myRequest.imageUrl() + '/public/' + promise.data.avatar_path
+									var t = {
+										"id": review.id,
+										"owner": review.user_id == myRequest.getUID(),
+										"hasLike": review.is_liked,
+										"likeNum": review.like_count,
+										"avatarUrl": avatar ,
+										"nickName": promise.data.nick_name,
+										"content": review.content,
+										"parentId": null,
+										"createTime": review.created_at.slice(0, 10)
+									}
+									commentList.push(t)
 								}
+								else {
+									myRequest.toast()
+								}
+							
 								
-								commentList.push(t)
+								
+								// var t = {									
+								// 	"id": review.id,
+								// 	"owner": review.user_id == myRequest.getUID(),
+								// 	"hasLike": review.is_liked,
+								// 	"likeNum": review.like_count,
+								// 	"avatarUrl": avatar ,
+								// 	"nickName": myRequest.getNickName(),
+								// 	"content": review.content,
+								// 	"parentId": null,
+								// 	"createTime": review.created_at.slice(0, 10)
+								// }
+								
+								// commentList.push(t)
 							}
 							
 							this.commentData = {
@@ -302,6 +329,21 @@ import myRequest from '../../common/request';
 				// this.reqFlag = false;
 				// this.$refs.hbComment.addComplete();
 				// this.getComment(this.articleId);
+			},
+			
+			getAuthorInfo(user_id) {
+				uni.request({
+					url: myRequest.interfaceUrl() + `/user/info/{user_id}`,
+					method: 'GET',
+					header: {
+						'X-Token': myRequest.getToken()
+					},
+					success: res => {
+						
+					}
+					
+				})
+				
 			},
 			
 			id2Comment(commentId) {

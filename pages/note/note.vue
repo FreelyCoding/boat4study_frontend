@@ -84,7 +84,7 @@
 			<u-line></u-line>
 
 			<!--评论-->
-			<comment-eg :articleId="this.note_id"></comment-eg>
+			<comment-eg :articleId="note_id"></comment-eg>
 
 		</view>
 
