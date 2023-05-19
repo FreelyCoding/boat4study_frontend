@@ -459,6 +459,34 @@
 				        "enablePullDownRefresh": false
 				    }
 				    
+				},
+				
+				{
+					"path": "createDiscussion",
+					"style": {
+						"navigationStyle": "custom"
+					}
+				},
+				
+				{
+					"path": "discussion",
+					"style": {
+						"navigationStyle": "custom"
+					}
+				},
+				
+				{
+					"path": "discussionIndex",
+					"style": {
+						"navigationStyle": "custom"
+					}
+				},
+				
+				{
+					"path": "editDiscussion",
+					"style": {
+						"navigationStyle": "custom"
+					}
 				}
 			]
 		}
