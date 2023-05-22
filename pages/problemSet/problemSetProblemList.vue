@@ -12,7 +12,7 @@
 		</view>
 			
 		<view class="u-demo-block">
-			<u-list customStyle="width: 94%; margin: auto; max-height: 600px; margin-top: 15px;">
+			<u-list customStyle="width: 94%; margin: auto; min-height: 600px; margin-top: 15px;">
 				<u-list-item v-for="(item, index) in problem_id_list" :key="index">
 					<uni-card spacing="0" padding="0" margin="10px 0px 0px 10px" 
 						@click="select(item)">

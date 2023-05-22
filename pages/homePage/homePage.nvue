@@ -159,16 +159,31 @@
 					<uni-card spacing="0" padding="0" margin="10px 0px 0px 10px" @click="jumpToProblemSetDetail(item)">
 						<view>
 							<uni-row>
+								<uni-col :span="2" align="start">
+									<view v-if="item.user_id == 0">
+										<uni-tag :mark="true" text="官方题库" type="primary" size="default"
+										 style=""/>								
+									</view>
+									
+									<view v-else-if="item.group_id == 0">
+										<uni-tag :mark="true" text="个人题库" type="success" size="default"
+										 style=""/>								
+									</view>
+
+								</uni-col>
+
 								<uni-col :span="8" align="start">
-									<p style="margin-right: auto;">
+									<p style="margin: auto;">
 										<u-avatar :src="myRequest.imageUrl() + '/public'
 											+ item.user_info.avatar_path" size="60px"></u-avatar>
-									<div style="margin-top: 10px; font-family: shuhei;">创建者 {{item.user_info.nick_name}}</div>
+									<div style="margin-top: 10px; font-family: shuhei; margin: auto;">
+										{{item.user_info.nick_name}}
+									</div>
 									</p>
 
 								</uni-col>
 
-								<uni-col :span="16" align="start">
+								<uni-col :span="14" align="start">
 									<div class="shuhei" style="margin-bottom: 5px;margin-top: 12px;">
 										<p style="font-size: 20px;">{{item.name}}</p>
 									</div>
@@ -207,8 +222,8 @@
 			<u-list customStyle="margin: auto; max-height: 380px; margin-top: 15px;">
 				<u-list-item v-for="(item, index) in groups" :key="index">
 					<uni-card :title="item.name" :extra="'创建于' + item.create_time" :thumbnail="item.pic"
-						@click="jumpToStudyGroup(item)" isShadow border padding="15px 5px 15px 5px" margin="0px 15px 15px 15px"
-						style="border-radius: 10px;">
+						@click="jumpToStudyGroup(item)" isShadow border padding="15px 5px 15px 5px"
+						margin="0px 15px 15px 15px" style="border-radius: 10px;">
 						<text class="uni-body">{{item.description}}</text>
 					</uni-card>
 				</u-list-item>
