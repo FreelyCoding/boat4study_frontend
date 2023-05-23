@@ -57,7 +57,7 @@
 
 <script>
 	import note from '@/pages/note/note.vue'
-	import index from '@/pages/homePage/noteIndex.vue'
+	import index from '@/pages/homePage/noteIndex.nvue'
 	import myRequest from '../../common/request';
 	import api from '@/common/api.js';
 	export default {

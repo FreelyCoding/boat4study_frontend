@@ -114,13 +114,13 @@
 	$uni-info: #8f939c !default;
 
 
-	$tag-default-pd: 4px 7px;
+	$tag-default-pd: 8px 10px 8px 5px;
 	$tag-small-pd: 2px 5px;
 	$tag-mini-pd: 1px 3px;
 
 	.uni-tag {
-		line-height: 14px;
-		font-size: 12px;
+		line-height: 16px;
+		font-size: 16px;
 		font-weight: 200;
 		padding: $tag-default-pd;
 		color: #fff;
@@ -227,7 +227,7 @@
 
 	.uni-tag-text {
 		color: #fff;
-		font-size: 14px;
+		font-size: 20px;
 
 		&--primary {
 			color: $uni-primary;

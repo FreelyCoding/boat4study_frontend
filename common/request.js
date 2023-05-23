@@ -5,7 +5,7 @@
 
 const myRequest = {
 	interfaceUrl: function() {
-		return 'http://123.249.3.32:9000';
+		return 'https://123.249.3.32/boat4study_api';
 	},
 	imageUrl: function() {
 		return 'http://123.249.3.32:9091';
