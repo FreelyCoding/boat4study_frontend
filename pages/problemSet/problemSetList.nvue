@@ -86,9 +86,10 @@
 			<p style="font-size: 20px;margin-top: 30px;">暂无题库</p>
 		</view>
 
+
 		<view style="padding: 10px 0 10px 0; position: sticky; bottom: 0; background-color: #EDEDED;">
-			<p style="text-align: center;">
-				<button style="background-color: #00aaff; color: white; max-width: 92%;
+			<p style="margin: auto;width: 92%">
+				<button style="background-color: #00aaff; color: white; 
 				 margin-bottom: 10px;" @click="jumpToCreatePS">
 					创建题库
 				</button>
