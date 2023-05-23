@@ -126,7 +126,7 @@
 											@click="jumpToWrongProblem()"></u-icon>
 									</view>
 									<view style="margin: auto;">
-										<p style="font-size: 15px;"> 全部错题 </p>
+										<p style="font-size: 15px;"> 我的错题 </p>
 									</view>
 
 								</uni-col>

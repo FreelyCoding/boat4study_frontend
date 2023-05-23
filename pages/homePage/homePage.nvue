@@ -169,6 +169,11 @@
 										<uni-tag :mark="true" text="个人题库" type="success" size="default"
 										 style=""/>								
 									</view>
+									
+									<view v-else-if="item.group_id != 0">
+										<uni-tag :mark="true" text="小组题库" type="warning" size="default"
+										 style=""/>		
+									</view>
 
 								</uni-col>
 
@@ -221,7 +226,7 @@
 		<view class="u-demo-block" v-if="groups && groups.length > 0">
 			<u-list customStyle="margin: auto; max-height: 380px; margin-top: 15px;">
 				<u-list-item v-for="(item, index) in groups" :key="index">
-					<uni-card :title="item.name" :extra="'创建于' + item.create_time" :thumbnail="item.pic"
+					<uni-card :title="item.name" :extra="'创建于' + item.create_time" :thumbnail="item.avatar_path"
 						@click="jumpToStudyGroup(item)" isShadow border padding="15px 5px 15px 5px"
 						margin="0px 15px 15px 15px" style="border-radius: 10px;">
 						<text class="uni-body">{{item.description}}</text>
@@ -231,38 +236,6 @@
 		</view>
 
 
-
-		<!--
-		<view class="u-demo-block" v-if="problemSet && problemSet.length > 0">
-			<u-list customStyle="width: 94%; margin: auto; max-height: 350px; margin-top: 15px;">
-				<u-list-item v-for="(item, index) in problemSet" :key="index">
-					<uni-card spacing="0" padding="0" margin="10px 0px 0px 10px" @click="jumpToProblemSetDetail(item)">
-						<view>
-							<uni-row>
-								<uni-col :span="5" align="start">
-									<view>
-										<u-icon name="/static/pic/qb.svg" size="50px"></u-icon>
-									</view>
-								</uni-col>
-
-								<uni-col :span="18" align="start">
-									<div class="shuhei" style="margin-bottom: 5px;">
-										<p style="font-size: 20px;">{{item.name}}</p>
-									</div>
-									<div style="font-size: 16px;">
-										{{item.problem_number}} 道题目
-										&ensp; &ensp;
-										{{item.created_at}}
-									</div>
-								</uni-col>
-							</uni-row>
-							<u-divider v-if="problemSet && (index != Math.min(3,problemSet.length - 1))"> </u-divider>
-						</view>
-					</uni-card>
-				</u-list-item>
-			</u-list>
-		</view>
-		-->
 
 		<view style="margin-bottom: 20px;">
 
@@ -557,7 +530,7 @@
 								var t = {
 									description: res.data.group[i].description,
 									name: res.data.group[i].name,
-									pic: "/static/pic/personal_group.svg",
+									avatar_path: "/static/pic/personal_group.svg",
 									create_time: res.data.group[i].created_at.slice(0, 10),
 									id: res.data.group[i].id,
 								}
