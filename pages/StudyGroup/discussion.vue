@@ -4,7 +4,7 @@
 			<!--自定义navbar-->
 			<uni-nav-bar title="讨论" background-color="#00aaff" color="#FFFFFF" status-bar="true">
 				<block slot="left">
-					<view class="note-navbar">
+					<view class="discussion-navbar">
 						<uni-icons type="left" color="#FFFFFF" size="18" @click="back()" />
 					</view>
 				</block>
@@ -75,7 +75,7 @@
 			<u-line></u-line>
 
 			<!--评论-->
-			<comment-eg :articleId="note_id"></comment-eg>
+			<comment-discussion :articleId="discussion_id"></comment-discussion>
 
 		</view>
 
@@ -97,6 +97,7 @@
 	import uCol from '@/uni_modules/uview-ui/components/u-col/u-col.vue'
 	import uAvatar from '@/uni_modules/uview-ui/components/u-avatar/u-avatar.vue'
 	import tuiNoData from '@/components/tui-no-data/tui-no-data.vue'
+	import commentDiscussion from '@/components/comment-discussion/comment-discussion.vue'
 	
 	export default {
 		data() {
@@ -104,8 +105,9 @@
 				title: "",
 				show: false,
 				valid: false,
-				note_html: "",
-				note_id: "",
+				discussion_html: "",
+				discussion_id: null,
+				group_id: null,
 				reqFlag: false,
 
 				remove_index: 0,
@@ -166,279 +168,6 @@
 			}
 		},
 		methods: {
-			problemClick(item) {
-				console.log('click')
-				uni.navigateTo({
-					url: `/pages/problem/problemDetail?problem_id=${item.id}&problem_type_id=${item.type}`
-				})
-				
-			},
-			
-			getRelativeProblem() {
-				this.relativeProblem = []
-				
-				uni.request({
-					url: myRequest.interfaceUrl() + `/note/problem_list/${this.note_id}`,
-					method: 'GET',
-					header: {
-						'X-Token': myRequest.getToken()
-					},
-					
-					success: res => {
-						if (res.statusCode == 200) {
-							var data = res.data
-							
-							if (data == null) return
-							
-							for (var i = 0; i < data.length; i ++) {
-								this.relativeProblem.push({
-									id: data[i].id,
-									type: data[i].problem_type_id,
-									description: data[i].description,
-								})
-							}
-						} else if (res.statusCode == 401) {
-							uni.redirectTo({
-								url: '/pages/login/login'
-							})
-						} else {
-							this.relativeProblemShow = false
-							myRequest.toast()
-						}
-					},
-					
-					fail: res => {
-						myRequest.toast()
-						this.relativeProblemShow = false
-					}
-					
-				})
-			},
-			
-			selectAll() {
-				for (var i = 0; i < this.problemList.length; i ++) {
-					this.problemList[i].selected = 1
-				}
-			},
-			
-			select(item) {
-				item.selected = 1 - item.selected
-			},
-			
-			addToRelativeProblem() {
-				for (var i = 0; i < this.problemList.length; i ++) {
-					var item = this.problemList[i]
-					
-					if (item.selected == 0) continue;
-					
-					var flag = false;
-					
-					for (var j = 0; j < this.relativeProblem.length; j ++) {
-						if (this.relativeProblem[j].id == item.id) {
-							flag = true;
-							break;
-						} 
-					}
-					
-					if (flag) continue;
-					
-					if (this.relativeProblem.indexOf(item) == -1) {
-						this.relativeProblem.push(item)
-						uni.request({
-							url: myRequest.interfaceUrl() + `/note/add_problem/${this.note_id}?problem_id=${item.id}`,
-							method:'POST',
-							header: {
-								'X-Token': myRequest.getToken()
-							}
-						})
-					}
-				}
-				
-				if (this.problemList.length > 0) {
-					myRequest.toast('添加题目成功')
-				}
-			},
-			
-			loadProblemList(problemSetId) {
-				this.problemSetSelectShow = false
-				this.problemListSelectShow = true
-				
-				console.log('yyy')
-				console.log(problemSetId)
-				
-				this.initProblemList(problemSetId)
-			},
-			
-			initProblemList(problemSetId) {
-				console.log('initProblemList')
-				var ret;
-				
-				uni.request({
-					url: myRequest.interfaceUrl() + `/problem_set/all_problem/${problemSetId}`,
-					method: 'GET',
-					header: {
-						'X-Token': myRequest.getToken()
-					},
-					
-					success: (res) => {
-						if (res.statusCode == 200) {
-							ret = res.data.problems
-							
-							this.problemList = []
-							
-							for (var i = 0; i < ret.length; i ++) {
-								this.problemList.push({
-									id: ret[i].id,
-									type: ret[i].problem_type_id,
-									selected: 0,
-									description: ret[i].description,
-								})
-							}
-							
-						} else if (res.statusCode == 401) {
-							uni.redirectTo({
-								url: '/pages/login/login'
-							})
-						} else {
-							this.problemListSelectShow = false
-							myRequest.toast()
-						}
-					},
-					
-					fail: res => {
-						this.problemListSelectShow = false
-						myRequest.toast()
-					}
-					
-				})
-				
-			},
-			
-			loadProblemSet() {
-				
-				myRequest.checkLogin()
-				uni.request({
-					url: myRequest.interfaceUrl() + '/user/problem_set',
-					method: 'GET',
-					header: {
-						'X-Token': myRequest.getToken()
-					},
-				
-					success: (res) => {
-						console.log(res)
-						if (res.statusCode == 200) {
-							this.problemSet = []
-							for (var i = 0; i < res.data.length; i++) {
-								var t = {
-									id: res.data[i].id,
-									description: res.data[i].description,
-									name: res.data[i].name,
-									pic: ".",
-									created_at: res.data[i].created_at.slice(0, 10),
-									problem_number: res.data[i].problem_count,
-								}
-								this.problemSet.push(t);
-							}
-						} else if (res.statusCode == 401) {
-							if (myRequest.isLogin()) {
-								myRequest.toast('请重新登录')
-							} else {
-								myRequest.toast('请登录')
-							}
-							uni.navigateTo({
-								url: '/pages/login/login'
-							})
-						} else {
-							myRequest.toast()
-						}
-					},
-				
-					fail: (res) => {
-						console.log(res)
-						myRequest.toast()
-					}
-				})
-			},
-			
-			relativeProblemOpen() {
-				this.relativeProblemShow = true;
-			},
-			
-			relativeProblemClose() {
-				this.relativeProblemShow = false;
-			},
-			
-			removeRelativeProblem(item, index) {
-				this.relativeProblem.splice(index, 1)
-				
-				uni.request({
-					url: myRequest.interfaceUrl() + `/note/remove_problem/${this.note_id}?problem_id=${item.id}`,
-					method: 'DELETE',
-					header: {
-						'X-Token': myRequest.getToken()
-					},
-					
-					success: res => {
-						if (res.statusCode == 200) {
-							
-						} else if (res.statusCode == 401) {
-							if (myRequest.isLogin()) {
-								myRequest.toast('请重新登录')
-							} else {
-								myRequest.toast('请登录')
-							}
-							uni.navigateTo({
-								url: '/pages/login/login'
-							})
-						} else {
-							myRequest.toast()
-						}
-					},
-					
-					fail: res => {
-						myRequest.toast()
-					}
-					
-				})
-				
-			},
-			
-			problemSetSelectClose() {
-				this.problemSetSelectShow = false;
-			},
-			
-			problemListSelectClose() {
-				this.problemListSelectShow = false;
-			},
-			
-			showProblemSet() {
-				this.problemSetSelectShow = true;
-				this.relativeProblemShow = false
-				
-				if (!myRequest.isLogin()) {
-					uni.redirectTo({
-						url: '/pages/login/login'
-					})
-					return
-				}
-				
-				uni.request({
-					url: myRequest.interfaceUrl() + '/problem/blank/all',
-					header: {
-						"X-Token": myRequest.getToken()
-					},
-					success: (res) => {
-						if (res.statusCode == 200) {
-							this.problemList = res.data.problems
-							console.log(this.problemList)
-						}
-						else {
-							myRequest.toast()
-						}
-					}
-				})
-			},
-			
 			
 			handleModalClick(e) {
 				let index = e.index
@@ -450,29 +179,21 @@
 					this.fabContent[0].active = !this.fabContent[0].active
 
 					console.log(123)
-					console.log(this.note_id)
+					console.log(this.discussion_id)
 
-					myRequest.request(`/note/delete/${this.note_id}`, 'DELETE').then(
+					myRequest.request(`/discussion/delete/${this.discussion_id}`, 'DELETE').then(
 						function(res) {
 							console.log(222)
 							console.log(res)
 							if (res.statusCode == 200) {
-								uni.switchTab({
-									url: '/pages/homePage/noteIndex',
-									success() {
-										// console.log(getCurrentPages())
-										// let page = getCurrentPages().pop(); //跳转页面成功之后
-										// if (!page) return;
-										// console.log(page.route)
-										// if (page.route == 'pages/homePage/noteIndex' 
-										// 		|| page.route == '/pages/personal/personalNote'
-										// 		|| page.route == '/pages/personal/starNotes') {
-										// 	page.$vm.refresh(); //如果页面存在，则重新刷新页面
-										// }
-										
-										uni.navigateBack()
-									}
-								})
+								if (getCurrentPages().length > 1) {
+									uni.navigateBack()
+								}
+								else {
+									uni.redirectTo({
+										url: '/pages/StudyGroup/StudyGroupIndex',
+									})
+								}
 							} else if (res.statusCode == 401) {
 								uni.redirectTo({
 									url: '/pages/login/login'
@@ -497,6 +218,7 @@
 					var curParam = pages[pages.length - 1].options;
 					
 					var id = curParam['id']
+					var group_id = curParam['group_id']
 					
 					if (!myRequest.isLogin()) {
 						myRequest.toast('请先登录')
@@ -506,18 +228,24 @@
 						return
 					}
 					
-					if (!id) {
-						uni.switchTab({
-							url: '/pages/homePage/noteIndex'
-						})
+					if (!id || !group_id) {
+						if (getCurrentPages().length > 1) {
+							uni.navigateBack()
+						}
+						else (
+							uni.redirectTo({
+								url: '/pages/StudyGroup/StudyGroupIndex'
+							})
+						)
 					}
 					else {
-						this.note_id = id;
+						this.discussion_id = id;
+						this.group_id = group_id
 						
 						this.userId = myRequest.getUID()
 						
 						uni.request({
-							url: myRequest.interfaceUrl() + `/note/all?id=${id}`,
+							url: myRequest.interfaceUrl() + `/discussion/all?id=${id}&group_id=${group_id}`,
 							method: 'GET',
 							header: {
 								'X-Token': myRequest.getToken()
@@ -525,21 +253,21 @@
 							success: (res) => {
 								if (res.statusCode == 200) {
 									console.log(res)
-									if (res.data.notes == null) {
+									if (res.data.discussions == null) {
 										myRequest.toast()
-										uni.switchTab({
-											url: '/pages/homePage/noteIndex'
+										uni.redirectTo({
+											url: '/pages/StudyGroup/StudyGroupIndex'
 										})
 										return
 									}
-									var data = res.data.notes[0];
+									var data = res.data.discussions[0];
 									
 									this.title = data.title;
-									this.note_html = data.content;
-									this.note_id = data.id;
+									this.discussion_html = data.content;
+									this.discussion_id = data.id;
 									this.created_at = data.created_at.slice(0, 10)
 									
-									this.authorInfo.id = data.user_id
+									this.authorInfo.id = data.user_info.user_id
 									
 									if (data.is_liked) {
 										this.fabContent[this.like_index].active = true
@@ -548,7 +276,10 @@
 										this.fabContent[this.star_index].active = true
 									}
 									
-									if (data.user_id != myRequest.getUID()) {
+									console.log('author id')
+									console.log(data.user_info.user_id)
+									
+									if (data.user_info.user_id != myRequest.getUID()) {
 										this.fabContent = this.fabContent.slice(2)
 										this.like_index = 0
 										this.star_index = 1
@@ -557,12 +288,11 @@
 									}
 									
 									this.editorCtx.setContents({
-										html: this.note_html
+										html: this.discussion_html
 									})
 									
-									this.loadAuthorInfo(data.user_id)
+									this.loadAuthorInfo(data.user_info.user_id)
 									
-									this.getRelativeProblem()
 								}
 								else if (res.statusCode == 401) {
 									myRequest.toast('请先登录')
@@ -573,16 +303,16 @@
 								else {
 									console.log('wrong')
 									myRequest.toast()
-									uni.switchTab({
-										url: '/pages/homePage/noteIndex'
+									uni.redirectTo({
+										url: '/pages/StudyGroup/StudyGroupIndex'
 									})
 								}
 							},
 							
 							fail: (res) => {
 								myRequest.toast()
-								uni.switchTab({
-									url: '/pages/homePage/noteIndex'
+								uni.redirectTo({
+									url: '/pages/StudyGroup/StudyGroupIndex'
 								})
 							}
 						})	
@@ -619,7 +349,7 @@
 				}
 				if (e.index == this.edit_index) {
 					uni.redirectTo({
-						url: `/pages/StudyGroup/editDiscussion?id=${this.note_id}`
+						url: `/pages/StudyGroup/editDiscussion?id=${this.discussion_id}&group_id=${this.group_id}`
 					})
 					return
 				}
@@ -628,19 +358,19 @@
 					
 					var url, method;
 					if (e.index == this.like_index && !t) {
-						url = `/note/unlike/${this.note_id}`
+						url = `/discussion/unlike/${this.discussion_id}`
 						method = 'POST'
 					}
 					else if (e.index == this.like_index && t) {
-						url = `/note/like/${this.note_id}`
+						url = `/discussion/like/${this.discussion_id}`
 						method = 'POST'
 					}
 					else if (e.index == this.star_index && !t) {
-						url = `/note/unfavorite/${this.note_id}`	
+						url = `/discussion/unfavorite/${this.discussion_id}`	
 						method = 'DELETE'
 					}
 					else {
-						url = `/note/favorite/${this.note_id}`
+						url = `/discussion/favorite/${this.discussion_id}`
 						method = 'POST'
 					}					
 					uni.request({
@@ -662,16 +392,16 @@
 							else {
 								console.log('wrong')
 								myRequest.toast()
-								uni.switchTab({
-									url: '/pages/homePage/noteIndex'
+								uni.redirectTo({
+									url: '/pages/StudyGroup/StudyGroupIndex'
 								})
 							}
 						},
 						
 						fail: (res) => {
 							myRequest.toast()
-							uni.switchTab({
-								url: '/pages/homePage/noteIndex'
+							uni.redirectTo({
+								url: '/pages/StudyGroup/StudyGroupIndex'
 							})
 						}
 					})	
@@ -685,9 +415,9 @@
 				if (pages.length > 1) {
 					let page = pages[pages.length - 2]; //跳转页面成功之后
 					
-					if (page.route == 'pages/homePage/noteIndex'
-						|| page.route == 'pages/personal/personalNote'
-						|| page.route == 'pages/personal/starNotes') {
+					if (page.route == 'pages/homePage/discussionIndex'
+						|| page.route == 'pages/personal/personaldiscussion'
+						|| page.route == 'pages/personal/stardiscussions') {
 						page.$vm.refresh(); //如果页面存在，则重新刷新页面
 					}
 					uni.navigateBack()
@@ -746,7 +476,7 @@
 			
 			// var id = curParam['id']
 			
-			// if (id) this.note_id = id	
+			// if (id) this.discussion_id = id	
 		},
 		
 	}
@@ -766,7 +496,7 @@
 		/*top: var(--status-bar-height);*/
 	}
 
-	.note-navbar {
+	.discussion-navbar {
 		/* #ifndef APP-PLUS-NVUE */
 		display: flex;
 		/* #endif */

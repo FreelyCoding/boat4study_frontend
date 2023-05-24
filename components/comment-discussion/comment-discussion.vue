@@ -1,5 +1,5 @@
 <template>
-	<view class="comment-eg">
+	<view class="comment-discussion">
 		<note-comment ref="hbComment" @add="add" @del="del" @like="like" @focusOn="focusOn" :deleteTip="'确认删除？'"
 			:cmData="commentData" v-if="commentData"></note-comment>
 	</view>
@@ -8,7 +8,7 @@
 <script>
 	import myRequest from '../../common/request';
 	export default {
-		name: 'comment-eg',
+		name: 'comment-discussion',
 		props: {
 			articleId: {
 				type: String,
@@ -74,7 +74,7 @@
 				var commentList = []
 				
 				uni.request({
-					url: myRequest.interfaceUrl() + `/note_review/get?note_id=${articleId}`,
+					url: myRequest.interfaceUrl() + `/discussion_review/get?discussion_id=${articleId}`,
 					method: 'GET',
 					header: {
 						'X-Token': myRequest.getToken()
@@ -93,14 +93,10 @@
 								return
 							}
 							
-							for (var i = 0; i < data.note_reviews.length; i ++) {
-								var review = data.note_reviews[i]
+							for (var i = 0; i < data.discussion_reviews.length; i ++) {
+								var review = data.discussion_reviews[i]
 								
-								var promise = await myRequest.request(`/user/info/${review.user_id}`, 'GET')
-								
-								console.log('i')
-								console.log(i)
-								console.log(promise)
+								var promise = await myRequest.request(`/user/info/${review.user_info.user_id}`, 'GET')
 								
 										
 								if (promise.statusCode == 200) {
@@ -121,22 +117,7 @@
 								else {
 									myRequest.toast()
 								}
-							
 								
-								
-								// var t = {									
-								// 	"id": review.id,
-								// 	"owner": review.user_id == myRequest.getUID(),
-								// 	"hasLike": review.is_liked,
-								// 	"likeNum": review.like_count,
-								// 	"avatarUrl": avatar ,
-								// 	"nickName": myRequest.getNickName(),
-								// 	"content": review.content,
-								// 	"parentId": null,
-								// 	"createTime": review.created_at.slice(0, 10)
-								// }
-								
-								// commentList.push(t)
 							}
 							
 							this.commentData = {
@@ -163,7 +144,7 @@
 							console.log('wrong')
 							myRequest.toast()
 							uni.switchTab({
-								url: '/pages/note/index'
+								url: '/pages/discussion/index'
 							})
 						}
 					},
@@ -171,79 +152,12 @@
 					fail: (res) => {
 						myRequest.toast()
 						uni.switchTab({
-							url: '/pages/note/index'
+							url: '/pages/discussion/index'
 						})
 					}
 					
 				})
 				
-				
-				// 下边假装请求成功
-				// let res = {
-				// 	"readNumber": 193,
-				// 	"commentList": [{
-				// 			"id": 1,
-				// 			"owner": false,
-				// 			"hasLike": false,
-				// 			"likeNum": 2,
-				// 			"avatarUrl": "https://inews.gtimg.com/newsapp_ls/0/13797755537/0",
-				// 			"nickName": "超长昵称超长...",
-				// 			"content": "啦啦啦啦",
-				// 			"parentId": null,
-				// 			"createTime": "2021-07-02 16:32:07"
-				// 		},
-				// 		{
-				// 			"id": 2,
-				// 			"owner": false,
-				// 			"hasLike": false,
-				// 			"likeNum": 2,
-				// 			"avatarUrl": "https://inews.gtimg.com/newsapp_ls/0/13797761970/0",
-				// 			"nickName": "寂寞无敌",
-				// 			"content": "我是评论的评论",
-				// 			"parentId": 1,
-				// 			"createTime": "2021-07-02 17:05:50"
-				// 		},
-				// 		{
-				// 			"id": 4,
-				// 			"owner": true,
-				// 			"hasLike": true,
-				// 			"likeNum": 1,
-				// 			"avatarUrl": "https://inews.gtimg.com/newsapp_ls/0/13797763270/0",
-				// 			"nickName": "name111",
-				// 			"content": "评论啦啦啦啦啦啦啦啦啦啦",
-				// 			"parentId": null,
-				// 			"createTime": "2021-07-13 09:37:50"
-				// 		},
-				// 		{
-				// 			"id": 5,
-				// 			"owner": false,
-				// 			"hasLike": false,
-				// 			"likeNum": 0,
-				// 			"avatarUrl": "https://inews.gtimg.com/newsapp_ls/0/13797755537/0",
-				// 			"nickName": "超长昵称超长...",
-				// 			"content": "超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论超长评论",
-				// 			"parentId": null,
-				// 			"createTime": "2021-07-13 16:04:35"
-				// 		},
-				// 		{
-				// 			"id": 13,
-				// 			"owner": false,
-				// 			"hasLike": false,
-				// 			"likeNum": 0,
-				// 			"avatarUrl": "https://inews.gtimg.com/newsapp_ls/0/13797755537/0",
-				// 			"nickName": "超长昵称超长...",
-				// 			"content": "@寂寞无敌 你怕不是个大聪明",
-				// 			"parentId": 1,
-				// 			"createTime": "2021-07-14 11:01:23"
-				// 		}
-				// 	]
-				// };
-				// this.commentData = {
-				// 	// "readNumer": res.readNumer,
-				// 	"commentSize": res.commentList.length,
-				// 	"comment": this.getTree(res.commentList)
-				// };
-			
 			},
 			// 新增评论
 			add(content) {
@@ -281,12 +195,12 @@
 				
 				var data = JSON.stringify({
 					'content': content,
-					'note_id': this.articleId,
+					'discussion_id': this.articleId,
 					'title': 'title'
 				})
 				
 				uni.request({
-					url: myRequest.interfaceUrl() + '/note_review/add',
+					url: myRequest.interfaceUrl() + '/discussion_review/add',
 					header: {
 						'X-Token': myRequest.getToken()
 					},
@@ -374,7 +288,7 @@
 				if (!this.commentData.comment[index].hasLike) {
 					
 					uni.request({
-						url: myRequest.interfaceUrl() + `/note_review/like/${commentId}`,
+						url: myRequest.interfaceUrl() + `/discussion_review/like/${commentId}`,
 						method: 'POST',
 						header: {
 							'X-Token': myRequest.getToken()
@@ -416,7 +330,7 @@
 				else {
 					
 					uni.request({
-						url: myRequest.interfaceUrl() + `/note_review/unlike/${commentId}`,
+						url: myRequest.interfaceUrl() + `/discussion_review/unlike/${commentId}`,
 						method: 'POST',
 						header: {
 							'X-Token': myRequest.getToken()
@@ -493,7 +407,7 @@
 				this.reqFlag = true
 				
 				uni.request({
-					url: myRequest.interfaceUrl() + `/note_review/remove/${commentId}`,
+					url: myRequest.interfaceUrl() + `/discussion_review/remove/${commentId}`,
 					header: {
 						'X-Token': myRequest.getToken()
 					},
