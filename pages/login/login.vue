@@ -69,6 +69,8 @@
 					"password": this.password
 				}
 				
+				myRequest.toast('准备调用接口')
+				
 				uni.request({
 					url: myRequest.interfaceUrl() + "/login",
 					method: 'POST',
@@ -121,7 +123,7 @@
 					},
 					
 					fail: res => {
-						
+						myRequest.toast('调用接口失败')
 						if (res == null) {
 							myRequest.toast("res为null")
 						}

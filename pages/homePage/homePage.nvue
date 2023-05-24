@@ -550,7 +550,7 @@
 								var t = {
 									description: res.data.group[i].description,
 									name: res.data.group[i].name,
-									avatar_path: "/static/pic/group_avatar_2.png",
+									avatar_path: myRequest.imageUrl() + "/public/9/7fc569f0-806d-4e5f-b375-d4c8e5381c30/group_avatar_2.png",
 									id: res.data.group[i].id,
 									member_count: res.data.group[i].member_count,
 									created_at: res.data.group[i].created_at.slice(0, 10),

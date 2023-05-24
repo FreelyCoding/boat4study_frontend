@@ -104,18 +104,23 @@
 			}
 		}
         
-			,{
-				"path" : "pages/tools/camera",
-				"style" :                                                                                    
-				{
-						"navigationBarTitleText": "",
-						"navigationStyle": "custom",
-						"enablePullDownRefresh": false
-				}
-				
-			}
     ],
 	"subPackages": [
+		{
+			"root": "pages/tools",
+			"pages": [
+				{
+					"path" : "camera",
+					"style" :                                                                                    
+					{
+							"navigationBarTitleText": "",
+							"navigationStyle": "custom",
+							"enablePullDownRefresh": false
+					}
+					
+				}
+			]
+		},
 		{
 			"root": "pages/register",
 			"pages": [
