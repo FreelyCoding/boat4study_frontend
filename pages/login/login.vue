@@ -69,11 +69,8 @@
 					"password": this.password
 				}
 				
-				
-				myRequest.toast('准备调用接口')
-				
 				uni.request({
-					url: "http://123.249.3.32:9000/login",
+					url: myRequest.interfaceUrl() + "/login",
 					method: 'POST',
 					data: JSON.stringify(userInfo),
 					dataType: 'json',

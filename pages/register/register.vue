@@ -168,7 +168,7 @@
 					"v_code": this.code
 				}
 				uni.request({
-					url: "http://123.249.3.32:9000/register",
+					url: myRequest.interfaceUrl() + "/register",
 					data: JSON.stringify(userInfo),
 					method: 'POST',
 					
