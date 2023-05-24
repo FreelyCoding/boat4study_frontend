@@ -281,7 +281,7 @@
 				
 				var data = JSON.stringify({
 					'content': content,
-					'note_id': this.articleId,
+					'note_id': Number(this.articleId),
 					'title': 'title'
 				})
 				
@@ -298,7 +298,7 @@
 						if (res.statusCode == 200) {
 							myRequest.toast('添加评论成功')
 							this.$refs.hbComment.addComplete();
-							this.getComment(this.articleId)
+							this.getComment(Number(this.articleId))
 						}
 						else if (res.statusCode == 401) {
 							uni.showModal({
@@ -316,7 +316,7 @@
 						}
 						else {
 							console.log('wrong')
-							myRequest.toast()
+							myRequest.toast('其他错误')
 						}
 					},
 					
