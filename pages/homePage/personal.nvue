@@ -78,7 +78,6 @@
 
 
 		<view>
-			<!-- 输入框示例 -->
 			<uni-popup ref="logoutDialog" type="dialog" :isMaskClick="false">
 				<uni-popup-dialog cancelText="取消" confirmText="确定" title="您确认退出吗" @confirm="logout()"
 					@close="logoutDialogClose()"></uni-popup-dialog>
