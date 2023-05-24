@@ -76,24 +76,22 @@
 
 				</uni-card>
 			</view>
-				
-			<view style="padding-bottom: 20px;">
-				<p style="text-align: center;">
-					<button style="background-color: #00aaff; color: white; max-width: 92%;
-					 margin-bottom: 10px;" @click="jumpToCreateNote">
-						创建笔记
-					</button>
-				</p>
-			</view>
-			
 		</view>
-
-		
 
 		<view v-else style="text-align: center;">
 			<image src="../../static/pic/note/no_note.png"
 				style="margin: auto; margin-top: 30px; height: 200px; width: 200px;"></image>
 			<p style="font-size: 20px;margin-top: 30px;">暂无笔记</p>
+		</view>
+
+
+		<view style="padding: 10px 0 10px 0; position: sticky; bottom: 40px; background-color: #EDEDED;">
+			<p style="margin: auto;width: 92%">
+				<button style="background-color: #00aaff; color: white; 
+					 margin-bottom: 10px;" @click="jumpToCreateNote">
+					创建笔记
+				</button>
+			</p>
 		</view>
 
 	</view>
@@ -235,7 +233,6 @@
 </script>
 
 <style>
-
 	page {
 		background: #EDEDED;
 	}

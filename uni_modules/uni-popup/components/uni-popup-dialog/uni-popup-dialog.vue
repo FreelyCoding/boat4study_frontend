@@ -191,7 +191,7 @@
 	}
 
 	.uni-dialog-title-text {
-		font-size: 16px;
+		font-size: 18px;
 		font-weight: 500;
 	}
 
@@ -202,7 +202,7 @@
 		flex-direction: row;
 		justify-content: center;
 		align-items: center;
-		padding: 20px;
+		padding: 10px;
 	}
 
 	.uni-dialog-content-text {

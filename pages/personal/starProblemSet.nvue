@@ -11,8 +11,8 @@
 			<view class="u-demo-block">
 				<u-list customStyle="margin: auto; margin-top: 10px;">
 					<u-list-item v-for="(item, index) in problemSet" :key="index">
-						<uni-card isShadow border padding="0" margin="0px 15px 15px 15px" style="border-radius: 10px;"
-							@click="jumpToPS(item)">
+						<uni-card isShadow border padding="10px 0px 10px 0px" margin="0px 15px 15px 15px"
+							style="border-radius: 10px;" @click="jumpToPS(item)">
 							<view>
 								<uni-row>
 									<uni-col :span="7" align="start">
@@ -23,15 +23,12 @@
 											{{item.user_info.nick_name}}
 										</div>
 										</p>
-								
 									</uni-col>
-								
-									<uni-col :span="2" align="start">
-								
+									<uni-col :span="1" align="start">
+
 									</uni-col>
-								
-									<uni-col :span="14" align="start">
-										<div class="shuhei" style="margin-bottom: 5px;margin-top: 12px;">
+									<uni-col :span="16" align="start">
+										<div class="shuhei" style="margin-bottom: 5px;margin-top: 14px;">
 											<p style="font-size: 22px;">{{item.name}}</p>
 										</div>
 										<div style="font-size: 16px; margin-top: 5px;">
