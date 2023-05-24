@@ -20,7 +20,7 @@
 		<view class="comment-list" v-if="commentData && commentData.comment && commentData.comment.length != 0">
 			<!-- 评论主体-顶部数量及发表评论按钮-start -->
 			<view class="comment-num">
-				<view><uni-section :title="'共' + commentData.comment.length + '条评论'" titleColor="#666" type="line"></uni-section></view>
+				<view><uni-section :title="'共' + commentData.commentSize + '条评论'" titleColor="#666" type="line"></uni-section></view>
 				<view class="add-btn">
 					<button type="primary" size="mini" @click="commentInput">发表评论</button>
 				</view>

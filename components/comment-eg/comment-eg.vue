@@ -504,6 +504,7 @@
 						if (res.statusCode == 200) {
 							myRequest.toast('删除评论成功')
 							this.$refs.hbComment.deleteComplete(commentId);
+							this.getComment(this.articleId)
 						}
 						else if (res.statusCode == 401) {
 							uni.showModal({
