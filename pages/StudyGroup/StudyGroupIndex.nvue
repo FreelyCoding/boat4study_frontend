@@ -49,7 +49,7 @@
 
 		<view v-if="groups && groups.length != 0" style="margin-top: 5px;">
 			<view v-for="(item, index) in groups" :key="index">
-				<uni-card @click="jumpToStudyGroup(item)" isShadow border padding="15px 0px 15px 0px"
+				<uni-card @click="cardClick(item)" isShadow border padding="15px 0px 15px 0px"
 					margin="0px 15px 15px 15px" style="border-radius: 10px;">
 					<view>
 						<uni-row>
@@ -85,7 +85,7 @@
 		</view>
 
 
-		<view style="padding: 10px 0 10px 0; position: sticky; bottom: 40px; background-color: #EDEDED;">
+		<view style="padding: 10px 0 10px 0; position: sticky; bottom: 0px; background-color: #EDEDED;">
 			<p style="margin: auto;width: 92%">
 				<button style="background-color: #00aaff; color: white; 
 				 margin-bottom: 10px;" @click="jumpToCreateGroup">

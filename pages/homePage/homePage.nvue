@@ -154,50 +154,51 @@
 
 
 		<view class="u-demo-block" v-if="problemSet && problemSet.length > 0">
-			<u-list customStyle="width: 94%; margin: auto; max-height: 370px; margin-top: 15px;"  >
+			<u-list customStyle="width: 94%; margin: auto; max-height: 370px; margin-top: 15px;">
 				<u-list-item v-for="(item, index) in problemSet" :key="index">
-					<uni-card spacing="0" padding="0" margin="10px 0px 0px 10px" @click="jumpToProblemSetDetail(item)">
+					<uni-card isShadow border padding="10px 0px 10px 0px" margin="0px 10px 15px 10px"
+						style="border-radius: 10px;" @click="jumpToPS(item)">
 						<view>
 							<uni-row>
 								<uni-col :span="2" align="start">
 									<view v-if="item.user_id == 0">
-										<uni-tag :mark="true" text="官方题库" type="primary" size="default"
-										 style="font-size: 16px;"/>								
+										<p class="official_PS_tag">
+											官方题库
+										</p>
 									</view>
-									
 									<view v-else-if="item.group_id == 0">
-										<uni-tag :mark="true" text="个人题库" type="success" size="default"
-										 style="font-size: 16px;"/>								
+										<div class="personal_PS_tag">
+											个人题库
+										</div>		
 									</view>
-									
 									<view v-else-if="item.group_id != 0">
-										<uni-tag :mark="true" text="小组题库" type="warning" size="default"
-										 style="font-size: 16px;"/>		
+										<div class="group_PS_tag">
+											小组题库
+										</div>		
 									</view>
-
 								</uni-col>
-
-								<uni-col :span="10" align="start">
+								<uni-col :span="2" align="start">
+								</uni-col>
+								<uni-col :span="7" align="start">
 									<p style="margin: auto;">
 										<u-avatar :src="myRequest.imageUrl() + '/public'
 											+ item.user_info.avatar_path" size="70px"></u-avatar>
-									<div style="margin-top: 12px; font-family: shuhei; margin: auto;">
+									<div style="margin-top: 10px; font-family: shuhei; margin: auto;">
 										{{item.user_info.nick_name}}
 									</div>
 									</p>
-
 								</uni-col>
-
-								<uni-col :span="14" align="start">
-									<div class="shuhei" style="margin-bottom: 5px;margin-top: 12px;">
-										<p style="font-size: 20px;">{{item.name}}</p>
+								<uni-col :span="1" align="start">
+								</uni-col>
+								<uni-col :span="12" align="start">
+									<div class="shuhei" style="margin-bottom: 5px;margin-top: 18px;">
+										<p style="font-size: 22px;">{{item.name}}</p>
 									</div>
 									<div style="font-size: 16px; margin-top: 5px;">
 										{{item.problem_number}} 道题目
 									</div>
 								</uni-col>
 							</uni-row>
-							<u-divider> </u-divider>
 						</view>
 					</uni-card>
 				</u-list-item>
@@ -224,18 +225,17 @@
 		<view class="u-demo-block" v-if="groups && groups.length > 0">
 			<u-list customStyle="margin: auto; max-height: 500px; margin-top: 15px;max-width:1200px">
 				<u-list-item v-for="(item, index) in groups" :key="index">
-					<uni-card
-						@click="jumpToStudyGroup(item)" isShadow border padding="15px 0px 15px 0px"
+					<uni-card @click="jumpToStudyGroup(item)" isShadow border padding="15px 0px 15px 0px"
 						margin="0px 15px 15px 15px" style="border-radius: 10px;">
 						<view>
-							<uni-row>			
+							<uni-row>
 								<uni-col :span="6">
 									<p style="margin: auto;">
 										<u-avatar :src="item.avatar_path" size="70px"></u-avatar>
 									</p>
 								</uni-col>
 								<uni-col :span="3">
-									
+
 								</uni-col>
 								<uni-col :span="14" align="start">
 									<div class="shuhei" style="margin-bottom: 5px;margin-top: 12px;">
@@ -248,7 +248,7 @@
 							</uni-row>
 							<u-divider> </u-divider>
 						</view>
-						
+
 						<text class="uni-body">{{item.description}}</text>
 					</uni-card>
 				</u-list-item>

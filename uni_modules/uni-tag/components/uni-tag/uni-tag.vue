@@ -114,7 +114,7 @@
 	$uni-info: #8f939c !default;
 
 
-	$tag-default-pd: 8px 10px 8px 5px;
+	$tag-default-pd: 5px 5px 5px 5px;
 	$tag-small-pd: 2px 5px;
 	$tag-mini-pd: 1px 3px;
 
