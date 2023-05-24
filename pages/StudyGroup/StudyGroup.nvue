@@ -23,54 +23,38 @@
 						</view>
 					</uni-col>
 
-					<uni-col :span="2">
+					<uni-col :span="1">
 
 					</uni-col>
 
 					<uni-col :span="8">
 						<view>
-							<p style="text-align: center;">
+							<p style="margin: auto;">
 								<u-avatar :src="myRequest.imageUrl() + '/public' + group.avatar"
 									size="120px"></u-avatar>
 							</p>
-						</view>
-						<view>
-							<p style="text-align: center; margin-top: 30px;" v-if="isAdministrator">
-								<button size="mini" style="background-color: #f9ae3d; color: white; width: 100px;"
-									@click="inputDialogToggle">
-									编辑信息
-								</button>
-							</p>
 
-							<p style="text-align: center; margin-top: 30px;" v-else-if="!isMember">
-								<button size="mini" style="background-color: #5ac725; color: white; width: 100px;"
-									@click="addGroupDialogToggle">
-									申请加入
-								</button>
-							</p>
+							<view style="margin: auto; margin-top: 30px;">
+								<p  v-if="isAdministrator">
+									<button size="mini" style="background-color: #f9ae3d; color: white; width: 100px; "
+										@click="jumpToManage()">
+										管理小组
+									</button>
+								</p>
+								
+								<p v-else-if="!isMember">
+									<button size="mini" style="background-color: #5ac725; color: white; width: 100px;"
+										@click="addGroupDialogToggle">
+										申请加入
+									</button>
+								</p>
+							</view>
+
 						</view>
 					</uni-col>
 				</uni-row>
 			</view>
 		</div>
-
-		<view>
-			<!-- 输入框示例 -->
-			<uni-popup ref="inputDialog" type="dialog" :isMaskClick="false">
-				<uni-popup-dialog cancelText="取消编辑" confirmText="确定提交" title="编辑小组信息" type="info"
-					@confirm="dialogInputConfirm()" @close="inputDialogClose()" >
-					<uni-card style="padding: 0 0 10px 0; margin: 0;">
-						<uni-section title="小组名" type="line" titleFontSize="16px">
-							<u-input type="text" placeholder="请输入小组名" v-model="group.editName" />
-						</uni-section>
-						<uni-section title="小组简介" type="line" titleFontSize="16px">
-							<u-input type="textarea" placeholder="请输入小组简介" v-model="group.editIntroduction" />
-						</uni-section>
-					</uni-card>
-				</uni-popup-dialog>
-
-			</uni-popup>
-		</view>
 
 		<view>
 			<div style="background-color: #f7f7f7;">
@@ -185,13 +169,6 @@
 					<uni-card :isShadow="true" :border="true" padding="10px 0px 0px 0px" margin="0px 15px 10px 15px">
 						<view>
 							<p style="text-align: center; margin-bottom: 10px;">
-								<button style="background-color: #5ac725; color: white;"
-									@click="invitationDialogToggle()">
-									查看申请
-								</button>
-							</p>
-
-							<p style="text-align: center; margin-bottom: 10px;">
 								<button style="color: white;" type="warn" @click="deleteGroupDialogToggle">
 									删除小组
 								</button>
@@ -216,54 +193,6 @@
 			</view>
 
 			<view>
-				<uni-popup ref="invitationDialog" type="dialog">
-					<uni-card>
-						<p style="text-align: center;font-size: 24px;margin-bottom: 20px;margin-top: 10px;"
-							class="shuhei">
-							邀请码
-						</p>
-						<p style="text-align: center;font-size: 20px; margin-bottom: 10px;">
-							{{invitation}}
-						</p>
-					</uni-card>
-				</uni-popup>
-			</view>
-
-			<view>
-				<!--
-				<uni-popup ref="addGroupDialog" type="dialog" :isMaskClick="false">
-					<uni-card>
-						<p style="text-align: center;font-size: 24px;margin-bottom: 20px;margin-top: 10px;"
-							class="shuhei">
-							请输入邀请码
-						</p>
-						<u-input class="tui-input" name="invitation" v-model="addGroupCode" />
-
-						<p style="margin-top: 20px; width: 240px;">
-
-						</p>
-
-						<uni-row>
-							<uni-col :span="7">
-								<p>
-									<button style="background-color: #00aaff; color: white; width: 100px;"
-										@click="addGroupDialogClose">
-										取消输入
-									</button>
-								</p>
-							</uni-col>
-							<uni-col :span="10" :offset="7">
-								<p>
-									<button style="background-color: #5ac725; color: white; width: 100px;"
-										@click="addGroupDialogInputConfirm">
-										确认提交
-									</button>
-								</p>
-							</uni-col>
-						</uni-row>
-					</uni-card>
-				</uni-popup>
-				-->
 				<uni-popup ref="addGroupDialog" type="dialog" :isMaskClick="false">
 					<uni-popup-dialog cancelText="取消" confirmText="确定" title="您确定申请加入吗" type="info"
 						@confirm="addGroupDialogInputConfirm()" @close="addGroupDialogClose()"></uni-popup-dialog>
@@ -272,14 +201,14 @@
 
 			<view>
 				<uni-popup ref="deleteGroupDialog" type="dialog" :isMaskClick="false">
-					<uni-popup-dialog cancelText="取消" confirmText="确定" title="您确定要删除小组吗" 
+					<uni-popup-dialog cancelText="取消" confirmText="确定" title="您确定要删除小组吗"
 						@confirm="deleteGroupDialogConfirm()" @close="deleteGroupDialogClose()"></uni-popup-dialog>
 				</uni-popup>
 			</view>
 
 			<view>
 				<uni-popup ref="quitGroupDialog" type="dialog" :isMaskClick="false">
-					<uni-popup-dialog cancelText="取消" confirmText="确定" title="您确定要删除小组吗" 
+					<uni-popup-dialog cancelText="取消" confirmText="确定" title="您确定要删除小组吗"
 						@confirm="quitGroupDialogConfirm()" @close="quitGroupDialogClose()"></uni-popup-dialog>
 				</uni-popup>
 			</view>
@@ -542,6 +471,11 @@
 			jumpToAddProblemSet() {
 				uni.navigateTo({
 					url: "/pages/problemSet/problemSetCreate?group_id=" + this.group.id
+				})
+			},
+			jumpToManage() {
+				uni.navigateTo({
+					url: "/pages/StudyGroup/StudyGroupManage?group_id=" + this.group.id
 				})
 			},
 			dialogInputConfirm() {
