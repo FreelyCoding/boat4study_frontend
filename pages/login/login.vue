@@ -18,9 +18,17 @@
 						maxlength="30" v-model="password"/>
 				</view>
 				
-				
-				<u--text color="#5c8dff" text="注册" align="right" 
-					size="18" margin="10rpx" @click="toRegister"></u--text>
+				<u-row>
+					<u-col :span="6">
+						<u--text color="#5c8dff" text="忘记密码？" align="left"
+							size="18" margin="10rpx" @click="toPassword"></u--text>
+					</u-col>
+					
+					<u-col :span="6">
+						<u--text color="#5c8dff" text="注册" align="right"
+							size="18" margin="10rpx" @click="toRegister"></u--text>
+					</u-col>
+				</u-row>
 				
 				
 				<button class="tui-button-primary tui-btn-submit" hover-class="tui-button-hover"
@@ -157,7 +165,13 @@
 				uni.redirectTo({
 					url: "/pages/register/register"
 				})
+			},
+			toPassword() {
+				uni.redirectTo({
+					url: "/pages/login/forget_password"
+				})
 			}
+			
 		}
 	};
 </script>

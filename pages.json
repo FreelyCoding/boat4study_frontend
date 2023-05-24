@@ -62,7 +62,12 @@
 				"navigationBarTitleText": "登录"
 			}
 		},
-		
+		{
+			"path": "pages/login/forget_password",
+			"style": {
+				"navigationBarTitleText": "重置密码"
+			}
+		},
 		{
 			"path": "pages/homePage/noteIndex",
 			"style": {
