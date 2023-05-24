@@ -161,17 +161,17 @@
 						<view>
 							<uni-row>
 								<uni-col :span="2" align="start">
-									<view v-if="item.user_id == 0">
+									<view v-if="item.user_id == 0" style="max-width: 30px;">
 										<p class="official_PS_tag">
 											官方题库
 										</p>
 									</view>
-									<view v-else-if="item.group_id == 0">
+									<view v-else-if="item.group_id == 0" style="max-width: 30px;">
 										<div class="personal_PS_tag">
 											个人题库
 										</div>		
 									</view>
-									<view v-else-if="item.group_id != 0">
+									<view v-else-if="item.group_id != 0" style="max-width: 30px;">
 										<div class="group_PS_tag">
 											小组题库
 										</div>		
@@ -223,7 +223,7 @@
 		</view>
 
 		<view class="u-demo-block" v-if="groups && groups.length > 0">
-			<u-list customStyle="margin: auto; max-height: 500px; margin-top: 15px;max-width:1200px">
+			<u-list customStyle="margin: auto; max-height: 480px; margin-top: 15px;max-width:1200px">
 				<u-list-item v-for="(item, index) in groups" :key="index">
 					<uni-card @click="jumpToStudyGroup(item)" isShadow border padding="15px 0px 15px 0px"
 						margin="0px 15px 15px 15px" style="border-radius: 10px;">
@@ -231,7 +231,8 @@
 							<uni-row>
 								<uni-col :span="6">
 									<p style="margin: auto;">
-										<u-avatar :src="item.avatar_path" size="70px"></u-avatar>
+										<u-avatar :src="myRequest.imageUrl() + '/public' + item.avatar_path"
+											size="70px"></u-avatar>
 									</p>
 								</uni-col>
 								<uni-col :span="3">
@@ -500,7 +501,7 @@
 						if (res.statusCode == 200) {
 							this.problemSet = []
 							if (res.data.problem_set && res.data.problem_set.length) {
-								for (var i = 0; i < res.data.problem_set.length; i++) {
+								for (var i = 0; i <  Math.min(6, res.data.problem_set.length); i++) {
 									let owner_id = res.data.problem_set[i].user_id
 									var t = {
 										id: res.data.problem_set[i].id,
@@ -546,11 +547,11 @@
 					success: (res) => {
 						console.log(res)
 						if (res.statusCode == 200) {
-							for (var i = 0; i < res.data.group.length; i++) {
+							for (var i = 0; i < Math.min(6, res.data.group.length); i++) {
 								var t = {
 									description: res.data.group[i].description,
 									name: res.data.group[i].name,
-									avatar_path: "/static/pic/group_avatar_2.png",
+									avatar_path: res.data.group[i].avatar_url,
 									id: res.data.group[i].id,
 									member_count: res.data.group[i].member_count,
 									created_at: res.data.group[i].created_at.slice(0, 10),

@@ -55,7 +55,8 @@
 						<uni-row>
 							<uni-col :span="7">
 								<p style="margin: auto;">
-									<u-avatar :src="item.avatar_path" size="70px"></u-avatar>
+									<u-avatar :src="myRequest.imageUrl() + '/public' + item.avatar_path"
+										size="70px"></u-avatar>
 								</p>
 							</uni-col>
 							<uni-col :span="2">
@@ -212,7 +213,7 @@
 								var t = {
 									description: res.data.group[i].description,
 									name: res.data.group[i].name,
-									avatar_path: "/static/pic/group_avatar_2.png",
+									avatar_path: res.data.group[i].avatar_url,
 									id: res.data.group[i].id,
 									member_count: res.data.group[i].member_count,
 									created_at: res.data.group[i].created_at.slice(0, 10),
