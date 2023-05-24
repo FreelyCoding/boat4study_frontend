@@ -85,7 +85,9 @@
 		</view>
 
 
-		<view style="padding: 10px 0 10px 0; position: sticky; bottom: 40px; background-color: #EDEDED;">
+
+
+		<view style="padding: 10px 0 10px 0; position: sticky; bottom: 0px; background-color: #EDEDED;">
 			<p style="margin: auto;width: 92%">
 				<button style="background-color: #00aaff; color: white; 
 					 margin-bottom: 10px;" @click="jumpToCreateNote">
