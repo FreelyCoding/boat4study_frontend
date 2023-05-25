@@ -233,7 +233,7 @@
 				isAdministrator: false,
 				isMember: false,
 				invitation: "abcd",
-				addGroupCode: "",
+				addGroupMessage: "",
 				group: {
 					id: 1,
 					owner_id: 1,

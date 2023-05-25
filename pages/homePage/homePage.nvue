@@ -154,10 +154,10 @@
 
 
 		<view class="u-demo-block" v-if="problemSet && problemSet.length > 0">
-			<u-list customStyle="width: 94%; margin: auto; max-height: 370px; margin-top: 15px;">
+			<u-list customStyle="width: 94%; margin: auto; max-height: 520px; margin-top: 15px;">
 				<u-list-item v-for="(item, index) in problemSet" :key="index">
 					<uni-card isShadow border padding="10px 0px 10px 0px" margin="0px 10px 15px 10px"
-						style="border-radius: 10px;" @click="jumpToPS(item)">
+						style="border-radius: 10px;" @click="jumpToProblemSetDetail(item)">
 						<view>
 							<uni-row>
 								<uni-col :span="2" align="start">
@@ -210,7 +210,7 @@
 			<uni-row>
 				<uni-col :span="12">
 					<view>
-						<p class="homePage-header"> 精选小组</p>
+						<p class="homePage-header"> 精选小组 </p>
 					</view>
 				</uni-col>
 
@@ -223,7 +223,7 @@
 		</view>
 
 		<view class="u-demo-block" v-if="groups && groups.length > 0">
-			<u-list customStyle="margin: auto; max-height: 480px; margin-top: 15px;max-width:1200px">
+			<u-list customStyle="margin: auto; max-height: 500px; margin-top: 15px;max-width:1200px">
 				<u-list-item v-for="(item, index) in groups" :key="index">
 					<uni-card @click="jumpToStudyGroup(item)" isShadow border padding="15px 0px 15px 0px"
 						margin="0px 15px 15px 15px" style="border-radius: 10px;">
@@ -501,7 +501,7 @@
 						if (res.statusCode == 200) {
 							this.problemSet = []
 							if (res.data.problem_set && res.data.problem_set.length) {
-								for (var i = 0; i <  Math.min(6, res.data.problem_set.length); i++) {
+								for (var i = 0; i <  Math.min(4, res.data.problem_set.length); i++) {
 									let owner_id = res.data.problem_set[i].user_id
 									var t = {
 										id: res.data.problem_set[i].id,
@@ -547,7 +547,7 @@
 					success: (res) => {
 						console.log(res)
 						if (res.statusCode == 200) {
-							for (var i = 0; i < Math.min(6, res.data.group.length); i++) {
+							for (var i = 0; i < Math.min(3, res.data.group.length); i++) {
 								var t = {
 									description: res.data.group[i].description,
 									name: res.data.group[i].name,
