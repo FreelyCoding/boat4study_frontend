@@ -261,6 +261,16 @@ export default {
 		return api + "/" + data.id + "?user_id=" + data.user_id + "&invitation=" + data.invitation
 	},
 	
+	study_group_apply() {
+		let api = "/group/apply"
+		return api;
+	},
+	
+	stdy_group_application() {
+		let api = "/group/application"
+		return api
+	},
+	
 	study_group_remove(data) {
 		let api = "/group/remove"
 		return api + "/" + data.id + "?user_id=" + data.user_id

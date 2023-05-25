@@ -35,13 +35,13 @@
 							</p>
 
 							<view style="margin: auto; margin-top: 30px;">
-								<p  v-if="isAdministrator">
+								<p v-if="isAdministrator">
 									<button size="mini" style="background-color: #f9ae3d; color: white; width: 100px; "
 										@click="jumpToManage()">
 										管理小组
 									</button>
 								</p>
-								
+
 								<p v-else-if="!isMember">
 									<button size="mini" style="background-color: #5ac725; color: white; width: 100px;"
 										@click="addGroupDialogToggle">
@@ -194,8 +194,14 @@
 
 			<view>
 				<uni-popup ref="addGroupDialog" type="dialog" :isMaskClick="false">
-					<uni-popup-dialog cancelText="取消" confirmText="确定" title="您确定申请加入吗" type="info"
-						@confirm="addGroupDialogInputConfirm()" @close="addGroupDialogClose()"></uni-popup-dialog>
+					<uni-popup-dialog cancelText="取消" confirmText="确定" title="申请加入小组" type="info"
+						@confirm="addGroupDialogInputConfirm()" @close="addGroupDialogClose()">
+						<uni-card style="padding: 0 0 10px 0; margin: 0;">
+							<uni-section title="申请理由" type="line" titleFontSize="16px">
+								<u-input type="text" placeholder="请输入您的申请理由" v-model="addGroupMessage" />
+							</uni-section>
+						</uni-card>
+					</uni-popup-dialog>
 				</uni-popup>
 			</view>
 
@@ -309,7 +315,7 @@
 			refresh(option) {
 				let uid = myRequest.getUID();
 				myRequest.checkLogin()
-				this.group.id = option.id
+				this.group.id = parseInt(option.id)
 				console.log('this.group_id: ' + this.group.id); //打印出上个页面传递的参数。
 
 				uni.request({
@@ -581,54 +587,38 @@
 			},
 
 			addGroupDialogInputConfirm() {
-				uni.showLoading({
-					title: '验证中'
+				// 关闭窗口后，恢复默认内容
+				let uid = myRequest.getUID()
+				var data = JSON.stringify({
+					"group_id": this.group.id,
+					"message": this.addGroupMessage,
 				})
 
-				setTimeout(() => {
-					uni.hideLoading()
-					// 关闭窗口后，恢复默认内容
-					let uid = myRequest.getUID()
-					let data = {
-						"id": this.group.id,
-						"user_id": uid,
-						"invitation": this.addGroupCode
-					}
-					let option = {
-						"id": this.group.id,
-					}
-					let that = this
+				console.log(data)
 
-					myRequest.request(api.study_group_add(data), 'POST').then(
-						function(res) {
-							console.log(res)
-							if (res.statusCode == 200) {
-								myRequest.toast('加入成功', 1500, true)
-								setTimeout(() => {
-									uni.hideToast();
-									//关闭提示后刷新
-									that.refresh(option)
-								}, 1000)
-							} else if (res.statusCode == 401) {
-								myRequest.redirectToLogin()
-							} else if (res.statusCode == 403) {
-								myRequest.toast("请您再检查一遍邀请码~")
-							} else if (res.statusCode == 404) {
-								myRequest.toast("小组不存在~")
-							} else {
-								myRequest.toast("")
-							}
-						}
-					).catch(
-						function(res) {
-							console.log(res)
+				myRequest.request(api.study_group_apply(), 'POST', data).then(
+					function(res) {
+						console.log(res)
+						if (res.statusCode == 200) {
+							myRequest.toast('申请成功', 1500, true)
+							setTimeout(() => {
+								uni.hideToast();
+								//关闭提示后跳转
+							}, 1000)
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else {
 							myRequest.toast()
 						}
-					)
-
-					this.addGroupCode = ""
-					this.$refs.addGroupDialog.close()
-				}, 500)
+					}
+				).catch(
+					function(res) {
+						console.log(res)
+						myRequest.toast()
+					}
+				)
+				this.addGroupMessage = ""
+				this.$refs.addGroupDialog.close()
 			},
 
 			quitGroupDialogToggle() {

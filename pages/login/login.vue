@@ -62,6 +62,9 @@
 				msg: ''
 			};
 		},
+		onShow() {
+			uni.preloadPage({url: "/pages/homePage/homePage"});
+		},
 		methods: {
 			login(e) {
 				let userInfo = {
