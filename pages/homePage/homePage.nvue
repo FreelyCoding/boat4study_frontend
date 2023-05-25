@@ -276,31 +276,46 @@
 						author_name: "Longxmas",
 						note_title: "精选笔记",
 						note_content: "加载中",
-						pic: "../../static/pic/binSearch.png"
+						pic: "../../static/pic/binSearch.png",
+						create_time: "2023-05-04",
+						star_count: 0,
+						like_count: 0,
 					},
 					{
 						author_name: "Longxmas",
 						note_title: "精选笔记",
 						note_content: "加载中",
-						pic: "../../static/pic/binSearch.png"
+						pic: "../../static/pic/binSearch.png",
+						create_time: "2023-05-04",
+						star_count: 0,
+						like_count: 0,
 					},
 					{
 						author_name: "Longxmas",
 						note_title: "精选笔记",
 						note_content: "加载中",
-						pic: "../../static/pic/binSearch.png"
+						pic: "../../static/pic/binSearch.png",
+						create_time: "2023-05-04",
+						star_count: 1,
+						like_count: 1,
 					},
 					{
 						author_name: "Longxmas",
 						note_title: "精选笔记",
 						note_content: "加载中",
-						pic: "../../static/pic/binSearch.png"
+						pic: "../../static/pic/binSearch.png",
+						create_time: "2023-05-04",
+						star_count: 1,
+						like_count: 1,
 					},
 					{
 						author_name: "Longxmas",
 						note_title: "精选笔记",
 						note_content: "加载中",
-						pic: "../../static/pic/binSearch.png"
+						pic: "../../static/pic/binSearch.png",
+						create_time: "2023-05-04",
+						star_count: 1,
+						like_count: 1,
 					}
 				],
 				problemSet: [ 
