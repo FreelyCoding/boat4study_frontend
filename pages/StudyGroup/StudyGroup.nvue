@@ -14,7 +14,7 @@
 		<div class="background-light-blue">
 			<view style="width: 90%; margin: auto; margin-top: 10px; margin-bottom: 10px;">
 				<uni-row>
-					<uni-col :span="16">
+					<uni-col :span="13">
 						<view style="margin: 10px 0px 0px 0px;">
 							<p class="group_name">小组名</p>
 							<p class="group_name ">{{group.name}}</p>
@@ -23,67 +23,38 @@
 						</view>
 					</uni-col>
 
+					<uni-col :span="1">
+
+					</uni-col>
+
 					<uni-col :span="8">
 						<view>
-							<p style="text-align: center;">
-								<image style="width: 100px; height: 100px; background-color: #b2daf8; margin-top: 10px;"
-									mode="aspectFill" :src="group.avatar"></image>
+							<p style="margin: auto;">
+								<u-avatar :src="myRequest.imageUrl() + '/public' + group.avatar"
+									size="120px"></u-avatar>
 							</p>
 
-						</view>
-						<view>
-							<p style="text-align: center; margin-top: 10px;" v-if="isAdministrator">
-								<button size="mini" style="background-color: #f9ae3d; color: white; width: 100px;"
-									@click="inputDialogToggle">
-									编辑信息
-								</button>
-							</p>
+							<view style="margin: auto; margin-top: 30px;">
+								<p v-if="isAdministrator">
+									<button size="mini" style="background-color: #f9ae3d; color: white; width: 100px; "
+										@click="jumpToManage()">
+										管理小组
+									</button>
+								</p>
+
+								<p v-else-if="!isMember">
+									<button size="mini" style="background-color: #5ac725; color: white; width: 100px;"
+										@click="addGroupDialogToggle">
+										申请加入
+									</button>
+								</p>
+							</view>
+
 						</view>
 					</uni-col>
 				</uni-row>
 			</view>
 		</div>
-
-		<view>
-			<!-- 输入框示例 -->
-			<uni-popup ref="inputDialog" type="dialog" :isMaskClick="false">
-				<uni-card>
-					<p style="text-align: center;">
-						编辑小组信息
-					</p>
-					<uni-section title="小组名" type="line">
-						<u-input type="text" placeholder="请输入小组名" v-model="group.editName" />
-					</uni-section>
-					<uni-section title="小组简介" type="line">
-						<u-input type="textarea" placeholder="请输入小组简介" custom-style="height: 300px;"
-							v-model="group.editIntroduction" />
-					</uni-section>
-
-					<p style="margin-top: 30px; width: 300px;">
-
-					</p>
-
-					<uni-row>
-						<uni-col :span="11" :offset="1">
-							<p style="text-align: center;">
-								<button style="background-color: #00aaff; color: white; width: 100px;"
-									@click="inputDialogClose">
-									取消编辑
-								</button>
-							</p>
-						</uni-col>
-						<uni-col :span="12" :offset="3">
-							<p style="text-align: center;">
-								<button style="background-color: #5ac725; color: white; width: 100px;"
-									@click="dialogInputConfirm">
-									确认提交
-								</button>
-							</p>
-						</uni-col>
-					</uni-row>
-				</uni-card>
-			</uni-popup>
-		</view>
 
 		<view>
 			<div style="background-color: #f7f7f7;">
@@ -198,13 +169,6 @@
 					<uni-card :isShadow="true" :border="true" padding="10px 0px 0px 0px" margin="0px 15px 10px 15px">
 						<view>
 							<p style="text-align: center; margin-bottom: 10px;">
-								<button style="background-color: #5ac725; color: white;"
-									@click="invitationDialogToggle()">
-									获取邀请码
-								</button>
-							</p>
-
-							<p style="text-align: center; margin-bottom: 10px;">
 								<button style="color: white;" type="warn" @click="deleteGroupDialogToggle">
 									删除小组
 								</button>
@@ -228,139 +192,32 @@
 				</div>
 			</view>
 
-			<view v-else-if="!isMember">
-				<div style="background-color: #f7f7f7;">
-					<uni-card :isShadow="true" :border="true" padding="10px 0px 0px 0px" margin="0px 15px 10px 15px">
-						<view>
-							<p style="text-align: center; margin-bottom: 10px;">
-								<button style="background-color: #5ac725;color: white;" type="warn"
-									@click="addGroupDialogToggle()">
-									加入小组
-								</button>
-							</p>
-						</view>
-					</uni-card>
-				</div>
-			</view>
-
-			<view>
-				<uni-popup ref="invitationDialog" type="dialog">
-					<uni-card>
-						<p style="text-align: center;font-size: 24px;margin-bottom: 20px;margin-top: 10px;"
-							class="shuhei">
-							邀请码
-						</p>
-						<p style="text-align: center;font-size: 20px; margin-bottom: 10px;">
-							{{invitation}}
-						</p>
-					</uni-card>
-				</uni-popup>
-			</view>
-
 			<view>
 				<uni-popup ref="addGroupDialog" type="dialog" :isMaskClick="false">
-					<uni-card>
-						<p style="text-align: center;font-size: 24px;margin-bottom: 20px;margin-top: 10px;"
-							class="shuhei">
-							请输入邀请码
-						</p>
-						<u-input class="tui-input" name="invitation" v-model="addGroupCode" />
-
-						<p style="margin-top: 20px; width: 240px;">
-
-						</p>
-
-						<uni-row>
-							<uni-col :span="7">
-								<p>
-									<button style="background-color: #00aaff; color: white; width: 100px;"
-										@click="addGroupDialogClose">
-										取消输入
-									</button>
-								</p>
-							</uni-col>
-							<uni-col :span="10" :offset="7">
-								<p>
-									<button style="background-color: #5ac725; color: white; width: 100px;"
-										@click="addGroupDialogInputConfirm">
-										确认提交
-									</button>
-								</p>
-							</uni-col>
-						</uni-row>
-					</uni-card>
+					<uni-popup-dialog cancelText="取消" confirmText="确定" title="申请加入小组" type="info"
+						@confirm="addGroupDialogInputConfirm()" @close="addGroupDialogClose()">
+						<uni-card style="padding: 0 0 10px 0; margin: 0;">
+							<uni-section title="申请理由" type="line" titleFontSize="16px">
+								<u-input type="text" placeholder="请输入您的申请理由" v-model="addGroupMessage" />
+							</uni-section>
+						</uni-card>
+					</uni-popup-dialog>
 				</uni-popup>
 			</view>
 
 			<view>
 				<uni-popup ref="deleteGroupDialog" type="dialog" :isMaskClick="false">
-					<uni-card>
-						<p style="text-align: center;font-size: 24px;margin-bottom: 20px;margin-top: 10px;"
-							class="shuhei">
-							您确定要删除小组吗
-						</p>
-						<p style="margin-top: 20px;width: 240px;">
-
-						</p>
-
-						<uni-row>
-							<uni-col :span="7">
-								<p style="text-align: center; margin-bottom: 10px;">
-									<button style="background-color: #00aaff; color: white; width: 100px;"
-										@click="deleteGroupDialogClose">
-										取消删除
-									</button>
-								</p>
-							</uni-col>
-
-							<uni-col :span="10" :offset="7">
-								<p style="text-align: center; margin-bottom: 10px;">
-									<button style="background-color: #e64340; color: white; width: 100px;"
-										@click="deleteGroupDialogConfirm">
-										确认删除
-									</button>
-								</p>
-							</uni-col>
-						</uni-row>
-					</uni-card>
+					<uni-popup-dialog cancelText="取消" confirmText="确定" title="您确定要删除小组吗"
+						@confirm="deleteGroupDialogConfirm()" @close="deleteGroupDialogClose()"></uni-popup-dialog>
 				</uni-popup>
 			</view>
-
 
 			<view>
 				<uni-popup ref="quitGroupDialog" type="dialog" :isMaskClick="false">
-					<uni-card>
-						<p style="text-align: center;font-size: 24px;margin-bottom: 20px;margin-top: 10px;"
-							class="shuhei">
-							您确定要退出吗
-						</p>
-						<p style="margin-top: 20px;width: 240px;">
-
-						</p>
-
-						<uni-row>
-							<uni-col :span="12">
-								<p style="text-align: center;">
-									<button size="mini" style="background-color: #00aaff; color: white; width: 90px;"
-										@click="quitGroupDialogClose">
-										取消退出
-									</button>
-								</p>
-							</uni-col>
-
-							<uni-col :span="12">
-								<p style="text-align: center;">
-									<button size="mini" style="background-color: #e64340; color: white; width: 90px;"
-										@click="quitGroupDialogConfirm">
-										确认退出
-									</button>
-								</p>
-							</uni-col>
-						</uni-row>
-					</uni-card>
+					<uni-popup-dialog cancelText="取消" confirmText="确定" title="您确定要删除小组吗"
+						@confirm="quitGroupDialogConfirm()" @close="quitGroupDialogClose()"></uni-popup-dialog>
 				</uni-popup>
 			</view>
-
 
 		</view>
 
@@ -382,7 +239,7 @@
 				isAdministrator: false,
 				isMember: false,
 				invitation: "abcd",
-				addGroupCode: "",
+				addGroupMessage: "",
 				group: {
 					id: 1,
 					owner_id: 1,
@@ -421,7 +278,7 @@
 			}
 		},
 		onLoad: function(option) {
-			
+
 		},
 
 		onShow: function() {
@@ -437,28 +294,28 @@
 			back() {
 				uni.navigateBack()
 			},
-			getParam(){
-			  let routes = getCurrentPages(); // 获取当前打开过的页面路由数组
-			  let curRoute = routes[routes.length - 1].route //获取当前页面路由
-			  let curParam = routes[routes.length - 1].options; //获取路由参数
-			  // 拼接参数
-			  let param = ''
-			  for (let key in curParam) {
-			    param += '&' + key + '=' + curParam[key]
-			  }
-			                
-			  // 把参数保存为对像
-			  let obj = {}
-			  for (let key in curParam) {
-			    obj[key] = curParam[key]
-			  }
-			  return obj
+			getParam() {
+				let routes = getCurrentPages(); // 获取当前打开过的页面路由数组
+				let curRoute = routes[routes.length - 1].route //获取当前页面路由
+				let curParam = routes[routes.length - 1].options; //获取路由参数
+				// 拼接参数
+				let param = ''
+				for (let key in curParam) {
+					param += '&' + key + '=' + curParam[key]
+				}
+
+				// 把参数保存为对像
+				let obj = {}
+				for (let key in curParam) {
+					obj[key] = curParam[key]
+				}
+				return obj
 			},
 
 			refresh(option) {
 				let uid = myRequest.getUID();
 				myRequest.checkLogin()
-				this.group.id = option.id
+				this.group.id = parseInt(option.id)
 				console.log('this.group_id: ' + this.group.id); //打印出上个页面传递的参数。
 
 				uni.request({
@@ -477,6 +334,7 @@
 							this.group.editIntroduction = this.group.introduction
 							this.group.editName = this.group.name
 							this.group.owner_id = res.data.group[0].owner_id
+							this.group.avatar = res.data.group[0].avatar_url
 							if (uid == this.group.owner_id) {
 								this.isAdministrator = true;
 							} else {
@@ -621,6 +479,11 @@
 					url: "/pages/problemSet/problemSetCreate?group_id=" + this.group.id
 				})
 			},
+			jumpToManage() {
+				uni.navigateTo({
+					url: "/pages/StudyGroup/StudyGroupManage?group_id=" + this.group.id
+				})
+			},
 			dialogInputConfirm() {
 				let model = {
 					"description": this.group.editIntroduction,
@@ -724,54 +587,38 @@
 			},
 
 			addGroupDialogInputConfirm() {
-				uni.showLoading({
-					title: '验证中'
+				// 关闭窗口后，恢复默认内容
+				let uid = myRequest.getUID()
+				var data = JSON.stringify({
+					"group_id": this.group.id,
+					"message": this.addGroupMessage,
 				})
 
-				setTimeout(() => {
-					uni.hideLoading()
-					// 关闭窗口后，恢复默认内容
-					let uid = myRequest.getUID()
-					let data = {
-						"id": this.group.id,
-						"user_id": uid,
-						"invitation": this.addGroupCode
-					}
-					let option = {
-						"id": this.group.id,
-					}
-					let that = this
+				console.log(data)
 
-					myRequest.request(api.study_group_add(data), 'POST').then(
-						function(res) {
-							console.log(res)
-							if (res.statusCode == 200) {
-								myRequest.toast('加入成功', 1500, true)
-								setTimeout(() => {
-									uni.hideToast();
-									//关闭提示后刷新
-									that.refresh(option)
-								}, 1000)
-							} else if (res.statusCode == 401) {
-								myRequest.redirectToLogin()
-							} else if (res.statusCode == 403) {
-								myRequest.toast("请您再检查一遍邀请码~")
-							} else if (res.statusCode == 404) {
-								myRequest.toast("小组不存在~")
-							} else {
-								myRequest.toast("")
-							}
-						}
-					).catch(
-						function(res) {
-							console.log(res)
+				myRequest.request(api.study_group_apply(), 'POST', data).then(
+					function(res) {
+						console.log(res)
+						if (res.statusCode == 200) {
+							myRequest.toast('申请成功', 1500, true)
+							setTimeout(() => {
+								uni.hideToast();
+								//关闭提示后跳转
+							}, 1000)
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else {
 							myRequest.toast()
 						}
-					)
-
-					this.addGroupCode = ""
-					this.$refs.addGroupDialog.close()
-				}, 500)
+					}
+				).catch(
+					function(res) {
+						console.log(res)
+						myRequest.toast()
+					}
+				)
+				this.addGroupMessage = ""
+				this.$refs.addGroupDialog.close()
 			},
 
 			quitGroupDialogToggle() {
@@ -884,10 +731,11 @@
 		margin-bottom: 8px;
 	}
 
+
 	.group_introduction {
+		min-height: 80px;
 		color: black;
 		font-size: 14px;
 		margin-bottom: 8px;
-		max-width: 200px;
 	}
 </style>

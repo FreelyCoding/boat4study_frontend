@@ -7,12 +7,12 @@
 		width: 96%;
 		margin: auto;
 	}
-	
+
 	.m-middle-7 {
 		margin-left: 7%;
 		margin-right: 7%;
 	}
-	
+
 
 	.m-lr-0 {
 		margin-left: 0px;
@@ -116,4 +116,37 @@
 
 	.puhui {
 		font-family: alibaba_puhui;
+	}
+
+	.official_PS_tag {
+		background-color: #2979ff;
+		writing-mode: vertical-lr;
+		border-top-right-radius: 15px;
+		border-bottom-right-radius: 15px;
+		color: white;
+		height: 80px;
+		text-align: center;
+		font-size: 16px;
+	}
+
+	.personal_PS_tag {
+		background-color: #18bc37;
+		writing-mode: vertical-lr;
+		border-top-right-radius: 15px;
+		border-bottom-right-radius: 15px;
+		color: white;
+		height: 80px;
+		text-align: center;
+		font-size: 16px;
+	}
+
+	.group_PS_tag {
+		background-color: #f9ae3d;
+		writing-mode: vertical-lr;
+		border-top-right-radius: 15px;
+		border-bottom-right-radius: 15px;
+		color: white;
+		height: 80px;
+		text-align: center;
+		font-size: 16px;
 	}

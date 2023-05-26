@@ -7,10 +7,8 @@
 						<uni-col :span="8">
 							<view>
 								<p style="text-align: center;">
-									<u-avatar :src="myRequest.imageUrl() + '/public' + user.avatar" size="100px" @click="clickImg(user.avatar)"></u-avatar>
-									<!--
-									<u-ava style="width: 100px; height: 100px; background-color: #00aaff;"
-										mode="aspectFill" :src="user.avatar"></image> -->
+									<u-avatar :src="myRequest.imageUrl() + '/public' + user.avatar" size="100px"
+										@click="clickImg(user.avatar)"></u-avatar>
 								</p>
 							</view>
 
@@ -30,64 +28,47 @@
 		<view>
 			<!-- 输入框示例 -->
 			<uni-popup ref="inputDialog" type="dialog" :isMaskClick="false">
-				<uni-card>
-					<p style="text-align: center;">
-						编辑个人信息
-					</p>
-					<uni-section title="用户名" type="line">
-						<p style="margin-left: 10px;">
-							{{user.name}}
-						</p>
-					</uni-section>
+				<uni-popup-dialog cancelText="取消编辑" confirmText="确定提交" title="编辑个人信息" type="info"
+					@confirm="dialogInputConfirm()" @close="inputDialogClose()">
+					<uni-card style="margin: 0;">
+						<uni-section title="用户名" type="line" titleFontSize="16px">
+							<p style="margin-left: 10px; font-size: 16px;">
+								{{user.name}}
+							</p>
+						</uni-section>
 					
-					<uni-section title="用户昵称" type="line">
-						<u-input type="text" placeholder="请输入用户昵称" v-model="user.editName" />
-					</uni-section>
-
-					<p style="margin-top: 10px; width: 240px;">
-
-					</p>
-
-					<uni-section title="上传用户头像" type="line">
-						<p style="margin: auto;">
-							<u-icon name="/static/pic/picture.svg" size="80px"
-								@click="changeAvatar()">
-							</u-icon>
+						<u-divider></u-divider>
+					
+						<uni-section title="用户邮箱" type="line" titleFontSize="16px">
+							<p style="margin-left: 10px; font-size: 16px;">
+								{{user.email}}
+							</p>
+						</uni-section>
+					
+						<u-divider></u-divider>
+					
+						<uni-section title="用户昵称" type="line" titleFontSize="16px">
+							<u-input type="text" placeholder="请输入用户昵称" v-model="user.editName" />
+						</uni-section>
+						<p style="margin-top: 20px; width: 240px;">
+					
 						</p>
+					</uni-card>
+				</uni-popup-dialog>
 
+			</uni-popup>
+		</view>
 
-					</uni-section>
-
-					<p style="margin-top: 20px;">
-
-					</p>
-
-					<uni-row>
-						<uni-col :span="7">
-							<p>
-								<button style="background-color: #00aaff; color: white; width: 100px;"
-									@click="inputDialogClose">
-									取消编辑
-								</button>
-							</p>
-						</uni-col>
-						<uni-col :span="10" :offset="7">
-							<p>
-								<button style="background-color: #5ac725; color: white; width: 100px;"
-									@click="dialogInputConfirm">
-									确认提交
-								</button>
-							</p>
-						</uni-col>
-					</uni-row>
-				</uni-card>
+		<view>
+			<uni-popup ref="logoutDialog" type="dialog" :isMaskClick="false">
+				<uni-popup-dialog cancelText="取消" confirmText="确定" title="您确认退出吗" @confirm="logout()"
+					@close="logoutDialogClose()"></uni-popup-dialog>
 			</uni-popup>
 		</view>
 
 
 		<view>
 			<div style="background-color: #f7f7f7;">
-
 				<view>
 					<div style="background-color: white;">
 						<view class="u-demo-block__content" style="margin-top: 20px; margin-bottom: 10px;">
@@ -126,7 +107,7 @@
 											@click="jumpToWrongProblem()"></u-icon>
 									</view>
 									<view style="margin: auto;">
-										<p style="font-size: 15px;"> 全部错题 </p>
+										<p style="font-size: 15px;"> 我的错题 </p>
 									</view>
 
 								</uni-col>
@@ -136,7 +117,7 @@
 				</view>
 
 				<view>
-					<div style="margin-top: 30px;">
+					<div style="margin-top: 20px;">
 
 					</div>
 				</view>
@@ -189,42 +170,57 @@
 						</view>
 					</div>
 				</view>
+
+				<view>
+					<div style="background-color: white;margin-top: 20px;">
+						<view class="m-middle-5" style="margin-top: 20px;">
+							<view>
+								<p class="homePage-header">更多功能</p>
+							</view>
+						</view>
+
+
+						<view class="m-middle-5" style="margin-top: 30px; margin-bottom: 30px;">
+							<u-row @click="changeAvatar()">
+								<u-col :span="2">
+									<u-icon name="/static/pic/avatar.svg" size="40px"></u-icon>
+								</u-col>
+								<u-col :span="9">
+									<p class="star-title"> 修改头像 </p>
+								</u-col>
+								<u-col :span="1">
+									<u-icon name="arrow-right" size="20px"></u-icon>
+								</u-col>
+							</u-row>
+							<u-divider style="margin-bottom: 15px;"></u-divider>
+							<u-row @click="inputDialogToggle()">
+								<u-col :span="2">
+									<u-icon name="/static/pic/info.svg" size="40px"></u-icon>
+								</u-col>
+								<u-col :span="9">
+									<p class="star-title"> 编辑信息 </p>
+								</u-col>
+								<u-col :span="1">
+									<u-icon name="arrow-right" size="20px"></u-icon>
+								</u-col>
+							</u-row>
+							<u-divider style="margin-bottom: 15px;"></u-divider>
+							<u-row @click="logoutDialogToggle()" style="margin-bottom: 20px;">
+								<u-col :span="2">
+									<u-icon name="/static/pic/exit.svg" size="40px"></u-icon>
+								</u-col>
+								<u-col :span="9">
+									<p class="star-title"> 退出登录 </p>
+								</u-col>
+								<u-col :span="1">
+									<u-icon name="arrow-right" size="20px"></u-icon>
+								</u-col>
+							</u-row>
+						</view>
+					</div>
+				</view>
 			</div>
 		</view>
-
-
-		<view style="margin-top: 100px;">
-			<uni-card padding="10px 0px 0px 0px" margin="0px 10px 10px 10px">
-				<uni-row>
-					<uni-col :span="12">
-						<p style="margin: auto">
-							<button style="background-color: #00aaff;color: white; width: 150px;"
-								@click="inputDialogToggle()">
-								编辑个人信息
-							</button>
-						</p>
-					</uni-col>
-
-					<uni-col :span="12">
-						<p style="margin: auto">
-							<button style="color: white; width: 150px;" type="warn" @click="logout()">
-								退出登录
-							</button>
-						</p>
-					</uni-col>
-				</uni-row>
-
-			</uni-card>
-		</view>
-
-		<!--
-		<p style="text-align: center; margin-bottom: 10px; ">
-			<button style="color: white;" type="warn" @click="logout">
-				退出登录
-			</button>
-		</p>
-		-->
-
 
 	</view>
 
@@ -335,7 +331,7 @@
 					}
 				})
 			},
-			
+
 			dialogInputConfirm() {
 				let model = {
 					"avatar_path": this.user.avatar,
@@ -344,7 +340,7 @@
 					"nick_name": this.user.editName
 				}
 				let that = this
-				
+
 				uni.request({
 					url: myRequest.interfaceUrl() + '/user/update',
 					method: 'PUT',
@@ -352,7 +348,7 @@
 					header: {
 						'X-Token': myRequest.getToken()
 					},
-				
+
 					success: (res) => {
 						console.log(res)
 						if (res.statusCode == 200) {
@@ -368,17 +364,17 @@
 							myRequest.toast()
 						}
 					},
-				
+
 					fail: (res) => {
 						console.log(res)
 						myRequest.toast()
 					}
 				})
-			
+
 				this.$refs.inputDialog.close()
 			},
-			
-			
+
+
 
 			inputDialogToggle() {
 				this.$refs.inputDialog.open()
@@ -426,6 +422,15 @@
 				})
 			},
 
+
+			logoutDialogToggle() {
+				this.$refs.logoutDialog.open()
+			},
+			logoutDialogClose() {
+				setTimeout(() => {
+					this.$refs.logoutDialog.close()
+				}, 100)
+			},
 
 			logout() {
 				myRequest.request(api.logout(), 'GET').then(

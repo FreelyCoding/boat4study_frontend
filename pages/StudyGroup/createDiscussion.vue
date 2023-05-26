@@ -8,7 +8,7 @@
 						title="创建讨论">
 
 						<block slot="left">
-							<view class="note-navbar">
+							<view class="discussion-navbar">
 								<!-- <uni-icons type="closeempty" color="#e45656" size="18" /> -->
 								<i-icon :size="20" color="#ffffff" name="more-2-fill" @click="toggle"></i-icon>
 								<!-- <i-icon size="20px" color="#e45656" name="close-fill" @click="clickClose"></i-icon> -->
@@ -18,7 +18,7 @@
 						</block>
 
 						<block slot="right">
-							<view class="note-navbar">
+							<view class="discussion-navbar">
 								<!-- <i-icon size="20px" color="#f29100" name="price-tag-fill"></i-icon> -->
 								<!-- <uni-icons type="checkmarkempty" color="#19be6b" size="18"></uni-icons> -->
 							</view>
@@ -41,7 +41,7 @@
 			</tui-bubble-popup>
 
 
-			<!--笔记标题-->
+			<!--讨论标题-->
 			<view class="title_wrapper">
 				<textarea class="title" v-model=title :placeholder="title_placeholder" :maxlength="title_maxlength"
 					placeholder-class="title_placeholder"></textarea>
@@ -53,7 +53,7 @@
 			<!--分界线-->
 			<u-line></u-line>
 			
-			<!--笔记内容-->
+			<!--讨论内容-->
 			<view class="page-body">
 				<view class='wrapper'>
 
@@ -150,15 +150,16 @@
 		},
 		data() {
 			return {
+				group_id: null,
 				popupTop: '12rpx',
 
 				show: false,
 				readOnly: false,
 				formats: {},
 				title: "",
-				title_placeholder: "笔记标题",
+				title_placeholder: "讨论标题",
 				title_maxlength: 50,
-				content_placeholder: "笔记内容",
+				content_placeholder: "讨论内容",
 				token: "",
 
 				relativeProblemShow: false,
@@ -205,138 +206,6 @@
 				item.selected = 1 - item.selected
 			},
 			
-			addToRelativeProblem() {
-				for (var i = 0; i < this.problemList.length; i ++) {
-					var item = this.problemList[i]
-					
-					if (item.selected == 0) continue;
-					
-					if (this.relativeProblem.indexOf(item) == -1) {
-						this.relativeProblem.push(item)
-					}
-				}
-				if (this.problemList.length > 0) {
-					myRequest.toast('添加题目成功')
-				}
-			},
-			
-			loadProblemList(problemSetId) {
-				this.problemSetSelectShow = false
-				this.problemListSelectShow = true
-				
-				console.log('yyy')
-				console.log(problemSetId)
-				
-				this.initProblemList(problemSetId)
-			},
-			
-			initProblemList(problemSetId) {
-				console.log('initProblemList')
-				var ret;
-				
-				uni.request({
-					url: myRequest.interfaceUrl() + `/problem_set/all_problem/${problemSetId}`,
-					method: 'GET',
-					header: {
-						'X-Token': myRequest.getToken()
-					},
-					
-					success: (res) => {
-						if (res.statusCode == 200) {
-							ret = res.data.problems
-							
-							this.problemList = []
-							
-							for (var i = 0; i < ret.length; i ++) {
-								this.problemList.push({
-									id: ret[i].id,
-									type: ret[i].problem_type_id,
-									selected: 0,
-									description: ret[i].description,
-								})
-							}
-							
-						} else if (res.statusCode == 401) {
-							uni.redirectTo({
-								url: '/pages/login/login'
-							})
-						} else {
-							this.problemListSelectShow = false
-							myRequest.toast()
-						}
-					},
-					
-					fail: res => {
-						this.problemListSelectShow = false
-						myRequest.toast()
-					}
-					
-				})
-				
-			},
-			
-			loadProblemSet() {
-				
-				myRequest.checkLogin()
-				uni.request({
-					url: myRequest.interfaceUrl() + '/user/problem_set',
-					method: 'GET',
-					header: {
-						'X-Token': myRequest.getToken()
-					},
-				
-					success: (res) => {
-						console.log(res)
-						if (res.statusCode == 200) {
-							this.problemSet = []
-							for (var i = 0; i < res.data.length; i++) {
-								var t = {
-									id: res.data[i].id,
-									description: res.data[i].description,
-									name: res.data[i].name,
-									pic: "",
-									created_at: res.data[i].created_at.slice(0, 10),
-									problem_number: res.data[i].problem_count,
-								}
-								this.problemSet.push(t);
-							}
-						} else if (res.statusCode == 401) {
-							if (myRequest.isLogin()) {
-								myRequest.toast('请重新登录')
-							} else {
-								myRequest.toast('请登录')
-							}
-							uni.navigateTo({
-								url: '/pages/login/login'
-							})
-						} else {
-							myRequest.toast()
-						}
-					},
-				
-					fail: (res) => {
-						console.log(res)
-						myRequest.toast()
-					}
-				})
-			},
-			
-			relativeProblemClose() {
-				this.relativeProblemShow = false;
-			},
-			
-			removeRelativeProblem(index) {
-				this.relativeProblem.splice(index, 1)
-			},
-			
-			problemSetSelectClose() {
-				this.problemSetSelectShow = false;
-			},
-			
-			problemListSelectClose() {
-				this.problemListSelectShow = false;
-			},
-		
 			toggle() {
 				this.popupShow = !this.popupShow;
 			},
@@ -466,44 +335,6 @@
 				})
 			},
 			
-			showProblemSet() {
-				this.problemSetSelectShow = true;
-				this.relativeProblemShow = false
-				
-				if (!myRequest.isLogin()) {
-					uni.redirectTo({
-						url: '/pages/login/login'
-					})
-					return
-				}
-				
-				uni.request({
-					url: myRequest.interfaceUrl() + '/problem/blank/all',
-					header: {
-						"X-Token": myRequest.getToken()
-					},
-					success: (res) => {
-						if (res.statusCode == 200) {
-							this.problemList = res.data.problems
-							console.log(this.problemList)
-						}
-						else {
-							myRequest.toast()
-						}
-					}
-				})
-			},
-			
-			addProblem(item) {
-				if (this.relativeProblem.indexOf(item) == -1) {
-					this.relativeProblem.push(item)
-					myRequest.toast('添加题目成功')
-				}
-				else {
-					myRequest.toast('已添加过该题目')
-				}
-			},
-			
 			async submit() {
 				if (!myRequest.isLogin()) {
 					uni.redirectTo({
@@ -530,34 +361,29 @@
 						} else {
 							var is_public = true
 							
-							var problems = []
-							
-							for (var i = 0; i < this.relativeProblem.length; i ++) {
-								var item = this.relativeProblem[i]
-								problems.push(item.id)
-							}
-							
 							// TODO: 后续更改is_public字段
 							var data = JSON.stringify({
 								"content": html_content,
 								"title": this.title,
 								"is_public": is_public,
-								"problems": problems
+								"group_id": Number(this.group_id)
 							})
+							
+							console.log(data)
 
-							myRequest.request(`/note/create`, 'POST', data).then(
+							myRequest.request(`/discussion/create`, 'POST', data).then(
 								function(res) {
 									console.log(res)
 									if (res.statusCode == 200) {
-										myRequest.toast('笔记创建成功')
-										uni.switchTab({
-											url: '/pages/homePage/noteIndex',
-											success() {
-												let page = getCurrentPages().pop(); //跳转页面成功之后
-												if (!page) return;
-												page.$vm.refresh(); //如果页面存在，则重新刷新页面
-											}
-										})
+										myRequest.toast('讨论创建成功')
+										if (getCurrentPages().length > 1) {
+											uni.navigateBack()
+										}
+										else {
+											uni.redirectTo({
+												url: `/pages/StudyGroup/discussionIndex?group_id=${this.group_id}`
+											})
+										}
 									} else if (res.statusCode == 401) {
 										if (myRequest.isLogin()) {
 											myRequest.toast('请重新登录')
@@ -585,6 +411,18 @@
 			}
 		},
 		onLoad() {
+			var pages = getCurrentPages();
+			var curRoutes = pages[pages.length - 1].route
+			var curParam = pages[pages.length - 1].options;
+			
+			this.group_id = curParam['group_id']
+			
+			if (!this.group_id) {
+				uni.switchTab({
+					url: "/pages/homePage/homePage"
+				})
+			}
+			
 			// #ifdef H5
 			this.popupTop = 44 + uni.upx2px(12) + 'px';
 			// #endif
@@ -612,7 +450,7 @@
 		top: var(--status-bar-height);
 	}
 
-	.note-navbar {
+	.discussion-navbar {
 		/* #ifndef APP-PLUS-NVUE */
 		display: flex;
 		/* #endif */

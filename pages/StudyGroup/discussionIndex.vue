@@ -2,30 +2,29 @@
 	<view>
 		<uni-nav-bar title="所有讨论" background-color="#00aaff" color="#FFFFFF" status-bar="true">
 			<block slot="left">
-				<view class="note-navbar">
+				<view class="discussion-navbar">
 					<uni-icons type="left" color="#FFFFFF" size="18" @click="back" />
 				</view>
 			</block>
 		</uni-nav-bar>
 
-
 		<uni-search-bar @confirm="search" :focus="true" v-model="searchValue" placeholder="请输入要搜索的讨论标题"
 			cancelButton="none" maxlength="50" style="margin-left: 5px; margin-right: 5px;">
 		</uni-search-bar>
 
-		<view v-if="notes && notes.length != 0" style="margin-top: 10px;">
-			<view v-for="(item, index) in notes" :key="index">
+		<view v-if="discussions && discussions.length != 0" style="margin-top: 10px;">
+			<view v-for="(item, index) in discussions" :key="index">
 				<uni-card isShadow border padding="15px 5px 0px 5px" margin="0px 15px 15px 15px"
 					style="border-radius: 10px;" @click="cardClick(item)">
 					<view class="u-demo-block">
 						<view>
 							<view>
-								<text class="note-title">{{item.note_title}}</text>
+								<text class="discussion-title">{{item.discussion_title}}</text>
 
 								<uni-row v-if="item.pic" style="margin-top: 15px;">
 									<uni-col :span="12">
 										<view>
-											<p class="note-content"> {{item.note_content ? item.note_content : "..."}}
+											<p class="discussion-content"> {{item.discussion_content ? item.discussion_content : "..."}}
 											</p>
 										</view>
 									</uni-col>
@@ -40,7 +39,7 @@
 								<uni-row v-else style="margin-top: 15px;">
 									<uni-col :span="24">
 										<view>
-											<p class="note-content"> {{item.note_content}}</p>
+											<p class="discussion-content"> {{item.discussion_content}}</p>
 										</view>
 									</uni-col>
 								</uni-row>
@@ -89,11 +88,19 @@
 		</view>
 
 		
-
 		<view v-else style="text-align: center;">
 			<image src="../../static/pic/note/no_note.png"
 				style="margin: auto; margin-top: 30px; height: 200px; width: 200px;"></image>
 			<p style="font-size: 20px;margin-top: 30px;">暂无讨论</p>
+		
+			<view style="margin-top: 30px; padding-bottom: 20px;">
+				<p style="text-align: center;">
+					<button style="background-color: #00aaff; color: white; max-width: 92%;
+					 margin-bottom: 10px;" @click="jumpToCreateDiscussion">
+						创建讨论
+					</button>
+				</p>
+			</view>
 		</view>
 
 	</view>
@@ -113,10 +120,23 @@
 			return {
 				searchValue: "",
 				flag: false,
-				notes: []
+				discussions: [],
+				group_id: null
 			}
 		},
 		onShow: function() {
+			var pages = getCurrentPages();
+			var curRoutes = pages[pages.length - 1].route
+			var curParam = pages[pages.length - 1].options;
+			
+			this.group_id = curParam['group_id']
+			
+			if (!this.group_id) {
+				uni.switchTab({
+					url: "/pages/homePage/homePage"
+				})
+			}
+			
 			this.refresh()
 		},
 
@@ -146,8 +166,8 @@
 			},
 
 			loadData() {
-				for (var i = 0; i < this.notes.length; i++) {
-					var html = this.notes[i].note_html
+				for (var i = 0; i < this.discussions.length; i++) {
+					var html = this.discussions[i].discussion_html
 					var plainText = html.replace(/<[^>]+>/g, "");
 					var plainText = html.replace(/<[^>]+>/g, "").replace(/&nbsp;/g, " ").replace(/&lt;/g, "<").replace(
 						/&gt;/g, ">").replace(/&amp;/g, "&");
@@ -161,9 +181,9 @@
 					// 去除首尾空格
 					plainText = plainText.replace(/(^\s*)|(\s*$)/g, "");
 
-					this.notes[i].note_content = plainText
-					// console.log(this.notes[i].note_content)
-					this.notes[i].pic = this.extractImage(this.notes[i].note_html)
+					this.discussions[i].discussion_content = plainText
+					// console.log(this.discussions[i].discussion_content)
+					this.discussions[i].pic = this.extractImage(this.discussions[i].discussion_html)
 
 				}
 			},
@@ -172,7 +192,7 @@
 				console.log(item)
 
 				uni.navigateTo({
-					url: `/pages/StudyGroup/discussion?id=${item.id}`,
+					url: `/pages/StudyGroup/discussion?id=${item.id}&group_id=${this.group_id}`,
 				})
 			},
 			back() {
@@ -182,15 +202,15 @@
 			},
 			jumpToCreateDiscussion() {
 				uni.navigateTo({
-					url: '/pages/StudyGroup/createDiscussion'
+					url: `/pages/StudyGroup/createDiscussion?group_id=${this.group_id}`
 				})
 			},
 			refresh() {
 				myRequest.checkLogin()
-				this.notes = []
+				this.discussions = []
 
 				uni.request({
-					url: myRequest.interfaceUrl() + '/note/all',
+					url: myRequest.interfaceUrl() + `/discussion/all?group_id=${this.group_id}`,
 					method: 'GET',
 					header: {
 						'X-Token': myRequest.getToken()
@@ -199,20 +219,20 @@
 					success: (res) => {
 						console.log(res)
 						if (res.statusCode == 200) {
-							this.notes = []
-							if (res.data.notes && res.data.notes.length > 0) {
-								for (var i = 0; i < res.data.notes.length; i++) {
+							this.discussions = []
+							if (res.data.discussions && res.data.discussions.length > 0) {
+								for (var i = 0; i < res.data.discussions.length; i++) {
 									var t = {
-										note_content: "",
-										note_html: res.data.notes[i].content,
-										note_title: res.data.notes[i].title,
+										discussion_content: "",
+										discussion_html: res.data.discussions[i].content,
+										discussion_title: res.data.discussions[i].title,
 										pic: "",
-										create_time: res.data.notes[i].created_at.slice(0, 10),
-										id: res.data.notes[i].id,
-										like_count: res.data.notes[i].like_count,
-										star_count: res.data.notes[i].favorite_count
+										create_time: res.data.discussions[i].created_at.slice(0, 10),
+										id: res.data.discussions[i].id,
+										like_count: res.data.discussions[i].like_count,
+										star_count: res.data.discussions[i].favorite_count
 									}
-									this.notes.push(t);
+									this.discussions.push(t);
 								}
 							}
 							this.loadData()
@@ -229,8 +249,7 @@
 					}
 				})
 			}
-		},
-
+		}
 	}
 </script>
 
@@ -245,11 +264,11 @@
 	}
 
 
-	.note-img {
+	.discussion-img {
 		max-height: 150px;
 	}
 
-	.note-title {
+	.discussion-title {
 		font-size: 18px;
 		color: black;
 		font-weight: bold;

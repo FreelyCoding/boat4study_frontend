@@ -15,7 +15,7 @@
 				
 				<view class="tui-line-cell tui-top28">
 					<tui-icon name="mail" :size="20" color="#6d7a87"></tui-icon>
-					<input placeholder-class="tui-phcolor" class="tui-input" name="email" placeholder="请输入邮箱"
+					<input placeholder-class="tui-phcolor" class="tui-input" name="email" placeholder="请输入绑定的邮箱"
 						maxlength="256" v-model="email" />
 				</view>
 				
@@ -23,13 +23,13 @@
 					<tui-icon name="pwd" :size="20" color="#6d7a87"></tui-icon>
 					<input placeholder-class="tui-phcolor" class="tui-input" name="code" placeholder="请输入验证码"
 						maxlength="6" v-model="code" />
-					<tui-button width="182rpx" height="56rpx" :size="24" type="primary" shape="circle" :plain="true"
-						@click="btnSend">获取验证码</tui-button>
+					<tui-button width="182rpx" height="56rpx" :size="24" :type="type" shape="circle" :plain="true"
+						:disabled="disabled" @click="btnSend">{{ btnText }}</tui-button>
 				</view>
 				
 				<view class="tui-line-cell tui-top28">
 					<tui-icon name="pwd" :size="20" color="#6d7a87"></tui-icon>
-					<input placeholder-class="tui-phcolor" class="tui-input" name="password" placeholder="请输入密码" password="true"
+					<input placeholder-class="tui-phcolor" class="tui-input" name="password" placeholder="请输入重置的密码" password="true"
 						maxlength="35" v-model="password"/>
 				</view>
 				
@@ -40,16 +40,12 @@
 				</view>
 				
 				
-				<u--text color="#5c8dff" text="已有账号？登录" align="right"
+				<u--text color="#5c8dff" text="登录" align="right"
 					size="18" margin="10rpx" @click="toLogin"></u--text>
 				
 				
 				<button class="tui-button-primary tui-btn-submit" hover-class="tui-button-hover"
-					form-type="submit">注册</button>
-				<view class="tui-protocol" hover-class="opcity" :hover-stay-time="150">
-					点击"注册"即表示已同意
-					<text class="tui-protocol-red">《用户协议》</text>
-				</view>
+					form-type="submit">重置密码</button>
 			</view>
 		</form>
 		
@@ -77,9 +73,6 @@
 				email: '',
 				code: ''
 			};
-		},
-		components: {
-			tuiButton
 		},
 		methods: {
 			checkPassword() {
@@ -163,21 +156,20 @@
 				}
 			},
 			
-			register(e) {
+			reset(e) {
 				let userInfo = {
-					"name": this.username,
-					"password": this.password,
-					"email": this.email,
-					"v_code": this.code
+					"username": this.username,
+					"new_password": this.password,
+					"verify_code": this.code
 				}
 				uni.request({
-					url: myRequest.interfaceUrl() + "/register",
+					url: myRequest.interfaceUrl() + '/reset-password',
 					data: JSON.stringify(userInfo),
 					method: 'POST',
 					
 					success: res => {
 						if (res.statusCode == 200) {
-							myRequest.toast('注册成功', 500, true)
+							myRequest.toast('重置密码成功', 500, true)
 							setTimeout(() => {
 								uni.hideToast();
 								//关闭提示后跳转
@@ -190,7 +182,7 @@
 							this.tui.toast("验证码错误或已过期")
 						}
 						else if (res.statusCode == 409){
-							this.tui.toast("用户名已存在");
+							this.tui.toast("用户不存在");
 						}
 						else {
 							this.tui.toast("发生未知错误")
@@ -256,7 +248,7 @@
 					return;
 				}
 				
-				this.register(e)
+				this.reset(e)
 			},
 			toLogin() {
 				uni.redirectTo({

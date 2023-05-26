@@ -62,7 +62,12 @@
 				"navigationBarTitleText": "登录"
 			}
 		},
-		
+		{
+			"path": "pages/login/forget_password",
+			"style": {
+				"navigationBarTitleText": "重置密码"
+			}
+		},
 		{
 			"path": "pages/homePage/noteIndex",
 			"style": {
@@ -88,7 +93,7 @@
 			}
 		},
 
-		
+
 		{
 			"path": "pages/homePage/problemSetList",
 			"style": {
@@ -98,26 +103,19 @@
 				"navigationBarTextStyle": "white"
 			}
 		}
-        
-			,{
-				"path" : "pages/tools/camera",
-				"style" :                                                                                    
-				{
-						"navigationBarTitleText": "",
-						"navigationStyle": "custom",
-						"enablePullDownRefresh": false
-				}
-				
-			}
     ],
+	
 	"subPackages": [
 		{
-			"root": "pages/register",
+			"root": "pages/tools",
 			"pages": [
 				{
-					"path": "register",
-					"style": {
-						"navigationBarTitleText": "注册"
+					"path" : "camera",
+					"style" :                                                                                    
+					{
+							"navigationBarTitleText": "",
+							"navigationStyle": "custom",
+							"enablePullDownRefresh": false
 					}
 					
 				}
@@ -125,16 +123,26 @@
 		},
 		
 		{
-			"root": "pages/note",
-			"pages": [
-				{
-				"path": "note",
+			"root": "pages/register",
+			"pages": [{
+				"path": "register",
 				"style": {
-					// 自定义navbar
-					"navigationBarTitleText": "笔记",
-					"navigationStyle": "custom",
-					"enablePullDownRefresh": false,
-					"navigationBarTextStyle": "white"
+					"navigationBarTitleText": "注册"
+				}
+
+			}]
+		},
+
+		{
+			"root": "pages/note",
+			"pages": [{
+					"path": "note",
+					"style": {
+						// 自定义navbar
+						"navigationBarTitleText": "笔记",
+						"navigationStyle": "custom",
+						"enablePullDownRefresh": false,
+						"navigationBarTextStyle": "white"
 					}
 				},
 				{
@@ -150,79 +158,63 @@
 						"navigationStyle": "custom"
 					}
 				}
-				
+
 			]
 		},
 		{
 			"root": "pages/personal",
-			"pages": [
-				{
-				    "path" : "personalNote",
-				    "style" :                                                                                    
-				    {
-				        "navigationStyle": "custom"
-						
-				    }
-				    
+			"pages": [{
+				"path": "personalNote",
+				"style": {
+					"navigationStyle": "custom"
+
 				}
-				,{
-				    "path" : "personalProblemSet",
-				    "style" :                                                                                    
-				    {
-				        "navigationStyle": "custom"
-				    }
-				    
+
+			}, {
+				"path": "personalProblemSet",
+				"style": {
+					"navigationStyle": "custom"
 				}
-				,{
-				    "path" : "personalGroup",
-				    "style" :
-				    {
-				        "navigationStyle": "custom"
-				    }
-				    
+
+			}, {
+				"path": "personalGroup",
+				"style": {
+					"navigationStyle": "custom"
 				}
-				,{
-				    "path" : "wrongProblem",
-				    "style" :                                                                                    
-				    {
-				        "navigationStyle": "custom",
-				        "enablePullDownRefresh": false
-				    }
-				    
+
+			}, {
+				"path": "wrongProblem",
+				"style": {
+					"navigationStyle": "custom",
+					"enablePullDownRefresh": false
 				}
-				,{
-				    "path" : "starProblem",
-				    "style" :                                                                                    
-				    {
-				        "navigationStyle": "custom",
-				        "enablePullDownRefresh": false
-				    }
-				    
+
+			}, {
+				"path": "starProblem",
+				"style": {
+					"navigationStyle": "custom",
+					"enablePullDownRefresh": false
 				}
-				,{
-				    "path" : "starNotes",
-				    "style" :                                                                                    
-				    {
-				        "navigationStyle": "custom",
-				        "enablePullDownRefresh": false
-				    }
-				    
+
+			}, {
+				"path": "starNotes",
+				"style": {
+					"navigationStyle": "custom",
+					"enablePullDownRefresh": false
 				}
-				,{
-				    "path" : "starProblemSet",
-				    "style" :                                                                                    
-				    {
-				        "navigationStyle": "custom",
-				        "enablePullDownRefresh": false
-				    }
-				    
+
+			}, {
+				"path": "starProblemSet",
+				"style": {
+					"navigationStyle": "custom",
+					"enablePullDownRefresh": false
 				}
-			]
+
+			}]
 		},
 		{
 			"root": "pages/problem",
-			"pages": [
-				{
+			"pages": [{
 					"path": "problemCreate",
 					"style": {
 						"navigationBarTitleText": "单题编辑录入",
@@ -271,8 +263,7 @@
 		},
 		{
 			"root": "pages/problemSet",
-			"pages": [
-				{
+			"pages": [{
 					"path": "problemSetDetail",
 					"style": {
 						"navigationBarTitleText": "",
@@ -281,7 +272,7 @@
 						"navigationBarTextStyle": "white"
 					}
 				},
-				
+
 				{
 					"path": "problemSetProblemList",
 					"style": {
@@ -291,77 +282,69 @@
 						"navigationBarTextStyle": "white"
 					}
 				}
-				
-				,{
-					"path" : "problemSetCreate",
-					"style" :                                                                                    
-					{
+
+				, {
+					"path": "problemSetCreate",
+					"style": {
 						"navigationBarTitleText": "创建题库",
 						"navigationStyle": "custom",
 						"enablePullDownRefresh": false
 					}
-					
-				}
-				,{
-					"path" : "problemUpload",
-					"style" :                                                                                    
-					{
+
+				}, {
+					"path": "problemUpload",
+					"style": {
 						"navigationBarTitleText": "上传题目",
 						"navigationStyle": "custom",
 						"enablePullDownRefresh": false
 					}
-					
+
 				},
-				
+
 				{
-					"path" : "problemSetWrongProblems",
-					"style" :                                                                                    
-					{
+					"path": "problemSetWrongProblems",
+					"style": {
 						"navigationBarTitleText": "题库错题列表",
-										"navigationStyle": "custom",
+						"navigationStyle": "custom",
 						"enablePullDownRefresh": false
 					}
-					
+
 				}
-				
-				,{
-					"path" : "problemSetFavProblems",
-					"style" :                                                                                    
-					{
+
+				, {
+					"path": "problemSetFavProblems",
+					"style": {
 						"navigationBarTitleText": "",
 						"navigationStyle": "custom",
 						"enablePullDownRefresh": false
 					}
-					
+
 				},
 				{
-				    "path" : "problemSetDetailOfficial",
-				    "style" :                                                                                    
-				    {
-				        "navigationBarTitleText": "",
-										"navigationStyle": "custom",
-				        "enablePullDownRefresh": false
-				    }
-				    
+					"path": "problemSetDetailOfficial",
+					"style": {
+						"navigationBarTitleText": "",
+						"navigationStyle": "custom",
+						"enablePullDownRefresh": false
+					}
+
 				}
-				
-			    ,{
-                    "path" : "problemSetList",
-                    "style" :                                                                                    
-                {
-                    "navigationBarTitleText": "",
-										"navigationStyle": "custom",
-                    "enablePullDownRefresh": false
-                }
-                
-                }
-            ]
+
+				, {
+					"path": "problemSetList",
+					"style": {
+						"navigationBarTitleText": "",
+						"navigationStyle": "custom",
+						"enablePullDownRefresh": false
+					}
+
+				}
+			]
 		},
-		
+
 		{
 			"root": "pages/problemExam",
-			"pages": [
-				{
+			"pages": [{
 					"path": "problemExam",
 					"style": {
 						"navigationBarTitleText": "",
@@ -380,110 +363,104 @@
 					}
 				},
 				{
-				    "path" : "problemWrongProExam",
-				    "style" :                                                                                    
-				    {
-				        "navigationBarTitleText": "",
-				        "navigationStyle": "custom",
-				        "enablePullDownRefresh": false
-				    }
-				    
-				}
-				,{
-				    "path" : "problemFavProExam",
-				    "style" :                                                                                    
-				    {
-				        "navigationBarTitleText": "",
-										"navigationStyle": "custom",
-				        "enablePullDownRefresh": false
-				    }
-				    
-				}
-				,{
-				    "path" : "problemSimuExam",
-				    "style" :                                                                                    
-				    {
-				        "navigationBarTitleText": "",
-										"navigationStyle": "custom",
-				        "enablePullDownRefresh": false
-				    }
-				    
-				}
-				,{
-				    "path" : "problemTypeExam",
-				    "style" :                                                                                    
-				    {
-				        "navigationBarTitleText": "",
-										"navigationStyle": "custom",
-				        "enablePullDownRefresh": false
-				    }
-				    
+					"path": "problemWrongProExam",
+					"style": {
+						"navigationBarTitleText": "",
+						"navigationStyle": "custom",
+						"enablePullDownRefresh": false
+					}
+
+				}, {
+					"path": "problemFavProExam",
+					"style": {
+						"navigationBarTitleText": "",
+						"navigationStyle": "custom",
+						"enablePullDownRefresh": false
+					}
+
+				}, {
+					"path": "problemSimuExam",
+					"style": {
+						"navigationBarTitleText": "",
+						"navigationStyle": "custom",
+						"enablePullDownRefresh": false
+					}
+
+				}, {
+					"path": "problemTypeExam",
+					"style": {
+						"navigationBarTitleText": "",
+						"navigationStyle": "custom",
+						"enablePullDownRefresh": false
+					}
+
 				}
 			]
 		},
-		
+
 		{
 			"root": "pages/StudyGroup",
-			"pages": [
-				{
-				    "path" : "StudyGroup",
-				    "style" :                                                                                    
-				    {
-				        "navigationBarTitleText": "学习小组详情",
-				        "navigationStyle": "custom",
-				        "enablePullDownRefresh": false
-				    }
-				    
-				}
-				,{
-				    "path" : "StudyGroupProblemSet",
-				    "style" :                                                                                    
-				    {
-				        "navigationStyle": "custom",
-				        "enablePullDownRefresh": false
-				
-				    }
-				    
+			"pages": [{
+					"path": "StudyGroup",
+					"style": {
+						"navigationBarTitleText": "学习小组详情",
+						"navigationStyle": "custom",
+						"enablePullDownRefresh": false
+					}
+
+				}, {
+					"path": "StudyGroupProblemSet",
+					"style": {
+						"navigationStyle": "custom",
+						"enablePullDownRefresh": false
+
+					}
+
 				},
 				{
 					"path": "StudyGroupIndex",
 					"style": {
 						"navigationStyle": "custom"
 					}
-				}
-				,{
-				    "path" : "StudyGroupCreate",
-				    "style" :                                                                                    
-				    {
+				}, {
+					"path": "StudyGroupCreate",
+					"style": {
 						"navigationStyle": "custom",
-				        "enablePullDownRefresh": false
-				    }
-				    
+						"enablePullDownRefresh": false
+					}
+
 				},
-				
+
 				{
 					"path": "createDiscussion",
 					"style": {
 						"navigationStyle": "custom"
 					}
 				},
-				
+
 				{
 					"path": "discussion",
 					"style": {
 						"navigationStyle": "custom"
 					}
 				},
-				
+
 				{
 					"path": "discussionIndex",
 					"style": {
 						"navigationStyle": "custom"
 					}
 				},
-				
+
 				{
 					"path": "editDiscussion",
+					"style": {
+						"navigationStyle": "custom"
+					}
+				},
+				
+				{
+					"path": "StudyGroupManage",
 					"style": {
 						"navigationStyle": "custom"
 					}

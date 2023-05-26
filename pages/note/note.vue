@@ -63,7 +63,6 @@
 			<!--笔记内容-->
 			<view class="page-body">
 				<view class='wrapper'>
-
 					<view class="editor-wrapper">
 						<editor id="editor" class="ql-container" @statuschange="onStatusChange" read-only
 							@ready="onEditorReady">
