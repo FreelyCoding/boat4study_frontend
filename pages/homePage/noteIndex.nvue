@@ -14,6 +14,8 @@
 			cancelButton="none" maxlength="50" style="margin-left: 5px; margin-right: 5px;">
 		</uni-search-bar>
 
+		<u-loading-icon :show="isLoading"></u-loading-icon>
+
 		<view v-if="notes && notes.length != 0" style="margin-top: 10px;">
 			<view v-for="(item, index) in notes" :key="index">
 				<uni-card isShadow border padding="15px 5px 0px 5px" margin="0px 15px 15px 15px"
@@ -77,15 +79,18 @@
 
 				</uni-card>
 			</view>
+
+			<u-loadmore :status="status" line lineColor="#000000"/>					
+
 		</view>
 
-		<view v-else style="text-align: center;">
+		<view v-else-if="!isLoading" style="text-align: center;">
 			<image src="../../static/pic/note/no_note.png"
 				style="margin: auto; margin-top: 30px; height: 200px; width: 200px;"></image>
 			<p style="font-size: 20px;margin-top: 30px;">暂无笔记</p>
 		</view>
 
-		<view v-if="this.platfrom == 'web'"
+		<view v-if="this.platfrom == 'web' && !isLoading"
 			style="padding: 10px 0 10px 0; position: sticky; bottom: 40px; background-color: #EDEDED;">
 			<p style="margin: auto;width: 92%">
 				<button style="background-color: #00aaff; color: white; 
@@ -95,7 +100,7 @@
 			</p>
 		</view>
 
-		<view v-else style="padding: 10px 0 10px 0; position: sticky; bottom: 0px; background-color: #EDEDED;">
+		<view v-else-if="!isLoading" style="padding: 10px 0 10px 0; position: sticky; bottom: 0px; background-color: #EDEDED;">
 			<p style="margin: auto;width: 92%">
 				<button style="background-color: #00aaff; color: white; 
 						 margin-bottom: 10px;" @click="jumpToCreateNote">
@@ -113,17 +118,25 @@
 	import tuiListCell from '@/components/tui-list-cell/tui-list-cell.vue';
 	import tuiNoData from '@/components/tui-no-data/tui-no-data.vue';
 	import myRequest from '../../common/request';
+	import uLoadmore from '@/uni_modules/uview-ui/components/u-loadmore/u-loadmore.vue';
+	import uLoadingIcon from '@/uni_modules/uview-ui/components/u-loading-icon/u-loading-icon.vue';
 
 	export default {
 		components: {
-			tuiNoData
+			tuiNoData,
+			uLoadmore,
+			uLoadingIcon
 		},
 		data() {
 			return {
 				searchValue: "",
 				flag: false,
 				platfrom: uni.getSystemInfoSync().uniPlatform,
-				notes: []
+				notes: [],
+				status: 'loading',
+				limit: 5,
+				offset: 0,
+				isLoading: false
 			}
 		},
 		onShow: function() {
@@ -155,8 +168,8 @@
 				// #endif
 			},
 
-			loadData() {
-				for (var i = 0; i < this.notes.length; i++) {
+			loadData(start) {
+				for (var i = start; i < this.notes.length; i++) {
 					var html = this.notes[i].note_html
 					var plainText = html.replace(/<[^>]+>/g, "");
 					var plainText = html.replace(/<[^>]+>/g, "").replace(/&nbsp;/g, " ").replace(/&lt;/g, "<").replace(
@@ -196,12 +209,16 @@
 				})
 			},
 			refresh() {
+				this.isLoading = true
+				
 				console.log(this.platfrom)
 				myRequest.checkLogin()
 				this.notes = []
+				this.offset = 0
+				this.status = 'loading'
 
 				uni.request({
-					url: myRequest.interfaceUrl() + '/note/all',
+					url: myRequest.interfaceUrl() + `/note/all?limit=${this.limit}&offset=${this.offset}`,
 					method: 'GET',
 					header: {
 						'X-Token': myRequest.getToken()
@@ -211,6 +228,14 @@
 						console.log(res)
 						if (res.statusCode == 200) {
 							this.notes = []
+							if (res.data.notes == null) {
+								this.status = 'nomore'
+								return;
+							}
+							
+							this.status = 'loading'
+							this.offset += res.data.notes.length
+							
 							if (res.data.notes && res.data.notes.length > 0) {
 								for (var i = 0; i < res.data.notes.length; i++) {
 									var t = {
@@ -226,7 +251,7 @@
 									this.notes.push(t);
 								}
 							}
-							this.loadData()
+							this.loadData(0)
 						} else if (res.statusCode == 401) {
 							myRequest.redirectToLogin()
 						} else {
@@ -237,10 +262,75 @@
 					fail: (res) => {
 						console.log(res)
 						myRequest.toast()
+					},
+					
+					complete: () => {
+						this.isLoading = false
 					}
 				})
 			}
 		},
+		
+		onReachBottom() {
+			console.log('reach bottom')
+			
+			this.isLoading = true
+			
+			uni.request({
+				url: myRequest.interfaceUrl() + `/note/all?limit=${this.limit}&offset=${this.offset}`,
+				method: 'GET',
+				header: {
+					'X-Token': myRequest.getToken()
+				},
+			
+				success: (res) => {
+					console.log(res)
+					if (res.statusCode == 200) {
+						
+						if (res.data.notes == null) {
+							this.status = 'nomore'
+							console.log('null')
+							return;
+						}
+						
+						this.status = 'loading'
+						var lastOffset = this.offset
+						this.offset += res.data.notes.length
+						
+						for (var i = 0; i < res.data.notes.length; i++) {
+							var t = {
+								note_content: "",
+								note_html: res.data.notes[i].content,
+								note_title: res.data.notes[i].title,
+								pic: "",
+								create_time: res.data.notes[i].created_at.slice(0, 10),
+								id: res.data.notes[i].id,
+								like_count: res.data.notes[i].like_count,
+								star_count: res.data.notes[i].favorite_count
+							}
+							this.notes.push(t);
+						}
+						console.log(this.notes)
+					
+						this.loadData(lastOffset + 1)
+						
+					} else if (res.statusCode == 401) {
+						myRequest.redirectToLogin()
+					} else {
+						myRequest.toast()
+					}
+				},
+			
+				fail: (res) => {
+					console.log(res)
+					myRequest.toast()
+				},
+				
+				complete: () => {
+					this.isLoading = false
+				}
+			})
+		}
 
 	}
 </script>
