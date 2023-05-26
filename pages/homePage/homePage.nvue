@@ -152,12 +152,11 @@
 			</uni-row>
 		</view>
 
-
-		<view class="u-demo-block" v-if="problemSet && problemSet.length > 0">
-			<u-list customStyle="width: 94%; margin: auto; max-height: 370px; margin-top: 15px;">
+		<view class="u-demo-block">
+			<u-list customStyle="width: 94%; margin: auto; max-height: 520px; margin-top: 15px;">
 				<u-list-item v-for="(item, index) in problemSet" :key="index">
 					<uni-card isShadow border padding="10px 0px 10px 0px" margin="0px 10px 15px 10px"
-						style="border-radius: 10px;" @click="jumpToPS(item)">
+						style="border-radius: 10px;" @click="jumpToProblemSetDetail(item)">
 						<view>
 							<uni-row>
 								<uni-col :span="2" align="start">
@@ -169,12 +168,12 @@
 									<view v-else-if="item.group_id == 0" style="max-width: 30px;">
 										<div class="personal_PS_tag">
 											个人题库
-										</div>		
+										</div>
 									</view>
 									<view v-else-if="item.group_id != 0" style="max-width: 30px;">
 										<div class="group_PS_tag">
 											小组题库
-										</div>		
+										</div>
 									</view>
 								</uni-col>
 								<uni-col :span="2" align="start">
@@ -210,7 +209,7 @@
 			<uni-row>
 				<uni-col :span="12">
 					<view>
-						<p class="homePage-header"> 精选小组</p>
+						<p class="homePage-header"> 精选小组 </p>
 					</view>
 				</uni-col>
 
@@ -222,8 +221,8 @@
 			</uni-row>
 		</view>
 
-		<view class="u-demo-block" v-if="groups && groups.length > 0">
-			<u-list customStyle="margin: auto; max-height: 480px; margin-top: 15px;max-width:1200px">
+		<view class="u-demo-block">
+			<u-list customStyle="margin: auto; max-height: 490px; margin-top: 15px;">
 				<u-list-item v-for="(item, index) in groups" :key="index">
 					<uni-card @click="jumpToStudyGroup(item)" isShadow border padding="15px 0px 15px 0px"
 						margin="0px 15px 15px 15px" style="border-radius: 10px;">
@@ -258,7 +257,7 @@
 
 
 
-		<view style="margin-bottom: 20px;">
+		<view style="margin-bottom: 10px;">
 
 		</view>
 
@@ -275,39 +274,84 @@
 				tabValue: 0,
 				notes: [{
 						author_name: "Longxmas",
-						note_title: "二分查找",
-						note_content: "二分查找是一类常见的算法问题, 对于这种问题，尤其需要注意的就是细节以及边界条件的处理," +
-							"二分查找是一类常见的算法问题, 对于这种问题，尤其需要注意的就是细节以及边界条件的处理" +
-							"二分查找是一类常见的算法问题, 对于这种问题，尤其需要注意的就是细节以及边界条件的处理" +
-							"二分查找是一类常见的算法问题, 对于这种问题，尤其需要注意的就是细节以及边界条件的处理",
-						pic: "../../static/pic/binSearch.png"
+						note_title: "精选笔记",
+						note_content: "加载中",
+						pic: "../../static/pic/binSearch.png",
+						create_time: "2023-05-04",
+						star_count: 0,
+						like_count: 0,
 					},
 					{
 						author_name: "Longxmas",
-						note_title: "二分查找",
-						note_content: "二分查找是一类常见的算法问题",
-						pic: "../../static/pic/binSearch.png"
+						note_title: "精选笔记",
+						note_content: "加载中",
+						pic: "../../static/pic/binSearch.png",
+						create_time: "2023-05-04",
+						star_count: 0,
+						like_count: 0,
 					},
 					{
 						author_name: "Longxmas",
-						note_title: "二分查找",
-						note_content: "二分查找是一类常见的算法问题, 对于这种问题，尤其需要注意的就是细节以及边界条件的处理",
-						pic: "../../static/pic/binSearch.png"
+						note_title: "精选笔记",
+						note_content: "加载中",
+						pic: "../../static/pic/binSearch.png",
+						create_time: "2023-05-04",
+						star_count: 1,
+						like_count: 1,
 					},
 					{
 						author_name: "Longxmas",
-						note_title: "二分查找",
-						note_content: "二分查找是一类常见的算法问题",
-						pic: "../../static/pic/binSearch.png"
+						note_title: "精选笔记",
+						note_content: "加载中",
+						pic: "../../static/pic/binSearch.png",
+						create_time: "2023-05-04",
+						star_count: 1,
+						like_count: 1,
 					},
 					{
 						author_name: "Longxmas",
-						note_title: "二分查找",
-						note_content: "二分查找是一类常见的算法问题",
-						pic: "../../static/pic/binSearch.png"
+						note_title: "精选笔记",
+						note_content: "加载中",
+						pic: "../../static/pic/binSearch.png",
+						create_time: "2023-05-04",
+						star_count: 1,
+						like_count: 1,
 					}
 				],
-				problemSet: [],
+				problemSet: [ 
+					{
+						user_id: 0,
+						user_info : {
+							nick_name: "学舟官方",
+						},
+						problem_number: 10,
+						name: "精选题库",
+					},
+					{
+						user_id: 0,
+						user_info : {
+							nick_name: "学舟官方",
+						},
+						problem_number: 10,
+						name: "精选题库",
+					},
+					{
+						user_id: 0,
+						user_info : {
+							nick_name: "学舟官方",
+						},
+						problem_number: 10,
+						name: "精选题库",
+					},
+					{
+						user_id: 0,
+						user_info : {
+							nick_name: "学舟官方",
+						},
+						problem_number: 10,
+						name: "精选题库",
+					}
+				],
 
 				groups: []
 			}
@@ -446,7 +490,7 @@
 				myRequest.checkLogin()
 
 				uni.request({
-					url: myRequest.interfaceUrl() + '/note/all',
+					url: myRequest.interfaceUrl() + '/special/featured_note',
 					method: 'GET',
 					header: {
 						'X-Token': myRequest.getToken()
@@ -490,7 +534,7 @@
 				})
 
 				uni.request({
-					url: myRequest.interfaceUrl() + '/problem_set/all?group_id=0',
+					url: myRequest.interfaceUrl() + '/special/featured_problem_set',
 					method: 'GET',
 					header: {
 						'X-Token': myRequest.getToken()
@@ -501,7 +545,7 @@
 						if (res.statusCode == 200) {
 							this.problemSet = []
 							if (res.data.problem_set && res.data.problem_set.length) {
-								for (var i = 0; i <  Math.min(6, res.data.problem_set.length); i++) {
+								for (var i = 0; i < Math.min(4, res.data.problem_set.length); i++) {
 									let owner_id = res.data.problem_set[i].user_id
 									var t = {
 										id: res.data.problem_set[i].id,
@@ -538,7 +582,7 @@
 				})
 
 				uni.request({
-					url: myRequest.interfaceUrl() + '/group/all',
+					url: myRequest.interfaceUrl() + '/special/featured_group',
 					method: 'GET',
 					header: {
 						'X-Token': myRequest.getToken()
@@ -547,7 +591,7 @@
 					success: (res) => {
 						console.log(res)
 						if (res.statusCode == 200) {
-							for (var i = 0; i < Math.min(6, res.data.group.length); i++) {
+							for (var i = 0; i < Math.min(3, res.data.group.length); i++) {
 								var t = {
 									description: res.data.group[i].description,
 									name: res.data.group[i].name,

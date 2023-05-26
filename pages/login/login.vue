@@ -65,6 +65,9 @@
 				msg: ''
 			};
 		},
+		onShow() {
+			uni.preloadPage({url: "/pages/homePage/homePage"});
+		},
 		methods: {
 			toWxLogin() {
 				uni.redirectTo({
