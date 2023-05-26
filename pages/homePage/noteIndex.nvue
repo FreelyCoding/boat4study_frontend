@@ -312,7 +312,7 @@
 						}
 						console.log(this.notes)
 					
-						this.loadData(lastOffset + 1)
+						this.loadData(lastOffset)
 						
 					} else if (res.statusCode == 401) {
 						myRequest.redirectToLogin()
