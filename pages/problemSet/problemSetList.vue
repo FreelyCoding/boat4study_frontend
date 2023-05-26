@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view class="box">
 		<view class="status-bar">
 			<uni-nav-bar title="题库" background-color="#00aaff" color="#FFFFFF" status-bar="true">
 				<block slot="left">
