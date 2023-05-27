@@ -69,6 +69,12 @@
 			}
 		},
 		{
+			"path": "pages/login/wx_login",
+			"style": {
+				"navigationBarTitleText": "微信登录"
+			}
+		},
+		{
 			"path": "pages/homePage/noteIndex",
 			"style": {
 				"navigationBarTitleText": "所有笔记",

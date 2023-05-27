@@ -32,14 +32,11 @@
 				
 				
 				<button class="tui-button-primary tui-btn-submit" hover-class="tui-button-hover"
-					form-type="submit">登录</button>
+					@click="submit">登录</button>
 				<!-- <view class="tui-protocol" hover-class="opcity" :hover-stay-time="150">
 					点击"登录"即表示已同意
 					<text class="tui-protocol-red">《用户协议》</text>
 				</view> -->
-				
-				<!-- <button class="tui-button-primary tui-btn-submit" hover-class="tui-button-hover"
-					@click="toWxLogin">微信登录</button> -->
 			</view>
 		</form>
 		
@@ -65,113 +62,39 @@
 				msg: ''
 			};
 		},
-		onShow() {
-			uni.preloadPage({url: "/pages/homePage/homePage"});
-		},
 		methods: {
-			toWxLogin() {
-				uni.redirectTo({
-					url: "/pages/login/wx_login"
+			login() {
+				uni.login({
+					provider: 'weixin',
+					univerifyStyle: true,
+					success: (res) => {
+						console.log(res)
+						var code = res.code
+						var data = JSON.stringify({
+							"code": code
+						})
+						
+						console.log(data)
+						
+						uni.request({
+							url: myRequest.interfaceUrl() + '/weixin-login',
+							method:'POST',
+							data: data,
+							success: res => {
+								console.log(res)
+							},
+							fail: () => {
+								console.log('fail')
+							}
+						})
+						
+					}
 				})
 			},
+			submit() {
+				this.login()
+			},
 			
-			login(e) {
-				let userInfo = {
-					"username": this.username,
-					"password": this.password
-				}
-				
-				myRequest.toast('准备调用接口')
-				
-				uni.request({
-					url: myRequest.interfaceUrl() + "/login",
-					method: 'POST',
-					data: JSON.stringify(userInfo),
-					dataType: 'json',
-					
-					success: res => {
-						myRequest.toast("调用接口成功")
-						if (res.statusCode == 200) {
-							this.tui.toast('登录成功')
-							uni.setStorage({
-								key: 'token',
-								data: res.data.token
-							})
-							
-							uni.request({
-								url: myRequest.interfaceUrl() + '/user/info',
-								method: 'GET',
-								header: {
-									"X-Token": res.data.token,	
-								},
-								
-								success: (res) => {
-									console.log(res)
-									if (res.statusCode == 200) {
-										uni.setStorage({
-											key: 'user_info',
-											data: res.data
-										})
-										
-										uni.switchTab({
-											url: '/pages/homePage/homePage'
-										})
-									}
-									else {
-										myRequest.toast()
-									}
-								},
-								
-								fail: res => {
-									console.log(res)
-									myRequest.toast()
-								}
-							})
-											
-						}
-						else {
-							this.tui.toast('用户名或密码错误')
-						}
-					},
-					
-					fail: res => {
-						myRequest.toast('调用接口失败')
-						if (res == null) {
-							myRequest.toast("res为null")
-						}
-						else {
-							
-						}
-						// myRequest.toast("调用接口失败")
-					}
-				});				
-			},
-			formLogin: function(e) {
-				let password = e.detail.value.password;
-				let username = e.detail.value.username;
-				let rules = [{
-						name: 'username',
-						rule: ['required'],
-						msg: ['请输入用户名']
-					},
-					{
-						name: 'password',
-						rule: ['required'],
-						msg: ['请输入密码']
-					}
-				];
-				//进行表单检查
-				let formData = {
-					username: username,
-					password: password
-				};
-				let checkRes = form.validation(formData, rules);
-				if (checkRes) {
-					this.tui.toast(checkRes);
-					return;
-				}
-				this.login(e)
-			},
 			toRegister() {
 				uni.redirectTo({
 					url: "/pages/register/register"
@@ -182,7 +105,6 @@
 					url: "/pages/login/forget_password"
 				})
 			}
-			
 		}
 	};
 </script>
