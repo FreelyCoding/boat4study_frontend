@@ -19,7 +19,7 @@
 					</view>
 				</uni-col>
 				<uni-col :span="22">
-					<u-tabs :list="problemSet_type_list" @click="click"></u-tabs>
+					<u-tabs :list="problemSet_type_list" @click="click_area_tab" :current="select_area"></u-tabs>
 				</uni-col>
 			</uni-row>
 		</view>
@@ -34,7 +34,7 @@
 				</view>
 				<u-grid :border="false" col="3">
 					<u-grid-item v-for="(listItem,listIndex) in problemSet_type_list" :key="listIndex">
-						<view class="grid-item">{{listItem.name}}</view>
+						<view class="grid-item" @click="switch_area(listIndex)">{{listItem.name}}</view>
 					</u-grid-item>
 				</u-grid>
 
@@ -96,7 +96,7 @@
 			</view>
 		</view>
 
-		<view v-else style="text-align: center;">
+		<view v-else style="text-align: center;" :style="{height:scrollH+'px'}">
 			<image src="../../static/pic/note/no_note.png"
 				style="margin: auto; margin-top: 30px; height: 200px; width: 200px;"></image>
 			<p style="font-size: 20px;margin-top: 30px;">暂无题库</p>
@@ -120,6 +120,7 @@
 	import tuiNoData from '@/components/tui-no-data/tui-no-data.vue';
 	import note from '@/pages/note/note.vue'
 	import myRequest from '../../common/request';
+	import api from '@/common/api.js';
 
 	export default {
 		data() {
@@ -127,6 +128,9 @@
 				searchValue: "",
 				problemSet: [],
 				problemSet_type_list_show: false,
+				select_area: 0,
+				page_size: 10,
+				loaded_num:0,
 				problemSet_type_list: [{
 					name: '综合',
 				}, {
@@ -172,6 +176,18 @@
 				}, ],
 			}
 		},
+		computed:{
+			scrollH:function(){
+				let sys = uni.getSystemInfoSync();
+				let winHeight =parseInt(sys.windowHeight)-50
+				return winHeight	
+			}
+		},
+		onLoad() {
+			myRequest.checkLogin()
+			
+			this.load_one_page()
+		},
 		methods: {
 			back() {
 				uni.navigateBack()
@@ -184,57 +200,75 @@
 					url: "/pages/problemSet/problemSetCreate"
 				})
 			},
-
 			jumpToPS(item) {
 				uni.navigateTo({
 					url: "/pages/problemSet/problemSetDetail?id=" + item.id
 				})
-			}
+			},
+			
+			switch_area(index) {
+				this.select_area = index;
+				this.problemSet_type_list_show = false;
+				this.problemSet = []
+				this.load_one_page()
+			},
+			click_area_tab(item) {
+				this.select_area = item.index;
+				this.problemSet = []
+				this.load_one_page()
+			},
+			
+			load_one_page() {
+				var _this = this
+				
+				if (this.select_area == 0) {
+					var the_api = api.problem_set_all({
+					limit:this.page_size,offset:this.loaded_num})
+				} else if (this.select_area + 1 == this.problemSet_type_list.length) {
+					var the_api = api.problem_set_all({area_id: 100,
+					limit:this.page_size,offset:this.loaded_num})
+				} else {
+					var the_api = api.problem_set_all({area_id: this.select_area,
+					limit:this.page_size,offset:this.loaded_num})
+				}
+				
+				myRequest.request(the_api, 'GET', {}).then(
+					function(res) {
+						console.log(res)
+						if (res.statusCode == 200) {
+							if (res.data.problem_set && res.data.problem_set.length > 0) {
+								for (var i = 0; i < res.data.problem_set.length; i++) {
+									var t = {
+										id: res.data.problem_set[i].id,
+										description: res.data.problem_set[i].description,
+										name: res.data.problem_set[i].name,
+										pic: "",
+										created_at: res.data.problem_set[i].created_at.slice(0, 10),
+										problem_number: res.data.problem_set[i].problem_count,
+										user_id: res.data.problem_set[i].user_id,
+										group_id: res.data.problem_set[i].group_id,
+										user_info: res.data.problem_set[i].user_info,
+									}
+									_this.problemSet.push(t);
+								}
+							}
+							
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else {
+							myRequest.toast()
+						}
+					}
+				).catch(
+					function(res) {
+						console.log(res)
+						myRequest.toast()
+				})
+				
+			},
 
 		},
-		onLoad() {
-			myRequest.checkLogin()
-			let uid = myRequest.getUID()
-			uni.request({
-				url: myRequest.interfaceUrl() + '/problem_set/all',
-				method: 'GET',
-				header: {
-					'X-Token': myRequest.getToken()
-				},
-
-				success: (res) => {
-					console.log(res)
-					if (res.statusCode == 200) {
-						if (res.data.problem_set && res.data.problem_set.length > 0) {
-							for (var i = 0; i < res.data.problem_set.length; i++) {
-								var t = {
-									id: res.data.problem_set[i].id,
-									description: res.data.problem_set[i].description,
-									name: res.data.problem_set[i].name,
-									pic: "",
-									created_at: res.data.problem_set[i].created_at.slice(0, 10),
-									problem_number: res.data.problem_set[i].problem_count,
-									user_id: res.data.problem_set[i].user_id,
-									group_id: res.data.problem_set[i].group_id,
-									user_info: res.data.problem_set[i].user_info,
-								}
-								this.problemSet.push(t);
-							}
-						}
-
-					} else if (res.statusCode == 401) {
-						myRequest.redirectToLogin()
-					} else {
-						myRequest.toast()
-					}
-				},
-
-				fail: (res) => {
-					console.log(res)
-					myRequest.toast()
-				}
-			})
-		}
+		
 	}
 </script>
 

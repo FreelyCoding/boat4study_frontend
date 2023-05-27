@@ -86,7 +86,8 @@
 				problemSet_type_list: [
 					'计算机','经济金融','电子信息','数学','生物',
 					'医学','物理','化学','历史','建筑','交通','人文社科','外语','体育健康',
-					'公务员','教师','天文学','地理','政治','其他'],
+					'公务员','教师','天文学','地理','政治','其他'
+				],
 			}
 		},
 		
@@ -122,12 +123,21 @@
 				console.log(uni.getStorageSync('token'))
 
 				// TODO: 后续更改is_public字段
-				var data = JSON.stringify({
-					"description": this.problemSet.description,
-					"name": this.problemSet.name,
-					"is_public": true,
-					"group_id": this.problemSet.group_id,
-				})
+				if (this.problemSet_type + 1 == this.problemSet_type_list) {
+					var data = JSON.stringify({
+						"description": this.problemSet.description,
+						"name": this.problemSet.name,
+						"is_public": true,
+						"area_id": 100
+					})
+				} else {
+					var data = JSON.stringify({
+						"description": this.problemSet.description,
+						"name": this.problemSet.name,
+						"is_public": true,
+						"area_id": this.problemSet_type + 1
+					})
+				}
 
 				myRequest.request(api.problem_set_create(), 'POST', data).then(
 					function(res) {

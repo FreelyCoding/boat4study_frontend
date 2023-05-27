@@ -14,197 +14,124 @@
 		<view>
 			<!-- 输入框示例 -->
 			<uni-popup ref="inputDialog" type="dialog" :isMaskClick="false">
-				<uni-card>
-					<p style="text-align: center;">
-						编辑题库信息
-					</p>
-					<uni-section title="题库名" type="line">
-						<u-input type="text" placeholder="请输入题库名" v-model="proDetailEdit.title" />
-					</uni-section>
-					<uni-section title="题库简介" type="line">
-						<u-input type="textarea" placeholder="请输入题库简介" custom-style="height: 300px;"
-							v-model="proDetailEdit.descrip" />
-					</uni-section>
-		
-					<p style="margin-top: 30px; width: 300px;">
-		
-					</p>
-		
-					<uni-row>
-						<uni-col :span="11" :offset = "1">
-							<p style="text-align: center;">
-								<button  style="background-color: #00aaff; color: white; width: 100px;"
-									@click="inputDialogClose">
-									取消编辑
-								</button>
-							</p>
-						</uni-col>
-						<uni-col :span="12" :offset="3">
-							<p style="text-align: center;">
-								<button style="background-color: #5ac725; color: white; width: 100px;"
-									@click="confirmProEdit()">
-									确认提交
-								</button>
-							</p>
-						</uni-col>
-					</uni-row>
-				</uni-card>
+				<uni-popup-dialog cancelText="取消" confirmText="确认编辑" title="编辑题库信息" type="info"
+					@confirm="confirmProEdit()" @close="inputDialogClose()">
+					<uni-card style="width: 280px; ">
+						<uni-section title="题库名" type="line">
+							<u-input type="text" placeholder="请输入题库名" v-model="proDetailEdit.title" />
+						</uni-section>
+						<uni-section title="题库简介" type="line">
+							<u-input type="textarea" placeholder="请输入题库简介" custom-style="height: 300px;"
+								v-model="proDetailEdit.descrip" />
+						</uni-section>
+					</uni-card>
+				</uni-popup-dialog>
 			</uni-popup>
 		</view>
 		
 		<view>
 			<uni-popup ref="deleteProSetDialog" type="dialog" :isMaskClick="false">
-				<uni-card>
-					<p style="text-align: center;font-size: 24px;margin-bottom: 20px;margin-top: 10px;"
-						class="shuhei">
-						您确定要删除题库吗
-					</p>
-					<p style="margin-top: 20px;width: 240px;"></p>
-		
-					<uni-row>
-						<uni-col :span="7" >
-							<p style="text-align: center; margin-bottom: 10px;">
-								<button  style="background-color: #00aaff; color: white; width: 100px;"
-									@click="deleteProSetDialogClose">
-									取消删除
-								</button>
-							</p>
-						</uni-col>
-		
-						<uni-col :span="10" :offset="7">
-							<p style="text-align: center; margin-bottom: 10px;">
-								<button  style="background-color: #e64340; color: white; width: 100px;"
-									@click="deleteProSetDialogConfirm">
-									确认删除
-								</button>
-							</p>
-						</uni-col>
-					</uni-row>
-				</uni-card>
+				<uni-popup-dialog cancelText="取消删除" confirmText="确认删除" title="您确定要删除题库吗" type="error"
+					@confirm="deleteProSetDialogConfirm()" @close="deleteProSetDialogClose()">
+				</uni-popup-dialog>
 			</uni-popup>
 		</view>
 		
 		<view>
 			<uni-popup ref="selectProNumDialog" type="dialog" :isMaskClick="false">
-				<uni-card style="width: 280px;">
-					<uni-section title="请选择题目数量" type="line">
-						<slider value="1" @change="selectProNum" min="1" block-size="14" :max="proDetail.totalNum" show-value />
-					</uni-section>
-		
-					<uni-row>
-						<uni-col :span="7" >
-							<p style="text-align: center; margin-bottom: 10px; ">
-								<button  style="background-color: #00aaff; color: white; width: 100px;" size="mini"
-									@click="selectProNumDialogClose">
-									返回
-								</button>
-							</p>
-						</uni-col>
-		
-						<uni-col :span="10" :offset="7">
-							<p style="text-align: center; margin-bottom: 10px; ">
-								<button  style="background-color: #55aa00; color: white; width: 100px;" size="mini"
-									@click="jumpToSimuPractice()">
-									开始做题
-								</button>
-							</p>
-						</uni-col>
-					</uni-row>
-				</uni-card>
+				<uni-popup-dialog cancelText="取消" confirmText="开始做题" title="请选择题目数量" type="info"
+					@confirm="jumpToSimuPractice()" @close="selectProNumDialogClose()">
+					<uni-card style="width: 280px; ">
+						<slider value="1" @change="selectProNum" min="1" block-size="14"
+						 :max="proDetail.totalNum" show-value />
+					</uni-card>
+				</uni-popup-dialog>
 			</uni-popup>
 		</view>
 		
 		<view>
 			<uni-popup ref="selectProTypeDialog" type="dialog" :isMaskClick="false">
-				<uni-card style="width: 280px; height: 220px;">
-					<uni-section title="请选择题目类型" type="line" style="margin-bottom: 20px;">
-						<uni-data-select v-model="problem_type_select" :localdata="problem_type" @change="change"
-							:clear="false" ></uni-data-select>
-					</uni-section>
-		
-					<uni-row>
-						<uni-col :span="7" >
-							<p style="text-align: center; margin-bottom: 10px;">
-								<button  style="background-color: #00aaff; color: white; width: 100px;" size="mini"
-									@click="selectProTypeDialogClose">
-									返回
-								</button>
-							</p>
-						</uni-col>
-		
-						<uni-col :span="10" :offset="7">
-							<p style="text-align: center; margin-bottom: 10px;">
-								<button  style="background-color: #55aa00; color: white; width: 100px;" size="mini"
-									@click="jumpToTypePractice()">
-									开始做题
-								</button>
-							</p>
-						</uni-col>
-					</uni-row>
-				</uni-card>
+				<uni-popup-dialog cancelText="取消" confirmText="开始做题" title="请选择题目类型" type="info"
+					@confirm="jumpToTypePractice()" @close="selectProTypeDialogClose()">
+					<uni-card style="width: 280px; ">
+						<u-radio-group 
+								v-model="problem_type_select"
+								placement="column"
+								iconPlacement="right">
+							<u-radio label="选择题" :name="0" :customStyle="{marginBottom: '8px'}"></u-radio>
+							<u-radio label="填空题" :name="1" :customStyle="{marginBottom: '8px'}"></u-radio>
+							<u-radio label="判断题" :name="2" :customStyle="{marginBottom: '8px'}"></u-radio>
+						</u-radio-group>
+					</uni-card>
+				</uni-popup-dialog>
 			</uni-popup>
 		</view>
 		
 		<view>
 			<!-- 输入框示例 -->
 			<uni-popup ref="errorNoProDialog" type="dialog" :isMaskClick="false">
-				<uni-card>
-					<p style="text-align: center; margin-bottom: 10px; font-size: 16px;">
-						没有题目
-					</p>
-					<uni-row>
-						<uni-col :span="24" :offset="0">
-							<p style="text-align: center;">
-								<button style="background-color: #5ac725; color: white; width: 100px;" size="mini"
-									@click="confirmErrorNoProDialog()">
-									确认
-								</button>
-							</p>
-						</uni-col>
-					</uni-row>
-				</uni-card>
+				<uni-popup-dialog type="error" cancelText="关闭" confirmText="确认"
+				 title="错误" content="没有题目"
+					@confirm="confirmErrorNoProDialog()" @close="confirmErrorNoProDialog()"></uni-popup-dialog>
 			</uni-popup>
 		</view>
 		<view>
 			<!-- 输入框示例 -->
 			<uni-popup ref="errorNoFavDialog" type="dialog" :isMaskClick="false">
-				<uni-card>
-					<p style="text-align: center; margin-bottom: 10px; font-size: 16px;">
-						没有收藏题目
-					</p>
-					<uni-row>
-						<uni-col :span="24" :offset="0">
-							<p style="text-align: center;">
-								<button style="background-color: #5ac725; color: white; width: 100px;" size="mini"
-									@click="confirmErrorNoFavDialog()">
-									确认
-								</button>
-							</p>
-						</uni-col>
-					</uni-row>
-				</uni-card>
+				<uni-popup-dialog type="error" cancelText="关闭" confirmText="确认"
+				 title="错误" content="没有收藏题目"
+					@confirm="confirmErrorNoFavDialog()" @close="confirmErrorNoFavDialog()"></uni-popup-dialog>
 			</uni-popup>
 		</view>
 		<view>
 			<!-- 输入框示例 -->
 			<uni-popup ref="errorNoWrongDialog" type="dialog" :isMaskClick="false">
-				<uni-card>
-					<p style="text-align: center; margin-bottom: 10px; font-size: 16px;">
-						没有错题
-					</p>
-					<uni-row>
-						<uni-col :span="24" :offset="0">
-							<p style="text-align: center;">
-								<button style="background-color: #5ac725; color: white; width: 100px;" size="mini"
-									@click="confirmErrorNoWrongDialog()">
-									确认
-								</button>
-							</p>
-						</uni-col>
-					</uni-row>
-				</uni-card>
+				<uni-popup-dialog type="error" cancelText="关闭" confirmText="确认"
+				 title="错误" content="没有错题"
+					@confirm="confirmErrorNoWrongDialog()" @close="confirmErrorNoWrongDialog()"></uni-popup-dialog>
 			</uni-popup>
 		</view>
+		
+		<u-popup :show="showOperationTable" :round="10" mode="bottom" @close="closeOperationTable" :overlayOpacity="0.2">
+			<view style="margin: 20px 10px 20px 10px;">
+				
+				<u-row @click="editPS()">
+					<u-col :span="2">
+						<u-icon name="/static/pic/problemSet/edit_pro_set.svg" size="40px"></u-icon>
+					</u-col>
+					<u-col :span="9">
+						<p class="star-title"> 编辑信息 </p>
+					</u-col>
+					<u-col :span="1">
+						<u-icon name="arrow-right" size="20px"></u-icon>
+					</u-col>
+				</u-row>
+				<u-divider style="margin-bottom: 15px;"></u-divider>
+				<u-row @click="jumpToProblemUpload()">
+					<u-col :span="2">
+						<u-icon name="/static/pic/problemSet/add_pro.svg" size="40px"></u-icon>
+					</u-col>
+					<u-col :span="9">
+						<p class="star-title"> 添加试题 </p>
+					</u-col>
+					<u-col :span="1">
+						<u-icon name="arrow-right" size="20px"></u-icon>
+					</u-col>
+				</u-row>
+				<u-divider style="margin-bottom: 15px;"></u-divider>
+				<u-row @click="deletePS()">
+					<u-col :span="2">
+						<u-icon name="/static/pic/delete_group.svg" size="40px"></u-icon>
+					</u-col>
+					<u-col :span="9">
+						<p class="star-title"> 删除题库 </p>
+					</u-col>
+					<u-col :span="1">
+						<u-icon name="arrow-right" size="20px"></u-icon>
+					</u-col>
+				</u-row>
+			</view>
+		</u-popup>
 
 		<view class="main-body">
 			<view class="title-line">
@@ -217,14 +144,14 @@
 							{{proDetail.descrip}}
 						</view>
 					</uni-col>
-					<uni-col :span="6">
-						<button class="mini-btn" type="primary" size="mini" @click="editPS()" >编辑</button>
-					</uni-col>
-					<uni-col :span="6">
-						<button class="mini-btn" type="warn" size="mini" @click="deletePS()">删除</button>
+					<uni-col :span="3" :offset="9" align="right">
+						<u-icon name="/static/pic/problemSet/more.svg" size="25px"
+							style="width: 25px;" @click="openOperationTable"
+							 v-if="user_info.user_id === proDetail.user_id"></u-icon>
 					</uni-col>
 				</uni-row>
 			</view>
+			
 			<view class="owner_info_box">
 				<u-row>
 					<u-col :span="2">
@@ -232,29 +159,24 @@
 						size="55px"
 							></u-avatar>
 					</u-col>
-					<u-col :span="9">
-						<view class="" style="font-size: 16px;">
+					<u-col :span="8">
+						<view class="" style="font-size: 16px; margin-left: 10px;">
 							{{proDetail.ownerName}}
 						</view>
-						<view class="" style="font-size: 14px; color: darkgray;">
+						<view class="" style="font-size: 14px; color: darkgray; margin-left: 10px;">
 							<u-row>
-								<u-col :span="4">
+								<u-col :span="6">
 									{{proDetail.created_at}}
 								</u-col>
-								<u-col :span="4">
+								<u-col :span="6">
 									{{proDetail.totalNum}}题
-								</u-col>
-								<u-col :span="4">
-									<view class="button-group">
-										<button class="button" size="mini" type="primary" @click="jumpToProblemUpload()"
-											style="background-color: #00aaff; text-align: center; margin: auto;">添加试题</button>
-									</view>
 								</u-col>
 							</u-row>
 						</view>
 					</u-col>
 				</u-row>
 			</view>
+			
 			<view class="proSetStatis">
 				<uni-row>
 					<uni-col :span="8">
@@ -428,7 +350,7 @@
 			<u-row>
 				<u-col span="2"></u-col>
 				<u-col span="3">
-					<u-button type="primary" shape="circle" text="公开"></u-button>
+					<u-button type="primary" shape="circle" text="公开" ></u-button>
 				</u-col>
 				<u-col span="2"></u-col>
 				<u-col span="3">
@@ -449,7 +371,10 @@
 	export default {
 		data() {
 			return {
+				user_info: {},
+				
 				proDetail: {
+					user_id: -1,
 					title: "",
 					created_at: '',
 					ownerName: "",
@@ -469,24 +394,13 @@
 				practice_proNum: 1,
 				
 				problem_type_select: 0,
-				problem_type: [{
-						value: 0,
-						text: "选择题"
-					},
-					{
-						value: 2,
-						text: "判断题"
-					},
-					{
-						value: 3,
-						text: "填空题"
-					},
-				],
+				showOperationTable: false,
 			}
 		},
 		onLoad: function(option) { //option为object类型，会序列化上个页面传递的参数
 			myRequest.checkLogin()
 			this.problem_set_id = option.id
+			this.user_info = uni.getStorageSync('user_info')
 			console.log('this.problem_set_id: ' + this.problem_set_id); //打印出上个页面传递的参数。
 		},
 		onShow: function() {
@@ -505,6 +419,7 @@
 						this.proDetail.totalNum = res.data.problem_set[0].problem_count
 						this.proDetail.descrip = res.data.problem_set[0].description
 						this.proDetail.is_favorite = res.data.problem_set[0].is_favorite
+						this.proDetail.user_id = res.data.problem_set[0].user_id
 						console.log(this.proDetail)
 						uni.request({
 							url: myRequest.interfaceUrl() +
@@ -673,9 +588,22 @@
 			},
 			
 			jumpToProblemUpload() {
+				this.showOperationTable = false
 				uni.navigateTo({
 					url: "/pages/problemSet/problemUpload?id=" + this.problem_set_id
 				})
+			},
+			
+			openOperationTable() {
+				if (this.showOperationTable == false) {
+					this.showOperationTable = true
+				} else {
+					this.showOperationTable = false
+				}
+				
+			},
+			closeOperationTable() {
+				this.showOperationTable = false
 			},
 			
 			back() {
@@ -732,6 +660,7 @@
 			},
 			
 			editPS() {
+				this.showOperationTable = false
 				this.proDetailEdit.descrip = this.proDetail.descrip
 				this.proDetailEdit.title = this.proDetail.title
 				this.$refs.inputDialog.open()
@@ -776,6 +705,7 @@
 			},
 			
 			deletePS() {
+				this.showOperationTable = false
 				this.$refs.deleteProSetDialog.open()
 			},
 			deleteProSetDialogClose() {
@@ -895,11 +825,11 @@
 	}
 
 	.owner_info_box {
-		margin-bottom: 20px;
+		margin-bottom: 15px;
 	}
 
 	.proSetStatis {
-		margin-bottom: 40px;
+		margin-bottom: 15px;
 	}
 
 	.practise-box {
@@ -933,7 +863,9 @@
 		}
 	}
 
-	.button-group {}
+	.button-group {
+		margin-bottom: 15px;
+	}
 
 	.footer {
 		margin: 0;

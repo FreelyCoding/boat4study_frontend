@@ -167,6 +167,12 @@ export default {
 			if (params.user_id != null) {
 				api += "&user_id=" + params.user_id;
 			}
+			if (params.area_id != null) {
+				api += "&area_id=" + params.area_id;
+			}
+			if (params.group_id != null) {
+				api += "&group_id=" + params.group_id;
+			}
 		} else if (params.id != null) {
 			api += "?id=" + params.id;
 			if (params.is_favorite != null) {
@@ -175,14 +181,40 @@ export default {
 			if (params.user_id != null) {
 				api += "&user_id=" + params.user_id;
 			}
+			if (params.area_id != null) {
+				api += "&area_id=" + params.area_id;
+			}
+			if (params.group_id != null) {
+				api += "&group_id=" + params.group_id;
+			}
 		} else if (params.is_favorite != null) {
 			api += "?is_favorite=" + params.is_favorite;
 			if (params.user_id != null) {
 				api += "&user_id=" + params.user_id;
 			}
+			if (params.area_id != null) {
+				api += "&area_id=" + params.area_id;
+			}
+			if (params.group_id != null) {
+				api += "&group_id=" + params.group_id;
+			}
 		} else if (params.user_id != null) {
 			api += "?user_id=" + params.user_id;
+			if (params.area_id != null) {
+				api += "&area_id=" + params.area_id;
+			}
+			if (params.group_id != null) {
+				api += "&group_id=" + params.group_id;
+			}
+		} else if (params.area_id != null) {
+			api += "?area_id=" + params.area_id;
+			if (params.group_id != null) {
+				api += "&group_id=" + params.group_id;
+			}
+		} else if (params.group_id != null) {
+			api += "?group_id=" + params.group_id;
 		}
+		console.log(api)
 		return api;
 	},
 
@@ -222,17 +254,45 @@ export default {
 			api += "?is_favorite=" + params.is_favorite;
 			if (params.problem_type_id != null) {
 				api += "&problem_type_id=" + params.problem_type_id;
-			} else if (params.is_wrong != null) {
+			}
+			if (params.is_wrong != null) {
 				api += "&is_wrong=" + params.is_wrong;
+			}
+			if (params.limit != null) {
+				api += "&limit=" + params.limit;
+			}
+			if (params.offset != null) {
+				api += "&offset=" + params.offset;
 			}
 		} else if (params.problem_type_id != null) {
 			api += "?problem_type_id=" + params.problem_type_id;
 			if (params.is_wrong != null) {
 				api += "&is_wrong=" + params.is_wrong;
 			}
+			if (params.limit != null) {
+				api += "&limit=" + params.limit;
+			}
+			if (params.offset != null) {
+				api += "&offset=" + params.offset;
+			}
 		} else if (params.is_wrong != null) {
 			api += "?is_wrong=" + params.is_wrong;
+			if (params.limit != null) {
+				api += "&limit=" + params.limit;
+			}
+			if (params.offset != null) {
+				api += "&offset=" + params.offset;
+			}
+		} else if (params.limit != null) {
+			api += "?limit=" + params.limit;
+			if (params.offset != null) {
+				api += "&offset=" + params.offset;
+			}
+		} else if (params.offset != null) {
+			api += "?offset=" + params.offset;
 		}
+		console.log(params)
+		console.log(api)
 		return api;
 	},
 

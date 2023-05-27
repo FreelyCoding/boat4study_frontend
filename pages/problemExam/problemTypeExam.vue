@@ -13,12 +13,33 @@
 		<view class="contain">
 
 			<view class="page_nav">
-				<uni-pagination :show-icon="true" :total="problem_id_list.length" pageSize="1" v-model="cur_page" @change="load_next_pro()"/>
+				<uni-row>
+					<uni-col :span="6">
+						<uni-tag text="上一题" type="primary" class="tag-unfav"
+						 custom-style="font-size: 16px;background-color: #e8e8e8;color: #000000;border: 0px;"
+						@click="pre_pro()"/>
+					</uni-col>
+					<uni-col :span="12" align="center">
+						<uni-tag text="选择题" type="primary" class="tag-pro_type"
+							v-if="problem[cur_page-1].type===0" />
+						<uni-tag text="填空题" type="primary" class="tag-pro_type"
+							v-if="problem[cur_page-1].type===1" />
+						<uni-tag text="判断题" type="primary" class="tag-pro_type"
+							v-if="problem[cur_page-1].type===2" />
+					</uni-col>
+					<uni-col :span="6" align="end" >
+						<view style="text-align: right;">
+							<uni-tag text="下一题" type="primary" class="tag-unfav"
+							 custom-style="font-size: 16px;background-color: #e8e8e8;color: #000000;border: 0px;"
+							@click="next_pro()"/>
+						</view>
+					</uni-col>
+				</uni-row>
 			</view>
 
 			<view class="problem_title" align="start">
 				<uni-row>
-					<uni-col span="12">
+					<uni-col :span="12">
 						<uni-tag text="单选题" type="primary" class="tag-pro_type"
 							v-if="problem[cur_page-1].type===0 && problem[cur_page-1].is_multiple === false" />
 						<uni-tag text="多选题" type="primary" class="tag-pro_type"
@@ -28,7 +49,7 @@
 						<uni-tag text="判断题" type="primary" class="tag-pro_type"
 							v-if="problem[cur_page-1].type===2" />
 					</uni-col>
-					<uni-col span="12" align="end" >
+					<uni-col :span="12" align="end" >
 						<view style="text-align: right;">
 							<uni-tag text="收藏" type="primary" class="tag-unfav"
 							 custom-style="font-size: 16px;background-color: #e8e8e8;color: #000000;border: 0px;"
@@ -43,7 +64,7 @@
 				</uni-row>
 			</view>
 
-			<view class="problem_content">
+			<view class="problem_content_exam">
 				<p>{{problem[cur_page-1].title}}</p>
 			</view>
 
@@ -187,6 +208,19 @@
 	export default {
 		data() {
 			return {
+				proDetail: {
+					user_id: -1,
+					title: "",
+					created_at: '',
+					ownerName: "",
+					ownerAvatar: "",
+					totalNum: 0,
+					descrip: '',
+					is_favorite: false,
+					wrong_problem_count: 0,
+					fav_problem_count: 0,
+				},
+				
 				problem_set_id: 0,
 				problem_id_list:[],
 				cur_page: 1,
@@ -197,13 +231,19 @@
 					'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
 				],
 				problem: [],
-
+				page_size: 10,
+				loaded_num: 0,
 			}
 		},
 		watch: {
 				cur_page(new_page, old_page) {
 					if (new_page > this.problem.length) {
 						this.load_one_problem_detail(new_page - 1)
+					}
+					if (this.proDetail.totalNum > this.problem_id_list.length) {
+						if (new_page > this.problem_id_list.length-2) {
+							this.load_new_page(0)
+						}
 					}
 				}
 		},
@@ -215,50 +255,16 @@
 			this.problem_type = option.problem_type
 			var _this = this
 			
-			uni.request({
-				url: myRequest.interfaceUrl() + api.problem_set_all_problem({id:this.problem_set_id,problem_type_id:this.problem_type}),
-				method: 'GET',
-				header: {
-					'X-Token': myRequest.getToken()
-				},
-				
-				success: (res1) => {
-					console.log(res1)
-					if (res1.statusCode == 200) {
-						this.problem_id_list = res1.data.problems
-						this.load_one_problem_detail(0)
-					}
-					else if (res1.statusCode == 401) {
-						myRequest.redirectToLogin()
-					}
-					else {
-						myRequest.toast()
-					}
-				},
-				
-				fail: (res1) => {					
-					console.log(res1)
-					myRequest.toast()
-				},
-			})
+			this.on_load()
 			
 		},
 		methods: {
-			shuffle(arr) {
-					var len = arr.length;
-					for (var i = 0; i < len - 1; i++) {
-							var index = parseInt(Math.random() * (len - i));
-							var temp = arr[index];
-							arr[index] = arr[len - i - 1];
-							arr[len - i - 1] = temp;
-					}
-					return arr;
-			},
 			back() {
 				uni.navigateBack({
 				    delta: 1
 				});
 			},
+			
 			groupChange(n) {
 				console.log('groupChange', n);
 			},
@@ -303,6 +309,125 @@
 				this.problem[index].favorite = false;
 			},
 			
+			async on_load() {
+				await this.get_proSet_info()
+				await this.load_new_page(1)
+			},
+			
+			next_pro() {
+				if (this.cur_page < this.problem_id_list.length) {
+					this.cur_page++;
+				}
+			},
+			pre_pro() {
+				if (this.cur_page > 1) {
+					this.cur_page--;
+				}
+			},
+			
+			get_proSet_info() {
+				uni.request({
+					url: myRequest.interfaceUrl() + '/problem_set/all?id=' + this.problem_set_id,
+					method: 'GET',
+					header: {
+						'X-Token': myRequest.getToken()
+					},
+				
+					success: (res) => {
+						console.log(res)
+						if (res.statusCode == 200) {
+							this.proDetail.title = res.data.problem_set[0].name
+							this.proDetail.created_at = res.data.problem_set[0].created_at.slice(0, 10)
+							this.proDetail.totalNum = res.data.problem_set[0].problem_count
+							this.proDetail.descrip = res.data.problem_set[0].description
+							this.proDetail.is_favorite = res.data.problem_set[0].is_favorite
+							this.proDetail.user_id = res.data.problem_set[0].user_id
+							console.log(this.proDetail)
+							uni.request({
+								url: myRequest.interfaceUrl() +
+									`/user/info/${res.data.problem_set[0].user_id}`,
+								method: 'GET',
+								header: {
+									'X-Token': myRequest.getToken()
+								},
+				
+								success: (res2) => {
+									console.log(res2)
+									if (res2.statusCode == 200) {
+										this.proDetail.ownerName = res2.data.nick_name
+										this.proDetail.ownerAvatar = res2.data.avatar_path
+									} else if (res2.statusCode == 401) {
+										myRequest.redirectToLogin()
+									} else {
+										myRequest.toast()
+									}
+								},
+				
+								fail: (res2) => {
+									console.log(res2)
+									myRequest.toast()
+								},
+							})
+				
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else {
+							myRequest.toast()
+						}
+					},
+				
+					fail: (res) => {
+						console.log(res)
+						myRequest.toast()
+					}
+				})
+			},
+			
+			shuffle(arr) {
+					var len = arr.length;
+					for (var i = 0; i < len - 1; i++) {
+							var index = parseInt(Math.random() * (len - i));
+							var temp = arr[index];
+							arr[index] = arr[len - i - 1];
+							arr[len - i - 1] = temp;
+					}
+					return arr;
+			},
+			
+			load_new_page(flag) {
+				uni.request({
+					url: myRequest.interfaceUrl() +
+					 api.problem_set_all_problem({id:this.problem_set_id,problem_type_id:this.problem_type,
+					 limit:this.page_size,offset:this.loaded_num}),
+					method: 'GET',
+					header: {
+						'X-Token': myRequest.getToken()
+					},
+					
+					success: (res1) => {
+						//console.log(res1)
+						if (res1.statusCode == 200) {
+							this.loaded_num += this.page_size
+							this.problem_id_list = this.problem_id_list.concat(res1.data.problems)
+							if (flag == 1) {
+								this.load_one_problem_detail(0)
+							}
+						}
+						else if (res1.statusCode == 401) {
+							myRequest.redirectToLogin()
+						}
+						else {
+							myRequest.toast()
+						}
+					},
+					
+					fail: (res1) => {					
+						//console.log(res1)
+						myRequest.toast()
+					}
+				})
+			},
+			
 			load_one_problem_detail(index) {
 				if (this.problem_id_list[index].problem_type_id == 0) {
 					uni.request({
@@ -312,7 +437,7 @@
 							'X-Token': myRequest.getToken()
 						},
 						success: (res2) => {
-							console.log(res2)
+							//console.log(res2)
 							if (res2.statusCode == 200) {
 								this.problem.push({
 									type: 0,
@@ -732,7 +857,7 @@
 	}
 
 	.page_nav {
-		margin-bottom: 5%;
+		margin-bottom: 30px;
 	}
 
 	.problem_title {
@@ -740,7 +865,7 @@
 		font-size: 20px;
 	}
 
-	.problem_content {
+	.problem_content_exam {
 		font-size: 16px;
 		margin-bottom: 30px;
 		line-height: 30px;
@@ -748,7 +873,9 @@
 
 	.option_item {
 		border-radius: 5px;
-		height: 40px;
+		//height: 40px;
+		padding-top: 8px;
+		padding-bottom: 8px;
 		display: flex;
 		align-items: center;
 		margin: 10px 0 10px 0;
@@ -807,6 +934,7 @@
 	.option_item_content {
 		font-size: 16px;
 		margin-left: 35px;
+		width: 270px;
 	}
 
 	.selected_option_item_content {
