@@ -25,9 +25,9 @@
 		
 			<view class="problem_content">
 				<p>{{problem[0].title}}</p>
-				<view v-if="true">
+				<view v-if="problem[0].title_pic != ''">
 					<image style="width: 100%; height: 200px; margin-top: 20px;"
-					src="https://pic1.zhimg.com/80/v2-1c2910a45821e277a6f5f59c0ee327cc_1440w.webp"></image>
+					:src="myRequest.imageUrl() + problem[0].title_pic"></image>
 				</view>
 			</view>
 		
@@ -48,9 +48,9 @@
 									<view class="option_item_content"
 										:class="{'selected_option_item_content':problem[0].options[index].selected!=0}">
 										{{problem[0].options[index].name}}
-										<view v-if="true">
+										<view v-if="problem[0].options[index].option_pic != ''">
 											<image style="width: 80%; height: 150px; margin-top: 20px;"
-											src="https://pic1.zhimg.com/80/v2-1c2910a45821e277a6f5f59c0ee327cc_1440w.webp"></image>
+											:src="myRequest.imageUrl() + problem[0].options[index].option_pic"></image>
 										</view>
 									</view>
 								</u-col>
@@ -68,15 +68,19 @@
 							 'wrong_option_item':problem[0].options[index].selected==2,
 							 'right_option_item':problem[0].options[index].selected==3}" @click="select_multi_option(index)">
 							<u-row>
-								<u-col span="1">
+								<u-col :span="1">
 									<view class="option_letter_box" :class="{'selected_option_letter_box':problem[0].options[index].selected==1,
 							 'wrong_option_letter_box':problem[0].options[index].selected==2,
 							 'right_option_letter_box':problem[0].options[index].selected==3}">{{letter[index]}}</view>
 								</u-col>
-								<u-col span="11">
+								<u-col :span="11">
 									<view class="option_item_content"
 										:class="{'selected_option_item_content':problem[0].options[index].selected!=0}">
 										{{problem[0].options[index].name}}
+										<view v-if="problem[0].options[index].option_pic != ''">
+											<image style="width: 80%; height: 150px; margin-top: 20px;"
+											:src="myRequest.imageUrl() + problem[0].options[index].option_pic"></image>
+										</view>
 									</view>
 								</u-col>
 							</u-row>
@@ -86,13 +90,6 @@
 			</view>
 			
 			<!-- 填空题 -->
-			<view v-if="problem[0].type === 1">
-				<view class="block_answer_box">
-					<view class="block_answer_item">
-						<uni-easyinput class="" v-model="problem[0].my_answer" placeholder="请输入答案" />
-					</view>
-				</view>
-			</view>
 			
 			<!-- 判断题 -->
 			<view v-if="problem[0].type === 2">
@@ -124,9 +121,9 @@
 			</view>
 			<view class="problem_answer_box">
 				<p>{{problem[0].correct_answer}}</p>
-				<view v-if="true">
+				<view v-if="problem[0].answer_pic != ''">
 					<image style="width: 100%; height: 200px; margin-top: 20px;"
-					src="https://pic1.zhimg.com/80/v2-1c2910a45821e277a6f5f59c0ee327cc_1440w.webp"></image>
+					:src="myRequest.imageUrl() + problem[0].answer_pic"></image>
 				</view>
 			</view>
 			<view class="problem_answer_box_title">
@@ -134,9 +131,9 @@
 			</view>
 			<view class="problem_answer_box">
 				<p>{{problem[0].analysis}}</p>
-				<view v-if="true">
+				<view v-if="problem[0].analysis_pic != ''">
 					<image style="width: 100%; height: 200px; margin-top: 20px;"
-					src="https://pic1.zhimg.com/80/v2-1c2910a45821e277a6f5f59c0ee327cc_1440w.webp"></image>
+					:src="myRequest.imageUrl() + problem[0].analysis_pic"></image>
 				</view>
 			</view>
 			
@@ -187,18 +184,28 @@
 									is_multiple: res2.data.problems[0].is_multiple,
 									done: 0,
 									right: 0,
-									title: res2.data.problems[0].description,
+									title: res2.data.problems[0].description.split("#")[0],
+									title_pic: '',
 									options: [],
 									my_answer: '',
 									correct_answer: '',
+									answer_pic: '',
 									analysis: '',
+									analysis_pic: '',
 									answer_show: 0,
 								})
+								if (res2.data.problems[0].description.split("#").length > 1) {
+									this.problem[0].title_pic = res2.data.problems[0].description.split("#")[1]
+								}
 								for (var j=0;j<res2.data.problems[0].choices.length;j++) {
 									this.problem[this.problem.length-1].options.push({
-										name: res2.data.problems[0].choices[j].description,
+										name: res2.data.problems[0].choices[j].description.split("#")[0],
+										option_pic: '',
 										selected: 0,
 									})
+									if (res2.data.problems[0].choices[j].description.split("#").length > 1) {
+										this.problem[0].options[j].option_pic = res2.data.problems[0].choices[j].description.split("#")[1]
+									}
 								}
 								
 								uni.request({
@@ -211,7 +218,10 @@
 										console.log(res1)
 										if (res1.statusCode == 200) {
 											var answer = res1.data.choice_problem_answer
-											this.problem[0].analysis = res1.data.analysis
+											this.problem[0].analysis = res1.data.analysis.split("#")[0]
+											if (res1.data.analysis.split("#").length > 1) {
+												this.problem[0].analysis_pic = res1.data.analysis.split("#")[1]
+											}
 											for (var k=0;k<answer.length;k++) {
 												if (answer[k].is_correct == true) {
 													this.problem[0].correct_answer += String.fromCharCode(65+k);
@@ -262,14 +272,19 @@
 									is_multiple: false,
 									done: 0,
 									right: 0,
-									title: res2.data.problems[0].description,
+									title: res2.data.problems[0].description.split("#")[0],
+									title_pic: '',
 									options: [],
 									my_answer: '',
 									correct_answer: '',
+									answer_pic: '',
 									analysis: '',
+									analysis_pic: '',
 									answer_show: 0,
 								})
-								
+								if (res2.data.problems[0].description.split("#").length > 1) {
+									this.problem[0].title_pic = res2.data.problems[0].description.split("#")[1]
+								}
 								uni.request({
 									url: myRequest.interfaceUrl() + api.problem_blank_answer(this.problem_id),
 									method: 'GET',
@@ -279,8 +294,14 @@
 									success: (res1) => {
 										console.log(res1)
 										if (res1.statusCode == 200) {
-											this.problem[0].correct_answer = res1.data.answer;
-											this.problem[0].analysis = res1.data.analysis;
+											this.problem[0].correct_answer = res1.data.answer.split("#")[0]
+											if (res1.data.answer.split("#").length > 1) {
+												this.problem[0].answer_pic = res1.data.answer.split("#")[1]
+											}
+											this.problem[0].analysis = res1.data.analysis.split("#")[0]
+											if (res1.data.analysis.split("#").length > 1) {
+												this.problem[0].analysis_pic = res1.data.analysis.split("#")[1]
+											}
 										}
 										else if (res1.statusCode == 401) {
 											myRequest.redirectToLogin()
@@ -324,7 +345,8 @@
 									is_multiple: false,
 									done: 0,
 									right: 0,
-									title: res2.data.problems[0].description,
+									title: res2.data.problems[0].description.split("#")[0],
+									title_pic: '',
 									options: [
 										{
 											name: "正确",
@@ -337,9 +359,14 @@
 									],
 									my_answer: '',
 									correct_answer: '',
+									answer_pic: '',
 									analysis: '',
+									analysis_pic: '',
 									answer_show: 0,
 								})
+								if (res2.data.problems[0].description.split("#").length > 1) {
+									this.problem[0].title_pic = res2.data.problems[0].description.split("#")[1]
+								}
 								
 								uni.request({
 									url: myRequest.interfaceUrl() + api.problem_judge_answer(this.problem_id),
@@ -351,7 +378,10 @@
 										console.log(res1)
 										if (res1.statusCode == 200) {
 											var answer = res1.data.is_correct;
-											this.problem[0].analysis = res1.data.analysis;
+											this.problem[0].analysis = res1.data.analysis.split("#")[0]
+											if (res1.data.analysis.split("#").length > 1) {
+												this.problem[0].analysis_pic = res1.data.analysis.split("#")[1]
+											}
 											if (answer) {
 												this.problem[0].correct_answer = "正确";
 											} else {

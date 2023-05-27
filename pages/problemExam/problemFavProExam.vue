@@ -61,8 +61,12 @@
 
 			<view class="problem_content_exam">
 				<p>{{problem[cur_page-1].title}}</p>
+				<view v-if="problem[cur_page-1].title_pic != ''">
+					<image style="width: 100%; height: 200px; margin-top: 20px;" 
+					:src="myRequest.imageUrl() + problem[cur_page-1].title_pic"></image>
+				</view>
 			</view>
-
+			
 			<!-- 单选题 -->
 			<view v-if="problem[cur_page-1].type === 0 && problem[cur_page-1].is_multiple === false">
 				<view class="option_group">
@@ -80,6 +84,10 @@
 									<view class="option_item_content"
 										:class="{'selected_option_item_content':problem[cur_page-1].options[index].selected!=0}">
 										{{problem[cur_page-1].options[index].name}}
+										<view v-if="problem[cur_page-1].options[index].option_pic != ''">
+											<image style="width: 80%; height: 150px; margin-top: 20px;"
+											:src="myRequest.imageUrl() + problem[cur_page-1].options[index].option_pic"></image>
+										</view>
 									</view>
 								</u-col>
 							</u-row>
@@ -105,6 +113,10 @@
 									<view class="option_item_content"
 										:class="{'selected_option_item_content':problem[cur_page-1].options[index].selected!=0}">
 										{{problem[cur_page-1].options[index].name}}
+										<view v-if="problem[cur_page-1].options[index].option_pic != ''">
+											<image style="width: 80%; height: 150px; margin-top: 20px;"
+											:src="myRequest.imageUrl() + problem[cur_page-1].options[index].option_pic"></image>
+										</view>
 									</view>
 								</u-col>
 							</u-row>
@@ -156,6 +168,10 @@
 				<view class="problem_answer_box">
 					<p>正确答案：{{problem[cur_page-1].correct_answer}}</p>
 					<p>我的答案：{{problem[cur_page-1].my_answer}}</p>
+					<view v-if="problem[cur_page-1].answer_pic != ''">
+						<image style="width: 100%; height: 200px; margin-top: 20px;"
+						:src="myRequest.imageUrl() + problem[cur_page-1].answer_pic"></image>
+					</view>
 				</view>
 				<view class="problem_answer_box_title" v-if="problem[cur_page-1].type === 1">
 					答案自查
@@ -186,6 +202,10 @@
 				</view>
 				<view class="problem_answer_box">
 					<p>{{problem[cur_page-1].analysis}}</p>
+					<view v-if="problem[cur_page-1].analysis_pic != ''">
+						<image style="width: 100%; height: 200px; margin-top: 20px;"
+						:src="myRequest.imageUrl() + problem[cur_page-1].analysis_pic"></image>
+					</view>
 				</view>
 			</view>
 			
@@ -422,6 +442,7 @@
 			},
 			
 			load_one_problem_detail(index) {
+				let last_index = this.problem.length
 				if (this.problem_id_list[index].problem_type_id == 0) {
 					uni.request({
 						url: myRequest.interfaceUrl() + api.problem_choice_all({id:this.problem_id_list[index].id}),
@@ -438,18 +459,28 @@
 									is_multiple: res2.data.problems[0].is_multiple,
 									done: 0,
 									right: 0,
-									title: res2.data.problems[0].description,
+									title: res2.data.problems[0].description.split("#")[0],
+									title_pic: '',
 									options: [],
 									my_answer: '',
 									correct_answer: '',
+									answer_pic: '',
 									analysis: '',
+									analysis_pic: '',
 									answer_show: 0,
 								})
+								if (res2.data.problems[0].description.split("#").length > 1) {
+									this.problem[last_index].title_pic = res2.data.problems[0].description.split("#")[1]
+								}
 								for (var j=0;j<res2.data.problems[0].choices.length;j++) {
 									this.problem[this.problem.length-1].options.push({
-										name: res2.data.problems[0].choices[j].description,
+										name: res2.data.problems[0].choices[j].description.split("#")[0],
 										selected: 0,
+										option_pic: '',
 									})
+									if (res2.data.problems[0].choices[j].description.split("#").length > 1) {
+										this.problem[last_index].options[j].option_pic = res2.data.problems[0].choices[j].description.split("#")[1]
+									}
 								}
 								console.log(this.problem)
 							
@@ -482,7 +513,8 @@
 									is_multiple: false,
 									done: 0,
 									right: 0,
-									title: res2.data.problems[0].description,
+									title: res2.data.problems[0].description.split("#")[0],
+									title_pic: '',
 									options: [
 										{
 											name: "我的答案正确",
@@ -493,12 +525,17 @@
 											selected: 0,
 										}
 									],
-									check_answer: 0,
 									my_answer: '',
+									check_answer: 0,
 									correct_answer: '',
+									answer_pic: '',
 									analysis: '',
+									analysis_pic: '',
 									answer_show: 0,
 								})
+								if (res2.data.problems[0].description.split("#").length > 1) {
+									this.problem[last_index].title_pic = res2.data.problems[0].description.split("#")[1]
+								}
 								console.log(this.problem)
 							}
 							else if (res2.statusCode == 401) {
@@ -529,7 +566,8 @@
 									is_multiple: false,
 									done: 0,
 									right: 0,
-									title: res2.data.problems[0].description,
+									title: res2.data.problems[0].description.split("#")[0],
+									title_pic: '',
 									options: [
 										{
 											name: "正确",
@@ -542,9 +580,14 @@
 									],
 									my_answer: '',
 									correct_answer: '',
+									answer_pic: '',
 									analysis: '',
+									analysis_pic: '',
 									answer_show: 0,
 								})
+								if (res2.data.problems[0].description.split("#").length > 1) {
+									this.problem[last_index].title_pic = res2.data.problems[0].description.split("#")[1]
+								}
 								console.log(this.problem)
 							}
 							else if (res2.statusCode == 401) {
@@ -600,7 +643,10 @@
 						success: (res1) => {
 							console.log(res1)
 							var answer = res1.data.choice_problem_answer
-							this.problem[pr_i].analysis = res1.data.analysis
+							this.problem[pr_i].analysis = res1.data.analysis.split("#")[0]
+							if (res1.data.analysis.split("#").length > 1) {
+								this.problem[pr_i].analysis_pic = res1.data.analysis.split("#")[1]
+							}
 							if (res1.statusCode == 200) {
 								for (var k=0;k<answer.length;k++) {
 									if (answer[k].is_correct == true) {
@@ -663,7 +709,10 @@
 							console.log(res1)
 							var answer = res1.data.choice_problem_answer
 							var if_right = true;
-							this.problem[pr_i].analysis = res1.data.analysis
+							this.problem[pr_i].analysis = res1.data.analysis.split("#")[0]
+							if (res1.data.analysis.split("#").length > 1) {
+								this.problem[pr_i].analysis_pic = res1.data.analysis.split("#")[1]
+							}
 							if (res1.statusCode == 200) {
 								for (var k=0;k<answer.length;k++) {
 									if (answer[k].is_correct == true) {
@@ -718,8 +767,14 @@
 						success: (res1) => {
 							console.log(res1)
 							if (res1.statusCode == 200) {
-								this.problem[pr_i].correct_answer = res1.data.answer;
-								this.problem[pr_i].analysis = res1.data.analysis;
+								this.problem[pr_i].correct_answer = res1.data.answer.split("#")[0]
+								if (res1.data.answer.split("#").length > 1) {
+									this.problem[pr_i].answer_pic = res1.data.answer.split("#")[1]
+								}
+								this.problem[pr_i].analysis = res1.data.analysis.split("#")[0]
+								if (res1.data.analysis.split("#").length > 1) {
+									this.problem[pr_i].analysis_pic = res1.data.analysis.split("#")[1]
+								}
 							}
 							else if (res1.statusCode == 401) {
 								myRequest.redirectToLogin()
@@ -740,6 +795,7 @@
 			},
 			self_check_blank_answer(index) {
 				let pr_i = this.cur_page - 1
+				console.log("!!!!")
 				if (this.problem[pr_i].check_answer == 0) {
 					this.problem[pr_i].check_answer = 1;
 					if (index == 1) {
@@ -765,7 +821,10 @@
 						success: (res1) => {
 							console.log(res1)
 							var answer = res1.data.is_correct;
-							this.problem[pr_i].analysis = res1.data.analysis;
+							this.problem[pr_i].analysis = res1.data.analysis.split("#")[0]
+							if (res1.data.analysis.split("#").length > 1) {
+								this.problem[pr_i].analysis_pic = res1.data.analysis.split("#")[1]
+							}
 							if (res1.statusCode == 200) {
 								if (answer) {
 									this.problem[pr_i].options[0].selected = 3;

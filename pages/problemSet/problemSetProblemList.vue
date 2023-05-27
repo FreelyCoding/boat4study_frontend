@@ -126,7 +126,7 @@
 						id: ret[i].id,
 						type: ret[i].problem_type_id,
 						selected: 0,
-						title: ret[i].description,
+						title: ret[i].description.split("#")[0],
 					})
 				}
 			},

@@ -172,10 +172,10 @@
 							<image class="item" @click="chooseImage(-2)" src="../../static/pic/problem/tupian.svg"
 							 style="height: 20px; width: 20px; margin-left: 10px;"></image>
 						</view>
-						<view v-if="baseFormData.answer !== ''" @click="viewImage(-2)">
+						<view v-if="baseFormData.answer_pic !== ''" @click="viewImage(-2)">
 							<image
 							style="width: 100%; height: 200px; margin-top: 20px;"
-							:src="baseFormData.answer"></image>
+							:src="baseFormData.answer_pic"></image>
 							<view @click.stop="DelImg(-2)"
 								style="position: absolute; top:60px; right:5px; background-color:aliceblue;">
 								<uni-icons type="closeempty" class="close" size="20"></uni-icons>
@@ -250,6 +250,7 @@
 	import list from '../../uni_modules/uview-ui/libs/config/props/list';
 	import toast from '../../uni_modules/uview-ui/libs/config/props/toast';
 	import api from '@/common/api.js';
+import upload from '../../uni_modules/uview-ui/libs/config/props/upload';
 	
 	export default {
 		data() {
@@ -328,6 +329,8 @@
 					}],
 					id: Date.now()
 				}],
+				
+				temp_url: '',
 			};
 		},
 		onLoad: function (option) {
@@ -429,6 +432,60 @@
 				this.dynamicLists.splice(index, 1)
 				this.option_name.splice(len_option - 1, 1)
 			},
+			
+			async pic_upload() {
+				console.log(this.baseFormData.title_pic)
+				if (this.baseFormData.title_pic != '') {
+					await this.upload_file(this.baseFormData.title_pic)
+					//console.log(this.temp_url)
+					this.baseFormData.title += '#'
+					this.baseFormData.title += this.temp_url
+				}
+				if (this.baseFormData.analyse_pic != '') {
+					await this.upload_file(this.baseFormData.analyse_pic)
+					//console.log(this.temp_url)
+					this.baseFormData.analyse += '#'
+					this.baseFormData.analyse += this.temp_url
+				}
+				if (this.baseFormData.answer_pic != '') {
+					await this.upload_file(this.baseFormData.answer_pic)
+					//console.log(this.temp_url)
+					this.baseFormData.answer += '#'
+					this.baseFormData.answer += this.temp_url
+				}
+				for (var i=0;i<this.dynamicLists.length;i++) {
+					if (this.dynamicLists[i].option_pic != '') {
+						await this.upload_file(this.dynamicLists[i].option_pic)
+						this.dynamicLists[i].description += '#'
+						this.dynamicLists[i].description += this.temp_url
+					}
+				}
+			},
+			
+			async upload_file(file_path) {
+				let that = this;
+				await myRequest.uploadFile('/upload/public', file_path, 'file', {}).then(
+					function(res) {
+						//console.log(res)
+						if (res.statusCode == 200) {
+							that.temp_url = JSON.parse(res.data).url;
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else {
+							myRequest.toast()
+						}
+					}
+				).catch(
+					function(res) {
+						console.log(res)
+						myRequest.toast()
+				})
+			},
+			
+			myIsNaN(value) {
+			   return (typeof value === 'number' && !isNaN(value));
+			},
+			
 			async create_choice_problem() {
 				if (!myRequest.isLogin()) {
 					uni.redirectTo({
@@ -443,21 +500,22 @@
 					myRequest.toast('题目内容不能为空')
 					return;
 				}
-				if (!this.baseFormData.answer) {
-					if (this.baseFormData.answer != 0) {
+				if (!this.myIsNaN(this.baseFormData.answer)) {
+					if (this.baseFormData.answer[0] == undefined) {
 						myRequest.toast('题目答案不能为空')
 						return;
 					}
 				}
 				if (this.problem_type_select == 0 || this.problem_type_select == 1) {
-					this.dynamicLists.forEach((item) => {
-						if (!item.description) {
+					for (var i=0;i<this.dynamicLists.length;i++) {
+						if (this.dynamicLists[i].description == '' && this.dynamicLists[i].option_pic == '') {
 							myRequest.toast('题目选项不能为空')
 							return;
 						}
-					})
+					}
 				}
-				console.log(this.dynamicLists)
+				
+				await this.pic_upload()
 
 				var data = {
 					"analysis": this.baseFormData.analyse,
@@ -546,11 +604,11 @@
 					return;
 				}
 				if (!this.baseFormData.answer) {
-					if (this.baseFormData.answer != 0) {
-						myRequest.toast('题目答案不能为空')
-						return;
-					}
+					myRequest.toast('题目答案不能为空')
+					return;
 				}
+				
+				await this.pic_upload()
 				
 				var data = {
 					"analysis": this.baseFormData.analyse,
@@ -621,12 +679,12 @@
 					myRequest.toast('题目内容不能为空')
 					return;
 				}
-				if (!this.baseFormData.answer) {
-					if (this.baseFormData.answer != 0) {
-						myRequest.toast('题目答案不能为空')
-						return;
-					}
+				if (!this.myIsNaN(this.baseFormData.answer)) {
+					myRequest.toast('题目答案不能为空')
+					return;
 				}
+				
+				await this.pic_upload()
 				
 				var data = {
 					"analysis": this.baseFormData.analyse,

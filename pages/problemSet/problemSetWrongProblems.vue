@@ -138,7 +138,7 @@
 						id: ret[i].id,
 						type: ret[i].problem_type_id,
 						selected: 0,
-						title: ret[i].description,
+						title: ret[i].description.split("#")[0],
 						wrong_count: 0,
 					})
 					this.get_problem_wrong_count(this.problem_id_list.length-1)
