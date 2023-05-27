@@ -350,7 +350,8 @@
 			<u-row>
 				<u-col span="2"></u-col>
 				<u-col span="3">
-					<u-button type="primary" shape="circle" text="公开" ></u-button>
+					<u-button v-if="proDetail.is_public == true" type="primary" shape="circle" text="已公开" @click="unPublishPS()"></u-button>
+					<u-button v-if="proDetail.is_public == false" type="primary" shape="circle" text="公开" @click="publishPS()"></u-button>
 				</u-col>
 				<u-col span="2"></u-col>
 				<u-col span="3">
@@ -382,6 +383,7 @@
 					totalNum: 0,
 					descrip: '',
 					is_favorite: false,
+					is_public: false,
 					wrong_problem_count: 0,
 					fav_problem_count: 0,
 				},
@@ -420,6 +422,7 @@
 						this.proDetail.descrip = res.data.problem_set[0].description
 						this.proDetail.is_favorite = res.data.problem_set[0].is_favorite
 						this.proDetail.user_id = res.data.problem_set[0].user_id
+						this.proDetail.is_public = res.data.problem_set[0].is_public
 						console.log(this.proDetail)
 						uni.request({
 							url: myRequest.interfaceUrl() +
@@ -592,6 +595,56 @@
 				uni.navigateTo({
 					url: "/pages/problemSet/problemUpload?id=" + this.problem_set_id
 				})
+			},
+			
+			publishPS() {
+				this.proDetail.is_public = true
+				this.proDetailEdit.is_public = true
+				if (this.user_info.user_id != this.proDetail.user_id) {
+					myRequest.toast('您没有修改权限~', 1000)
+					setTimeout(() => {
+						uni.hideToast();
+					}, 1000)
+				} else {
+					this.change_public_state()
+				}
+			},
+			unPublishPS() {
+				this.proDetail.is_public = false
+				this.proDetailEdit.is_public = false
+				if (this.user_info.user_id != this.proDetail.user_id) {
+					myRequest.toast('您没有修改权限~', 1000)
+					setTimeout(() => {
+						uni.hideToast();
+					}, 1000)
+				} else {
+					this.change_public_state()
+				}
+			},
+			change_public_state() {
+				var data = {
+					id: parseInt(this.problem_set_id),
+					is_public: this.proDetailEdit.is_public
+				}
+				var _this = this
+				
+				myRequest.request(api.problem_set_update(), 'PUT', data).then(
+					function(res2) {
+						console.log(res2)
+						if (res2.statusCode == 200) {
+							myRequest.toast('修改成功', 1500, true)
+						} else if (res2.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else {
+							myRequest.toast()
+						}
+					}
+				).catch(
+					function(res) {
+						console.log(res)
+						myRequest.toast()
+					}
+				)
 			},
 			
 			openOperationTable() {
