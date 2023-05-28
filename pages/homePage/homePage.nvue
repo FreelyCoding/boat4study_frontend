@@ -222,7 +222,7 @@
 		</view>
 
 		<view class="u-demo-block">
-			<u-list customStyle="margin: auto; max-height: 490px; margin-top: 15px;">
+			<u-list customStyle="margin: auto; max-height: 510px; margin-top: 15px;">
 				<u-list-item v-for="(item, index) in groups" :key="index">
 					<uni-card @click="jumpToStudyGroup(item)" isShadow border padding="15px 0px 15px 0px"
 						margin="0px 15px 15px 15px" style="border-radius: 10px;">

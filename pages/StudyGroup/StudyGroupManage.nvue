@@ -40,14 +40,14 @@
 					<u-divider style="margin-bottom: 15px;"></u-divider>
 					<u-row @click="intendDialogToggle()">
 						<u-col :span="2">
-							<view v-if="group_intenders.length > 0">
-								<uni-badge :text="group_intenders.length" absolute="rightTop" style="z-index: 0;max-width: 60px;" :offset="[20, 3]"
-									size="small">
+							<view v-if="group_intenders && group_intenders.length > 0">
+								<uni-badge :text="group_intenders.length" absolute="rightTop"
+									style="z-index: 0;max-width: 60px;" :offset="[20, 3]" size="small">
 									<view class="box">
 										<u-icon name="/static/pic/intend.svg" size="40px"></u-icon>
 									</view>
 								</uni-badge>
-		
+
 							</view>
 							<view v-else>
 								<view class="box">
@@ -109,7 +109,8 @@
 										<uni-row>
 											<uni-col :span="6">
 												<p style="margin: auto;">
-													<u-avatar :src="myRequest.imageUrl() + '/public' + item.avatar_path"
+													<u-avatar
+														:src="myRequest.imageUrl() + '/public' + item.user_info.avatar_path"
 														size="70px"></u-avatar>
 												</p>
 											</uni-col>
@@ -118,20 +119,21 @@
 											</uni-col>
 											<uni-col :span="14" align="start">
 												<div class="shuhei" style="margin-bottom: 5px;margin-top: 12px;">
-													<p style="font-size: 16px;">{{item.nick_name}}</p>
+													<p style="font-size: 16px;">{{item.user_info.nick_name}}</p>
 												</div>
 												<div style="font-size: 14px; margin-top: 5px;">
-													申请时间 &ensp; {{item.created_at}}
+													申请时间 &ensp; {{item.application.created_at.slice(0,10)}}
 												</div>
 											</uni-col>
 										</uni-row>
 										<u-divider> </u-divider>
 									</view>
-									<text class="uni-body">{{item.message}}</text>
+									<text class="uni-body">{{item.application.message}}</text>
 
 									<uni-row style="margin: 15px 5px 0px 5px;">
 										<uni-col :span="8">
-											<button size="mini" type="warn" style="width: 80px; color: white; margin: auto;"
+											<button size="mini" type="warn"
+												style="width: 80px; color: white; margin: auto;"
 												@click="reject(item)">拒绝</button>
 										</uni-col>
 										<uni-col :span="8"></uni-col>
@@ -192,35 +194,51 @@
 				group_members: [],
 				group_intenders: [{
 						user_id: 1,
-						nick_name: "FlyingLaird",
-						avatar_path: "/10/e9935bfa-0b99-41f3-9428-f36b198f21f3/avatar.png",
 						message: "我很喜欢你们的小组，我很喜欢你们的小组，我很喜欢你们的小组，我很喜欢你们的小组，可以让我加入吗",
 						application_id: 3,
-						created_at: "2023-05-04",
+						application: {
+							created_at: "2023-05-04",
+						},
+						user_info: {
+							nick_name: "FlyingLaird",
+							avatar_path: "/user.png",
+						}
 					},
 					{
 						user_id: 1,
-						nick_name: "FlyingLaird",
-						avatar_path: "/10/e9935bfa-0b99-41f3-9428-f36b198f21f3/avatar.png",
 						message: "我很喜欢你们的小组，可以让我加入吗",
 						application_id: 3,
-						created_at: "2023-05-04",
+						application: {
+							created_at: "2023-05-04",
+						},
+						user_info: {
+							nick_name: "FlyingLaird",
+							avatar_path: "/user.png",
+						}
 					},
 					{
 						user_id: 1,
-						nick_name: "FlyingLaird",
-						avatar_path: "/10/e9935bfa-0b99-41f3-9428-f36b198f21f3/avatar.png",
 						message: "我很喜欢你们的小组，可以让我加入吗",
 						application_id: 3,
-						created_at: "2023-05-04",
+						application: {
+							created_at: "2023-05-04",
+						},
+						user_info: {
+							nick_name: "FlyingLaird",
+							avatar_path: "/user.png",
+						}
 					},
 					{
 						user_id: 1,
-						nick_name: "FlyingLaird",
-						avatar_path: "/10/e9935bfa-0b99-41f3-9428-f36b198f21f3/avatar.png",
 						message: "我很喜欢你们的小组，可以让我加入吗",
 						application_id: 3,
-						created_at: "2023-05-04",
+						application: {
+							created_at: "2023-05-04",
+						},
+						user_info: {
+							nick_name: "FlyingLaird",
+							avatar_path: "/user.png",
+						}
 					},
 				],
 			}
@@ -255,6 +273,7 @@
 			refresh(id) {
 				let uid = myRequest.getUID();
 				myRequest.checkLogin()
+				this.group_intenders = []
 				this.group.id = id
 				console.log('this.group_id: ' + this.group.id); //打印出上个页面传递的参数。
 
@@ -286,6 +305,30 @@
 						myRequest.toast()
 					}
 				})
+
+				uni.request({
+					url: myRequest.interfaceUrl() + '/group/application/' + this.group.id + "?status=0",
+					method: 'GET',
+					header: {
+						'X-Token': myRequest.getToken()
+					},
+
+					success: (res) => {
+						console.log(res)
+						if (res.statusCode == 200) {
+							this.group_intenders = res.data.applications
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else {
+							myRequest.toast()
+						}
+					},
+					fail: (res) => {
+						console.log(res)
+						myRequest.toast()
+					}
+				})
+
 
 				/*uni.request({
 					url: myRequest.interfaceUrl() + '/group/all_user/' + this.group.id,
@@ -415,8 +458,9 @@
 			},
 
 			approve(item) {
+				let that = this
 				let model = {
-					"application_id": item.application_id,
+					"application_id": item.application.id,
 					"status": 1,
 				}
 
@@ -453,11 +497,13 @@
 						myRequest.toast()
 					}
 				})
+				this.$refs.intendDialog.close()
 			},
 
 			reject(item) {
+				let that = this
 				let model = {
-					"application_id": item.application_id,
+					"application_id": item.application.id,
 					"status": 2,
 				}
 
@@ -494,6 +540,7 @@
 						myRequest.toast()
 					}
 				})
+				this.$refs.intendDialog.close()
 			},
 
 			deleteGroupDialogToggle() {
