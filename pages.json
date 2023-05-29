@@ -109,6 +109,15 @@
 				"navigationBarTextStyle": "white"
 			}
 		}
+        ,{
+            "path" : "pages/search/search",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	
 	"subPackages": [

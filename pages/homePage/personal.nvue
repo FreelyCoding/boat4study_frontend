@@ -68,7 +68,7 @@
 		<view>
 			<div style="background-color: #f7f7f7;">
 				<view>
-					<div style="background-color: white; min-width: 400px;">
+					<div style="background-color: white;">
 						<view class="u-demo-block__content" style="margin-top: 20px; margin-bottom: 10px;">
 							<uni-row class="demo-uni-row">
 								<uni-col :span="6">

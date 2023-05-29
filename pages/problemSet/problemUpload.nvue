@@ -14,17 +14,17 @@
 		<view class="u-demo-block">
 			<u-list customStyle="width: 94%; margin: auto; margin-top: 10px;">
 				<u-list-item v-for="(item, index) in list" :key="index">
-					<uni-card spacing="0" padding="0" margin="20px 0px 0px 0px" isShadow="true" border="true"
+					<uni-card spacing="0" padding="0" margin="20px 0px 0px 0px" 
 						@click="jumpTo(index)">
 						<view style="margin-bottom: 20px;">
 							<uni-row>
-								<uni-col span="8">				
+								<uni-col :span="8">				
 									<view>
 										<image :src="item.iconPath" style="width: 90px; height: 90px; margin-top: 20px; margin-left: 10px;"></image>
 									</view>
 								</uni-col>
 		
-								<uni-col span="18">
+								<uni-col :span="18">
 									<div class="shuhei" style="padding-top: 24px;" >
 										<p style="font-size: 24px;">{{item.title}}</p>
 									</div>
