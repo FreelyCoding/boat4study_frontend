@@ -38,8 +38,8 @@
 					<text class="tui-protocol-red">《用户协议》</text>
 				</view> -->
 				
-				<!-- <button class="tui-button-primary tui-btn-submit" hover-class="tui-button-hover"
-					@click="toWxLogin">微信登录</button> -->
+				<button class="tui-button-primary tui-btn-submit" hover-class="tui-button-hover"
+					@click="toWxLogin">微信登录</button>
 			</view>
 		</form>
 		

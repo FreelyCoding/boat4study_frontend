@@ -11,6 +11,8 @@
 		<uni-search-bar @confirm="search" :focus="true" v-model="searchValue" placeholder="请输入要搜索的讨论标题"
 			cancelButton="none" maxlength="50" style="margin-left: 5px; margin-right: 5px;">
 		</uni-search-bar>
+		
+		<u-loading-icon :show="isLoading"></u-loading-icon>
 
 		<view v-if="discussions && discussions.length != 0" style="margin-top: 10px;">
 			<view v-for="(item, index) in discussions" :key="index">
@@ -75,6 +77,8 @@
 
 				</uni-card>
 			</view>
+			
+			<u-loadmore :status="status" line lineColor="#000000"/>
 				
 			<view style="padding-bottom: 20px;">
 				<p style="text-align: center;">
@@ -88,7 +92,7 @@
 		</view>
 
 		
-		<view v-else style="text-align: center;">
+		<view v-else-if="!isLoading" style="text-align: center;">
 			<image src="../../static/pic/note/no_note.png"
 				style="margin: auto; margin-top: 30px; height: 200px; width: 200px;"></image>
 			<p style="font-size: 20px;margin-top: 30px;">暂无讨论</p>
@@ -121,7 +125,11 @@
 				searchValue: "",
 				flag: false,
 				discussions: [],
-				group_id: null
+				group_id: null,
+				limit: 5, 
+				offset: 0,
+				status: "loading",
+				isLoading: false
 			}
 		},
 		onShow: function() {
@@ -165,8 +173,8 @@
 				// #endif
 			},
 
-			loadData() {
-				for (var i = 0; i < this.discussions.length; i++) {
+			loadData(start) {
+				for (var i = start; i < this.discussions.length; i++) {
 					var html = this.discussions[i].discussion_html
 					var plainText = html.replace(/<[^>]+>/g, "");
 					var plainText = html.replace(/<[^>]+>/g, "").replace(/&nbsp;/g, " ").replace(/&lt;/g, "<").replace(
@@ -208,9 +216,11 @@
 			refresh() {
 				myRequest.checkLogin()
 				this.discussions = []
+				this.offset = 0
+				this.isLoading = true
 
 				uni.request({
-					url: myRequest.interfaceUrl() + `/discussion/all?group_id=${this.group_id}`,
+					url: myRequest.interfaceUrl() + `/discussion/all?group_id=${this.group_id}&limit=${this.limit}&offset=0`,
 					method: 'GET',
 					header: {
 						'X-Token': myRequest.getToken()
@@ -235,7 +245,7 @@
 									this.discussions.push(t);
 								}
 							}
-							this.loadData()
+							this.loadData(0)
 						} else if (res.statusCode == 401) {
 							myRequest.redirectToLogin()
 						} else {
@@ -246,9 +256,73 @@
 					fail: (res) => {
 						console.log(res)
 						myRequest.toast()
+					},
+					complete: () => {
+						this.isLoading = false
 					}
 				})
 			}
+		},
+		
+		onReachBottom() {
+			console.log('reach bottom')
+			
+			this.isLoading = true
+			
+			uni.request({
+				url: myRequest.interfaceUrl() + `/discussion/all?group_id=${this.group_id}&limit=${this.limit}&offset=${this.offset}`,
+				method: 'GET',
+				header: {
+					'X-Token': myRequest.getToken()
+				},
+			
+				success: (res) => {
+					console.log(res)
+					if (res.statusCode == 200) {
+						
+						if (res.data.discussions == null) {
+							this.status = 'nomore'
+							console.log('null')
+							return;
+						}
+						
+						this.status = 'loading'
+						var lastOffset = this.offset
+						this.offset += res.data.discussions.length
+						
+						for (var i = 0; i < res.data.discussions.length; i++) {
+							var t = {
+								discussion_content: "",
+								discussion_html: res.data.discussions[i].content,
+								discussion_title: res.data.discussions[i].title,
+								pic: "",
+								create_time: res.data.discussions[i].created_at.slice(0, 10),
+								id: res.data.discussions[i].id,
+								like_count: res.data.discussions[i].like_count,
+								star_count: res.data.discussions[i].favorite_count
+							}
+							this.discussions.push(t);
+						}
+						console.log(this.discussions)
+					
+						this.loadData(lastOffset)
+						
+					} else if (res.statusCode == 401) {
+						myRequest.redirectToLogin()
+					} else {
+						myRequest.toast()
+					}
+				},
+			
+				fail: (res) => {
+					console.log(res)
+					myRequest.toast()
+				},
+				
+				complete: () => {
+					this.isLoading = false
+				}
+			})
 		}
 	}
 </script>
