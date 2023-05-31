@@ -230,7 +230,17 @@
 						console.log(res)
 						if (res.statusCode == 200) {
 							this.discussions = []
+							
+							if (res.data.discussions == null) {
+								this.status = 'nomore'
+								return;
+							}
+							
+							this.status = 'loading'
+							this.offset += res.data.discussions.length
+							
 							if (res.data.discussions && res.data.discussions.length > 0) {
+								
 								for (var i = 0; i < res.data.discussions.length; i++) {
 									var t = {
 										discussion_content: "",
