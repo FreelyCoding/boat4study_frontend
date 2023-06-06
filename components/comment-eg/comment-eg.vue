@@ -96,7 +96,7 @@
 							for (var i = 0; i < data.note_reviews.length; i ++) {
 								var review = data.note_reviews[i]
 								
-								var promise = await myRequest.request(`/user/info/${review.user_id}`, 'GET')
+								var promise = await myRequest.request(`/user/info/${review.user_id}`, 'GET', null, null, false, true)
 								
 								console.log('i')
 								console.log(i)

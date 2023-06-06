@@ -23,8 +23,8 @@
 					<tui-icon name="pwd" :size="20" color="#6d7a87"></tui-icon>
 					<input placeholder-class="tui-phcolor" class="tui-input" name="code" placeholder="请输入验证码"
 						maxlength="6" v-model="code" />
-					<tui-button width="182rpx" height="56rpx" :size="24" type="primary" shape="circle" :plain="true"
-						@click="btnSend">获取验证码</tui-button>
+					<tui-button width="182rpx" height="56rpx" :size="24" type="primary" shape="circle" :plain="true" :disabled="disabled"
+						@click="btnSend">{{ btnText }}</tui-button>
 				</view>
 				
 				<view class="tui-line-cell tui-top28">

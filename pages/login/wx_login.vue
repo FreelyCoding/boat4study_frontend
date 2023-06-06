@@ -5,41 +5,13 @@
 			<image src="@/static/pic/login/mine_def_touxiang_3x.png" class="tui-photo"></image>
 			<view class="tui-login-name">学舟</view>
 		</view>
-		<form :report-submit="true" @submit="formLogin">
-			<view class="tui-login-from">
-				<view class="tui-line-cell">
-					<tui-icon name="people" :size="20" color="#6d7a87"></tui-icon>
-					<input placeholder-class="tui-phcolor" class="tui-input" name="username" placeholder="请输入用户名"
-						maxlength="20" v-model="username"/>
-				</view>
-				<view class="tui-line-cell tui-top28">
-					<tui-icon name="pwd" :size="20" color="#6d7a87"></tui-icon>
-					<input placeholder-class="tui-phcolor" class="tui-input" name="password" placeholder="请输入密码" password="true"
-						maxlength="30" v-model="password"/>
-				</view>
-				
-				<u-row>
-					<u-col :span="6">
-						<u--text color="#5c8dff" text="忘记密码？" align="left"
-							size="18" margin="10rpx" @click="toPassword"></u--text>
-					</u-col>
-					
-					<u-col :span="6">
-						<u--text color="#5c8dff" text="注册" align="right"
-							size="18" margin="10rpx" @click="toRegister"></u--text>
-					</u-col>
-				</u-row>
-				
-				
-				<button class="tui-button-primary tui-btn-submit" hover-class="tui-button-hover"
-					@click="submit">登录</button>
-				<!-- <view class="tui-protocol" hover-class="opcity" :hover-stay-time="150">
-					点击"登录"即表示已同意
-					<text class="tui-protocol-red">《用户协议》</text>
-				</view> -->
-			</view>
-		</form>
-		
+		<view>
+			<!--微信小程序登录弹出授权登录框-->
+			
+			<button class="tui-button-primary tui-btn-submit" hover-class="tui-button-hover"
+				@click="submit">登录</button>
+			
+		</view>
 	</view>
 </template>
 
@@ -83,13 +55,18 @@
 							method:'POST',
 							data: data,
 							success: res => {
+								var t = res.data
 								console.log(res)
 							},
 							fail: () => {
+								myRequest.toast()
 								console.log('fail')
 							}
 						})
-						
+					},
+					
+					fail: (res) => {
+						myRequest.toast()
 					}
 				})
 			},

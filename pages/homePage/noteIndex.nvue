@@ -80,7 +80,7 @@
 				</uni-card>
 			</view>
 
-			<u-loadmore :status="status" line lineColor="#000000"/>					
+			<u-loadmore :status="status" line lineColor="#000000"/>				
 
 		</view>
 
