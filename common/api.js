@@ -378,6 +378,22 @@ export default {
 		return api
 	},
 	
+	//search
+	search_problem_set() {
+		let api = "/search/problem_set"
+		return api
+	},
+	
+	search_group() {
+		let api = "/search/group"
+		return api
+	},
+	
+	search_note() {
+		let api = "/search/note"
+		return api
+	},
+		
 	
 	//problemSet
 	problem_set_contains(id) {

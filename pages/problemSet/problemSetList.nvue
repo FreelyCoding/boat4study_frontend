@@ -50,20 +50,20 @@
 						<view>
 							<uni-row>
 								<uni-col :span="2" align="start">
-									<view v-if="item.user_id == 0">
-										<div class="official_PS_tag">
+									<view v-if="item.user_id == 0" style="max-width: 30px;">
+										<p class="official_PS_tag">
 											官方题库
-										</div>
+										</p>
 									</view>
-									<view v-else-if="item.group_id == 0">
+									<view v-else-if="item.group_id == 0" style="max-width: 30px;">
 										<div class="personal_PS_tag">
 											个人题库
-										</div>		
+										</div>
 									</view>
-									<view v-else-if="item.group_id != 0">
+									<view v-else-if="item.group_id != 0" style="max-width: 30px;">
 										<div class="group_PS_tag">
 											小组题库
-										</div>		
+										</div>
 									</view>
 								</uni-col>
 								<uni-col :span="2" align="start">
@@ -185,7 +185,6 @@
 		},
 		onLoad() {
 			myRequest.checkLogin()
-			
 			this.load_one_page()
 		},
 		methods: {
