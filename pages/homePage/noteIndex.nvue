@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<view class="status-bar">
+		<view class="status-bar" style="background-color: #EDEDED;">
 			<uni-nav-bar title="所有笔记" background-color="#00aaff" color="#FFFFFF" status-bar="true">
 				<block slot="left">
 					<view class="note-navbar">
@@ -8,11 +8,13 @@
 					</view>
 				</block>
 			</uni-nav-bar>
+			
+			<uni-search-bar @confirm="search" :focus="true" v-model="searchValue" placeholder="请输入要搜索的笔记标题"
+				cancelButton="none" maxlength="50" style="margin-left: 5px; margin-right: 5px;">
+			</uni-search-bar>
 		</view>
 
-		<uni-search-bar @confirm="search" :focus="true" v-model="searchValue" placeholder="请输入要搜索的笔记标题"
-			cancelButton="none" maxlength="50" style="margin-left: 5px; margin-right: 5px;">
-		</uni-search-bar>
+
 
 		<u-loading-icon :show="isLoading"></u-loading-icon>
 
@@ -80,7 +82,7 @@
 				</uni-card>
 			</view>
 
-			<u-loadmore :status="status" line lineColor="#000000"/>				
+			<u-loadmore :status="status" line lineColor="#000000" />
 
 		</view>
 
@@ -100,7 +102,8 @@
 			</p>
 		</view>
 
-		<view v-else-if="!isLoading" style="padding: 10px 0 10px 0; position: sticky; bottom: 0px; background-color: #EDEDED;">
+		<view v-else-if="!isLoading"
+			style="padding: 10px 0 10px 0; position: sticky; bottom: 0px; background-color: #EDEDED;">
 			<p style="margin: auto;width: 92%">
 				<button style="background-color: #00aaff; color: white; 
 						 margin-bottom: 10px;" @click="jumpToCreateNote">
@@ -108,7 +111,7 @@
 				</button>
 			</p>
 		</view>
-		
+
 
 	</view>
 </template>
@@ -120,6 +123,7 @@
 	import myRequest from '../../common/request';
 	import uLoadmore from '@/uni_modules/uview-ui/components/u-loadmore/u-loadmore.vue';
 	import uLoadingIcon from '@/uni_modules/uview-ui/components/u-loading-icon/u-loading-icon.vue';
+	import api from '@/common/api.js';
 
 	export default {
 		components: {
@@ -136,7 +140,8 @@
 				status: 'loading',
 				limit: 5,
 				offset: 0,
-				isLoading: false
+				isLoading: false,
+				searched: false,
 			}
 		},
 		onShow: function() {
@@ -144,11 +149,81 @@
 		},
 
 		methods: {
-			search(res) {
-				uni.showToast({
-					title: '搜索：' + res.value,
-					icon: 'none'
-				})
+			search(it) {
+				if (it.value != "") {
+					this.isLoading = true
+					this.searched = true
+					this.notes = []
+					this.offset = 0
+					this.status = 'loading'
+
+					var data = {
+						keyword: it.value,
+						limit: this.limit,
+						offset: this.offset
+					}
+
+					uni.request({
+						url: myRequest.interfaceUrl() + `/search/note`,
+						data: data,
+						method: 'POST',
+						header: {
+							'X-Token': myRequest.getToken()
+						},
+
+						success: (res) => {
+							console.log(res)
+							if (res.statusCode == 200) {
+								this.notes = []
+								if (res.data.notes == null) { //如果没有加载满，则意味着已经全部获取完了
+									this.status = 'nomore'
+									myRequest.toast('搜索结果为空', 1500)
+									setTimeout(() => {
+										uni.hideToast();
+									}, 1000)
+									return;
+								}
+								this.status = 'loading'
+								this.offset += res.data.notes.length
+								if (res.data.notes && res.data.notes.length > 0) {
+									for (var i = 0; i < res.data.notes.length; i++) {
+										var t = {
+											note_content: "",
+											note_html: res.data.notes[i].content,
+											note_title: res.data.notes[i].title,
+											pic: "",
+											create_time: res.data.notes[i].created_at.slice(0, 10),
+											id: res.data.notes[i].id,
+											like_count: res.data.notes[i].like_count,
+											star_count: res.data.notes[i].favorite_count
+										}
+										this.notes.push(t);
+									}
+								}
+								this.loadData(0)
+								if (res.data.notes.length < this.limit) { //如果没有加载满，则意味着已经全部获取完了
+									this.status = 'nomore'
+								}
+							} else if (res.statusCode == 401) {
+								myRequest.redirectToLogin()
+							} else {
+								myRequest.toast()
+							}
+						},
+
+						fail: (res) => {
+							console.log(res)
+							myRequest.toast()
+						},
+
+						complete: () => {
+							this.isLoading = false
+						}
+					})
+				} else {
+					this.refresh()
+				}
+				console.log("searchValue == " + it.value)
 			},
 			extractImage(htmlStr) {
 				// 从html中提取出第一个图片
@@ -209,8 +284,10 @@
 				})
 			},
 			refresh() {
+				this.searched = false
+				this.searchValue = ""
 				this.isLoading = true
-				
+
 				console.log(this.platfrom)
 				myRequest.checkLogin()
 				this.notes = []
@@ -232,10 +309,10 @@
 								this.status = 'nomore'
 								return;
 							}
-							
+
 							this.status = 'loading'
 							this.offset += res.data.notes.length
-							
+
 							if (res.data.notes && res.data.notes.length > 0) {
 								for (var i = 0; i < res.data.notes.length; i++) {
 									var t = {
@@ -263,73 +340,132 @@
 						console.log(res)
 						myRequest.toast()
 					},
-					
+
 					complete: () => {
 						this.isLoading = false
 					}
 				})
 			}
 		},
-		
+
 		onReachBottom() {
-			console.log('reach bottom')
-			
-			this.isLoading = true
-			
-			uni.request({
-				url: myRequest.interfaceUrl() + `/note/all?limit=${this.limit}&offset=${this.offset}`,
-				method: 'GET',
-				header: {
-					'X-Token': myRequest.getToken()
-				},
-			
-				success: (res) => {
-					console.log(res)
-					if (res.statusCode == 200) {
-						
-						if (res.data.notes == null) {
-							this.status = 'nomore'
-							console.log('null')
-							return;
-						}
-						
-						this.status = 'loading'
-						var lastOffset = this.offset
-						this.offset += res.data.notes.length
-						
-						for (var i = 0; i < res.data.notes.length; i++) {
-							var t = {
-								note_content: "",
-								note_html: res.data.notes[i].content,
-								note_title: res.data.notes[i].title,
-								pic: "",
-								create_time: res.data.notes[i].created_at.slice(0, 10),
-								id: res.data.notes[i].id,
-								like_count: res.data.notes[i].like_count,
-								star_count: res.data.notes[i].favorite_count
+			if (!this.searched) { //如果是默认全部展示
+				console.log('reach bottom')
+				this.isLoading = true
+				uni.request({
+					url: myRequest.interfaceUrl() + `/note/all?limit=${this.limit}&offset=${this.offset}`,
+					method: 'GET',
+					header: {
+						'X-Token': myRequest.getToken()
+					},
+					success: (res) => {
+						console.log(res)
+						if (res.statusCode == 200) {
+							if (res.data.notes == null) {
+								this.status = 'nomore'
+								console.log('null')
+								return;
 							}
-							this.notes.push(t);
+							this.status = 'loading'
+							var lastOffset = this.offset
+							this.offset += res.data.notes.length
+							for (var i = 0; i < res.data.notes.length; i++) {
+								var t = {
+									note_content: "",
+									note_html: res.data.notes[i].content,
+									note_title: res.data.notes[i].title,
+									pic: "",
+									create_time: res.data.notes[i].created_at.slice(0, 10),
+									id: res.data.notes[i].id,
+									like_count: res.data.notes[i].like_count,
+									star_count: res.data.notes[i].favorite_count
+								}
+								this.notes.push(t);
+							}
+							console.log(this.notes)
+
+							this.loadData(lastOffset)
+
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else {
+							myRequest.toast()
 						}
-						console.log(this.notes)
-					
-						this.loadData(lastOffset)
-						
-					} else if (res.statusCode == 401) {
-						myRequest.redirectToLogin()
-					} else {
+					},
+					fail: (res) => {
+						console.log(res)
 						myRequest.toast()
+					},
+					complete: () => {
+						this.isLoading = false
 					}
-				},
-			
-				fail: (res) => {
-					console.log(res)
-					myRequest.toast()
-				},
-				
-				complete: () => {
-					this.isLoading = false
+				})
+			} else { //如果是搜索结果的展示
+				this.isLoading = true
+				var data = {
+					keyword: this.searchValue,
+					limit: this.limit,
+					offset: this.offset
 				}
-			})
+				
+				
+				uni.request({
+					url: myRequest.interfaceUrl() + `/search/note`,
+					method: 'POST',
+					data: data,
+					header: {
+						'X-Token': myRequest.getToken()
+					},
+				
+					success: (res) => {
+						console.log(res)
+						if (res.statusCode == 200) {
+							if (res.data.notes == null) {
+								this.status = 'nomore'
+								console.log('null')
+								return;
+							}
+				
+							this.status = 'loading'
+							var lastOffset = this.offset
+							this.offset += res.data.notes.length
+				
+							for (var i = 0; i < res.data.notes.length; i++) {
+								var t = {
+									note_content: "",
+									note_html: res.data.notes[i].content,
+									note_title: res.data.notes[i].title,
+									pic: "",
+									create_time: res.data.notes[i].created_at.slice(0, 10),
+									id: res.data.notes[i].id,
+									like_count: res.data.notes[i].like_count,
+									star_count: res.data.notes[i].favorite_count
+								}
+								this.notes.push(t);
+							}
+							console.log(this.notes)
+							if (res.data.notes.length < this.limit) { //如果没有加载满，则意味着已经全部获取完了
+								this.status = 'nomore'
+							}
+							this.loadData(lastOffset)
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else {
+							myRequest.toast()
+						}
+					},
+				
+					fail: (res) => {
+						console.log(res)
+						myRequest.toast()
+					},
+				
+					complete: () => {
+						this.isLoading = false
+					}
+				})
+			}
+
 		}
 
 	}

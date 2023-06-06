@@ -41,13 +41,7 @@
 			</view>
 		</u-popup>
 
-
-		<uni-search-bar @confirm="search" :focus="true" v-model="searchValue" placeholder="请输入要搜索的学习小组名称"
-			cancelButton="none" maxlength="50" style="margin-left: 5px; margin-right: 5px;">
-		</uni-search-bar>
-
-
-		<view v-if="groups && groups.length != 0" style="margin-top: 5px;">
+		<view v-if="groups && groups.length != 0" style="margin-top: 10px;">
 			<view v-for="(item, index) in groups" :key="index">
 				<uni-card @click="cardClick(item)" isShadow border padding="15px 0px 15px 0px"
 					margin="0px 15px 15px 15px" style="border-radius: 10px;">
