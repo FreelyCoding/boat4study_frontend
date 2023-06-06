@@ -7,10 +7,6 @@
 				</view>
 			</block>
 		</uni-nav-bar>
-
-		<uni-search-bar @confirm="search" :focus="true" v-model="searchValue" placeholder="请输入要搜索的讨论标题"
-			cancelButton="none" maxlength="50" style="margin-left: 5px; margin-right: 5px;">
-		</uni-search-bar>
 		
 		<u-loading-icon :show="isLoading"></u-loading-icon>
 

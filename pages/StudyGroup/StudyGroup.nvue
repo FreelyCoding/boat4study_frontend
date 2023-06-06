@@ -35,14 +35,14 @@
 							</p>
 
 							<view style="margin: auto; margin-top: 30px;">
-								<p v-if="isAdministrator">
+								<p v-if="show && isAdministrator">
 									<button size="mini" style="background-color: #f9ae3d; color: white; width: 100px; "
 										@click="jumpToManage()">
 										管理小组
 									</button>
 								</p>
 
-								<p v-else-if="!isMember">
+								<p v-else-if="show && !isMember">
 									<button size="mini" style="background-color: #5ac725; color: white; width: 100px;"
 										@click="addGroupDialogToggle">
 										申请加入
@@ -256,23 +256,8 @@
 					</uni-card>
 				</view>
 			</div>
-			
-
-			<view v-if="isAdministrator">
-				<div style="background-color: #f7f7f7;">
-					<uni-card :isShadow="true" :border="true" padding="10px 0px 0px 0px" margin="0px 15px 10px 15px">
-						<view>
-							<p style="text-align: center; margin-bottom: 10px;">
-								<button style="color: white;" type="warn" @click="deleteGroupDialogToggle">
-									删除小组
-								</button>
-							</p>
-						</view>
-					</uni-card>
-				</div>
-			</view>
-
-			<view v-else-if="isMember">
+		
+			<view v-if="!isAdministrator && isMember">
 				<div style="background-color: #f7f7f7;">
 					<uni-card :isShadow="true" :border="true" padding="10px 0px 0px 0px" margin="0px 15px 10px 15px">
 						<view>
@@ -308,7 +293,7 @@
 
 			<view>
 				<uni-popup ref="quitGroupDialog" type="dialog" :isMaskClick="false">
-					<uni-popup-dialog cancelText="取消" confirmText="确定" title="您确定要删除小组吗"
+					<uni-popup-dialog cancelText="取消" confirmText="确定" title="您确定要退出小组吗"
 						@confirm="quitGroupDialogConfirm()" @close="quitGroupDialogClose()"></uni-popup-dialog>
 				</uni-popup>
 			</view>
@@ -332,6 +317,7 @@
 			return {
 				isAdministrator: false,
 				isMember: false,
+				show: false,
 				invitation: "abcd",
 				addGroupMessage: "",
 				group: {
@@ -344,31 +330,7 @@
 					editIntroduction: "",
 				},
 				group_members: [],
-				problemSet: [{
-						id: "1",
-						name: "数据结构",
-						problem_number: "113",
-						created_at: "2023-04-07"
-					},
-					{
-						id: "1",
-						name: "数据结构",
-						problem_number: "13",
-						created_at: "2023-04-07"
-					},
-					{
-						id: "1",
-						name: "数据结构",
-						problem_number: "13",
-						created_at: "2023-04-07"
-					},
-					{
-						id: "1",
-						name: "数据结构",
-						problem_number: "13",
-						created_at: "2023-04-07"
-					}
-				],
+				problemSet: [],
 				discussions: []
 			}
 		},
@@ -435,6 +397,7 @@
 							} else {
 								this.isAdministrator = false;
 							}
+							this.show = true
 							if (this.isAdministrator) {
 								uni.request({
 									url: myRequest.interfaceUrl() + '/group/invitation/' + this.group
