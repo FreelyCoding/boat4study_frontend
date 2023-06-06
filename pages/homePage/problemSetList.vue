@@ -9,18 +9,6 @@
 					</view>
 				</block>
 			</uni-nav-bar>
-			
-			<view class="m-middle-2" style="padding-top: 5px; padding-bottom: 5px; display: flex;">
-				<u--input placeholder="请输入想要搜索的题库名称" prefixIcon="search"
-					prefixIconStyle="font-size: 20px;color: #909399" shape="circle" v-model="searchValue"
-					customStyle="background-color: white;">
-				</u--input>
-				<button class="mini-btn search-btn" size="mini">
-					<view style="height: 100%;display:flex;align-items:center;justify-content:center;">
-					搜索
-					</view>
-				</button>
-			</view>
 		</view>
 		
 		<view style="margin: 0; padding: 0; height: 100%;">

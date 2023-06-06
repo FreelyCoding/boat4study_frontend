@@ -4,10 +4,10 @@
 		<view class="u-page__item" style="margin-bottom: 20px;">
 			<div class="background-blue">
 				<view class="u-input m-middle-2" style="margin-top: 20px">
-					<u--input placeholder="请输入想要搜索的题库或小组名称" prefixIcon="search"
+					<u-input placeholder="搜索题库、笔记或小组" prefixIcon="search"
 						prefixIconStyle="font-size: 20px;color: #909399" shape="circle" v-model="searchValue"
-						customStyle="background-color: white;">
-					</u--input>
+						customStyle="background-color: white;" @confirm="search">
+					</u-input>
 				</view>
 
 				<view class="u-demo-block__content" style="margin-top: 10px; margin-bottom: 10px;">
@@ -405,7 +405,7 @@
 			},
 			jumpToAllNote() {
 				uni.switchTab({
-					url: '/pages/note/index'
+					url: '/pages/homePage/noteIndex'
 				})
 			},
 			jumpToAllProblemSet() {
@@ -422,8 +422,11 @@
 			click1(e) {
 				console.log('click1', e);
 			},
-			search(e) {
-				console.log('searchChange', e);
+			search() {
+				console.log('searchChange', this.searchValue);
+				uni.navigateTo({
+					url: '/pages/search/search?searchValue=' + this.searchValue,
+				})
 			},
 
 			cardClick(item) {
@@ -487,6 +490,7 @@
 				let that = this
 				this.groups = []
 				this.problemSet = []
+				this.searchValue = ""
 				myRequest.checkLogin()
 
 				uni.request({
