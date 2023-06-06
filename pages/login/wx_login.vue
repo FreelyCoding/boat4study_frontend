@@ -64,6 +64,8 @@
 		},
 		methods: {
 			login() {
+				console.log('waiting login')
+				
 				uni.login({
 					provider: 'weixin',
 					univerifyStyle: true,

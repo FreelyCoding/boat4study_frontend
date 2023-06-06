@@ -367,7 +367,7 @@
 					}
 					else if (e.index == this.star_index && !t) {
 						url = `/discussion/unfavorite/${this.discussion_id}`	
-						method = 'DELETE'
+						method = 'POST'
 					}
 					else {
 						url = `/discussion/favorite/${this.discussion_id}`
