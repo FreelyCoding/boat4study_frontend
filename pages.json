@@ -108,35 +108,28 @@
 				"enablePullDownRefresh": false,
 				"navigationBarTextStyle": "white"
 			}
+		}, {
+			"path": "pages/search/search",
+			"style": {
+				"navigationStyle": "custom"
+			}
+
 		}
-        ,{
-            "path" : "pages/search/search",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-    ],
-	
-	"subPackages": [
-		{
+	],
+
+	"subPackages": [{
 			"root": "pages/tools",
-			"pages": [
-				{
-					"path" : "camera",
-					"style" :                                                                                    
-					{
-							"navigationBarTitleText": "",
-							"navigationStyle": "custom",
-							"enablePullDownRefresh": false
-					}
-					
+			"pages": [{
+				"path": "camera",
+				"style": {
+					"navigationBarTitleText": "",
+					"navigationStyle": "custom",
+					"enablePullDownRefresh": false
 				}
-			]
+
+			}]
 		},
-		
+
 		{
 			"root": "pages/register",
 			"pages": [{
@@ -473,7 +466,7 @@
 						"navigationStyle": "custom"
 					}
 				},
-				
+
 				{
 					"path": "StudyGroupManage",
 					"style": {
