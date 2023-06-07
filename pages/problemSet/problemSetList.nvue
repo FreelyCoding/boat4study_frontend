@@ -43,10 +43,9 @@
 
 		<view v-if="this.problemSet.length != 0">
 			<view class="u-demo-block">
-				<u-list customStyle="margin: auto; margin-top: 10px;">
-					<u-list-item v-for="(item, index) in problemSet" :key="index">
 					<uni-card isShadow border padding="10px 0px 10px 0px" margin="0px 10px 15px 10px"
-						style="border-radius: 10px;" @click="jumpToPS(item)">
+						style="border-radius: 10px;" @click="jumpToPS(item)"
+						v-for="(item, index) in problemSet">
 						<view>
 							<uni-row>
 								<uni-col :span="2" align="start">
@@ -91,15 +90,12 @@
 						</view>
 					</uni-card>
 
-					</u-list-item>
-				</u-list>
 			</view>
 		</view>
 
 		<view v-else style="text-align: center;" :style="{height:scrollH+'px'}">
 			<image src="../../static/pic/note/no_note.png"
 				style="margin: auto; margin-top: 30px; height: 200px; width: 200px;"></image>
-			<p style="font-size: 20px;margin-top: 30px;">暂无题库</p>
 		</view>
 
 

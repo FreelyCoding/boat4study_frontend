@@ -19,7 +19,7 @@
 					</view>
 				</uni-col>
 				<uni-col :span="22">
-					<u-tabs :list="group_type_list" @click="click"></u-tabs>
+					<u-tabs :list="group_type_list" @click="click_area_tab" :current="select_area"></u-tabs>
 				</uni-col>
 			</uni-row>
 		</view>
@@ -34,7 +34,7 @@
 				</view>
 				<u-grid :border="false" col="3">
 					<u-grid-item v-for="(listItem,listIndex) in group_type_list" :key="listIndex">
-						<view class="grid-item">{{listItem.name}}</view>
+						<view class="grid-item" @click="switch_area(listIndex)">{{listItem.name}}</view>
 					</u-grid-item>
 				</u-grid>
 
@@ -73,7 +73,7 @@
 			</view>
 		</view>
 
-		<view v-else style="text-align: center;">
+		<view v-else style="text-align: center;" :style="{height:scrollH+'px'}">
 			<image src="../../static/pic/note/no_note.png"
 				style="margin: auto; margin-top: 30px; height: 200px; width: 200px;"></image>
 			<p style="font-size: 20px;margin-top: 30px;">暂无学习小组 </p>
@@ -97,6 +97,7 @@
 	import tuiListCell from '@/components/tui-list-cell/tui-list-cell.vue';
 	import tuiNoData from '@/components/tui-no-data/tui-no-data.vue';
 	import myRequest from '../../common/request';
+	import api from '@/common/api.js';
 
 	export default {
 		components: {
@@ -107,6 +108,9 @@
 				searchValue: "",
 				flag: false,
 				groups: [],
+				select_area: 0,
+				page_size: 10,
+				loaded_num:0,
 				group_type_list_show: false,
 				group_type_list: [{
 					name: '综合',
@@ -153,8 +157,15 @@
 				}, ],
 			}
 		},
+		computed:{
+			scrollH:function(){
+				let sys = uni.getSystemInfoSync();
+				let winHeight =parseInt(sys.windowHeight)-50
+				return winHeight	
+			}
+		},
 		onShow: function() {
-			this.refresh()
+			this.load_one_page()
 		},
 		methods: {
 			search(res) {
@@ -184,49 +195,69 @@
 					url: '/pages/StudyGroup/StudyGroupCreate'
 				})
 			},
+			
+			switch_area(index) {
+				this.select_area = index;
+				this.group_type_list_show = false;
+				this.groups = []
+				this.load_one_page()
+			},
+			click_area_tab(item) {
+				this.select_area = item.index;
+				this.groups = []
+				this.load_one_page()
+			},
 
 
 			back() {
 				uni.navigateBack()
 			},
-			refresh() {
-				myRequest.checkLogin()
-				this.groups = []
-
-				uni.request({
-					url: myRequest.interfaceUrl() + '/group/all',
-					method: 'GET',
-					header: {
-						'X-Token': myRequest.getToken()
-					},
-
-					success: (res) => {
+			
+			load_one_page() {
+				var _this = this
+				
+				if (this.select_area == 0) {
+					var the_api = api.group_all({
+					limit:this.page_size,offset:this.loaded_num})
+				} else if (this.select_area + 1 == this.group_type_list.length) {
+					var the_api = api.group_all({area_id: 100,
+					limit:this.page_size,offset:this.loaded_num})
+				} else {
+					var the_api = api.group_all({area_id: this.select_area,
+					limit:this.page_size,offset:this.loaded_num})
+				}
+				
+				myRequest.request(the_api, 'GET', {}).then(
+					function(res) {
 						console.log(res)
 						if (res.statusCode == 200) {
-							for (var i = 0; i < res.data.group.length; i++) {
-								var t = {
-									description: res.data.group[i].description,
-									name: res.data.group[i].name,
-									avatar_path: res.data.group[i].avatar_url,
-									id: res.data.group[i].id,
-									member_count: res.data.group[i].member_count,
-									created_at: res.data.group[i].created_at.slice(0, 10),
+							if (res.data.group != null && res.data.group.length > 0) {
+								for (var i = 0; i < res.data.group.length; i++) {
+									var t = {
+										description: res.data.group[i].description,
+										name: res.data.group[i].name,
+										avatar_path: res.data.group[i].avatar_url,
+										id: res.data.group[i].id,
+										member_count: res.data.group[i].member_count,
+										created_at: res.data.group[i].created_at.slice(0, 10),
+									}
+									_this.groups.push(t);
 								}
-								this.groups.push(t);
 							}
 						} else if (res.statusCode == 401) {
 							myRequest.redirectToLogin()
 						} else {
 							myRequest.toast()
 						}
-					},
-
-					fail: (res) => {
+					}
+				).catch(
+					function(res) {
 						console.log(res)
 						myRequest.toast()
-					}
 				})
-			}
+				
+			},
+			
 		},
 
 	}

@@ -300,6 +300,39 @@ export default {
 		let api = "/problem_set/remove/" + id;
 		return api;
 	},
+	
+	group_all(params) {
+		let api = "/group/all";
+		if (params.area_id != null) {
+			api += "?area_id=" + params.area_id;
+			if (params.user_id != null) {
+				api += "&user_id=" + params.user_id;
+			}
+			if (params.id != null) {
+				api += "&id=" + params.id;
+			}
+			if (params.owner_id != null) {
+				api += "&owner_id=" + params.owner_id;
+			}
+		} else if (params.user_id != null) {
+			api += "?user_id=" + params.user_id;
+			if (params.id != null) {
+				api += "&id=" + params.id;
+			}
+			if (params.owner_id != null) {
+				api += "&owner_id=" + params.owner_id;
+			}
+		} else if (params.area_id != null) {
+			api += "?area_id=" + params.area_id;
+			if (params.owner_id != null) {
+				api += "&owner_id=" + params.owner_id;
+			}
+		} else if (params.group_id != null) {
+			api += "?group_id=" + params.group_id;
+		}
+		console.log(api)
+		return api;
+	},
 
 	study_group_create() {
 		let api = "/group/create";

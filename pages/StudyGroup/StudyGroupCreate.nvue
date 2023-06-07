@@ -116,10 +116,19 @@
 				console.log(uni.getStorageSync('token'))
 
 				// TODO: 后续更改is_public字段
-				var data = JSON.stringify({
-					"description": this.group.description,
-					"name": this.group.name,
-				})
+				if (this.studyGroup_type + 1 == this.studyGroup_type_list) {
+					var data = JSON.stringify({
+						"description": this.group.introduction,
+						"name": this.group.name,
+						"area_id": 100
+					})
+				} else {
+					var data = JSON.stringify({
+						"description": this.group.introduction,
+						"name": this.group.name,
+						"area_id": this.studyGroup_type + 1
+					})
+				}
 
 				myRequest.request(api.study_group_create(), 'POST', data).then(
 					function(res) {
