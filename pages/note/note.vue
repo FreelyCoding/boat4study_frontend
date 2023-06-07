@@ -171,7 +171,7 @@
 										</div>
 									</uni-col>
 								</uni-row>
-								<u-divider v-if="(index != Math.min(3,problemSet.length - 1))"> </u-divider>
+								<u-divider> </u-divider>
 							</view>
 						</uni-card>
 						
