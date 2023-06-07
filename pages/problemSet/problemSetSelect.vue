@@ -94,6 +94,7 @@
 			return {
 				searchValue: "",
 				problemSet: [],
+				select_proSet_id: '',
 			}
 		},
 		computed:{
@@ -104,6 +105,17 @@
 			},
 			barHeight() {
 				return `calc(${h}px + 44px)`
+			},
+			photo_path() {
+				return this.$store.state.photo_path 
+			}
+		},
+		onShow:function(){
+			console.log(this.photo_path)
+			if (this.photo_path != '') {
+				uni.navigateTo({
+					url: "/pages/problem/problemCreateFromPhotoOCR?id="+this.select_proSet_id
+				})
 			}
 		},
 		methods: {
@@ -112,8 +124,9 @@
 			},
 
 			jumpToPS(item) {
+				this.select_proSet_id = item.id;
 				uni.navigateTo({
-					url: "/pages/problemSet/problemSetDetail?id=" + item.id
+					url: "/pages/tools/camera"
 				})
 			},
 			jumpToCreatePS() {
