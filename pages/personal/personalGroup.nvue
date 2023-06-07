@@ -1,12 +1,15 @@
 <template>
 	<view class="box">
-		<uni-nav-bar title="我的小组" background-color="#00aaff" color="#FFFFFF" status-bar="true">
-			<block slot="left">
-				<view class="note-navbar">
-					<uni-icons type="left" color="#FFFFFF" size="18" @click="back" />
-				</view>
-			</block>
-		</uni-nav-bar>
+		<view class="status-bar">
+			<uni-nav-bar title="我的小组" background-color="#00aaff" color="#FFFFFF" status-bar="true">
+				<block slot="left">
+					<view class="note-navbar">
+						<uni-icons type="left" color="#FFFFFF" size="18" @click="back" />
+					</view>
+				</block>
+			</uni-nav-bar>
+		</view>
+		
 
 		<view v-if="groups && groups.length != 0" style="margin-top: 20px;">
 			<view v-for="(item, index) in groups" :key="index">
@@ -172,5 +175,12 @@
 		margin: auto;
 		left: 0;
 		right: 0;
+	}
+	
+	.status-bar {
+		width: 100%;
+		position: sticky;
+		top: 0;
+		z-index: 10;
 	}
 </style>
