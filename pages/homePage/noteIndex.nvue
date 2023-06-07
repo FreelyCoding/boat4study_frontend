@@ -8,13 +8,11 @@
 					</view>
 				</block>
 			</uni-nav-bar>
-			
-			<uni-search-bar @confirm="search" :focus="true" v-model="searchValue" placeholder="请输入要搜索的笔记标题"
-				cancelButton="none" maxlength="50" style="margin-left: 5px; margin-right: 5px;">
-			</uni-search-bar>
 		</view>
 
-
+		<uni-search-bar @confirm="search" :focus="true" v-model="searchValue" placeholder="请输入要搜索的笔记标题"
+			cancelButton="none" maxlength="50" style="margin-left: 5px; margin-right: 5px;">
+		</uni-search-bar>
 
 		<u-loading-icon :show="isLoading"></u-loading-icon>
 
@@ -407,8 +405,8 @@
 					limit: this.limit,
 					offset: this.offset
 				}
-				
-				
+
+
 				uni.request({
 					url: myRequest.interfaceUrl() + `/search/note`,
 					method: 'POST',
@@ -416,7 +414,7 @@
 					header: {
 						'X-Token': myRequest.getToken()
 					},
-				
+
 					success: (res) => {
 						console.log(res)
 						if (res.statusCode == 200) {
@@ -425,11 +423,11 @@
 								console.log('null')
 								return;
 							}
-				
+
 							this.status = 'loading'
 							var lastOffset = this.offset
 							this.offset += res.data.notes.length
-				
+
 							for (var i = 0; i < res.data.notes.length; i++) {
 								var t = {
 									note_content: "",
@@ -454,12 +452,12 @@
 							myRequest.toast()
 						}
 					},
-				
+
 					fail: (res) => {
 						console.log(res)
 						myRequest.toast()
 					},
-				
+
 					complete: () => {
 						this.isLoading = false
 					}

@@ -41,7 +41,7 @@
 			</view>
 		</u-popup>
 
-		<view v-if="groups && groups.length != 0" style="margin-top: 10px;">
+		<view v-if="groups != null && groups.length != 0" style="margin-top: 10px;">
 			<view v-for="(item, index) in groups" :key="index">
 				<uni-card @click="cardClick(item)" isShadow border padding="15px 0px 15px 0px"
 					margin="0px 15px 15px 15px" style="border-radius: 10px;">
@@ -71,17 +71,20 @@
 					<text class="uni-body">{{item.description}}</text>
 				</uni-card>
 			</view>
+			<view style="margin-bottom: 80px;">
+				
+			</view>
 		</view>
 
-		<view v-else style="text-align: center;" :style="{height:scrollH+'px'}">
+		<view v-else style="text-align: center;" >
 			<image src="../../static/pic/note/no_note.png"
 				style="margin: auto; margin-top: 30px; height: 200px; width: 200px;"></image>
 			<p style="font-size: 20px;margin-top: 30px;">暂无学习小组 </p>
 		</view>
 
 
-		<view style="padding: 10px 0 10px 0; position: sticky; bottom: 0px; background-color: #EDEDED;">
-			<p style="margin: auto;width: 92%">
+		<view style="padding: 10px 0 10px 0; position: fixed; bottom: 0;background-color: #EDEDED; width: 100%;">
+			<p style="margin: auto; width: 90%;">
 				<button style="background-color: #00aaff; color: white; 
 				 margin-bottom: 10px;" @click="jumpToCreateGroup">
 					创建小组
@@ -106,7 +109,6 @@
 		data() {
 			return {
 				searchValue: "",
-				flag: false,
 				groups: [],
 				select_area: 0,
 				page_size: 10,
@@ -168,12 +170,6 @@
 			this.load_one_page()
 		},
 		methods: {
-			search(res) {
-				uni.showToast({
-					title: '搜索：' + res.value,
-					icon: 'none'
-				})
-			},
 			close() {
 				this.group_type_list_show = false;
 			},
@@ -275,10 +271,6 @@
 		background: #EDEDED;
 	}
 
-	.container {
-		padding-bottom: env(safe-area-inset-bottom);
-	}
-
 	.grid-item {
 		margin: 5px 0 5px 0;
 		width: 80%;
@@ -290,22 +282,4 @@
 		background-color: #f0f0f0;
 	}
 
-	.note-img {
-		max-height: 150px;
-	}
-
-	.note-title {
-		font-size: 18px;
-		color: black;
-		font-weight: bold;
-		margin-bottom: 5px;
-	}
-
-	.btn-box {
-		position: absolute;
-		bottom: 10px;
-		margin: auto;
-		left: 0;
-		right: 0;
-	}
 </style>
