@@ -13,7 +13,7 @@
 				<view class="u-demo-block__content" style="margin-top: 10px; margin-bottom: 10px;">
 					<uni-row class="demo-uni-row">
 						<uni-col :span="6">
-							<view style="margin: auto;">
+							<view style="margin: auto;" @click="jumpoToPhotoOCR()">
 								<u-icon name="/static/pic/camera2.svg" size="40px" color="white"></u-icon>
 							</view>
 							<view style="margin: auto;">
@@ -366,6 +366,11 @@
 			jumpToPerson() {
 				uni.navigateTo({
 					url: "/pages/note/note"
+				})
+			},
+			jumpoToPhotoOCR() {
+				uni.navigateTo({
+					url: "/pages/problemSet/problemSetSelect"
 				})
 			},
 			jumpToCreateProblemSet() {

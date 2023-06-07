@@ -275,6 +275,8 @@
 				problem_difficulty_select: 0,
 				
 				ocr_result: '',
+				
+				platform: uni.getSystemInfoSync().uniPlatform,
 
 				letter: [
 					'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
@@ -521,29 +523,57 @@
 			
 			async upload_pdf_file() {
 				var _this = this
-				wx.chooseMessageFile({
-					count: 1,//限制选择的文件数量
-					type: 'file',//非图片和视频的文件,不选默认为all
-					success (res) {
-					 const tempFilePaths = res.tempFiles
-						 myRequest.uploadFile('/special/pdf_ocr?raw_result=false&page=1', tempFilePaths[0].path, 'file', {}).then(
-						 	function(res) {
-						 		console.log(res)
-						 		if (res.statusCode == 200) {
-						 			_this.ocr_result = res.data
-						 		} else if (res.statusCode == 401) {
-						 			myRequest.redirectToLogin()
-						 		} else {
-						 			myRequest.toast()
-						 		}
-						 	}
-						 ).catch(
-						 	function(res) {
-						 		console.log(res)
-						 		myRequest.toast()
-						 })
-					}
-				})
+				console.log(this.platform)
+				if (this.platform == 'web') {
+					uni.chooseFile({
+					  count: 1,
+						type: 'file',
+						success: function (res) {
+							const tempFilePaths = res.tempFiles
+							 myRequest.uploadFile('/special/pdf_ocr?raw_result=false&page=1', tempFilePaths[0].path, 'file', {}).then(
+								function(res) {
+									console.log(res)
+									if (res.statusCode == 200) {
+										_this.ocr_result = res.data
+									} else if (res.statusCode == 401) {
+										myRequest.redirectToLogin()
+									} else {
+										myRequest.toast()
+									}
+								}
+							 ).catch(
+								function(res) {
+									console.log(res)
+									myRequest.toast()
+							 })
+						}
+					});
+				} else {
+					wx.chooseMessageFile({
+						count: 1,//限制选择的文件数量
+						type: 'file',//非图片和视频的文件,不选默认为all
+						success (res) {
+						 const tempFilePaths = res.tempFiles
+							 myRequest.uploadFile('/special/pdf_ocr?raw_result=false&page=1', tempFilePaths[0].path, 'file', {}).then(
+							 	function(res) {
+							 		console.log(res)
+							 		if (res.statusCode == 200) {
+							 			_this.ocr_result = res.data
+							 		} else if (res.statusCode == 401) {
+							 			myRequest.redirectToLogin()
+							 		} else {
+							 			myRequest.toast()
+							 		}
+							 	}
+							 ).catch(
+							 	function(res) {
+							 		console.log(res)
+							 		myRequest.toast()
+							 })
+						}
+					})
+				}
+				
 			},
 			
 			myIsNaN(value) {
