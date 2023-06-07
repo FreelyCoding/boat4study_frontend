@@ -1,19 +1,23 @@
 <template>
 	<view>
-		<uni-nav-bar title="所有讨论" background-color="#00aaff" color="#FFFFFF" status-bar="true">
-			<block slot="left">
-				<view class="discussion-navbar">
-					<uni-icons type="left" color="#FFFFFF" size="18" @click="back" />
-				</view>
-			</block>
-		</uni-nav-bar>
+		<view class="status-bar">
+			<uni-nav-bar title="所有讨论" background-color="#00aaff" color="#FFFFFF" status-bar="true">
+				<block slot="left">
+					<view class="discussion-navbar">
+						<uni-icons type="left" color="#FFFFFF" size="18" @click="back" />
+					</view>
+				</block>
+			</uni-nav-bar>
+		</view>
+		
 		
 		<u-loading-icon :show="isLoading"></u-loading-icon>
 
-		<view v-if="discussions && discussions.length != 0" style="margin-top: 10px;">
-			<view v-for="(item, index) in discussions" :key="index">
+		<scroll-view scroll-y="true" v-if="discussions && discussions.length != 0" style="margin-top: 10px;" :style="{height:scrollH+'px'}">
+			<view>
 				<uni-card isShadow border padding="15px 5px 0px 5px" margin="0px 15px 15px 15px"
-					style="border-radius: 10px;" @click="cardClick(item)">
+				v-for="(item, index) in discussions" :key="index"
+					style="border-radius: 10px;" @click="cardClick(item)" >
 					<view class="u-demo-block">
 						<view>
 							<view>
@@ -75,32 +79,24 @@
 			</view>
 			
 			<u-loadmore :status="status" line lineColor="#000000"/>
-				
-			<view style="padding-bottom: 20px;">
-				<p style="text-align: center;">
-					<button style="background-color: #00aaff; color: white; max-width: 92%;
-					 margin-bottom: 10px;" @click="jumpToCreateDiscussion">
-						创建讨论
-					</button>
-				</p>
-			</view>
-			
-		</view>
+		</scroll-view>
 
 		
 		<view v-else-if="!isLoading" style="text-align: center;">
-			<image src="../../static/pic/note/no_note.png"
-				style="margin: auto; margin-top: 30px; height: 200px; width: 200px;"></image>
-			<p style="font-size: 20px;margin-top: 30px;">暂无讨论</p>
-		
-			<view style="margin-top: 30px; padding-bottom: 20px;">
-				<p style="text-align: center;">
-					<button style="background-color: #00aaff; color: white; max-width: 92%;
-					 margin-bottom: 10px;" @click="jumpToCreateDiscussion">
-						创建讨论
-					</button>
-				</p>
+			<view class="" :style="{height:theWindowH+'px'}">
+				<image src="../../static/pic/note/no_note.png"
+					style="margin: auto; margin-top: 30px; height: 200px; width: 200px;"></image>
+				<p style="font-size: 20px;margin-top: 30px;">暂无讨论</p>
 			</view>
+		</view>
+		
+		<view style="padding-bottom: 10px; padding-top: 10px; position: sticky; bottom: 0;">
+			<p style="text-align: center;">
+				<button style="background-color: #00aaff; color: white; max-width: 92%;"
+				 @click="jumpToCreateDiscussion">
+					创建讨论
+				</button>
+			</p>
 		</view>
 
 	</view>
@@ -126,6 +122,21 @@
 				offset: 0,
 				status: "loading",
 				isLoading: false
+			}
+		},
+		computed:{
+			theWindowH:function(){
+				let sys = uni.getSystemInfoSync();
+				let winHeight =parseInt(sys.windowHeight)-50
+				return winHeight	
+			},
+			scrollH:function(){
+				let sys = uni.getSystemInfoSync();
+				let winHeight =parseInt(sys.windowHeight)-120
+				return winHeight	
+			},
+			barHeight() {
+				return `calc(${h}px + 44px)`
 			}
 		},
 		onShow: function() {
@@ -337,6 +348,13 @@
 
 	page {
 		background: #EDEDED;
+	}
+	
+	.status-bar {
+		width: 100%;
+		position: sticky;
+		top: 0;
+		z-index: 10;
 	}
 
 	.container {
