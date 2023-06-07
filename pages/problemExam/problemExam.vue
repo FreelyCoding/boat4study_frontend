@@ -1004,7 +1004,7 @@
 	.option_item_content {
 		font-size: 16px;
 		margin-left: 35px;
-		width: 80%;
+		width: 240px;
 	}
 
 	.selected_option_item_content {
