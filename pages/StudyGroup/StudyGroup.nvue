@@ -35,14 +35,14 @@
 							</p>
 
 							<view style="margin: auto; margin-top: 30px;">
-								<p v-if="isAdministrator">
+								<p v-if="show && isAdministrator">
 									<button size="mini" style="background-color: #f9ae3d; color: white; width: 100px; "
 										@click="jumpToManage()">
 										管理小组
 									</button>
 								</p>
 
-								<p v-else-if="!isMember">
+								<p v-else-if="show && !isMember">
 									<button size="mini" style="background-color: #5ac725; color: white; width: 100px;"
 										@click="addGroupDialogToggle">
 										申请加入
@@ -125,28 +125,49 @@
 						<view class="u-demo-block">
 							<u-list customStyle="margin: auto;margin-top: 10px; max-height: 350px;">
 								<u-list-item v-for="(item, index) in problemSet" :key="index">
-									<uni-card spacing="0" padding="0px 0px 0px 5px" margin="10px 0px 0px 0px"
-										@click="jumpToProblemSetDetail(item)">
+									<uni-card isShadow border padding="10px 0px 10px 0px" margin="0px 10px 15px 10px"
+										style="border-radius: 10px;" @click="jumpToProblemSetDetail(item)">
 										<view>
 											<uni-row>
-												<uni-col :span="7" align="start">
-													<view>
-														<u-icon name="/static/pic/qb.svg" size="50px"></u-icon>
+												<uni-col :span="2" align="start">
+													<view v-if="item.user_id == 0" style="max-width: 30px;">
+														<p class="official_PS_tag">
+															官方题库
+														</p>
+													</view>
+													<view v-else-if="item.group_id == 0" style="max-width: 30px;">
+														<div class="personal_PS_tag">
+															个人题库
+														</div>
+													</view>
+													<view v-else-if="item.group_id != 0" style="max-width: 30px;">
+														<div class="group_PS_tag">
+															小组题库
+														</div>
 													</view>
 												</uni-col>
-
-												<uni-col :span="17" align="start">
-													<div class="shuhei" style="margin-bottom: 5px;">
-														<p style="font-size: 20px;">{{item.name}}</p>
+												<uni-col :span="2" align="start">
+												</uni-col>
+												<uni-col :span="7" align="start">
+													<p style="margin: auto;">
+														<u-avatar :src="myRequest.imageUrl() + '/public'
+															+ item.user_info.avatar_path" size="70px"></u-avatar>
+													<div style="margin-top: 10px; font-family: shuhei; margin: auto;">
+														{{item.user_info.nick_name}}
 													</div>
-													<div style="font-size: 14px;">
+													</p>
+												</uni-col>
+												<uni-col :span="2" align="start">
+												</uni-col>
+												<uni-col :span="12" align="start">
+													<div class="shuhei" style="margin-bottom: 5px;margin-top: 18px;">
+														<p style="font-size: 22px;">{{item.name}}</p>
+													</div>
+													<div style="font-size: 16px; margin-top: 5px;">
 														{{item.problem_number}} 道题目
-														&ensp; &ensp;
-														{{item.created_at}}
 													</div>
 												</uni-col>
 											</uni-row>
-											<u-divider v-if="(index != Math.min(3,problemSet.length - 1))"> </u-divider>
 										</view>
 									</uni-card>
 								</u-list-item>
@@ -162,7 +183,7 @@
 						</view>
 					</uni-card>
 				</view>
-			
+
 				<view>
 					<uni-card :isShadow="true" :border="true" spacing="0">
 						<view>
@@ -172,7 +193,7 @@
 										<p class="homePage-header" style="color: black;"> 小组讨论</p>
 									</view>
 								</uni-col>
-					
+
 								<uni-col :span="12">
 									<view>
 										<p class="check-all" style="padding-top: 3px;" @click="jumpToAllDiscussion()">
@@ -181,20 +202,21 @@
 								</uni-col>
 							</uni-row>
 						</view>
-					
+
 						<view style="min-height: 350px;">
 							<view v-for="(item, index) in discussions" :key="item.id">
-								<uni-card isShadow margin="0"
-									style="margin-top: 10px; margin-bottom: 10px;" @click="cardClick(item)">
+								<uni-card isShadow margin="0" style="margin-top: 10px; margin-bottom: 10px;"
+									@click="cardClick(item)">
 									<view>
 										<view>
 											<view>
 												<text class="discussion-title">{{item.discussion_title}}</text>
-							
+
 												<uni-row v-if="item.pic" style="margin-top: 15px;">
 													<uni-col :span="12">
 														<view>
-															<p class="discussion-content"> {{item.discussion_content ? item.discussion_content : "..."}}
+															<p class="discussion-content">
+																{{item.discussion_content ? item.discussion_content : "..."}}
 															</p>
 														</view>
 													</uni-col>
@@ -205,19 +227,20 @@
 														</view>
 													</uni-col>
 												</uni-row>
-							
+
 												<uni-row v-else style="margin-top: 15px;">
 													<uni-col :span="24">
 														<view>
-															<p class="discussion-content"> {{item.discussion_content}}</p>
+															<p class="discussion-content"> {{item.discussion_content}}
+															</p>
 														</view>
 													</uni-col>
 												</uni-row>
-							
+
 												<view style="margin-top: 5px;">
 													<u--text type="info" :text="item.create_time" size="12px"></u--text>
 												</view>
-							
+
 												<view style="margin-top: 10px;">
 													<uni-row>
 														<uni-col :span="2">
@@ -237,14 +260,14 @@
 														</uni-col>
 													</uni-row>
 												</view>
-							
+
 											</view>
 										</view>
 									</view>
 								</uni-card>
 							</view>
 						</view>
-						
+
 						<view>
 							<view style="text-align: center; margin-bottom: 0px;" v-show="isMember">
 								<button style="background-color: #00aaff; color: white;" @click="jumpToAddDiscussion()">
@@ -252,27 +275,12 @@
 								</button>
 							</view>
 						</view>
-						
+
 					</uni-card>
 				</view>
 			</div>
-			
 
-			<view v-if="isAdministrator">
-				<div style="background-color: #f7f7f7;">
-					<uni-card :isShadow="true" :border="true" padding="10px 0px 0px 0px" margin="0px 15px 10px 15px">
-						<view>
-							<p style="text-align: center; margin-bottom: 10px;">
-								<button style="color: white;" type="warn" @click="deleteGroupDialogToggle">
-									删除小组
-								</button>
-							</p>
-						</view>
-					</uni-card>
-				</div>
-			</view>
-
-			<view v-else-if="isMember">
+			<view v-if="!isAdministrator && isMember">
 				<div style="background-color: #f7f7f7;">
 					<uni-card :isShadow="true" :border="true" padding="10px 0px 0px 0px" margin="0px 15px 10px 15px">
 						<view>
@@ -308,7 +316,7 @@
 
 			<view>
 				<uni-popup ref="quitGroupDialog" type="dialog" :isMaskClick="false">
-					<uni-popup-dialog cancelText="取消" confirmText="确定" title="您确定要删除小组吗"
+					<uni-popup-dialog cancelText="取消" confirmText="确定" title="您确定要退出小组吗"
 						@confirm="quitGroupDialogConfirm()" @close="quitGroupDialogClose()"></uni-popup-dialog>
 				</uni-popup>
 			</view>
@@ -332,6 +340,7 @@
 			return {
 				isAdministrator: false,
 				isMember: false,
+				show: false,
 				invitation: "abcd",
 				addGroupMessage: "",
 				group: {
@@ -344,31 +353,7 @@
 					editIntroduction: "",
 				},
 				group_members: [],
-				problemSet: [{
-						id: "1",
-						name: "数据结构",
-						problem_number: "113",
-						created_at: "2023-04-07"
-					},
-					{
-						id: "1",
-						name: "数据结构",
-						problem_number: "13",
-						created_at: "2023-04-07"
-					},
-					{
-						id: "1",
-						name: "数据结构",
-						problem_number: "13",
-						created_at: "2023-04-07"
-					},
-					{
-						id: "1",
-						name: "数据结构",
-						problem_number: "13",
-						created_at: "2023-04-07"
-					}
-				],
+				problemSet: [],
 				discussions: []
 			}
 		},
@@ -435,6 +420,7 @@
 							} else {
 								this.isAdministrator = false;
 							}
+							this.show = true
 							if (this.isAdministrator) {
 								uni.request({
 									url: myRequest.interfaceUrl() + '/group/invitation/' + this.group
@@ -517,7 +503,8 @@
 						this.problemSet = []
 						if (res.statusCode == 200) {
 							if (res.data.problem_set && res.data.problem_set.length) {
-								for (var i = 0; i < Math.min(4, res.data.problem_set.length); i++) {
+								for (var i = 0; i < res.data.problem_set.length; i++) {
+									let owner_id = res.data.problem_set[i].user_id
 									var t = {
 										id: res.data.problem_set[i].id,
 										description: res.data.problem_set[i].description,
@@ -525,6 +512,9 @@
 										pic: "",
 										created_at: res.data.problem_set[i].created_at.slice(0, 10),
 										problem_number: res.data.problem_set[i].problem_count,
+										user_id: res.data.problem_set[i].user_id,
+										group_id: res.data.problem_set[i].group_id,
+										user_info: res.data.problem_set[i].user_info,
 									}
 									this.problemSet.push(t);
 								}
@@ -541,14 +531,14 @@
 						myRequest.toast()
 					}
 				})
-				
+
 				uni.request({
 					url: myRequest.interfaceUrl() + `/discussion/all?group_id=${Number(this.group.id)}&limit=3`,
 					method: 'GET',
 					header: {
 						'X-Token': myRequest.getToken()
 					},
-				
+
 					success: (res) => {
 						console.log(res)
 						if (res.statusCode == 200) {
@@ -575,7 +565,7 @@
 							myRequest.toast()
 						}
 					},
-				
+
 					fail: (res) => {
 						console.log(res)
 						myRequest.toast()
@@ -585,30 +575,30 @@
 				console.log("member = " + this.isMember)
 				console.log("ad = " + this.isAdministrator)
 			},
-			
+
 			loadData() {
 				for (var i = 0; i < this.discussions.length; i++) {
 					var html = this.discussions[i].discussion_html
 					var plainText = html.replace(/<[^>]+>/g, "");
 					var plainText = html.replace(/<[^>]+>/g, "").replace(/&nbsp;/g, " ").replace(/&lt;/g, "<").replace(
 						/&gt;/g, ">").replace(/&amp;/g, "&");
-			
+
 					// console.log(plainText)
-			
+
 					// 替换所有换行符为空格
 					plainText = plainText.replace(/[\r\n\t]/g, " ");
 					// 替换所有空格为一个空格
 					plainText = plainText.replace(/\s+/g, " ");
 					// 去除首尾空格
 					plainText = plainText.replace(/(^\s*)|(\s*$)/g, "");
-			
+
 					this.discussions[i].discussion_content = plainText
 					// console.log(this.discussions[i].discussion_content)
 					this.discussions[i].pic = this.extractImage(this.discussions[i].discussion_html)
-			
+
 				}
 			},
-			
+
 			extractImage(htmlStr) {
 				// 从html中提取出第一个图片
 				var img = htmlStr.match(/<img.*?(?:>|\/>)/gi);
@@ -620,13 +610,13 @@
 				}
 				return img;
 			},
-			
+
 			jumpToAllDiscussion() {
 				uni.navigateTo({
 					url: `/pages/StudyGroup/discussionIndex?group_id=${this.group.id}`
 				})
 			},
-			
+
 			jumpToAllProblemSet() {
 				if (this.isMember) {
 					uni.navigateTo({
@@ -656,13 +646,13 @@
 					url: "/pages/problemSet/problemSetCreate?group_id=" + this.group.id
 				})
 			},
-			
+
 			jumpToAddDiscussion() {
 				uni.navigateTo({
 					url: `/pages/StudyGroup/createDiscussion?group_id=${this.group.id}`
 				})
 			},
-			
+
 			jumpToManage() {
 				uni.navigateTo({
 					url: "/pages/StudyGroup/StudyGroupManage?group_id=" + this.group.id
@@ -922,16 +912,15 @@
 		font-size: 14px;
 		margin-bottom: 8px;
 	}
-	
+
 	.discussion-img {
 		max-height: 150px;
 	}
-	
+
 	.discussion-title {
 		font-size: 18px;
 		color: black;
 		font-weight: bold;
 		margin-bottom: 5px;
 	}
-	
 </style>
