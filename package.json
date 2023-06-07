@@ -10,6 +10,7 @@
   "dependencies": {
     "egg-cors": "^2.2.3",
     "html2plaintext": "^2.1.4",
+    "image-tools": "^1.4.0",
     "uview-ui": "^2.0.36"
   },
   "devDependencies": {

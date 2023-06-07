@@ -301,6 +301,11 @@ export default {
 		return api;
 	},
 	
+	special_picture_ocr() {
+		let api = "/special/picture_ocr";
+		return api;
+	},
+	
 	group_all(params) {
 		let api = "/group/all";
 		if (params.area_id != null) {

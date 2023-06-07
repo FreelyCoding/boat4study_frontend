@@ -267,6 +267,33 @@
 						"navigationBarTextStyle": "white"
 					}
 				}
+				,{
+					"path" : "problemCreateFromPhotoOCR",
+					"style": {
+						"navigationBarTitleText": "",
+						"navigationStyle": "custom",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path" : "problemCreateFromTxt",
+					"style" :                                                                                    
+					{
+							"navigationBarTitleText": "",
+							"navigationStyle": "custom",
+							"enablePullDownRefresh": false
+					}
+					
+				},
+				{
+					"path" : "problemCreateFromPdfOCR",
+					"style":                                                                                    
+					{
+							"navigationBarTitleText": "",
+							"navigationStyle": "custom",
+							"enablePullDownRefresh": false
+					}
+				}
 			]
 		},
 		{
