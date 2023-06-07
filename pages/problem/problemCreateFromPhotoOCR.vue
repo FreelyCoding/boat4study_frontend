@@ -258,7 +258,7 @@
 	import list from '../../uni_modules/uview-ui/libs/config/props/list';
 	import toast from '../../uni_modules/uview-ui/libs/config/props/toast';
 	import api from '@/common/api.js';
-  import upload from '../../uni_modules/uview-ui/libs/config/props/upload';
+	import upload from '../../uni_modules/uview-ui/libs/config/props/upload';
 	import { pathToBase64, base64ToPath } from 'image-tools'
 	
 	export default {
