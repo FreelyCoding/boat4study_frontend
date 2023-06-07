@@ -25,6 +25,7 @@
 		"color": "#7A7E83",
 		"borderStyle": "black",
 		"backgroundColor": "#ffffff",
+		"selectedColor": "#00aaff",
 		"height": "50px",
 		"fontSize": "10px",
 		"iconWidth": "24px",

@@ -1,6 +1,6 @@
 <template>
 	<view class="box">
-		<view class="status-bar" style="background-color: #f1f1f1;">
+		<view class="status-bar" :style="{height: barHeight}">
 			<uni-nav-bar title="搜索" background-color="#00aaff" color="#FFFFFF" status-bar="true">
 				<block slot="left">
 					<view class="note-navbar">
@@ -9,6 +9,7 @@
 				</block>
 			</uni-nav-bar>
 		</view>
+		
 		<view>
 			<!--自定义navbar-->
 			<view class="m-middle-2" style="padding-top: 10px; padding-bottom: 0px; display: flex;">
@@ -97,7 +98,7 @@
 		<view v-else-if="select_area == 1 && notes.length != 0">
 			<view v-for="(item, index) in notes" :key="index" style="margin-top: 10px;">
 				<uni-card isShadow border padding="15px 5px 0px 5px" margin="0px 15px 15px 15px"
-					style="border-radius: 10px;" @click="cardClick(item)">
+					style="border-radius: 10px;" @click="jumpToNote(item)">
 					<view class="u-demo-block">
 						<view>
 							<view>
@@ -158,7 +159,7 @@
 		
 		<view v-else-if="select_area == 2 && group.length != 0" >
 			<view v-for="(item, index) in group" :key="index" style="margin-top: 5px;">
-				<uni-card @click="cardClick(item)" isShadow border padding="15px 0px 15px 0px"
+				<uni-card @click="jumpToGroup(item)" isShadow border padding="15px 0px 15px 0px"
 					margin="0px 15px 15px 15px" style="border-radius: 10px;">
 					<view>
 						<uni-row>
@@ -196,6 +197,8 @@
 	import note from '@/pages/note/note.vue'
 	import myRequest from '../../common/request';
 	import api from '@/common/api.js';
+	
+	const h = uni.getSystemInfoSync().statusBarHeight;
 	export default {
 		data() {
 			return {
@@ -223,6 +226,16 @@
 		},
 		onLoad() {
 			this.refresh()
+		},
+		computed:{
+			scrollH:function(){
+				let sys = uni.getSystemInfoSync();
+				let winHeight =parseInt(sys.windowHeight)-50
+				return winHeight	
+			},
+			barHeight() {
+				return `calc(${h}px + 44px)`
+			}
 		},
 		methods: {
 			back() {
