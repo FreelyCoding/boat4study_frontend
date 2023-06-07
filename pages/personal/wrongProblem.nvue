@@ -12,7 +12,7 @@
 		
 		<view v-if="this.ps.length != 0">
 			<view class="u-demo-block">
-				<u-list customStyle="width: 94%; margin: auto; margin-top: 15px;">
+				<u-list customStyle="width: 94%; margin: auto; margin-top: 5px;">
 					<u-list-item v-for="(item, index) in ps" :key="index">
 						<uni-card spacing="0" padding="0" margin="10px 0px 0px 0px">
 							<view>
