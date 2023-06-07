@@ -464,61 +464,51 @@
 			})
 			
 			uni.request({
-				url: myRequest.interfaceUrl() + api.problem_set_all_problem({id:this.problem_set_id, is_wrong:true}),
+				url: myRequest.interfaceUrl() +
+					'/problem_set/statistic/wrong_count?id=' + this.problem_set_id,
 				method: 'GET',
 				header: {
 					'X-Token': myRequest.getToken()
 				},
-				
-				success: (res1) => {
-					console.log(res1)
-					if (res1.statusCode == 200) {
-						if (res1.data.problems != null) {
-							this.proDetail.wrong_problem_count = res1.data.problems.length
-						} else {
-							this.proDetail.wrong_problem_count = 0
-						}
-					}
-					else if (res1.statusCode == 401) {
+							
+				success: (res2) => {
+					console.log(res2)
+					if (res2.statusCode == 200) {
+						this.proDetail.wrong_problem_count = res2.data
+					} else if (res2.statusCode == 401) {
 						myRequest.redirectToLogin()
-					}
-					else {
+					} else {
 						myRequest.toast()
 					}
 				},
-				
-				fail: (res1) => {					
-					console.log(res1)
+							
+				fail: (res2) => {
+					console.log(res2)
 					myRequest.toast()
 				},
 			})
 			
 			uni.request({
-				url: myRequest.interfaceUrl() + api.problem_set_all_problem({id:this.problem_set_id, is_favorite:true}),
+				url: myRequest.interfaceUrl() +
+					'/problem_set/statistic/fav_count?id=' + this.problem_set_id,
 				method: 'GET',
 				header: {
 					'X-Token': myRequest.getToken()
 				},
-				
-				success: (res1) => {
-					console.log(res1)
-					if (res1.statusCode == 200) {
-						if (res1.data.problems != null) {
-							this.proDetail.fav_problem_count = res1.data.problems.length
-						} else {
-							this.proDetail.fav_problem_count = 0
-						}
-					}
-					else if (res1.statusCode == 401) {
+							
+				success: (res2) => {
+					console.log(res2)
+					if (res2.statusCode == 200) {
+						this.proDetail.fav_problem_count = res2.data
+					} else if (res2.statusCode == 401) {
 						myRequest.redirectToLogin()
-					}
-					else {
+					} else {
 						myRequest.toast()
 					}
 				},
-				
-				fail: (res1) => {					
-					console.log(res1)
+							
+				fail: (res2) => {
+					console.log(res2)
 					myRequest.toast()
 				},
 			})

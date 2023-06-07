@@ -4,7 +4,7 @@
 			<uni-nav-bar title="所有笔记" background-color="#00aaff" color="#FFFFFF" status-bar="true">
 				<block slot="left">
 					<view class="note-navbar">
-						<uni-icons type="left" color="#FFFFFF" size="18" @click="back" />
+						
 					</view>
 				</block>
 			</uni-nav-bar>

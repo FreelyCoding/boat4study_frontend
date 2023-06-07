@@ -20,7 +20,7 @@
 						@click="pre_pro()"/>
 					</uni-col>
 					<uni-col :span="12" align="center">
-						{{cur_page}}/{{proDetail.totalNum}}
+						{{cur_page}}/{{proDetail.fav_problem_count}}
 					</uni-col>
 					<uni-col :span="6" align="end" >
 						<view style="text-align: right;">
@@ -393,6 +393,31 @@
 						console.log(res)
 						myRequest.toast()
 					}
+				})
+				
+				uni.request({
+					url: myRequest.interfaceUrl() +
+						'/problem_set/statistic/fav_count?id=' + this.problem_set_id,
+					method: 'GET',
+					header: {
+						'X-Token': myRequest.getToken()
+					},
+								
+					success: (res2) => {
+						console.log(res2)
+						if (res2.statusCode == 200) {
+							this.proDetail.fav_problem_count = res2.data
+						} else if (res2.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else {
+							myRequest.toast()
+						}
+					},
+								
+					fail: (res2) => {
+						console.log(res2)
+						myRequest.toast()
+					},
 				})
 			},
 			

@@ -13,7 +13,7 @@
 
 		<view v-if="this.problemSet.length != 0">
 			<view class="u-demo-block">
-				<u-list customStyle="width: 94%; margin: auto; margin-top: 15px;">
+				<u-list customStyle="margin: auto; margin-top: 10px;">
 					<u-list-item v-for="(item, index) in problemSet" :key="index">
 						<uni-card isShadow border padding="10px 0px 10px 0px" margin="0px 10px 15px 10px"
 							style="border-radius: 10px;" @click="jumpToPS(item)">
@@ -41,7 +41,7 @@
 									<uni-col :span="7" align="start">
 										<p style="margin: auto;">
 											<u-avatar :src="myRequest.imageUrl() + '/public'
-											+ item.user_info.avatar_path" size="70px"></u-avatar>
+												+ item.user_info.avatar_path" size="70px"></u-avatar>
 										<div style="margin-top: 10px; font-family: shuhei; margin: auto;">
 											{{item.user_info.nick_name}}
 										</div>
@@ -60,6 +60,7 @@
 								</uni-row>
 							</view>
 						</uni-card>
+
 					</u-list-item>
 				</u-list>
 			</view>
