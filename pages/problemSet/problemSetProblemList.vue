@@ -18,7 +18,7 @@
 						@click="select(item)">
 						<view>
 							<uni-row>
-								<uni-col :span="4" align="start">
+								<uni-col :span="5" align="start">
 									<uni-tag text="选择题" type="primary" customStyle="background-color: #00aaff"
 										v-if="item.type===0" />
 									<uni-tag text="填空题" type="primary" customStyle="background-color: #00aaff"
@@ -26,9 +26,9 @@
 									<uni-tag text="判断题" type="primary" customStyle="background-color: #00aaff"
 										v-if="item.type===2" />
 								</uni-col>
-								<uni-col :span="10" align="start">
+								<uni-col :span="9" align="start">
 									<div class="shuhei problem-title" style="margin-bottom: 5px;" @click="jumpToProbelmDetail(index)">
-										<p style="font-size: 20px;">{{item.title}}</p>
+										<p style="font-size: 18px;">{{item.title}}</p>
 									</div>
 								</uni-col>
 								<uni-col :span="5" align="start">

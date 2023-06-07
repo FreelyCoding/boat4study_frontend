@@ -74,13 +74,13 @@
 						<view class="option_item" :class="{'selected_option_item':problem[cur_page-1].options[index].selected==1,
 							 'wrong_option_item':problem[cur_page-1].options[index].selected==2,
 							 'right_option_item':problem[cur_page-1].options[index].selected==3}" @click="select_single_option(index)">
-							<u-row>
-								<u-col span="1">
+							<uni-row>
+								<uni-col span="2">
 									<view class="option_letter_box" :class="{'selected_option_letter_box':problem[cur_page-1].options[index].selected==1,
 							 'wrong_option_letter_box':problem[cur_page-1].options[index].selected==2,
 							 'right_option_letter_box':problem[cur_page-1].options[index].selected==3}">{{letter[index]}}</view>
-								</u-col>
-								<u-col span="11">
+								</uni-col>
+								<uni-col span="22">
 									<view class="option_item_content"
 										:class="{'selected_option_item_content':problem[cur_page-1].options[index].selected!=0}">
 										{{problem[cur_page-1].options[index].name}}
@@ -89,8 +89,8 @@
 											:src="myRequest.imageUrl() + problem[cur_page-1].options[index].option_pic"></image>
 										</view>
 									</view>
-								</u-col>
-							</u-row>
+								</uni-col>
+							</uni-row>
 						</view>
 					</view>
 				</view>
@@ -1004,7 +1004,7 @@
 	.option_item_content {
 		font-size: 16px;
 		margin-left: 35px;
-		width: 270px;
+		width: 80%;
 	}
 
 	.selected_option_item_content {
