@@ -19,17 +19,17 @@
 							<view>
 								<uni-row>
 									<uni-col :span="2" align="start">
-										<view v-if="item.user_id == 0">
-											<div class="official_PS_tag">
+										<view v-if="item.user_id == 0" style="max-width: 30px;">
+											<p class="official_PS_tag">
 												官方题库
-											</div>
+											</p>
 										</view>
-										<view v-else-if="item.group_id == 0">
+										<view v-else-if="item.group_id == 0" style="max-width: 30px;">
 											<div class="personal_PS_tag">
 												个人题库
 											</div>
 										</view>
-										<view v-else-if="item.group_id != 0">
+										<view v-else-if="item.group_id != 0" style="max-width: 30px;">
 											<div class="group_PS_tag">
 												小组题库
 											</div>
@@ -40,7 +40,7 @@
 									<uni-col :span="7" align="start">
 										<p style="margin: auto;">
 											<u-avatar :src="myRequest.imageUrl() + '/public'
-											+ item.user_info.avatar_path" size="70px"></u-avatar>
+												+ item.user_info.avatar_path" size="70px"></u-avatar>
 										<div style="margin-top: 10px; font-family: shuhei; margin: auto;">
 											{{item.user_info.nick_name}}
 										</div>
@@ -97,9 +97,9 @@
 					url: "/pages/problemSet/problemSetDetail?id=" + item.id
 				})
 			}
-
 		},
-		onLoad() {
+		onShow() {
+			this.problemSet = []
 			myRequest.checkLogin()
 			let uid = myRequest.getUID()
 			uni.request({
@@ -128,14 +128,12 @@
 								this.problemSet.push(t);
 							}
 						}
-
 					} else if (res.statusCode == 401) {
 						myRequest.redirectToLogin()
 					} else {
 						myRequest.toast()
 					}
 				},
-
 				fail: (res) => {
 					console.log(res)
 					myRequest.toast()
