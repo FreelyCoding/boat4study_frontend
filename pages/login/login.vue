@@ -2,7 +2,7 @@
 	<view class="container">
 		<view class="tui-bg-box">
 			<image src="@/static/pic/login/bg_login.png" class="tui-bg-img"></image>
-			<image src="@/static/pic/login/mine_def_touxiang_3x.png" class="tui-photo"></image>
+			<image src="@/static/pic/boat4study.png" class="tui-photo"></image>
 			<view class="tui-login-name">学舟</view>
 		</view>
 		<form :report-submit="true" @submit="formLogin">
@@ -21,12 +21,12 @@
 				<u-row>
 					<u-col :span="6">
 						<u--text color="#5c8dff" text="忘记密码？" align="left"
-							size="18" margin="10rpx" @click="toPassword"></u--text>
+							size="32rpx" style="margin-top: 15px;" @click="toPassword"></u--text>
 					</u-col>
 					
 					<u-col :span="6">
 						<u--text color="#5c8dff" text="注册" align="right"
-							size="18" margin="10rpx" @click="toRegister"></u--text>
+							size="32rpx" style="margin-top: 15px;" @click="toRegister"></u--text>
 					</u-col>
 				</u-row>
 				
@@ -47,7 +47,7 @@
 		<view style="margin-top: 50px;">
 			<view style="display: flex; justify-content: center;">
 				<u-icon name="weixin-circle-fill"
-					size="50px" color="#00ff00" @click="wxLogin"></u-icon>
+					size="50px" color="#0bb908" @click="wxLogin"></u-icon>
 			</view>
 		</view>
 		<!-- #endif -->
