@@ -67,6 +67,20 @@
 				page_size: 12,
 				loaded_num: 0,
 				
+				proDetail: {
+					user_id: -1,
+					title: "",
+					created_at: '',
+					ownerName: "",
+					ownerAvatar: "",
+					totalNum: 0,
+					descrip: '',
+					is_favorite: false,
+					is_public: false,
+					wrong_problem_count: 0,
+					fav_problem_count: 0,
+				},
+				
 			}
 		},
 		computed:{
@@ -82,7 +96,7 @@
 			console.log(option.id); //打印出上个页面传递的参数。
 			this.problem_set_id = option.id
 			
-			this.load_new_page()
+			this.onloadFunc()
 
 		},
 		methods: {
@@ -92,16 +106,26 @@
 				})
 			},
 			
-			async load_new_page() {
-				var ret;
+			async onloadFunc() {
+				await this.get_proset_detail()
+				await this.load_new_page()
+			},
+			
+			async get_proset_detail() {
 				var _this = this
-				await myRequest.request(api.problem_set_all_problem({id:this.problem_set_id, is_favorite:true,
-				 limit:this.page_size,offset:this.loaded_num}), 'GET', {}).then(
+				await myRequest.request('/problem_set/all?id=' + this.problem_set_id
+				, 'GET', {}).then(
 					function(res) {
 						console.log(res)
 						if (res.statusCode == 200) {
-							ret = res.data.problems
-							_this.loaded_num += _this.page_size
+							_this.proDetail.title = res.data.problem_set[0].name
+							_this.proDetail.created_at = res.data.problem_set[0].created_at.slice(0, 10)
+							_this.proDetail.totalNum = res.data.problem_set[0].problem_count
+							_this.proDetail.descrip = res.data.problem_set[0].description
+							_this.proDetail.is_favorite = res.data.problem_set[0].is_favorite
+							_this.proDetail.user_id = res.data.problem_set[0].user_id
+							_this.proDetail.is_public = res.data.problem_set[0].is_public
+							console.log(_this.proDetail)
 						} else if (res.statusCode == 401) {
 							myRequest.redirectToLogin()
 						} else {
@@ -114,15 +138,84 @@
 						myRequest.toast()
 				})
 				
-				for (var i=0;i<ret.length;i++) {
-					await this.problem_id_list.push({
-						id: ret[i].id,
-						type: ret[i].problem_type_id,
-						selected: 0,
-						title: ret[i].description.split("#")[0],
-						is_favorite: ret[i].is_favorite,
+				await myRequest.request('/problem_set/statistic/wrong_count?id=' + this.problem_set_id
+				, 'GET', {}).then(
+					function(res) {
+						console.log(res)
+						if (res.statusCode == 200) {
+							_this.proDetail.wrong_problem_count = res.data
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else {
+							myRequest.toast()
+						}
+					}
+				).catch(
+					function(res) {
+						console.log(res)
+						myRequest.toast()
+				})
+				
+				await myRequest.request('/problem_set/statistic/fav_count?id=' + this.problem_set_id
+				, 'GET', {}).then(
+					function(res) {
+						console.log(res)
+						if (res.statusCode == 200) {
+							_this.proDetail.fav_problem_count = res.data
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else {
+							myRequest.toast()
+						}
+					}
+				).catch(
+					function(res) {
+						console.log(res)
+						myRequest.toast()
+				})
+				
+			},
+			
+			async load_new_page() {
+				var ret;
+				var _this = this
+				
+				if (this.loaded_num < this.proDetail.fav_problem_count) {
+					await myRequest.request(api.problem_set_all_problem({id:this.problem_set_id, is_favorite:true,
+					 limit:this.page_size,offset:this.loaded_num}), 'GET', {}).then(
+						function(res) {
+							console.log(res)
+							if (res.statusCode == 200) {
+								ret = res.data.problems
+								_this.loaded_num += _this.page_size
+							} else if (res.statusCode == 401) {
+								myRequest.redirectToLogin()
+							} else {
+								myRequest.toast()
+							}
+						}
+					).catch(
+						function(res) {
+							console.log(res)
+							myRequest.toast()
+					})
+					
+					for (var i=0;i<ret.length;i++) {
+						await this.problem_id_list.push({
+							id: ret[i].id,
+							type: ret[i].problem_type_id,
+							selected: 0,
+							title: ret[i].description.split("#")[0],
+							is_favorite: ret[i].is_favorite,
+						})
+					}
+				} else {
+					uni.showToast({
+						title: "加载完毕",
+						duration: 500
 					})
 				}
+				
 			},
 			
 			fav_pro(index) {
