@@ -13,31 +13,13 @@
 							</view>
 						</uni-col>
 
-						<!-- <uni-col :span="8">
-							<view style="margin: 10px 0px 10px 10px;">
-								<p class="user_name">{{user.nickName}}</p>
-								<p class="uid">uid: &ensp; {{user.uid}}</p>
-							</view>
-						</uni-col>
-						
-						<uni-col :span="8">
-							<view style="margin: 10px 0px 10px 0px;">
-								<view style="display: flex; justify-content: center;">
-									<!-- <p class="user_name">微信绑定</p> -->
-									<!-- <u-icon name="weixin-circle-fill" -->
-										<!-- size="50px" color="#00ff00" @click="wxBind"></u-icon> -->
-								<!-- </view> -->
-							<!-- </view> -->
-						<!-- </uni-col> -->
-						
-						
 						<uni-col :span="16">
 							<view style="margin: 20px 0px 10px 30px;">
 								<p class="user_name">{{user.nickName}}</p>
 								<p class="uid">uid: &ensp; {{user.uid}}</p>
 							</view>
 						</uni-col>
-						
+
 					</uni-row>
 				</view>
 			</div>
@@ -223,7 +205,7 @@
 								</u-col>
 							</u-row>
 							<u-divider style="margin-bottom: 15px;"></u-divider>
-							
+
 							<!-- #ifdef MP-WEIXIN -->
 							<u-row @click="wxBind()">
 								<u-col :span="2">
@@ -238,7 +220,7 @@
 							</u-row>
 							<u-divider style="margin-bottom: 15px;"></u-divider>
 							<!-- #endif -->
-							
+
 							<u-row @click="logoutDialogToggle()" style="margin-bottom: 20px;">
 								<u-col :span="2">
 									<u-icon name="/static/pic/exit.svg" size="40px"></u-icon>
@@ -501,7 +483,7 @@
 
 			wxBind() {
 				console.log('waiting bind')
-				
+
 				uni.login({
 					provider: 'weixin',
 					univerifyStyle: true,
@@ -511,25 +493,24 @@
 						var data = JSON.stringify({
 							"code": code
 						})
-						
+
 						console.log(data)
-						
+
 						uni.request({
 							url: myRequest.interfaceUrl() + '/weixin-bind',
-							method:'POST',
+							method: 'POST',
 							data: data,
 							header: {
 								"X-Token": myRequest.getToken()
 							},
-							
+
 							success: res => {
-								
+
 								console.log(res)
 								if (res.statusCode == 200) {
 									console.log("绑定成功")
 									myRequest.toast("绑定成功")
-								}
-								else {
+								} else {
 									myRequest.toast(res.data)
 								}
 							},
@@ -539,13 +520,13 @@
 							}
 						})
 					},
-					
+
 					fail: (res) => {
 						myRequest.toast()
 					}
 				})
 			}
-			
+
 		},
 	}
 </script>
@@ -580,6 +561,10 @@
 		font-family: shuhei;
 		font-size: 30px;
 		margin-bottom: 8px;
+		word-break: break-all;
+		word-wrap: break-word;
+		/*但在有些场景中，还需要加上下面这行代码*/
+		white-space: normal;
 	}
 
 	.uid {
