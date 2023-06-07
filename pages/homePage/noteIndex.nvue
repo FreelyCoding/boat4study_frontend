@@ -8,19 +8,17 @@
 					</view>
 				</block>
 			</uni-nav-bar>
-			
-			<uni-search-bar @confirm="search" :focus="true" v-model="searchValue" placeholder="请输入要搜索的笔记标题"
-				cancelButton="none" maxlength="50" style="margin-left: 5px; margin-right: 5px;">
-			</uni-search-bar>
 		</view>
 
-
+		<uni-search-bar @confirm="search" :focus="true" v-model="searchValue" placeholder="请输入要搜索的笔记标题"
+			cancelButton="none" maxlength="50" style="margin-left: 5px; margin-right: 5px;">
+		</uni-search-bar>
 
 		<u-loading-icon :show="isLoading"></u-loading-icon>
 
 		<view v-if="notes && notes.length != 0" style="margin-top: 10px;">
 			<view v-for="(item, index) in notes" :key="index">
-				<uni-card isShadow border padding="15px 5px 0px 5px" margin="0px 15px 15px 15px"
+				<uni-card isShadow border padding="15px 5px 0px 5px"
 					style="border-radius: 10px;" @click="cardClick(item)">
 					<view class="u-demo-block">
 						<view>
@@ -103,13 +101,16 @@
 		</view>
 
 		<view v-else-if="!isLoading"
-			style="padding: 10px 0 10px 0; position: sticky; bottom: 0px; background-color: #EDEDED;">
-			<p style="margin: auto;width: 92%">
-				<button style="background-color: #00aaff; color: white; 
-						 margin-bottom: 10px;" @click="jumpToCreateNote">
-					创建笔记
-				</button>
-			</p>
+			style="padding: 10px 0 10px 0; background-color: #EDEDED;">
+			
+			<view style="margin-bottom: 10px;">
+				<p style="margin: auto;width: 92%">
+					<button style="background-color: #00aaff; color: white; 
+							 margin-bottom: 10px;" @click="jumpToCreateNote">
+						创建笔记
+					</button>
+				</p>
+			</view>
 		</view>
 
 
@@ -407,8 +408,8 @@
 					limit: this.limit,
 					offset: this.offset
 				}
-				
-				
+
+
 				uni.request({
 					url: myRequest.interfaceUrl() + `/search/note`,
 					method: 'POST',
@@ -416,7 +417,7 @@
 					header: {
 						'X-Token': myRequest.getToken()
 					},
-				
+
 					success: (res) => {
 						console.log(res)
 						if (res.statusCode == 200) {
@@ -425,11 +426,11 @@
 								console.log('null')
 								return;
 							}
-				
+
 							this.status = 'loading'
 							var lastOffset = this.offset
 							this.offset += res.data.notes.length
-				
+
 							for (var i = 0; i < res.data.notes.length; i++) {
 								var t = {
 									note_content: "",
@@ -454,12 +455,12 @@
 							myRequest.toast()
 						}
 					},
-				
+
 					fail: (res) => {
 						console.log(res)
 						myRequest.toast()
 					},
-				
+
 					complete: () => {
 						this.isLoading = false
 					}

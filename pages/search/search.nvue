@@ -8,7 +8,8 @@
 					</view>
 				</block>
 			</uni-nav-bar>
-
+		</view>
+		<view>
 			<!--自定义navbar-->
 			<view class="m-middle-2" style="padding-top: 10px; padding-bottom: 0px; display: flex;">
 				<uni-row>
@@ -26,9 +27,6 @@
 						</button>
 					</uni-col>
 				</uni-row>
-			</view>
-			
-			<view style="margin-bottom: 5px;">
 				<uni-row>
 					<uni-col>
 						<view style="display:flex;align-items:center;justify-content:center;">
