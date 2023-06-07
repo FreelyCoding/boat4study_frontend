@@ -5,20 +5,19 @@
 			<uni-nav-bar title="所有收藏题目" background-color="#00aaff" color="#FFFFFF" status-bar="true">
 				<block slot="left">
 					<view class="note-navbar">
-						<uni-icons type="left" color="#FFFFFF" size="18"  @click="back()"/>
+						<uni-icons type="left" color="#FFFFFF" size="18" @click="back()" />
 					</view>
 				</block>
 			</uni-nav-bar>
 		</view>
-			
+
 		<view class="u-demo-block">
 			<u-list :customStyle="{height:scrollH+'px'}" @scroll="scrollEvent" @scrolltolower="load_new_page">
 				<u-list-item v-for="(item, index) in problem_id_list" :key="index">
-					<uni-card spacing="0" padding="0" margin="10px 0px 0px 10px" 
-						@click="select(item)">
+					<uni-card spacing="0" padding="0" margin="10px 0px 0px 10px">
 						<view>
 							<uni-row>
-								<uni-col :span="4" align="start">
+								<uni-col :span="5" align="start">
 									<uni-tag text="选择题" type="primary" customStyle="background-color: #00aaff"
 										v-if="item.type===0" />
 									<uni-tag text="填空题" type="primary" customStyle="background-color: #00aaff"
@@ -26,22 +25,20 @@
 									<uni-tag text="判断题" type="primary" customStyle="background-color: #00aaff"
 										v-if="item.type===2" />
 								</uni-col>
-								<uni-col :span="12" align="start">
-									<div class="shuhei problem-title" style="margin-bottom: 5px;" @click="jumpToProbelmDetail(index)">
+								<uni-col :span="10">
+									<div class="shuhei problem-title" style="margin-bottom: 5px;"
+										@click="jumpToProbelmDetail(index)">
 										<p style="font-size: 20px;">{{item.title}}</p>
 									</div>
 								</uni-col>
-								
-								<uni-col :span="8" align="start">
-									<view style="text-align: right;">
+								<uni-col :span="9">
+									<view style="text-align: center;">
 										<uni-tag text="收藏" type="primary" class="tag-unfav"
-										 custom-style="font-size: 16px;background-color: #e8e8e8;color: #000000;border: 0px;"
-										@click="fav_pro(index)"
-											v-if="!item.is_favorite" />
-										<uni-tag text="已收藏" type="primary" class="tag-fav" 
-										 custom-style="background-color: #f9ae3d;font-size: 16px;border: 0px;"
-										@click="unfav_pro(index)"
-											v-if="item.is_favorite" />
+											custom-style="font-size: 12px;background-color: #e8e8e8;color: #000000;border: 0px;"
+											@click="fav_pro(index)" v-if="!item.is_favorite" />
+										<uni-tag text="已收藏" type="primary" class="tag-fav"
+											custom-style="background-color: #f9ae3d;font-size: 12px;border: 2px;"
+											@click="unfav_pro(index)" v-if="item.is_favorite" />
 									</view>
 								</uni-col>
 							</uni-row>
@@ -51,14 +48,14 @@
 				</u-list-item>
 			</u-list>
 		</view>
-			
+
 	</view>
 </template>
 
 <script>
 	import myRequest from '../../common/request';
 	import api from '@/common/api.js';
-		
+
 	export default {
 		data() {
 			return {
@@ -83,26 +80,25 @@
 				
 			}
 		},
-		computed:{
-			scrollH:function(){
+		computed: {
+			scrollH: function() {
 				let sys = uni.getSystemInfoSync();
-				let winHeight =parseInt(sys.windowHeight)-50
-				return winHeight	
+				let winHeight = parseInt(sys.windowHeight) - 50
+				return winHeight
 			}
 		},
 		onLoad: function(option) {
 			myRequest.checkLogin()
-			
 			console.log(option.id); //打印出上个页面传递的参数。
 			this.problem_set_id = option.id
 			
 			this.onloadFunc()
-
 		},
 		methods: {
 			jumpToProbelmDetail(i) {
 				uni.navigateTo({
-					url: "/pages/problem/problemDetail?problem_id=" + this.problem_id_list[i].id + "&problem_type_id=" + this.problem_id_list[i].type,
+					url: "/pages/problem/problemDetail?problem_id=" + this.problem_id_list[i].id +
+						"&problem_type_id=" + this.problem_id_list[i].type,
 				})
 			},
 			
@@ -217,13 +213,12 @@
 				}
 				
 			},
-			
+
 			fav_pro(index) {
 				myRequest.request(api.problem_favorite(this.problem_id_list[index].id), 'POST', {}).then(
 					function(res) {
 						console.log(res)
-						if (res.statusCode == 200) {
-						} else if (res.statusCode == 401) {
+						if (res.statusCode == 200) {} else if (res.statusCode == 401) {
 							myRequest.redirectToLogin()
 						} else {
 							myRequest.toast()
@@ -233,15 +228,14 @@
 					function(res) {
 						console.log(res)
 						myRequest.toast()
-				})
+					})
 				this.problem_id_list[index].is_favorite = true;
 			},
 			unfav_pro(index) {
 				myRequest.request(api.problem_unfavorite(this.problem_id_list[index].id), 'DELETE', {}).then(
 					function(res) {
 						console.log(res)
-						if (res.statusCode == 200) {
-						} else if (res.statusCode == 401) {
+						if (res.statusCode == 200) {} else if (res.statusCode == 401) {
 							myRequest.redirectToLogin()
 						} else {
 							myRequest.toast()
@@ -251,10 +245,10 @@
 					function(res) {
 						console.log(res)
 						myRequest.toast()
-				})
+					})
 				this.problem_id_list[index].is_favorite = false;
 			},
-			
+
 			back() {
 				uni.navigateBack({
 					delta: 1,
@@ -268,15 +262,16 @@
 	.main-body {
 		margin: 20px;
 	}
+
 	.status-bar {
 		width: 100%;
 		position: sticky;
 		top: 0;
 		z-index: 10;
 	}
+
 	.problem-title {
 		width: 90%;
 		overflow: hidden;
-		height: 20px;
 	}
 </style>

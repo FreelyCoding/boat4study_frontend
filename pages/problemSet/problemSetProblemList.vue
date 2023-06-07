@@ -5,21 +5,20 @@
 			<uni-nav-bar title="所有题目" background-color="#00aaff" color="#FFFFFF" status-bar="true">
 				<block slot="left">
 					<view class="note-navbar">
-						<uni-icons type="left" color="#FFFFFF" size="18"  @click="back()"/>
+						<uni-icons type="left" color="#FFFFFF" size="18" @click="back()" />
 					</view>
 				</block>
 			</uni-nav-bar>
 		</view>
-			
+
 		<view class="u-demo-block">
 			<u-list :customStyle="{height:scrollH+'px'}" @scroll="scrollEvent" @scrolltolower="load_new_page">
 				<u-list-item v-for="(item, index) in problem_id_list" :key="index">
-					<uni-card spacing="0" padding="0" margin="10px 0px 0px 10px" 
-						@click="select(item)">
+					<uni-card spacing="0" padding="0" margin="10px 0px 0px 10px" @click="select(item)">
 						<view>
 							<uni-row>
 								<uni-col :span="5" align="start">
-									<uni-tag text="选择题" type="primary" customStyle="background-color: #00aaff"
+									<uni-tag text="选择题" type="primary" customStyle="background-color: #00aaff;"
 										v-if="item.type===0" />
 									<uni-tag text="填空题" type="primary" customStyle="background-color: #00aaff"
 										v-if="item.type===1" />
@@ -27,7 +26,8 @@
 										v-if="item.type===2" />
 								</uni-col>
 								<uni-col :span="9" align="start">
-									<div class="shuhei problem-title" style="margin-bottom: 5px;" @click="jumpToProbelmDetail(index)">
+									<div class="shuhei problem-title" style="justify-content: center;"
+										@click="jumpToProbelmDetail(index)">
 										<p style="font-size: 18px;">{{item.title}}</p>
 									</div>
 								</uni-col>
@@ -43,18 +43,18 @@
 							<u-divider> </u-divider>
 						</view>
 					</uni-card>
-		
+
 				</u-list-item>
 			</u-list>
 		</view>
-			
+
 	</view>
 </template>
 
 <script>
 	import myRequest from '../../common/request';
 	import api from '@/common/api.js';
-		
+
 	export default {
 		data() {
 			return {
@@ -78,19 +78,16 @@
 				},
 			}
 		},
-		computed:{
-			scrollH:function(){
+		computed: {
+			scrollH: function() {
 				let sys = uni.getSystemInfoSync();
-				let winHeight =parseInt(sys.windowHeight)-50
-				return winHeight	
+				let winHeight = parseInt(sys.windowHeight) - 50
+				return winHeight
 			}
 		},
 		onLoad: function(option) {
-			
 			console.log(uni.getSystemInfoSync())
-			
 			myRequest.checkLogin()
-			
 			console.log(option.id); //打印出上个页面传递的参数。
 			this.problem_set_id = option.id
 			
@@ -101,15 +98,17 @@
 		methods: {
 			jumpToProbelmDetail(i) {
 				uni.navigateTo({
-					url: "/pages/problem/problemDetail?problem_id=" + this.problem_id_list[i].id + "&problem_type_id=" + this.problem_id_list[i].type,
+					url: "/pages/problem/problemDetail?problem_id=" + this.problem_id_list[i].id +
+						"&problem_type_id=" + this.problem_id_list[i].type,
 				})
 			},
 			jumpToProblemEdit(i) {
 				uni.navigateTo({
-					url: "/pages/problem/problemEdit?problem_id=" + this.problem_id_list[i].id + "&problem_type_id=" + this.problem_id_list[i].type,
+					url: "/pages/problem/problemEdit?problem_id=" + this.problem_id_list[i].id +
+						"&problem_type_id=" + this.problem_id_list[i].type,
 				})
 			},
-			scrollEvent (e) {
+			scrollEvent(e) {
 				//console.log(e);
 			},
 			
@@ -221,15 +220,15 @@
 						duration: 500
 					})
 				}
+
 			},
-			
+
 			deleteProblem(index) {
 				if (this.problem_id_list[index].type == 0) {
 					myRequest.request(api.problem_choice_delete(this.problem_id_list[index].id), 'DELETE', {}).then(
 						function(res) {
 							console.log(res)
-							if (res.statusCode == 200) {
-							} else if (res.statusCode == 401) {
+							if (res.statusCode == 200) {} else if (res.statusCode == 401) {
 								myRequest.redirectToLogin()
 							} else {
 								myRequest.toast()
@@ -239,13 +238,12 @@
 						function(res) {
 							console.log(res)
 							myRequest.toast()
-					})
+						})
 				} else if (this.problem_id_list[index].type == 1) {
 					myRequest.request(api.problem_blank_delete(this.problem_id_list[index].id), 'DELETE', {}).then(
 						function(res) {
 							console.log(res)
-							if (res.statusCode == 200) {
-							} else if (res.statusCode == 401) {
+							if (res.statusCode == 200) {} else if (res.statusCode == 401) {
 								myRequest.redirectToLogin()
 							} else {
 								myRequest.toast()
@@ -255,13 +253,12 @@
 						function(res) {
 							console.log(res)
 							myRequest.toast()
-					})
+						})
 				} else if (this.problem_id_list[index].type == 2) {
 					myRequest.request(api.problem_judge_delete(this.problem_id_list[index].id), 'DELETE', {}).then(
 						function(res) {
 							console.log(res)
-							if (res.statusCode == 200) {
-							} else if (res.statusCode == 401) {
+							if (res.statusCode == 200) {} else if (res.statusCode == 401) {
 								myRequest.redirectToLogin()
 							} else {
 								myRequest.toast()
@@ -271,11 +268,11 @@
 						function(res) {
 							console.log(res)
 							myRequest.toast()
-					})
+						})
 				}
 				this.problem_id_list.splice(index, 1)
 			},
-			
+
 			back() {
 				uni.navigateBack({
 					delta: 1,
@@ -289,15 +286,16 @@
 	.main-body {
 		margin: 20px;
 	}
+
 	.status-bar {
 		width: 100%;
 		position: sticky;
 		top: 0;
 		z-index: 10;
 	}
+
 	.problem-title {
 		width: 90%;
 		overflow: hidden;
-		height: 20px;
 	}
 </style>
