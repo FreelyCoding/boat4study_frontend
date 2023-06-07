@@ -412,10 +412,8 @@
 						}
 						else if (res.statusCode == 400) {
 							console.log(res)
-							this.tui.toast("验证码错误或已过期")
-						}
-						else if (res.statusCode == 409){
-							this.tui.toast("用户名已存在");
+							this.tui.toast(res.data)
+							
 						}
 						else {
 							this.tui.toast("发生未知错误")
