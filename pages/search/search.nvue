@@ -9,11 +9,19 @@
 				</block>
 			</uni-nav-bar>
 		</view>
-		
+
 		<view>
 			<!--自定义navbar-->
 			<view class="m-middle-2" style="padding-top: 10px; padding-bottom: 0px; display: flex;">
 				<uni-row>
+					<uni-col>
+						<u-input placeholder="搜索题库、笔记、小组" prefixIcon="search"
+							prefixIconStyle="font-size: 20px;color: #909399" shape="circle" v-model="editValue"
+							customStyle="background-color: white;" @confirm="search()">
+						</u-input>
+					</uni-col>
+
+					<!--
 					<uni-col :span="20">
 						<u-input placeholder="搜索题库、笔记、小组" prefixIcon="search"
 							prefixIconStyle="font-size: 20px;color: #909399" shape="circle" v-model="editValue"
@@ -22,12 +30,14 @@
 					</uni-col>
 					<uni-col :span="4">
 						<button class="search-btn" size="mini" @click="search()" style="margin: auto;">
-							<view style="display:flex;align-items:center;justify-content:center;font-size: 16px;">
+							<view>
 								搜索
 							</view>
 						</button>
 					</uni-col>
+					-->
 				</uni-row>
+
 				<uni-row>
 					<uni-col>
 						<view style="display:flex;align-items:center;justify-content:center;">
@@ -45,7 +55,7 @@
 			<view class="u-demo-block">
 				<u-list customStyle="margin: auto; margin-top: 10px;">
 					<u-list-item v-for="(item, index) in problemSet" :key="index">
-						<uni-card isShadow border padding="10px 0px 10px 0px" margin="0px 10px 15px 10px"
+						<uni-card isShadow border padding="15px 0px 10px 0px" margin="0px 10px 15px 10px"
 							style="border-radius: 10px;" @click="jumpToPS(item)">
 							<view>
 								<uni-row>
@@ -95,15 +105,14 @@
 			</view>
 		</view>
 
-		<view v-else-if="select_area == 1 && notes.length != 0">
-			<view v-for="(item, index) in notes" :key="index" style="margin-top: 10px;">
+		<view v-else-if="select_area == 1 && notes.length != 0" style="margin-top: 10px;">
+			<view v-for="(item, index) in notes" :key="index" >
 				<uni-card isShadow border padding="15px 5px 0px 5px" margin="0px 15px 15px 15px"
-					style="border-radius: 10px;" @click="jumpToNote(item)">
+					 @click="jumpToNote(item)" style="border-radius: 10px;">
 					<view class="u-demo-block">
 						<view>
 							<view>
 								<text class="note-title">{{item.note_title}}</text>
-
 								<uni-row v-if="item.pic" style="margin-top: 15px;">
 									<uni-col :span="12">
 										<view>
@@ -153,12 +162,13 @@
 							</view>
 						</view>
 					</view>
+
 				</uni-card>
 			</view>
 		</view>
-		
-		<view v-else-if="select_area == 2 && group.length != 0" >
-			<view v-for="(item, index) in group" :key="index" style="margin-top: 5px;">
+
+		<view v-else-if="select_area == 2 && group.length != 0" style="margin-top: 10px;">
+			<view v-for="(item, index) in group" :key="index" >
 				<uni-card @click="jumpToGroup(item)" isShadow border padding="15px 0px 15px 0px"
 					margin="0px 15px 15px 15px" style="border-radius: 10px;">
 					<view>
@@ -170,7 +180,7 @@
 								</p>
 							</uni-col>
 							<uni-col :span="2">
-		
+
 							</uni-col>
 							<uni-col :span="14" align="start">
 								<div class="shuhei" style="margin-bottom: 5px;margin-top: 12px;">
@@ -183,7 +193,7 @@
 						</uni-row>
 						<u-divider> </u-divider>
 					</view>
-		
+
 					<text class="uni-body">{{item.description}}</text>
 				</uni-card>
 			</view>
@@ -197,7 +207,7 @@
 	import note from '@/pages/note/note.vue'
 	import myRequest from '../../common/request';
 	import api from '@/common/api.js';
-	
+
 	const h = uni.getSystemInfoSync().statusBarHeight;
 	export default {
 		data() {
@@ -227,11 +237,11 @@
 		onLoad() {
 			this.refresh()
 		},
-		computed:{
-			scrollH:function(){
+		computed: {
+			scrollH: function() {
 				let sys = uni.getSystemInfoSync();
-				let winHeight =parseInt(sys.windowHeight)-50
-				return winHeight	
+				let winHeight = parseInt(sys.windowHeight) - 50
+				return winHeight
 			},
 			barHeight() {
 				return `calc(${h}px + 44px)`
@@ -276,7 +286,7 @@
 				for (let key in curParam) {
 					param += '&' + key + '=' + curParam[key]
 				}
-			
+
 				// 把参数保存为对像
 				let obj = {}
 				for (let key in curParam) {
@@ -487,7 +497,7 @@
 					_this.load_problem_set()
 				} else if (this.select_area == 1) {
 					_this.load_note()
-				} else if (this.select_area == 2){
+				} else if (this.select_area == 2) {
 					_this.load_group()
 				}
 			},
@@ -507,16 +517,10 @@
 		top: 0;
 		z-index: 10;
 	}
-	
+
 	.search-btn {
 		background-color: #f1f1f1;
 		color: #00aaff;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		margin-left: 5px;
-		padding: 5px;
-		line-height: 100%;
 	}
 
 	.search-btn::after {

@@ -41,7 +41,7 @@
 			</view>
 		</u-popup>
 
-		<view v-if="this.problemSet.length != 0">
+		<view v-if="this.problemSet.length != 0" style="margin-top: 10px;">
 			<view class="u-demo-block">
 					<uni-card isShadow border padding="10px 0px 10px 0px" margin="0px 10px 15px 10px"
 						style="border-radius: 10px;" @click="jumpToPS(item)"
