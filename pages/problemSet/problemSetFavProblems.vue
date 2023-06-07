@@ -39,7 +39,7 @@
 										<uni-tag text="已收藏" type="primary" class="tag-fav"
 											custom-style="background-color: #f9ae3d;font-size: 12px;border: 2px;"
 											@click="unfav_pro(index)" v-if="item.is_favorite" />
-									</view>							
+									</view>
 								</uni-col>
 							</uni-row>
 							<u-divider> </u-divider>
@@ -112,15 +112,16 @@
 						console.log(res)
 						myRequest.toast()
 					})
-
-				for (var i = 0; i < ret.length; i++) {
-					await this.problem_id_list.push({
-						id: ret[i].id,
-						type: ret[i].problem_type_id,
-						selected: 0,
-						title: ret[i].description.split("#")[0],
-						is_favorite: ret[i].is_favorite,
-					})
+				if (ret != null && ret.length > 0) {
+					for (var i = 0; i < ret.length; i++) {
+						await this.problem_id_list.push({
+							id: ret[i].id,
+							type: ret[i].problem_type_id,
+							selected: 0,
+							title: ret[i].description.split("#")[0],
+							is_favorite: ret[i].is_favorite,
+						})
+					}
 				}
 			},
 

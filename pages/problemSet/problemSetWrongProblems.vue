@@ -34,7 +34,7 @@
 
 								<uni-col :span="9" align="start">
 									<view style="text-align: center;">
-										<view >
+										<view>
 											错误{{item.wrong_count}}次
 										</view>
 										<button class="button" size="mini" type="primary"
@@ -77,12 +77,9 @@
 		},
 		onLoad: function(option) {
 			myRequest.checkLogin()
-
 			console.log(option.id); //打印出上个页面传递的参数。
 			this.problem_set_id = option.id
-
 			this.load_new_page()
-
 		},
 		methods: {
 			jumpToProbelmDetail(i) {
@@ -141,15 +138,17 @@
 						myRequest.toast()
 					})
 
-				for (var i = 0; i < ret.length; i++) {
-					await this.problem_id_list.push({
-						id: ret[i].id,
-						type: ret[i].problem_type_id,
-						selected: 0,
-						title: ret[i].description.split("#")[0],
-						wrong_count: 0,
-					})
-					this.get_problem_wrong_count(this.problem_id_list.length - 1)
+				if (ret != null && ret.length > 0) {
+					for (var i = 0; i < ret.length; i++) {
+						await this.problem_id_list.push({
+							id: ret[i].id,
+							type: ret[i].problem_type_id,
+							selected: 0,
+							title: ret[i].description.split("#")[0],
+							wrong_count: 0,
+						})
+						this.get_problem_wrong_count(this.problem_id_list.length - 1)
+					}
 				}
 			},
 
