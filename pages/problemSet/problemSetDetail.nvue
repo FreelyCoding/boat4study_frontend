@@ -610,8 +610,10 @@
 				}
 			},
 			unPublishPS() {
-				this.proDetail.is_public = false
-				this.proDetailEdit.is_public = false
+				if (this.user_info.user_id == this.proDetail.user_id) {
+					this.proDetail.is_public = false
+					this.proDetailEdit.is_public = false
+				}
 				if (this.user_info.user_id != this.proDetail.user_id) {
 					myRequest.toast('您没有修改权限~', 1000)
 					setTimeout(() => {

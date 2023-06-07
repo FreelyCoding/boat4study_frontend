@@ -2,7 +2,7 @@
 	<view class="container">
 		<view class="tui-bg-box">
 			<image src="@/static/pic/login/bg_login.png" class="tui-bg-img"></image>
-			<image src="@/static/pic/login/mine_def_touxiang_3x.png" class="tui-photo"></image>
+			<image src="@/static/pic/boat4study.png" class="tui-photo"></image>
 			<view class="tui-login-name">学舟</view>
 		</view>
 		<form :report-submit="true" @submit="formRegister">

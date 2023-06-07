@@ -15,6 +15,9 @@
 				default: () => {
 					return null;
 				}
+			},
+			authorId: {
+				
 			}
 		},
 		watch: {
@@ -107,7 +110,7 @@
 									var avatar = myRequest.imageUrl() + '/public/' + promise.data.avatar_path
 									var t = {
 										"id": review.id,
-										"owner": review.user_id == myRequest.getUID(),
+										"owner": review.user_id == myRequest.getUID() || myRequest.getUID() == this.authorId,
 										"hasLike": review.is_liked,
 										"likeNum": review.like_count,
 										"avatarUrl": avatar ,

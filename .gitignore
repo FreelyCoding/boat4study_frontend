@@ -18,3 +18,5 @@ unpackage/cache/
 
 # python
 *.pyc
+
+.idea/

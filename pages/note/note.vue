@@ -29,7 +29,7 @@
 			</view>
 
 			<!--分界线-->
-			<u-line></u-line>
+			<!-- <u-line></u-line> -->
 
 			<view>
 				<u-row>
@@ -58,7 +58,7 @@
 				</u-row>
 			</view>
 			
-			<u-line></u-line>
+			<!-- <u-line></u-line> -->
 
 			<!--笔记内容-->
 			<view class="page-body">
@@ -74,16 +74,52 @@
 			<!-- <uni-fab class="fab" horizontal="right" vertical="bottom" icon="icon-edit" -->
 			<!-- icon_size="28" :pattern="pattern"/> -->
 
-
-			<!--悬浮按钮-->
-			<uni-fab ref="fab" horizontal="right" vertical="bottom" direction="horizontal" :content="fabContent"
-				@trigger="trigger"></uni-fab>
-
-
 			<u-line></u-line>
 
+			<view style="margin-top: 10px;">
+				<uni-row>
+					<uni-col :offset="1" :span="2">
+						<view v-if="isLike" @click="clickLike()">
+							<u-icon name="/static/pic/note/heart-active.png" size="26px"></u-icon>
+						</view>
+						
+						<view v-else="!isLike" @click="clickLike()">
+							<u-icon name="/static/pic/note/heart.png" size="26px"></u-icon>
+						</view>
+					</uni-col>
+					
+					<uni-col :span="4">
+						<button type="primary" size="mini"
+							style="width: 60px; background-color: #00aaff; margin-left: 5px;">{{ likeCount }}</button>
+					</uni-col>
+					<uni-col :offset="10" :span="2">
+						<view v-if="isStar">
+							<u-icon name="/static/pic/note/star-active.png" size="28px" @click="clickStar"></u-icon>
+						</view>
+						
+						<view v-else="!isStar">
+							<u-icon name="/static/pic/note/star.png" size="28px" @click="clickStar"></u-icon>
+						</view>
+					</uni-col>
+					<uni-col :span="4">
+						<button size="mini"
+							style="width: 60px; background-color: #f9ae3d; color: white; margin-left: 5px;">
+							{{ starCount }}</button>
+					</uni-col>
+				</uni-row>
+			</view>
+
+			<view v-if="authorInfo.id == userId">
+				<!--悬浮按钮-->
+				<uni-fab ref="fab" horizontal="right" vertical="bottom" direction="horizontal" :content="fabContent"
+					@trigger="trigger"></uni-fab>
+			</view>
+			
+
+			<!-- <u-line></u-line> -->
+
 			<!--评论-->
-			<comment-eg :articleId="note_id"></comment-eg>
+			<comment-eg :articleId="note_id" :authorId="authorInfo.id"></comment-eg>
 
 		</view>
 
@@ -327,6 +363,11 @@
 				
 				like_index: 2, 
 				star_index: 3,
+				
+				isLike: false,
+				isStar: false,
+				likeCount: 0,
+				starCount: 0,
 
 				authorInfo: {
 					id: null,
@@ -347,18 +388,6 @@
 						iconPath: '/static/pic/note/edit-fill.png',
 						selectedIconPath: '/static/pic/note/edit-fill-active.png',
 						text: '编辑',
-						active: false
-					},
-					{
-						iconPath: '/static/pic/note/heart.png',
-						selectedIconPath: '/static/pic/note/heart-active.png',
-						text: '喜欢',
-						active: false
-					},
-					{
-						iconPath: '/static/pic/note/star.png',
-						selectedIconPath: '/static/pic/note/star-active.png',
-						text: '收藏',
 						active: false
 					}
 				],
@@ -753,12 +782,10 @@
 									
 									this.authorInfo.id = data.user_id
 									
-									if (data.is_liked) {
-										this.fabContent[this.like_index].active = true
-									}
-									if (data.is_favorite) {
-										this.fabContent[this.star_index].active = true
-									}
+									this.isLike = data.is_liked
+									this.isStar = data.is_favorite
+									this.likeCount = data.like_count
+									this.starCount = data.favorite_count
 									
 									if (data.user_id != myRequest.getUID()) {
 										this.fabContent = this.fabContent.slice(2)
@@ -889,7 +916,108 @@
 					})	
 				
 				}
+			},
+			
+			clickLike() {
+				var url, method;
+				if (this.isLike) {
+					url = `/note/unlike/${this.note_id}`
+					method = 'POST'
+				}
+				else {
+					url = `/note/like/${this.note_id}`
+					method = 'POST'
+				}	
+				uni.request({
+					url: myRequest.interfaceUrl() + url,
+					method: method,
+					header: {
+						'X-Token': myRequest.getToken()
+					},
+					success: (res) => {
+						if (res.statusCode == 200) {
+							console.log(res)
+							this.isLike = !this.isLike
+							if (this.isLike) {
+								this.likeCount += 1
+							}
+							else {
+								this.likeCount -= 1
+							}
+						}
+						else if (res.statusCode == 401) {
+							myRequest.toast('请先登录')
+							uni.redirectTo({
+								url: '/pages/login/login'
+							})
+						}
+						else {
+							console.log('wrong')
+							myRequest.toast()
+							uni.switchTab({
+								url: '/pages/homePage/noteIndex'
+							})
+						}
+					},
+					
+					fail: (res) => {
+						myRequest.toast()
+						uni.switchTab({
+							url: '/pages/homePage/noteIndex'
+						})
+					}
+				})	
+			},
 
+			clickStar() {
+				var url, method;
+				if (this.isStar) {
+					url = `/note/unfavorite/${this.note_id}`	
+					method = 'DELETE'
+				}
+				else {
+					url = `/note/favorite/${this.note_id}`
+					method = 'POST'
+				}			
+				uni.request({
+					url: myRequest.interfaceUrl() + url,
+					method: method,
+					header: {
+						'X-Token': myRequest.getToken()
+					},
+					success: (res) => {
+						if (res.statusCode == 200) {
+							console.log(res)
+							this.isStar = !this.isStar
+							if (this.isStar) {
+								this.starCount += 1
+							}
+							else {
+								this.starCount -= 1
+							}
+						}
+						else if (res.statusCode == 401) {
+							myRequest.toast('请先登录')
+							uni.redirectTo({
+								url: '/pages/login/login'
+							})
+						}
+						else {
+							console.log('wrong')
+							myRequest.toast()
+							uni.switchTab({
+								url: '/pages/homePage/noteIndex'
+							})
+						}
+					},
+					
+					fail: (res) => {
+						myRequest.toast()
+						uni.switchTab({
+							url: '/pages/homePage/noteIndex'
+						})
+					}
+				})	
 			},
 
 			back() {
