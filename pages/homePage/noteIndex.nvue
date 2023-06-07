@@ -18,7 +18,7 @@
 
 		<view v-if="notes && notes.length != 0" style="margin-top: 10px;">
 			<view v-for="(item, index) in notes" :key="index">
-				<uni-card isShadow border padding="15px 5px 0px 5px" margin="0px 15px 15px 15px"
+				<uni-card isShadow border padding="15px 5px 0px 5px"
 					style="border-radius: 10px;" @click="cardClick(item)">
 					<view class="u-demo-block">
 						<view>
@@ -101,13 +101,16 @@
 		</view>
 
 		<view v-else-if="!isLoading"
-			style="padding: 10px 0 10px 0; position: sticky; bottom: 0px; background-color: #EDEDED;">
-			<p style="margin: auto;width: 92%">
-				<button style="background-color: #00aaff; color: white; 
-						 margin-bottom: 10px;" @click="jumpToCreateNote">
-					创建笔记
-				</button>
-			</p>
+			style="padding: 10px 0 10px 0; background-color: #EDEDED;">
+			
+			<view style="margin-bottom: 10px;">
+				<p style="margin: auto;width: 92%">
+					<button style="background-color: #00aaff; color: white; 
+							 margin-bottom: 10px;" @click="jumpToCreateNote">
+						创建笔记
+					</button>
+				</p>
+			</view>
 		</view>
 
 

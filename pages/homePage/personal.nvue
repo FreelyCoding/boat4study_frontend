@@ -13,12 +13,31 @@
 							</view>
 						</uni-col>
 
+						<!-- <uni-col :span="8">
+							<view style="margin: 10px 0px 10px 10px;">
+								<p class="user_name">{{user.nickName}}</p>
+								<p class="uid">uid: &ensp; {{user.uid}}</p>
+							</view>
+						</uni-col>
+						
+						<uni-col :span="8">
+							<view style="margin: 10px 0px 10px 0px;">
+								<view style="display: flex; justify-content: center;">
+									<!-- <p class="user_name">微信绑定</p> -->
+									<!-- <u-icon name="weixin-circle-fill" -->
+										<!-- size="50px" color="#00ff00" @click="wxBind"></u-icon> -->
+								<!-- </view> -->
+							<!-- </view> -->
+						<!-- </uni-col> -->
+						
+						
 						<uni-col :span="16">
 							<view style="margin: 20px 0px 10px 30px;">
 								<p class="user_name">{{user.nickName}}</p>
 								<p class="uid">uid: &ensp; {{user.uid}}</p>
 							</view>
 						</uni-col>
+						
 					</uni-row>
 				</view>
 			</div>
@@ -204,6 +223,22 @@
 								</u-col>
 							</u-row>
 							<u-divider style="margin-bottom: 15px;"></u-divider>
+							
+							<!-- #ifdef MP-WEIXIN -->
+							<u-row @click="wxBind()">
+								<u-col :span="2">
+									<u-icon name="weixin-fill" size="40px" color="#00aaff"></u-icon>
+								</u-col>
+								<u-col :span="9">
+									<p class="star-title"> 绑定微信 </p>
+								</u-col>
+								<u-col :span="1">
+									<u-icon name="arrow-right" size="20px"></u-icon>
+								</u-col>
+							</u-row>
+							<u-divider style="margin-bottom: 15px;"></u-divider>
+							<!-- #endif -->
+							
 							<u-row @click="logoutDialogToggle()" style="margin-bottom: 20px;">
 								<u-col :span="2">
 									<u-icon name="/static/pic/exit.svg" size="40px"></u-icon>
@@ -383,8 +418,6 @@
 				this.$refs.inputDialog.close()
 			},
 
-
-
 			inputDialogToggle() {
 				this.$refs.inputDialog.open()
 			},
@@ -464,8 +497,55 @@
 						myRequest.toast()
 					}
 				)
-			}
+			},
 
+			wxBind() {
+				console.log('waiting bind')
+				
+				uni.login({
+					provider: 'weixin',
+					univerifyStyle: true,
+					success: (res) => {
+						console.log(res)
+						var code = res.code
+						var data = JSON.stringify({
+							"code": code
+						})
+						
+						console.log(data)
+						
+						uni.request({
+							url: myRequest.interfaceUrl() + '/weixin-bind',
+							method:'POST',
+							data: data,
+							header: {
+								"X-Token": myRequest.getToken()
+							},
+							
+							success: res => {
+								
+								console.log(res)
+								if (res.statusCode == 200) {
+									console.log("绑定成功")
+									myRequest.toast("绑定成功")
+								}
+								else {
+									myRequest.toast(res.data)
+								}
+							},
+							fail: res => {
+								myRequest.toast()
+								console.log('fail')
+							}
+						})
+					},
+					
+					fail: (res) => {
+						myRequest.toast()
+					}
+				})
+			}
+			
 		},
 	}
 </script>

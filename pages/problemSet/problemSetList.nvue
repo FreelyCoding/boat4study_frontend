@@ -1,6 +1,6 @@
 <template>
 	<view class="box">
-		<view class="status-bar">
+		<view class="status-bar" :style="{height: barHeight}">
 			<uni-nav-bar title="题库" background-color="#00aaff" color="#FFFFFF" status-bar="true">
 				<block slot="left">
 					<view class="note-navbar">
@@ -118,6 +118,7 @@
 	import myRequest from '../../common/request';
 	import api from '@/common/api.js';
 
+	const h = uni.getSystemInfoSync().statusBarHeight;
 	export default {
 		data() {
 			return {
@@ -177,6 +178,9 @@
 				let sys = uni.getSystemInfoSync();
 				let winHeight =parseInt(sys.windowHeight)-50
 				return winHeight	
+			},
+			barHeight() {
+				return `calc(${h}px + 44px)`
 			}
 		},
 		onLoad() {
@@ -267,17 +271,17 @@
 </script>
 
 <style>
-	page {
-		background: #EDEDED;
-	}
-
 	.status-bar {
 		width: 100%;
 		position: sticky;
 		top: 0;
 		z-index: 10;
 	}
-
+	
+	page {
+		background: #EDEDED;
+	}
+	
 	.grid-item {
 		margin: 5px 0 5px 0;
 		width: 80%;

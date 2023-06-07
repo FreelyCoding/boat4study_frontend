@@ -368,9 +368,7 @@
 				, {
 					"path": "problemSetList",
 					"style": {
-						"navigationBarTitleText": "",
-						"navigationStyle": "custom",
-						"enablePullDownRefresh": false
+						"navigationStyle": "custom"
 					}
 
 				}
