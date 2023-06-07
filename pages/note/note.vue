@@ -29,7 +29,7 @@
 			</view>
 
 			<!--分界线-->
-			<u-line></u-line>
+			<!-- <u-line></u-line> -->
 
 			<view>
 				<u-row>
@@ -58,7 +58,7 @@
 				</u-row>
 			</view>
 			
-			<u-line></u-line>
+			<!-- <u-line></u-line> -->
 
 			<!--笔记内容-->
 			<view class="page-body">
@@ -116,7 +116,7 @@
 			</view>
 			
 
-			<u-line></u-line>
+			<!-- <u-line></u-line> -->
 
 			<!--评论-->
 			<comment-eg :articleId="note_id" :authorId="authorInfo.id"></comment-eg>
