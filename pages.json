@@ -294,7 +294,17 @@
 							"enablePullDownRefresh": false
 					}
 				}
-			]
+			    ,{
+                    "path" : "problemCreateBatch",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+										"navigationStyle": "custom",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+            ]
 		},
 		{
 			"root": "pages/problemSet",
