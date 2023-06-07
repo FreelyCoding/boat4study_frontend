@@ -73,7 +73,8 @@
 					{
 						iconPath: "../../static/pic/problemSet/piliang.svg",
 						title: "批量导入",
-						description: "参考模板调整文档格式内容, 上传文档"
+						description: "参考模板调整文档格式内容, 上传文档",
+						url: "/pages/problem/problemCreateFromTxt?id="
 					},
 					
 				]

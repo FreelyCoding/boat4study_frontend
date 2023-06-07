@@ -9,12 +9,17 @@ const store = new Vuex.Store({
     state: {
         // 用户信息
         photo_path: '',
+				pro_id_batch: [],
     },
 		mutations: {
 			set_photo(state, new_path) {
 				state.photo_path = new_path
 				//console.log(state.photo_path)
-			}
+			},
+			set_pro_id_batch(state, new_pro_id_batch) {
+				state.pro_id_batch = new_pro_id_batch
+				//console.log(state.photo_path)
+			},
 		}
 })
 

@@ -15,7 +15,8 @@
 
 			<uni-section title="PDF文字识别" type="line" class="select_box">
 				<view class="" style="margin-top: 15px; margin-bottom: 15px; display: flex; justify-content: space-around;">
-					<uni-file-picker limit="1" file-mediatype="all" title="选择上传1个PDF文件"></uni-file-picker>
+					<button type="primary" size="mini"
+					 style="background-color: #00aaff;" @click="upload_pdf_file()">上传PDF文件</button>
 				</view>
 				<view class="" v-if="ocr_result != ''">
 					<text selectable>{{ocr_result}}</text>
@@ -359,35 +360,7 @@
 			console.log("problem_set_id: "+this.problem_set_id)
 		},
 		onShow: function() {
-			var _this = this
-			console.log(this.photo_path)
-			pathToBase64(this.photo_path).then( base64 => {
-			   //console.log('result 转换为base64：', base64);
-				 var data = {
-					 image_base64: base64,
-					 raw_result: false,
-				 }
-			    myRequest.request(api.special_picture_ocr(), 'POST', data).then(
-			    	function(res) {
-			    		console.log(res)
-			    		if (res.statusCode == 200) {
-			    			_this.ocr_result = res.data.replaceAll("\n","")
-			    
-			    		} else if (res.statusCode == 401) {
-			    			myRequest.redirectToLogin()
-			    		} else {
-			    			myRequest.toast()
-			    		}
-			    	}
-			    ).catch(
-			    	function(res) {
-			    		console.log(res)
-			    		myRequest.toast()
-			    	}
-			    )
-			}).catch(error => {
-			    console.error(error)
-			})
+
 		},
 		methods: {
 			back() {
@@ -547,7 +520,30 @@
 			},
 			
 			async upload_pdf_file() {
-				
+				var _this = this
+				wx.chooseMessageFile({
+					count: 1,//限制选择的文件数量
+					type: 'file',//非图片和视频的文件,不选默认为all
+					success (res) {
+					 const tempFilePaths = res.tempFiles
+						 myRequest.uploadFile('/special/pdf_ocr?raw_result=false&page=1', tempFilePaths[0].path, 'file', {}).then(
+						 	function(res) {
+						 		console.log(res)
+						 		if (res.statusCode == 200) {
+						 			_this.ocr_result = res.data
+						 		} else if (res.statusCode == 401) {
+						 			myRequest.redirectToLogin()
+						 		} else {
+						 			myRequest.toast()
+						 		}
+						 	}
+						 ).catch(
+						 	function(res) {
+						 		console.log(res)
+						 		myRequest.toast()
+						 })
+					}
+				})
 			},
 			
 			myIsNaN(value) {
