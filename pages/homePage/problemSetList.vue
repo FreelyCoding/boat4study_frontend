@@ -5,7 +5,7 @@
 			<uni-nav-bar title="选择题库" background-color="#00aaff" color="#FFFFFF" status-bar="true">
 				<block slot="left">
 					<view class="note-navbar">
-						<uni-icons type="left" color="#FFFFFF" size="18" />
+						
 					</view>
 				</block>
 			</uni-nav-bar>
@@ -99,7 +99,7 @@
 		methods: {
 			jumpToPSDetail(problem_set_id) {
 				uni.navigateTo({
-					url: "/pages/problemSet/problemSetDetailOfficial?id=" + problem_set_id
+					url: "/pages/problemSet/problemSetDetail?id=" + problem_set_id
 				})
 			},
 			scrollEvent (e) {
