@@ -55,8 +55,8 @@
 			<view class="u-demo-block">
 				<u-list customStyle="margin: auto; margin-top: 10px;">
 					<u-list-item v-for="(item, index) in problemSet" :key="index">
-						<uni-card isShadow border padding="15px 0px 10px 0px" margin="0px 10px 15px 10px"
-							style="border-radius: 10px;" @click="jumpToPS(item)">
+						<uni-card isShadow border padding="15px 5px 0px 5px" margin="0px 15px 15px 15px"
+							 @click="jumpToPS(item)" style="border-radius: 10px;">
 							<view>
 								<uni-row>
 									<uni-col :span="2" align="start">
