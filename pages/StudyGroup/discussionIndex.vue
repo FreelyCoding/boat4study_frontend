@@ -252,6 +252,11 @@
 								}
 							}
 							this.loadData(0)
+							
+							if (res.data.discussions.length < this.limit) {
+								this.status = 'nomore'
+							}
+							
 						} else if (res.statusCode == 401) {
 							myRequest.redirectToLogin()
 						} else {
@@ -312,6 +317,10 @@
 						console.log(this.discussions)
 					
 						this.loadData(lastOffset)
+						
+						if (res.data.discussions.length < this.limit) {
+							this.status = 'nomore'
+						}
 						
 					} else if (res.statusCode == 401) {
 						myRequest.redirectToLogin()
