@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<view class="status-bar">
+		<view class="status-bar" :style="{height: barHeight}">
 			<uni-nav-bar title="题目收藏" background-color="#00aaff" color="#FFFFFF" status-bar="true">
 				<block slot="left">
 					<view class="note-navbar">
@@ -62,11 +62,23 @@
 	import note from '@/pages/note/note.vue'
 	import index from '@/pages/homePage/noteIndex.nvue'
 	import myRequest from '../../common/request';
+	
+	const h = uni.getSystemInfoSync().statusBarHeight;
 	import api from '@/common/api.js';
 	export default {
 		data() {
 			return {
 				ps: [],
+			}
+		},
+		computed:{
+			scrollH:function(){
+				let sys = uni.getSystemInfoSync();
+				let winHeight =parseInt(sys.windowHeight)-50
+				return winHeight	
+			},
+			barHeight() {
+				return `calc(${h}px + 44px)`
 			}
 		},
 		onShow() {
