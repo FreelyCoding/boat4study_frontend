@@ -111,10 +111,10 @@
 			async load_new_page() {
 				for (var i=0;i<this.pro_batch.length;i++) {
 					await this.problem_id_list.push({
-						id: this.pro_batch[i].ProblemId,
-						type: this.pro_batch[i].ProblemType,
+						id: this.pro_batch[i].problem_id,
+						type: this.pro_batch[i].problem_type,
 						selected: 0,
-						title: this.pro_batch[i].Description.split("#")[0],
+						title: this.pro_batch[i].description,
 					})
 				}
 			},
