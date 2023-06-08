@@ -240,8 +240,6 @@
 					"password": this.password
 				}
 				
-				myRequest.toast('准备调用接口')
-				
 				uni.request({
 					url: myRequest.interfaceUrl() + "/login",
 					method: 'POST',
@@ -249,7 +247,6 @@
 					dataType: 'json',
 					
 					success: res => {
-						myRequest.toast("调用接口成功")
 						if (res.statusCode == 200) {
 							this.tui.toast('登录成功')
 							this.store(res.data.token)
@@ -260,7 +257,6 @@
 					},
 					
 					fail: res => {
-						myRequest.toast('调用接口失败')
 						if (res == null) {
 							myRequest.toast("res为null")
 						}
