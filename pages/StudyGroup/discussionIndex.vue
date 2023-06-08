@@ -78,17 +78,22 @@
 				</uni-card>
 			</view>
 			
-			<u-loadmore :status="status" line lineColor="#000000"/>
+			<view style="margin-bottom: 80px; margin-top: 30px;">
+				<u-loadmore :status="status" line lineColor="#000000"/>
+			</view>
+			
+			<view>
+				<u-line></u-line>
+			</view>
+			
 		</view>
 
-		
 		<view v-else-if="!isLoading" style="text-align: center;">
-			<view class="" :style="{height:theWindowH+'px'}">
-				<image src="../../static/pic/note/no_note.png"
-					style="margin: auto; margin-top: 30px; height: 200px; width: 200px;"></image>
-				<p style="font-size: 20px;margin-top: 30px;">暂无讨论</p>
-			</view>
+			<image src="../../static/pic/note/no_note.png"
+				style="margin: auto; margin-top: 30px; height: 200px; width: 200px;"></image>
+			<p style="font-size: 20px;margin-top: 30px;">暂无讨论</p>
 		</view>
+		
 		
 		<view style="padding: 10px 0 10px 0; position: fixed; bottom: 0px;background-color: #EDEDED; width: 100%;">
 			<p style="margin: auto; width: 96%;">

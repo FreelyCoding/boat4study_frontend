@@ -81,7 +81,7 @@
 				</uni-card>
 			</view>
 			
-			<view style="margin-bottom: 50px;">
+			<view style="margin-bottom: 45px;">
 				<u-loadmore :status="status" line lineColor="#000000" />
 			</view>
 		</view>
@@ -115,7 +115,7 @@
 			</view>
 		</view> -->
 		
-		<view v-if="this.platfrom == 'web' && !isLoading"
+		<view v-if="this.platfrom == 'web'"
 		style="padding: 10px 0 10px 0; position: fixed; bottom: 40px;background-color: #EDEDED; width: 100%;">
 			<p style="margin: auto; width: 96%;">
 				<button style="background-color: #00aaff; color: white; 
@@ -125,8 +125,7 @@
 			</p>
 		</view>
 		
-		<view v-else-if="!isLoading"
-		style="padding: 10px 0 10px 0; position: fixed; bottom: 0px;background-color: #EDEDED; width: 100%;">
+		<view v-else style="padding: 10px 0 10px 0; position: fixed; bottom: 0px;background-color: #EDEDED; width: 100%;">
 			<p style="margin: auto; width: 96%;">
 				<button style="background-color: #00aaff; color: white; 
 				 margin-bottom: 5px;" @click="jumpToCreateNote">
