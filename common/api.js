@@ -4,7 +4,7 @@ const {
 // 获取菜单
 export const fetchMenu = (params, config = {}) => http.post('/ebapi/public_api/index', params, config)
 export default {
-	
+
 	wrong_record_create(id) {
 		return "/wrong_record/create/" + id;
 	},
@@ -14,13 +14,13 @@ export default {
 	wrong_record_get(id) {
 		return "/wrong_record/get/" + id;
 	},
-	
-	
+
+
 	problem_set_migrate_problem(set_id, problem_id) {
 		let api = "/problem_set/migrate/" + set_id + "?problem_id=" + problem_id;
 		return api;
 	},
-	
+
 	problem_blank_all(params) {
 		let api = "/problem/blank/all";
 		if (params.id != null) {
@@ -173,6 +173,9 @@ export default {
 			if (params.group_id != null) {
 				api += "&group_id=" + params.group_id;
 			}
+			if (params.is_public != null) {
+				api += "&is_public=" + params.is_public
+			}
 		} else if (params.id != null) {
 			api += "?id=" + params.id;
 			if (params.is_favorite != null) {
@@ -187,6 +190,9 @@ export default {
 			if (params.group_id != null) {
 				api += "&group_id=" + params.group_id;
 			}
+			if (params.is_public != null) {
+				api += "&is_public=" + params.is_public
+			}
 		} else if (params.is_favorite != null) {
 			api += "?is_favorite=" + params.is_favorite;
 			if (params.user_id != null) {
@@ -198,6 +204,9 @@ export default {
 			if (params.group_id != null) {
 				api += "&group_id=" + params.group_id;
 			}
+			if (params.is_public != null) {
+				api += "&is_public=" + params.is_public
+			}
 		} else if (params.user_id != null) {
 			api += "?user_id=" + params.user_id;
 			if (params.area_id != null) {
@@ -206,13 +215,21 @@ export default {
 			if (params.group_id != null) {
 				api += "&group_id=" + params.group_id;
 			}
+			if (params.is_public != null) {
+				api += "&is_public=" + params.is_public
+			}
 		} else if (params.area_id != null) {
 			api += "?area_id=" + params.area_id;
 			if (params.group_id != null) {
 				api += "&group_id=" + params.group_id;
 			}
+			if (params.is_public != null) {
+				api += "&is_public=" + params.is_public
+			}
 		} else if (params.group_id != null) {
 			api += "?group_id=" + params.group_id;
+		} else if (params.is_public != null) {
+			api += "?is_public=" + params.is_public
 		}
 		console.log(api)
 		return api;
@@ -227,7 +244,7 @@ export default {
 		let api = "/problem_set/delete";
 		return api + "/" + id;
 	},
-	
+
 	problem_set_update(id) {
 		let api = "/problem_set/update";
 		return api;
@@ -300,12 +317,12 @@ export default {
 		let api = "/problem_set/remove/" + id;
 		return api;
 	},
-	
+
 	special_picture_ocr() {
 		let api = "/special/picture_ocr";
 		return api;
 	},
-	
+
 	group_all(params) {
 		let api = "/group/all";
 		if (params.area_id != null) {
@@ -343,106 +360,106 @@ export default {
 		let api = "/group/create";
 		return api;
 	},
-	
+
 	study_group_delete(id) {
 		let api = "/group/delete";
 		return api + "/" + id;
 	},
-	
+
 	study_group_invitation(id) {
 		let api = "/group/invitation";
 		return api + "/" + id;
 	},
-	
+
 	study_group_add(data) {
 		let api = "/group/add"
 		return api + "/" + data.id + "?user_id=" + data.user_id + "&invitation=" + data.invitation
 	},
-	
+
 	study_group_apply() {
 		let api = "/group/apply"
 		return api;
 	},
-	
+
 	stdy_group_application() {
 		let api = "/group/application"
 		return api
 	},
-	
+
 	study_group_remove(data) {
 		let api = "/group/remove"
 		return api + "/" + data.id + "?user_id=" + data.user_id
 	},
-	
+
 	study_group_quit(id) {
 		let api = "/group/quit"
 		return api + "/" + id
 	},
-	
+
 	study_group_update(id) {
 		let api = "/group/update"
 		return api + "/" + id
 	},
-	
+
 	//user
 	user_updatae(data) {
 		let api = "/user/update"
 		return api
 	},
-	
+
 	logout() {
 		let api = "/logout"
 		return api
 	},
-	
+
 	user_wrong_record() {
 		let api = "/user/wrong_record"
 		return api
 	},
-	
+
 	user_info(id) {
 		let api = "/user/info"
 		return api + "/" + id
 	},
-	
+
 	//special
 	wrong_problem_set() {
 		let api = "/special/wrong_problem_set"
 		return api
 	},
-	
+
 	favorite_problem_set() {
 		let api = "/favorite_problem_set"
 		return api
 	},
-	
+
 	//search
 	search_problem_set() {
 		let api = "/search/problem_set"
 		return api
 	},
-	
+
 	search_group() {
 		let api = "/search/group"
 		return api
 	},
-	
+
 	search_note() {
 		let api = "/search/note"
 		return api
 	},
-		
-	
+
+
 	//problemSet
 	problem_set_contains(id) {
 		let api = "/problem_set/all"
 		return api + "?contain=" + id
 	},
-	
+
 	problem_set_wrong(id) {
 		let api = "/problem_set/all_problem"
 		return api + "/" + id + "?iswrong=true"
 	}
-	
+
 
 }

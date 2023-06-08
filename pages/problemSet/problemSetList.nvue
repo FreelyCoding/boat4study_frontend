@@ -183,7 +183,7 @@
 				return `calc(${h}px + 44px)`
 			}
 		},
-		onLoad() {
+		onShow() {
 			myRequest.checkLogin()
 			this.load_one_page()
 		},
@@ -219,16 +219,16 @@
 			
 			load_one_page() {
 				var _this = this
-				
+				this.problemSet = []
 				if (this.select_area == 0) {
 					var the_api = api.problem_set_all({
-					limit:this.page_size,offset:this.loaded_num})
+					limit:this.page_size,offset:this.loaded_num,is_public: true})
 				} else if (this.select_area + 1 == this.problemSet_type_list.length) {
 					var the_api = api.problem_set_all({area_id: 100,
-					limit:this.page_size,offset:this.loaded_num})
+					limit:this.page_size,offset:this.loaded_num,is_public: true})
 				} else {
 					var the_api = api.problem_set_all({area_id: this.select_area,
-					limit:this.page_size,offset:this.loaded_num})
+					limit:this.page_size,offset:this.loaded_num,is_public: true})
 				}
 				
 				myRequest.request(the_api, 'GET', {}).then(
