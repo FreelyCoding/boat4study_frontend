@@ -110,14 +110,6 @@
 				return this.$store.state.photo_path
 			}
 		},
-		onShow: function() {
-			console.log(this.photo_path)
-			if (this.photo_path != '') {
-				uni.navigateTo({
-					url: "/pages/problem/problemCreateFromPhotoOCR?id=" + this.select_proSet_id
-				})
-			}
-		},
 		methods: {
 			back() {
 				uni.navigateBack()
@@ -178,6 +170,13 @@
 					myRequest.toast()
 				}
 			})
+		
+			console.log(this.photo_path)
+			if (this.photo_path != '') {
+				uni.navigateTo({
+					url: "/pages/problem/problemCreateFromPhotoOCR?id=" + this.select_proSet_id
+				})
+			}
 		}
 	}
 </script>
