@@ -119,7 +119,10 @@
 		components: {
 			uIcon,
 			tuiModal,
-			tuiButton
+			tuiButton,
+			form,
+			tuiToast,
+			tuiIcon
 		},
 		data() {
 			return {
