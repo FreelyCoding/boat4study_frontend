@@ -50,6 +50,7 @@
 	export default {
 		data() {
 			return {
+				problem_set_id: 0,
 				input_text: '',
 				model_text: "选择题\n"+
 					"\n" + 
@@ -112,7 +113,7 @@
 				var _this = this
 				var data = String.raw`${this.input_text}`
 				console.log(data)
-				myRequest.request('/problem/batch', 'POST', data).then(
+				myRequest.request('/problem/batch?problem_set_id='+this.problem_set_id, 'POST', data).then(
 					function(res2) {
 						console.log(res2)
 						if (res2.statusCode == 200) {
