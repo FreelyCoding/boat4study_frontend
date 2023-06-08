@@ -170,7 +170,7 @@
 			
 				<view v-for="(item, index) in problemSet">
 					<uni-card isShadow border padding="10px 0px 10px 0px" margin="15px 10px 15px 10px"
-						style="border-radius: 10px;" @click="loadProblemList(item.id)">
+						style="border-radius: 10px;" @click="loadProblemList(item.id)" v-if="item.problem_number > 0">
 						<view>
 							<uni-row>
 								<uni-col :span="3" align="start">
@@ -384,7 +384,7 @@
 					
 					
 					<view class="u-demo-block" style="margin-top: 15px;">
-						<u-list :customStyle="{height:'400px'}">
+						<u-list>
 							<u-list-item style="margin-bottom: 10px;">
 								<view v-if="authorInfo.id == userId">
 									<u-row>
@@ -510,7 +510,7 @@
 
 				],
 				
-				limit: 5, 
+				limit: 10, 
 				offset: 0,
 				curProblemSetId: 0,
 				flag: false
@@ -522,15 +522,6 @@
 				let that = this;
 				
 				var ret;
-				
-				if (this.flag) {
-					return
-				}
-				if (this.offset == 0) {
-					return
-				}
-				
-				this.flag = true
 				
 				myRequest.request(api.problem_set_all_problem({id:this.curProblemSetId, limit: this.limit, offset: this.offset}), 'GET', {}).then(
 					function(res) {
@@ -679,12 +670,11 @@
 				console.log('initProblemList')
 				var ret;
 				
-				if (this.flag) {
-					return
-				}
+				console.log('aaa')
+				console.log(problemSetId)
 				
-				this.flag = true
-
+				this.offset = 0
+				
 				uni.request({
 					url: myRequest.interfaceUrl() + `/problem_set/all_problem/${problemSetId}?offset=${this.offset}&limit=${this.limit}`,
 					method: 'GET',
@@ -697,10 +687,13 @@
 							ret = res.data.problems
 
 							if (ret == null) {
+								console.log('init == null')
 								return;
 							}
 							
 							this.problemList = []
+							
+							this.offset += ret.length
 
 							for (var i = 0; i < ret.length; i++) {
 								this.problemList.push({
@@ -711,6 +704,7 @@
 								})
 							}
 							
+							console.log('init problemList')
 							console.log(this.problemList)
 
 						} else if (res.statusCode == 401) {
@@ -726,12 +720,7 @@
 					fail: res => {
 						this.problemListSelectShow = false
 						myRequest.toast()
-					},
-					
-					complete: res => {
-						this.flag = false
 					}
-
 				})
 
 			},
