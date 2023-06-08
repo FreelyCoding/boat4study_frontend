@@ -19,17 +19,17 @@
 				</view>
 				
 				<view style="margin-top: 10px;">
-					<u-row>
-						<u-col :span="6">
+					<uni-row>
+						<uni-col :span="12">
 							<u--text color="#5c8dff" text="忘记密码？" align="left"
 								size="18" margin="10rpx" @click="toPassword"></u--text>
-						</u-col>
+						</uni-col>
 						
-						<u-col :span="6">
+						<uni-col :span="12">
 							<u--text color="#5c8dff" text="注册" align="right"
 								size="18" margin="10rpx" @click="toRegister"></u--text>
-						</u-col>
-					</u-row>
+						</uni-col>
+					</uni-row>
 				</view>
 
 				
@@ -52,7 +52,6 @@
 					size="50px" color="#32df73" @click="wxLogin"></u-icon>
 			</view>
 		</view>
-		<!-- #endif -->
 		
 		<tui-modal :show="show" @cancel="hide" :custom="true" fadeIn>
 			<view class="tui-modal-custom">
@@ -101,6 +100,8 @@
 				
 			</view>
 		</tui-modal>
+		<!-- #endif -->
+		
 	</view>
 </template>
 
@@ -111,9 +112,10 @@
 	import tuiToast from '@/components/tui-toast/tui-toast.vue'
 	import tuiModal from '@/components/tui-modal/tui-modal.vue'
 	import uIcon from '@/uni_modules/uview-ui/components/u-icon/u-icon.vue'
+	import uText from '@/uni_modules/uview-ui/components/u-text/u-text.vue'
 	
 	import util from '@/util/thor_utils/util.js'
-	import myRequest from '../../common/request'
+	import myRequest from '@/common/request.js'
 	
 	export default {
 		components: {
@@ -140,9 +142,6 @@
 				email: '',
 				code: ''
 			};
-		},
-		onShow() {
-			uni.preloadPage({url: "/pages/homePage/homePage"});
 		},
 		methods: {
 			hide() {
@@ -549,15 +548,6 @@
 		overflow: hidden;
 	}
 	
-	.my-input {
-		font-size: 32rpx;
-		flex: 1;
-		display: inline-block;
-		padding-left: 5rpx;
-		box-sizing: border-box;
-		overflow: hidden;
-	}
-
 	.tui-line-cell {
 		padding: 27rpx 0;
 		display: -webkit-flex;
