@@ -5,12 +5,12 @@
 			<uni-nav-bar title="从其他题库录入" background-color="#00aaff" color="#FFFFFF" status-bar="true">
 				<block slot="left">
 					<view class="note-navbar">
-						<uni-icons type="left" color="#FFFFFF" size="18"  @click="back()"/>
+						<uni-icons type="left" color="#FFFFFF" size="18" @click="back()" />
 					</view>
 				</block>
 			</uni-nav-bar>
 		</view>
-		
+
 		<view v-if="problemSet.length != 0">
 			<view class="u-demo-block">
 				<u-list customStyle="margin: auto; margin-top: 10px;">
@@ -67,30 +67,32 @@
 		</view>
 
 		<view v-else style="text-align: center;">
-			<image src="../../static/pic/note/no_note.png" style="margin: auto; margin-top: 30px; height: 200px; width: 200px;"></image>
+			<image src="../../static/pic/note/no_note.png"
+				style="margin: auto; margin-top: 30px; height: 200px; width: 200px;"></image>
 			<p style="font-size: 20px;margin-top: 30px;">暂无题库</p>
 		</view>
-		
+
 	</view>
 </template>
 
 <script>
 	import myRequest from '../../common/request';
-		
-	export default{
+	import api from '@/common/api.js';
+
+	export default {
 		data() {
 			return {
 				problem_set_id: 0,
 				problemSet: [],
 			};
 		},
-		onShow: function (option) {
+		onShow: function(option) {
 			this.refresh()
 		},
 		methods: {
 			back() {
 				uni.navigateBack({
-				    delta: 1
+					delta: 1
 				});
 			},
 			getParam() {
@@ -102,7 +104,7 @@
 				for (let key in curParam) {
 					param += '&' + key + '=' + curParam[key]
 				}
-			
+
 				// 把参数保存为对像
 				let obj = {}
 				for (let key in curParam) {
@@ -113,7 +115,8 @@
 			jumpToPSPList(item) {
 				console.log(item.id)
 				uni.navigateTo({
-					url: "/pages/problem/problemCreateFromPSPList?id="+this.problem_set_id+"&source_set_id="+item.id
+					url: "/pages/problem/problemCreateFromPSPList?id=" + this.problem_set_id + "&source_set_id=" +
+						item.id
 				})
 			},
 			refresh() {
@@ -121,18 +124,14 @@
 				myRequest.checkLogin()
 				let params = this.getParam();
 				let id = params['id'];
-				
+
 				this.problem_set_id = id;
 				console.log("problem_set_id: " + this.problem_set_id);
 				this.problemSet = []
-				uni.request({
-					url: myRequest.interfaceUrl() + '/problem_set/all',
-					method: 'GET',
-					header: {
-						'X-Token': myRequest.getToken()
-					},
-				
-					success: (res) => {
+				let _this = this
+
+				myRequest.request(api.problem_set_all({}), 'GET', {}).then(
+					function(res) {
 						console.log(res)
 						if (res.statusCode == 200) {
 							if (res.data.problem_set && res.data.problem_set.length > 0) {
@@ -148,7 +147,7 @@
 										group_id: res.data.problem_set[i].group_id,
 										user_info: res.data.problem_set[i].user_info,
 									}
-									this.problemSet.push(t);
+									_this.problemSet.push(t);
 								}
 							}
 						} else if (res.statusCode == 401) {
@@ -156,17 +155,16 @@
 						} else {
 							myRequest.toast()
 						}
-					},
-					fail: (res) => {
+					}
+				).catch(
+					function(res) {
 						console.log(res)
 						myRequest.toast()
-					}
-				})
-				
+					})
+
 			},
 		}
 	}
-	
 </script>
 
 <style>
@@ -176,7 +174,7 @@
 		top: 0;
 		z-index: 10;
 	}
-	
+
 	page {
 		background: #EDEDED;
 	}
