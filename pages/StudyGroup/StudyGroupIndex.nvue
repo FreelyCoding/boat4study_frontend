@@ -54,7 +54,6 @@
 								</p>
 							</uni-col>
 							<uni-col :span="2">
-
 							</uni-col>
 							<uni-col :span="14" align="start">
 								<div class="shuhei" style="margin-bottom: 5px;margin-top: 12px;">

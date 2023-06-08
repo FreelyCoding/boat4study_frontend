@@ -41,7 +41,7 @@
 			</view>
 		</u-popup>
 
-		<view v-if="this.problemSet.length != 0" style="margin-top: 10px;">
+		<view v-if="this.problemSet.length != 0" style="margin-top: 10px;margin-bottom: 50px;">
 			<view class="u-demo-block">
 					<uni-card isShadow border padding="10px 0px 10px 0px" margin="0px 10px 15px 10px"
 						style="border-radius: 10px;" @click="jumpToPS(item)"
@@ -103,7 +103,7 @@
 			<p style="margin: auto; width: 96%;">
 				<button style="background-color: #00aaff; color: white; 
 				 margin-bottom: 10px;" @click="jumpToCreatePS">
-					创建小组
+					创建题库
 				</button>
 			</p>
 		</view>
