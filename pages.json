@@ -86,8 +86,7 @@
 		{
 			"path": "pages/homePage/homePage",
 			"style": {
-				"navigationBarTitleText": "学舟",
-				"enablePullDownRefresh": true
+				"navigationBarTitleText": "学舟"
 			}
 
 		},
