@@ -120,7 +120,6 @@
 			uIcon,
 			tuiModal,
 			tuiButton,
-			form,
 			tuiToast,
 			tuiIcon
 		},
