@@ -72,11 +72,11 @@
 				<uni-row>
 					<uni-col :offset="1" :span="2">
 						<view v-if="isLike" @click="clickLike()">
-							<u-icon name="/static/pic/note/heart-active.png" size="26px"></u-icon>
+							<u-icon name="/static/pic/note/like.svg" size="26px"></u-icon>
 						</view>
 						
 						<view v-else="!isLike" @click="clickLike()">
-							<u-icon name="/static/pic/note/heart.png" size="26px"></u-icon>
+							<u-icon name="/static/pic/note/unlike.svg" size="26px"></u-icon>
 						</view>
 					</uni-col>
 					
@@ -86,11 +86,11 @@
 					</uni-col>
 					<uni-col :offset="10" :span="2">
 						<view v-if="isStar">
-							<u-icon name="/static/pic/note/star-active.png" size="28px" @click="clickStar"></u-icon>
+							<u-icon name="/static/pic/note/star.svg" size="28px" @click="clickStar"></u-icon>
 						</view>
 						
 						<view v-else="!isStar">
-							<u-icon name="/static/pic/note/star.png" size="28px" @click="clickStar"></u-icon>
+							<u-icon name="/static/pic/note/unstar.svg" size="28px" @click="clickStar"></u-icon>
 						</view>
 					</uni-col>
 					<uni-col :span="4">
@@ -136,6 +136,10 @@
 	import commentDiscussion from '@/components/comment-discussion/comment-discussion.vue'
 	
 	export default {
+		components: {
+			commentDiscussion
+		},
+		
 		data() {
 			return {
 				title: "",
@@ -541,18 +545,11 @@
 			back() {
 				var pages = getCurrentPages()
 				if (pages.length > 1) {
-					let page = pages[pages.length - 2]; //跳转页面成功之后
-					
-					if (page.route == 'pages/homePage/discussionIndex'
-						|| page.route == 'pages/personal/personaldiscussion'
-						|| page.route == 'pages/personal/stardiscussions') {
-						page.$vm.refresh(); //如果页面存在，则重新刷新页面
-					}
 					uni.navigateBack()
 				}
 				else {
 					uni.redirectTo({
-						url: '/pages/StudyGroup/discussionIndex'
+						url: `/pages/StudyGroup/discussionIndex?group_id=${this.group_id}`
 					})
 				}
 			},

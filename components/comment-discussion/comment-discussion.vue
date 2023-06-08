@@ -250,7 +250,7 @@
 			
 			getAuthorInfo(user_id) {
 				uni.request({
-					url: myRequest.interfaceUrl() + `/user/info/{user_id}`,
+					url: myRequest.interfaceUrl() + `/user/info/${user_id}`,
 					method: 'GET',
 					header: {
 						'X-Token': myRequest.getToken()
