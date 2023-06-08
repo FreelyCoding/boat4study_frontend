@@ -130,6 +130,7 @@
 		},
 		onShow() {
 			this.problemSet = []
+			var _this = this
 			myRequest.checkLogin()
 			let uid = myRequest.getUID()
 			uni.request({
@@ -155,7 +156,7 @@
 									group_id: res.data.problem_set[i].group_id,
 									user_info: res.data.problem_set[i].user_info,
 								}
-								this.problemSet.push(t);
+								_this.problemSet.push(t);
 							}
 						}
 					} else if (res.statusCode == 401) {
