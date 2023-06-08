@@ -10,7 +10,7 @@
 			</uni-nav-bar>
 		</view>
 		
-		<view v-if="this.ps.length != 0">
+		<view v-if="ps.length != 0">
 			<view class="u-demo-block">
 				<u-list customStyle="width: 94%; margin: auto; margin-top: 5px;">
 					<u-list-item v-for="(item, index) in ps" :key="index">
