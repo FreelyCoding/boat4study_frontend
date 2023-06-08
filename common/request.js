@@ -8,7 +8,7 @@ const myRequest = {
 		return 'https://flyinglaird.top/boat4study_api';
 	},
 	imageUrl: function() {
-		return 'http://123.249.3.32:9091';
+		return 'https://123.249.3.32:9091';
 	},
 	toast: function(text, duration, success) {
 		uni.showToast({

@@ -164,6 +164,7 @@
 				offset: 0,
 				isLoading: false,
 				searched: false,
+				flag: false
 			}
 		},
 		onShow: function() {
@@ -306,6 +307,10 @@
 				})
 			},
 			refresh() {
+				if (this.flag) {
+					return
+				}
+				
 				this.searched = false
 				this.searchValue = ""
 				this.isLoading = true
@@ -315,6 +320,8 @@
 				this.notes = []
 				this.offset = 0
 				this.status = 'loading'
+				
+				this.flag = true
 
 				uni.request({
 					url: myRequest.interfaceUrl() + `/note/all?limit=${this.limit}&offset=${this.offset}`,
@@ -365,15 +372,22 @@
 
 					complete: () => {
 						this.isLoading = false
+						this.flag = false
 					}
 				})
 			}
 		},
 
 		onReachBottom() {
+			if (this.flag) {
+				return
+			}
+			
 			if (!this.searched) { //如果是默认全部展示
 				console.log('reach bottom')
 				this.isLoading = true
+				this.flag = true
+				
 				uni.request({
 					url: myRequest.interfaceUrl() + `/note/all?limit=${this.limit}&offset=${this.offset}`,
 					method: 'GET',
@@ -420,9 +434,12 @@
 					},
 					complete: () => {
 						this.isLoading = false
+						this.flag = false
 					}
 				})
 			} else { //如果是搜索结果的展示
+				this.flag = true
+			
 				this.isLoading = true
 				var data = {
 					keyword: this.searchValue,
@@ -484,6 +501,7 @@
 
 					complete: () => {
 						this.isLoading = false
+						this.flag = false
 					}
 				})
 			}
