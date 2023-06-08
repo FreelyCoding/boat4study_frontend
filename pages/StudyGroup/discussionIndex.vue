@@ -13,7 +13,7 @@
 		
 		<u-loading-icon :show="isLoading"></u-loading-icon>
 
-		<scroll-view scroll-y="true" v-if="discussions && discussions.length != 0" style="margin-top: 10px;" :style="{height:scrollH+'px'}">
+		<view v-if="discussions && discussions.length != 0" style="margin-top: 20px;">
 			<view>
 				<uni-card isShadow border padding="15px 5px 0px 5px" margin="0px 15px 15px 15px"
 				v-for="(item, index) in discussions" :key="index"
@@ -79,7 +79,7 @@
 			</view>
 			
 			<u-loadmore :status="status" line lineColor="#000000"/>
-		</scroll-view>
+		</view>
 
 		
 		<view v-else-if="!isLoading" style="text-align: center;">
@@ -90,10 +90,10 @@
 			</view>
 		</view>
 		
-		<view style="padding-bottom: 10px; padding-top: 10px; position: sticky; bottom: 0;">
-			<p style="text-align: center;">
-				<button style="background-color: #00aaff; color: white; max-width: 92%;"
-				 @click="jumpToCreateDiscussion">
+		<view style="padding: 10px 0 10px 0; position: fixed; bottom: 0px;background-color: #EDEDED; width: 100%;">
+			<p style="margin: auto; width: 96%;">
+				<button style="background-color: #00aaff; color: white; 
+				 margin-bottom: 5px;" @click="jumpToCreateDiscussion">
 					创建讨论
 				</button>
 			</p>
@@ -122,21 +122,6 @@
 				offset: 0,
 				status: "loading",
 				isLoading: false
-			}
-		},
-		computed:{
-			theWindowH:function(){
-				let sys = uni.getSystemInfoSync();
-				let winHeight =parseInt(sys.windowHeight)-50
-				return winHeight	
-			},
-			scrollH:function(){
-				let sys = uni.getSystemInfoSync();
-				let winHeight =parseInt(sys.windowHeight)-120
-				return winHeight	
-			},
-			barHeight() {
-				return `calc(${h}px + 44px)`
 			}
 		},
 		onShow: function() {

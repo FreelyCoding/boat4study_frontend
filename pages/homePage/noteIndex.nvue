@@ -80,9 +80,10 @@
 
 				</uni-card>
 			</view>
-
-			<u-loadmore :status="status" line lineColor="#000000" />
-
+			
+			<view style="margin-bottom: 50px;">
+				<u-loadmore :status="status" line lineColor="#000000" />
+			</view>
 		</view>
 
 		<view v-else-if="!isLoading" style="text-align: center;">
