@@ -211,9 +211,6 @@
 							</view>
 						</view>
 					</uni-forms-item>
-					<uni-forms-item label="难度" style="margin-bottom: 0ch;">
-						<uni-rate v-model="problem_difficulty_select" />
-					</uni-forms-item>
 				</uni-forms>
 			</uni-section>
 			
