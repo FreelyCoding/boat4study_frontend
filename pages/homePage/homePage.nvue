@@ -182,7 +182,7 @@
 									<p style="margin: auto;">
 										<u-avatar :src="myRequest.imageUrl() + '/public'
 											+ item.user_info.avatar_path" size="70px"></u-avatar>
-									<div style="margin-top: 10px; font-family: shuhei; margin: auto;">
+									<div class="user_name" style="margin-top: 10px; font-family: shuhei; margin: auto;">
 										{{item.user_info.nick_name}}
 									</div>
 									</p>
@@ -659,4 +659,12 @@
 			}
 		}
 	}
+	
+	.user_name {
+		word-break: break-all;
+		word-wrap: break-word;
+		/*但在有些场景中，还需要加上下面这行代码*/
+		white-space: normal;
+	}
+	
 </style>
