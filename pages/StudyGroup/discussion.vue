@@ -136,6 +136,10 @@
 	import commentDiscussion from '@/components/comment-discussion/comment-discussion.vue'
 	
 	export default {
+		components: {
+			commentDiscussion
+		},
+		
 		data() {
 			return {
 				title: "",
@@ -541,18 +545,11 @@
 			back() {
 				var pages = getCurrentPages()
 				if (pages.length > 1) {
-					let page = pages[pages.length - 2]; //跳转页面成功之后
-					
-					if (page.route == 'pages/homePage/discussionIndex'
-						|| page.route == 'pages/personal/personaldiscussion'
-						|| page.route == 'pages/personal/stardiscussions') {
-						page.$vm.refresh(); //如果页面存在，则重新刷新页面
-					}
 					uni.navigateBack()
 				}
 				else {
 					uni.redirectTo({
-						url: '/pages/StudyGroup/discussionIndex'
+						url: `/pages/StudyGroup/discussionIndex?group_id=${this.group_id}`
 					})
 				}
 			},

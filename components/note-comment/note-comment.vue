@@ -22,7 +22,7 @@
 			<view class="comment-num">
 				<view><uni-section :title="'共' + commentData.commentSize + '条评论'" titleColor="#666" type="line"></uni-section></view>
 				<view class="add-btn">
-					<button type="primary" size="mini" @click="commentInput">发表评论</button>
+					<button type="default" style="margin-right: 10px; background-color: #007aff; color: #ffffff;" size="mini" @click="commentInput">发表评论</button>
 				</view>
 			</view>
 			
