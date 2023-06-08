@@ -11,7 +11,7 @@
 			</uni-nav-bar>
 		</view>
 
-		<view class="u-demo-block">
+		<view class="u-demo-block" v-if="have_access">
 			<u-list :customStyle="{height:scrollH+'px'}" @scroll="scrollEvent" @scrolltolower="load_new_page">
 				<u-list-item v-for="(item, index) in problem_id_list" :key="index">
 					<uni-card spacing="0" padding="0" margin="10px 0px 0px 10px" @click="select(item)">
@@ -47,6 +47,35 @@
 				</u-list-item>
 			</u-list>
 		</view>
+		
+		<view class="u-demo-block" v-if="!have_access">
+			<u-list :customStyle="{height:scrollH+'px'}" @scroll="scrollEvent" @scrolltolower="load_new_page">
+				<u-list-item v-for="(item, index) in problem_id_list" :key="index">
+					<uni-card spacing="0" padding="0" margin="10px 0px 0px 10px" @click="select(item)">
+						<view>
+							<uni-row>
+								<uni-col :span="5" align="start">
+									<uni-tag text="选择题" type="primary" customStyle="background-color: #00aaff;"
+										v-if="item.type===0" />
+									<uni-tag text="填空题" type="primary" customStyle="background-color: #00aaff"
+										v-if="item.type===1" />
+									<uni-tag text="判断题" type="primary" customStyle="background-color: #00aaff"
+										v-if="item.type===2" />
+								</uni-col>
+								<uni-col :span="19" align="start">
+									<div class="shuhei problem-title" style="justify-content: center;"
+										@click="jumpToProbelmDetail(index)">
+										<p style="font-size: 18px;">{{item.title}}</p>
+									</div>
+								</uni-col>
+							</uni-row>
+							<u-divider> </u-divider>
+						</view>
+					</uni-card>
+		
+				</u-list-item>
+			</u-list>
+		</view>
 
 	</view>
 </template>
@@ -76,6 +105,8 @@
 					wrong_problem_count: 0,
 					fav_problem_count: 0,
 				},
+				
+				have_access: false,
 			}
 		},
 		computed: {
@@ -119,6 +150,29 @@
 			
 			async get_proset_detail() {
 				var _this = this
+				
+				await myRequest.request('/check/problem_set/' + this.problem_set_id
+				, 'GET', {}).then(
+					function(res) {
+						console.log(res)
+						if (res.statusCode == 200) {
+							_this.have_access = true
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else if (res.statusCode == 403) {
+							_this.have_access = false
+						} else if (res.statusCode == 404) {
+							_this.have_access = false
+						} else {
+							myRequest.toast()
+						}
+					}
+				).catch(
+					function(res) {
+						console.log(res)
+						myRequest.toast()
+				})
+				
 				await myRequest.request('/problem_set/all?id=' + this.problem_set_id
 				, 'GET', {}).then(
 					function(res) {
