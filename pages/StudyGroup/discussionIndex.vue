@@ -126,7 +126,8 @@
 				limit: 5, 
 				offset: 0,
 				status: "loading",
-				isLoading: false
+				isLoading: false,
+				flag: false
 			}
 		},
 		onShow: function() {
@@ -211,10 +212,15 @@
 				})
 			},
 			refresh() {
+				if (this.flag) {
+					return
+				}
+				
 				myRequest.checkLogin()
 				this.discussions = []
 				this.offset = 0
 				this.isLoading = true
+				this.flag = true
 
 				uni.request({
 					url: myRequest.interfaceUrl() + `/discussion/all?group_id=${this.group_id}&limit=${this.limit}&offset=0`,
@@ -271,6 +277,7 @@
 					},
 					complete: () => {
 						this.isLoading = false
+						this.flag = false
 					}
 				})
 			}
@@ -279,7 +286,12 @@
 		onReachBottom() {
 			console.log('reach bottom')
 			
+			if (this.flag) {
+				return
+			}
+			
 			this.isLoading = true
+			this.flag = true
 			
 			uni.request({
 				url: myRequest.interfaceUrl() + `/discussion/all?group_id=${this.group_id}&limit=${this.limit}&offset=${this.offset}`,
@@ -337,6 +349,7 @@
 				
 				complete: () => {
 					this.isLoading = false
+					this.flag = true
 				}
 			})
 		}
