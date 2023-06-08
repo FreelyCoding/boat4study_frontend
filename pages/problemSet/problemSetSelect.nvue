@@ -9,7 +9,70 @@
 				</block>
 			</uni-nav-bar>
 		</view>
+		
+		<!-- #ifdef MP-WEIXIN -->
+		<view v-if="this.problemSet.length != 0" style="margin-top: 70px;">
+			<view class="u-demo-block">
+				<u-list customStyle="margin: auto; margin-top: 10px;">
+					<u-list-item v-for="(item, index) in problemSet" :key="index">
+						<uni-card isShadow border padding="10px 0px 10px 0px" margin="0px 10px 15px 10px"
+							style="border-radius: 10px;" @click="jumpToPS(item)">
+							<view>
+								<uni-row>
+									<uni-col :span="2" align="start">
+										<view v-if="item.user_id == 0" style="max-width: 30px;">
+											<p class="official_PS_tag">
+												官方题库
+											</p>
+										</view>
+										<view v-else-if="item.group_id == 0" style="max-width: 30px;">
+											<div class="personal_PS_tag">
+												个人题库
+											</div>
+										</view>
+										<view v-else-if="item.group_id != 0" style="max-width: 30px;">
+											<div class="group_PS_tag">
+												小组题库
+											</div>
+										</view>
+									</uni-col>
+									<uni-col :span="2" align="start">
+									</uni-col>
+									<uni-col :span="7" align="start">
+										<p style="margin: auto;">
+											<u-avatar :src="myRequest.imageUrl() + '/public'
+												+ item.user_info.avatar_path" size="70px"></u-avatar>
+										<div style="margin-top: 10px; font-family: shuhei; margin: auto;">
+											{{item.user_info.nick_name}}
+										</div>
+										</p>
+									</uni-col>
+									<uni-col :span="1" align="start">
+									</uni-col>
+									<uni-col :span="12" align="start">
+										<div class="shuhei" style="margin-bottom: 5px;margin-top: 18px;">
+											<p style="font-size: 22px;">{{item.name}}</p>
+										</div>
+										<div style="font-size: 16px; margin-top: 5px;">
+											{{item.problem_number}} 道题目
+										</div>
+									</uni-col>
+								</uni-row>
+							</view>
+						</uni-card>
+		
+					</u-list-item>
+				</u-list>
+			</view>
+		</view>
+		
+		<view v-else style="text-align: center;" :style="{height:scrollH+'px'}">
+			<image src="../../static/pic/note/no_note.png"
+				style="margin: auto; margin-top: 30px; height: 200px; width: 200px;"></image>
+		</view>
+		<!-- #endif -->
 
+		<!-- #ifdef H5 -->
 		<view v-if="this.problemSet.length != 0">
 			<view class="u-demo-block">
 				<u-list customStyle="margin: auto; margin-top: 10px;">
@@ -59,17 +122,17 @@
 								</uni-row>
 							</view>
 						</uni-card>
-
+		
 					</u-list-item>
 				</u-list>
 			</view>
 		</view>
-
+		
 		<view v-else style="text-align: center;" :style="{height:scrollH+'px'}">
 			<image src="../../static/pic/note/no_note.png"
 				style="margin: auto; margin-top: 30px; height: 200px; width: 200px;"></image>
 		</view>
-
+		<!-- #endif -->
 
 		<view style="padding: 10px 0 10px 0; position: sticky; bottom: 0; background-color: #EDEDED;">
 			<p style="margin: auto;width: 92%">
@@ -103,9 +166,10 @@
 				let winHeight = parseInt(sys.windowHeight) - 50
 				return winHeight
 			},
-			barHeight() {
-				return `calc(${h}px + 44px)`
-			},
+			// barHeight() {
+			// 	const h = uni.getSystemInfoSync().statusBarHeight;
+			// 	return String(Number(h) + 44) + 'px'
+			// },
 			photo_path() {
 				return this.$store.state.photo_path
 			}
