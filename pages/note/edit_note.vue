@@ -361,10 +361,6 @@
 					{
 						title: '取消',
 						icon: 'delete-back-fill'
-					},
-					{
-						title: '相关题目',
-						icon: 'link'
 					}
 				],
 				popupShow: false,

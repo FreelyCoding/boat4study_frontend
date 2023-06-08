@@ -304,7 +304,7 @@
 					<u-row>
 						<u-col span="2"></u-col>
 						<u-col span="3">
-							<u-button type="primary" shape="circle" text="加入题库" @click="addToRelativeProblem"></u-button>
+							<u-button type="primary" shape="circle" text="加入" @click="addToRelativeProblem"></u-button>
 						</u-col>
 						<u-col span="2"></u-col>
 						<u-col span="3">
@@ -512,8 +512,8 @@
 				
 				limit: 5, 
 				offset: 0,
-				curProblemSetId: 0
-				
+				curProblemSetId: 0,
+				flag: false
 
 			}
 		},
@@ -522,6 +522,15 @@
 				let that = this;
 				
 				var ret;
+				
+				if (this.flag) {
+					return
+				}
+				if (this.offset == 0) {
+					return
+				}
+				
+				this.flag = true
 				
 				myRequest.request(api.problem_set_all_problem({id:this.curProblemSetId, limit: this.limit, offset: this.offset}), 'GET', {}).then(
 					function(res) {
@@ -548,11 +557,15 @@
 								title: ret[i].description,
 							})
 						}
+						
+						that.flag = false
 					}
 				).catch(
 					function(res) {
 						console.log(res)
 						myRequest.toast()
+						
+						that.flag = false
 				})
 			},
 			
@@ -665,6 +678,12 @@
 			initProblemList(problemSetId) {
 				console.log('initProblemList')
 				var ret;
+				
+				if (this.flag) {
+					return
+				}
+				
+				this.flag = true
 
 				uni.request({
 					url: myRequest.interfaceUrl() + `/problem_set/all_problem/${problemSetId}?offset=${this.offset}&limit=${this.limit}`,
@@ -707,6 +726,10 @@
 					fail: res => {
 						this.problemListSelectShow = false
 						myRequest.toast()
+					},
+					
+					complete: res => {
+						this.flag = false
 					}
 
 				})
