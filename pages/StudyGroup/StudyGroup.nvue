@@ -347,7 +347,7 @@
 					id: 1,
 					owner_id: 1,
 					name: "",
-					avatar: "/static/pic/personal_group.svg",
+					avatar: "",
 					introduction: "",
 					editName: "",
 					editIntroduction: "",

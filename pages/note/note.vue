@@ -6,7 +6,8 @@
 				<block slot="left">
 					<view class="note-navbar">
 						<uni-icons type="left" color="#FFFFFF" size="18" @click="back()" />
-						<i-icon name="link" color="#FFFFFF" size="16px" style='margin-left: 15px;' @click="relativeProblemOpen"></i-icon>
+						<i-icon name="link" color="#FFFFFF" size="16px" style='margin-left: 15px;'
+							@click="relativeProblemOpen"></i-icon>
 					</view>
 				</block>
 
@@ -19,11 +20,11 @@
 				</block>-->
 			</uni-nav-bar>
 		</view>
-		
+
 
 		<view class="container">
 			<!--作者信息, 笔记创建时间等信息-->
-			
+
 			<view class="title_wrapper">
 				<textarea class="title" :maxlength="title_maxlength" :value="title" disabled="true"></textarea>
 			</view>
@@ -38,26 +39,26 @@
 							<u-avatar :src="authorInfo.avatar">
 							</u-avatar>
 						</view>
-						
+
 					</u-col>
-					
+
 					<u-col :span="4">
 						<view>
 							<text> {{ authorInfo.nickName }} </text>
 						</view>
-						
+
 					</u-col>
-					
+
 					<u-col :span="6">
 						<view style="display: flex; justify-content: flex-end; margin-right: 15px;">
 							<text>{{ created_at }}</text>
-							
+
 						</view>
-						
+
 					</u-col>
 				</u-row>
 			</view>
-			
+
 			<!-- <u-line></u-line> -->
 
 			<!--笔记内容-->
@@ -82,28 +83,30 @@
 						<view v-if="isLike" @click="clickLike()">
 							<u-icon name="/static/pic/note/heart-active.png" size="26px"></u-icon>
 						</view>
-						
+
 						<view v-else="!isLike" @click="clickLike()">
 							<u-icon name="/static/pic/note/heart.png" size="26px"></u-icon>
 						</view>
 					</uni-col>
-					
+
 					<uni-col :span="4">
 						<button type="primary" size="mini"
-							style="width: 60px; background-color: #00aaff; margin-left: 5px;" @click="clickLike">{{ likeCount }}</button>
+							style="width: 60px; background-color: #00aaff; margin-left: 5px;"
+							@click="clickLike">{{ likeCount }}</button>
 					</uni-col>
 					<uni-col :offset="10" :span="2">
 						<view v-if="isStar">
 							<u-icon name="/static/pic/note/star-active.png" size="28px" @click="clickStar"></u-icon>
 						</view>
-						
+
 						<view v-else="!isStar">
 							<u-icon name="/static/pic/note/star.png" size="28px" @click="clickStar"></u-icon>
 						</view>
 					</uni-col>
 					<uni-col :span="4">
 						<button size="mini"
-							style="width: 60px; background-color: #f9ae3d; color: white; margin-left: 5px;" @click="clickStar">
+							style="width: 60px; background-color: #f9ae3d; color: white; margin-left: 5px;"
+							@click="clickStar">
 							{{ starCount }}</button>
 					</uni-col>
 				</uni-row>
@@ -114,7 +117,7 @@
 				<uni-fab ref="fab" horizontal="right" vertical="bottom" direction="horizontal" :content="fabContent"
 					@trigger="trigger"></uni-fab>
 			</view>
-			
+
 
 			<!-- <u-line></u-line> -->
 
@@ -127,31 +130,18 @@
 		<tui-modal :show="show" title="提示" content="确定删除笔记吗" @click="handleModalClick" width="70%"></tui-modal>
 
 		<!--选择题库弹出层-->
-		<u-popup
-			:safeAreaInsetBottom="true"
-			:safeAreaInsetTop="true"
-			mode="center"
-			:show="problemSetSelectShow"
-			:overlay="true"
-			:closeable="true"
-			:closeOnClickOverlay="true"
-			@open="loadProblemSet"
-			@close="problemSetSelectClose"
-		>
-			
-			<scroll-view
-				class="u-popup-slot"
-				:style="{
+		<u-popup :safeAreaInsetBottom="true" :safeAreaInsetTop="true" mode="center" :show="problemSetSelectShow"
+			:overlay="true" :closeable="true" :closeOnClickOverlay="true" @open="loadProblemSet"
+			@close="problemSetSelectClose">
+
+			<scroll-view class="u-popup-slot" :style="{
 					width: '300px',
 					marginTop: '0',
-				}"
-				scroll-y="true"
-			>
-				
+				}" scroll-y="true">
+
 				<u-list customStyle="width: 94%; margin: auto; margin-top: 15px;">
 					<u-list-item v-for="(item, index) in problemSet" :key="index">
-						<uni-card spacing="0" padding="0" margin="10px 0px 0px 10px" 
-								@click="loadProblemList(item.id)">
+						<uni-card spacing="0" padding="0" margin="10px 0px 0px 10px" @click="loadProblemList(item.id)">
 							<view>
 								<uni-row>
 									<uni-col :span="5" align="start">
@@ -159,7 +149,7 @@
 											<u-icon name="/static/pic/qb.svg" size="50px"></u-icon>
 										</view>
 									</uni-col>
-						
+
 									<uni-col :span="18" align="start">
 										<div class="shuhei" style="margin-bottom: 5px;">
 											<p style="font-size: 20px;">{{item.name}}</p>
@@ -174,38 +164,25 @@
 								<u-divider> </u-divider>
 							</view>
 						</uni-card>
-						
+
 					</u-list-item>
 				</u-list>
-				
+
 			</scroll-view>
 		</u-popup>
-		
+
 		<!--选择题目弹出层-->
-		<u-popup
-			:safeAreaInsetBottom="true"
-			:safeAreaInsetTop="true"
-			mode="center"
-			:show="problemListSelectShow"
-			:overlay="true"
-			:closeable="true"
-			:closeOnClickOverlay="true"
-			@close="problemListSelectClose"
-		>
-			<scroll-view
-				class="u-popup-slot"
-				:style="{
+		<u-popup :safeAreaInsetBottom="true" :safeAreaInsetTop="true" mode="center" :show="problemListSelectShow"
+			:overlay="true" :closeable="true" :closeOnClickOverlay="true" @close="problemListSelectClose">
+			<scroll-view class="u-popup-slot" :style="{
 					width: '300px',
 					marginTop: '0',
-				}"
-				scroll-y="true"
-			>
-			
-				
+				}" scroll-y="true">
+
+
 				<u-list customStyle="width: 94%; margin: auto; margin-top: 25px;">
 					<u-list-item v-for="(item, index) in problemList" :key="index">
-						<uni-card spacing="0" padding="0" margin="10px 0px 0px 10px" 
-							@click="select(item)">
+						<uni-card spacing="0" padding="0" margin="10px 0px 0px 10px" @click="select(item)">
 							<view>
 								<uni-row>
 									<uni-col :span="6" align="start">
@@ -222,16 +199,18 @@
 										</div>
 									</uni-col>
 									<uni-col :span="4" align="start">
-										<u-icon name="/static/pic/problemSet/fxxz.svg" size="25px" v-if="item.selected === 1"></u-icon>
-										<u-icon name="/static/pic/problemSet/fxwxz.svg" size="25px" v-if="item.selected === 0"></u-icon>
+										<u-icon name="/static/pic/problemSet/fxxz.svg" size="25px"
+											v-if="item.selected === 1"></u-icon>
+										<u-icon name="/static/pic/problemSet/fxwxz.svg" size="25px"
+											v-if="item.selected === 0"></u-icon>
 									</uni-col>
 								</uni-row>
 								<u-divider> </u-divider>
 							</view>
 						</uni-card>
-			
+
 					</u-list-item>
-					
+
 					<u-list-item style="margin-top: 15px; margin-bottom: 15px;">
 						<u-row>
 							<!-- <u-col span="4"></u-col> -->
@@ -243,56 +222,43 @@
 							</u-col>
 						</u-row>
 					</u-list-item>
-					
-				
+
+
 				</u-list>
-			
-				
+
+
 			</scroll-view>
 		</u-popup>
-		
-		
+
+
 		<!--相关题目弹出层-->
 		<view>
-			<u-popup 
-				:safeAreaInsetBottom="true"
-				:safeAreaInsetTop="true"
-				:show="relativeProblemShow" 
-				mode="left"
-				:overlay="true"
-				:closeable="true"
-				:closeOnClickOverlay="true"
-				@close="relativeProblemClose"
-			>
-				
-				<scroll-view
-					class="u-popup-slot"
-					:style="{
+			<u-popup :safeAreaInsetBottom="true" :safeAreaInsetTop="true" :show="relativeProblemShow" mode="left"
+				:overlay="true" :closeable="true" :closeOnClickOverlay="true" @close="relativeProblemClose">
+
+				<scroll-view class="u-popup-slot" :style="{
 						height: '100%',
 						width: '280px',
 						marginTop: '0',
-					}"
-					scroll-y="true"
-				>
-			
+					}" scroll-y="true">
+
 					<u-list customStyle="width: 94%; margin: auto; margin-top: 15px;">
-						
-						<u-list-item style="margin-bottom: 15px;" >
+
+						<u-list-item style="margin-bottom: 15px;">
 							<view v-if="authorInfo.id == userId">
 								<u-row>
 									<u-col span="6" offset="3">
 										<u-button type="success" text="添加相关题目" @click="showProblemSet"></u-button>
 									</u-col>
 								</u-row>
-								
+
 							</view>
-							
+
 						</u-list-item>
-						
-					
+
+
 						<u-list-item v-for="(item, index) in relativeProblem" :key="index">
-							<uni-card spacing="0" padding="0" margin="10px 0px 0px 10px" 
-								@click="select(item)">
+							<uni-card spacing="0" padding="0" margin="10px 0px 0px 10px" @click="select(item)">
 								<view>
 									<uni-row>
 										<uni-col :span="6" align="start">
@@ -304,38 +270,41 @@
 												v-if="item.type===2" />
 										</uni-col>
 										<uni-col :span="12" align="start">
-											<div class="shuhei problem-title" style="margin-bottom: 5px;" @click="problemClick(item)">
+											<div class="shuhei problem-title" style="margin-bottom: 5px;"
+												@click="problemClick(item)">
 												<p style="font-size: 20px;">{{item.description}}</p>
 											</div>
 										</uni-col>
-										
+
 										<uni-col span="4" align="start">
 											<view v-if="authorInfo.id == userId">
-												<i-icon name="delete-bin-fill" color="red" :size="15" style="float: right;" @click="removeRelativeProblem(item, index)"></i-icon>
+												<i-icon name="delete-bin-fill" color="red" :size="15"
+													style="float: right;"
+													@click="removeRelativeProblem(item, index)"></i-icon>
 											</view>
-											
+
 										</uni-col>
-									
+
 									</uni-row>
 									<u-divider> </u-divider>
 								</view>
 							</uni-card>
-									
+
 						</u-list-item>
-												
+
 					</u-list>
 				</scroll-view>
-				
+
 			</u-popup>
 		</view>
-		
+
 
 	</view>
 </template>
 
 <script>
 	import myRequest from '../../common/request'
-	
+
 	import tuiModal from '@/components/tui-modal/tui-modal.vue';
 	import tuiBubblePopup from '@/components/tui-bubble-popup/tui-bubble-popup.vue';
 	import tRtPopup from '@/components/t-rt-popup/t-rt-popup';
@@ -345,7 +314,7 @@
 	import uCol from '@/uni_modules/uview-ui/components/u-col/u-col.vue'
 	import uAvatar from '@/uni_modules/uview-ui/components/u-avatar/u-avatar.vue'
 	import tuiNoData from '@/components/tui-no-data/tui-no-data.vue'
-	
+
 	export default {
 		data() {
 			return {
@@ -358,12 +327,12 @@
 
 				remove_index: 0,
 				edit_index: 1,
-				
+
 				userId: null,
-				
-				like_index: 2, 
+
+				like_index: 2,
 				star_index: 3,
-				
+
 				isLike: false,
 				isStar: false,
 				likeCount: 0,
@@ -374,11 +343,10 @@
 					avatar: null,
 					nickName: null
 				},
-				
+
 				created_at: null,
 
-				fabContent: [
-					{
+				fabContent: [{
 						iconPath: '/static/pic/note/delete-bin-line.png',
 						selectedIconPath: '/static/pic/note/delete-bin-fill.png',
 						text: '删除',
@@ -393,17 +361,16 @@
 				],
 
 				problemListSelectShow: false,
-				problemList: [		
-				],
-				
+				problemList: [],
+
 				problemSetSelectShow: false,
 				problemSet: [],
-				
+
 				relativeProblemShow: false,
 				relativeProblem: [
-					
+
 				],
-				
+
 			}
 		},
 		methods: {
@@ -412,26 +379,26 @@
 				uni.navigateTo({
 					url: `/pages/problem/problemDetail?problem_id=${item.id}&problem_type_id=${item.type}`
 				})
-				
+
 			},
-			
+
 			getRelativeProblem() {
 				this.relativeProblem = []
-				
+
 				uni.request({
 					url: myRequest.interfaceUrl() + `/note/problem_list/${this.note_id}`,
 					method: 'GET',
 					header: {
 						'X-Token': myRequest.getToken()
 					},
-					
+
 					success: res => {
 						if (res.statusCode == 200) {
 							var data = res.data
-							
+
 							if (data == null) return
-							
-							for (var i = 0; i < data.length; i ++) {
+
+							for (var i = 0; i < data.length; i++) {
 								this.relativeProblem.push({
 									id: data[i].id,
 									type: data[i].problem_type_id,
@@ -447,87 +414,88 @@
 							myRequest.toast()
 						}
 					},
-					
+
 					fail: res => {
 						myRequest.toast()
 						this.relativeProblemShow = false
 					}
-					
+
 				})
 			},
-			
+
 			selectAll() {
-				for (var i = 0; i < this.problemList.length; i ++) {
+				for (var i = 0; i < this.problemList.length; i++) {
 					this.problemList[i].selected = 1
 				}
 			},
-			
+
 			select(item) {
 				item.selected = 1 - item.selected
 			},
-			
+
 			addToRelativeProblem() {
-				for (var i = 0; i < this.problemList.length; i ++) {
+				for (var i = 0; i < this.problemList.length; i++) {
 					var item = this.problemList[i]
-					
+
 					if (item.selected == 0) continue;
-					
+
 					var flag = false;
-					
-					for (var j = 0; j < this.relativeProblem.length; j ++) {
+
+					for (var j = 0; j < this.relativeProblem.length; j++) {
 						if (this.relativeProblem[j].id == item.id) {
 							flag = true;
 							break;
-						} 
+						}
 					}
-					
+
 					if (flag) continue;
-					
+
 					if (this.relativeProblem.indexOf(item) == -1) {
 						this.relativeProblem.push(item)
 						uni.request({
-							url: myRequest.interfaceUrl() + `/note/add_problem/${this.note_id}?problem_id=${item.id}`,
-							method:'POST',
+							url: myRequest.interfaceUrl() +
+								`/note/add_problem/${this.note_id}?problem_id=${item.id}`,
+							method: 'POST',
 							header: {
 								'X-Token': myRequest.getToken()
 							}
 						})
 					}
 				}
-				
+
 				if (this.problemList.length > 0) {
 					myRequest.toast('添加题目成功')
 				}
 			},
-			
+
 			loadProblemList(problemSetId) {
 				this.problemSetSelectShow = false
 				this.problemListSelectShow = true
-				
+
 				console.log('yyy')
 				console.log(problemSetId)
-				
+
 				this.initProblemList(problemSetId)
 			},
-			
+
 			initProblemList(problemSetId) {
 				console.log('initProblemList')
 				var ret;
-				
+
 				uni.request({
 					url: myRequest.interfaceUrl() + `/problem_set/all_problem/${problemSetId}`,
 					method: 'GET',
 					header: {
 						'X-Token': myRequest.getToken()
 					},
-					
+
 					success: (res) => {
 						if (res.statusCode == 200) {
 							ret = res.data.problems
-							
+
 							this.problemList = []
-							
-							for (var i = 0; i < ret.length; i ++) {
+
+							for (var i = 0; i < ret.length; i++) {
 								this.problemList.push({
 									id: ret[i].id,
 									type: ret[i].problem_type_id,
@@ -535,7 +503,7 @@
 									description: ret[i].description,
 								})
 							}
-							
+
 						} else if (res.statusCode == 401) {
 							uni.redirectTo({
 								url: '/pages/login/login'
@@ -545,18 +513,18 @@
 							myRequest.toast()
 						}
 					},
-					
+
 					fail: res => {
 						this.problemListSelectShow = false
 						myRequest.toast()
 					}
-					
+
 				})
-				
+
 			},
-			
+
 			loadProblemSet() {
-				
+
 				myRequest.checkLogin()
 				uni.request({
 					url: myRequest.interfaceUrl() + '/user/problem_set',
@@ -564,7 +532,7 @@
 					header: {
 						'X-Token': myRequest.getToken()
 					},
-				
+
 					success: (res) => {
 						console.log(res)
 						if (res.statusCode == 200) {
@@ -593,35 +561,35 @@
 							myRequest.toast()
 						}
 					},
-				
+
 					fail: (res) => {
 						console.log(res)
 						myRequest.toast()
 					}
 				})
 			},
-			
+
 			relativeProblemOpen() {
 				this.relativeProblemShow = true;
 			},
-			
+
 			relativeProblemClose() {
 				this.relativeProblemShow = false;
 			},
-			
+
 			removeRelativeProblem(item, index) {
 				this.relativeProblem.splice(index, 1)
-				
+
 				uni.request({
 					url: myRequest.interfaceUrl() + `/note/remove_problem/${this.note_id}?problem_id=${item.id}`,
 					method: 'DELETE',
 					header: {
 						'X-Token': myRequest.getToken()
 					},
-					
+
 					success: res => {
 						if (res.statusCode == 200) {
-							
+
 						} else if (res.statusCode == 401) {
 							if (myRequest.isLogin()) {
 								myRequest.toast('请重新登录')
@@ -635,34 +603,34 @@
 							myRequest.toast()
 						}
 					},
-					
+
 					fail: res => {
 						myRequest.toast()
 					}
-					
+
 				})
-				
+
 			},
-			
+
 			problemSetSelectClose() {
 				this.problemSetSelectShow = false;
 			},
-			
+
 			problemListSelectClose() {
 				this.problemListSelectShow = false;
 			},
-			
+
 			showProblemSet() {
 				this.problemSetSelectShow = true;
 				this.relativeProblemShow = false
-				
+
 				if (!myRequest.isLogin()) {
 					uni.redirectTo({
 						url: '/pages/login/login'
 					})
 					return
 				}
-				
+
 				uni.request({
 					url: myRequest.interfaceUrl() + '/problem/blank/all',
 					header: {
@@ -672,15 +640,14 @@
 						if (res.statusCode == 200) {
 							this.problemList = res.data.problems
 							console.log(this.problemList)
-						}
-						else {
+						} else {
 							myRequest.toast()
 						}
 					}
 				})
 			},
-			
-			
+
+
 			handleModalClick(e) {
 				let index = e.index
 				if (index == 0) {
@@ -698,22 +665,20 @@
 							console.log(222)
 							console.log(res)
 							if (res.statusCode == 200) {
-								uni.switchTab({
+								/*uni.switchTab({
 									url: '/pages/homePage/noteIndex',
-									success() {
-										// console.log(getCurrentPages())
-										// let page = getCurrentPages().pop(); //跳转页面成功之后
-										// if (!page) return;
-										// console.log(page.route)
-										// if (page.route == 'pages/homePage/noteIndex' 
-										// 		|| page.route == '/pages/personal/personalNote'
-										// 		|| page.route == '/pages/personal/starNotes') {
-										// 	page.$vm.refresh(); //如果页面存在，则重新刷新页面
-										// }
-										
+									success() {								
 										uni.navigateBack()
 									}
-								})
+								})*/
+								myRequest.toast('删除成功', 1500, true)
+								setTimeout(() => {
+									uni.hideToast();
+									//关闭提示后跳转
+									uni.navigateBack({
+										delta: 1
+									})
+								}, 1000)
 							} else if (res.statusCode == 401) {
 								uni.redirectTo({
 									url: '/pages/login/login'
@@ -732,13 +697,13 @@
 			onEditorReady() {
 				uni.createSelectorQuery().select('#editor').context((res) => {
 					this.editorCtx = res.context
-					
+
 					var pages = getCurrentPages();
 					var curRoutes = pages[pages.length - 1].route
 					var curParam = pages[pages.length - 1].options;
-					
+
 					var id = curParam['id']
-					
+
 					if (!myRequest.isLogin()) {
 						myRequest.toast('请先登录')
 						uni.redirectTo({
@@ -746,17 +711,16 @@
 						})
 						return
 					}
-					
+
 					if (!id) {
 						uni.switchTab({
 							url: '/pages/homePage/noteIndex'
 						})
-					}
-					else {
+					} else {
 						this.note_id = id;
-						
+
 						this.userId = myRequest.getUID()
-						
+
 						uni.request({
 							url: myRequest.interfaceUrl() + `/note/all?id=${id}`,
 							method: 'GET',
@@ -774,19 +738,19 @@
 										return
 									}
 									var data = res.data.notes[0];
-									
+
 									this.title = data.title;
 									this.note_html = data.content;
 									this.note_id = data.id;
 									this.created_at = data.created_at.slice(0, 10)
-									
+
 									this.authorInfo.id = data.user_id
-									
+
 									this.isLike = data.is_liked
 									this.isStar = data.is_favorite
 									this.likeCount = data.like_count
 									this.starCount = data.favorite_count
-									
+
 									if (data.user_id != myRequest.getUID()) {
 										this.fabContent = this.fabContent.slice(2)
 										this.like_index = 0
@@ -794,22 +758,20 @@
 										this.remove_index = 1000
 										this.edit_index = 1000
 									}
-									
+
 									this.editorCtx.setContents({
 										html: this.note_html
 									})
-									
+
 									this.loadAuthorInfo(data.user_id)
-									
+
 									this.getRelativeProblem()
-								}
-								else if (res.statusCode == 401) {
+								} else if (res.statusCode == 401) {
 									myRequest.toast('请先登录')
 									uni.redirectTo({
 										url: '/pages/login/login'
 									})
-								}
-								else {
+								} else {
 									console.log('wrong')
 									myRequest.toast()
 									uni.switchTab({
@@ -817,15 +779,15 @@
 									})
 								}
 							},
-							
+
 							fail: (res) => {
 								myRequest.toast()
 								uni.switchTab({
 									url: '/pages/homePage/noteIndex'
 								})
 							}
-						})	
-					}	
+						})
+					}
 				}).exec()
 			},
 			format(e) {
@@ -848,7 +810,7 @@
 						console.log(res.html)
 					}
 				})
-				
+
 				// console.log(e)
 				this.fabContent[e.index].active = !e.item.active
 				var t = this.fabContent[e.index].active
@@ -862,26 +824,23 @@
 					})
 					return
 				}
-				
+
 				if (e.index == this.like_index || e.index == this.star_index) {
-					
+
 					var url, method;
 					if (e.index == this.like_index && !t) {
 						url = `/note/unlike/${this.note_id}`
 						method = 'POST'
-					}
-					else if (e.index == this.like_index && t) {
+					} else if (e.index == this.like_index && t) {
 						url = `/note/like/${this.note_id}`
 						method = 'POST'
-					}
-					else if (e.index == this.star_index && !t) {
-						url = `/note/unfavorite/${this.note_id}`	
+					} else if (e.index == this.star_index && !t) {
+						url = `/note/unfavorite/${this.note_id}`
 						method = 'DELETE'
-					}
-					else {
+					} else {
 						url = `/note/favorite/${this.note_id}`
 						method = 'POST'
-					}					
+					}
 					uni.request({
 						url: myRequest.interfaceUrl() + url,
 						method: method,
@@ -891,14 +850,12 @@
 						success: (res) => {
 							if (res.statusCode == 200) {
 								console.log(res)
-							}
-							else if (res.statusCode == 401) {
+							} else if (res.statusCode == 401) {
 								myRequest.toast('请先登录')
 								uni.redirectTo({
 									url: '/pages/login/login'
 								})
-							}
-							else {
+							} else {
 								console.log('wrong')
 								myRequest.toast()
 								uni.switchTab({
@@ -906,28 +863,27 @@
 								})
 							}
 						},
-						
+
 						fail: (res) => {
 							myRequest.toast()
 							uni.switchTab({
 								url: '/pages/homePage/noteIndex'
 							})
 						}
-					})	
-				
+					})
+
 				}
 			},
-			
+
 			clickLike() {
 				var url, method;
 				if (this.isLike) {
 					url = `/note/unlike/${this.note_id}`
 					method = 'POST'
-				}
-				else {
+				} else {
 					url = `/note/like/${this.note_id}`
 					method = 'POST'
-				}	
+				}
 				uni.request({
 					url: myRequest.interfaceUrl() + url,
 					method: method,
@@ -940,18 +896,15 @@
 							this.isLike = !this.isLike
 							if (this.isLike) {
 								this.likeCount += 1
-							}
-							else {
+							} else {
 								this.likeCount -= 1
 							}
-						}
-						else if (res.statusCode == 401) {
+						} else if (res.statusCode == 401) {
 							myRequest.toast('请先登录')
 							uni.redirectTo({
 								url: '/pages/login/login'
 							})
-						}
-						else {
+						} else {
 							console.log('wrong')
 							myRequest.toast()
 							uni.switchTab({
@@ -959,26 +912,25 @@
 							})
 						}
 					},
-					
+
 					fail: (res) => {
 						myRequest.toast()
 						uni.switchTab({
 							url: '/pages/homePage/noteIndex'
 						})
 					}
-				})	
+				})
 			},
 
 			clickStar() {
 				var url, method;
 				if (this.isStar) {
-					url = `/note/unfavorite/${this.note_id}`	
+					url = `/note/unfavorite/${this.note_id}`
 					method = 'DELETE'
-				}
-				else {
+				} else {
 					url = `/note/favorite/${this.note_id}`
 					method = 'POST'
-				}			
+				}
 				uni.request({
 					url: myRequest.interfaceUrl() + url,
 					method: method,
@@ -991,18 +943,15 @@
 							this.isStar = !this.isStar
 							if (this.isStar) {
 								this.starCount += 1
-							}
-							else {
+							} else {
 								this.starCount -= 1
 							}
-						}
-						else if (res.statusCode == 401) {
+						} else if (res.statusCode == 401) {
 							myRequest.toast('请先登录')
 							uni.redirectTo({
 								url: '/pages/login/login'
 							})
-						}
-						else {
+						} else {
 							console.log('wrong')
 							myRequest.toast()
 							uni.switchTab({
@@ -1010,35 +959,34 @@
 							})
 						}
 					},
-					
+
 					fail: (res) => {
 						myRequest.toast()
 						uni.switchTab({
 							url: '/pages/homePage/noteIndex'
 						})
 					}
-				})	
+				})
 			},
 
 			back() {
 				var pages = getCurrentPages()
 				if (pages.length > 1) {
 					let page = pages[pages.length - 2]; //跳转页面成功之后
-					
-					if (page.route == 'pages/homePage/noteIndex'
-						|| page.route == 'pages/personal/personalNote'
-						|| page.route == 'pages/personal/starNotes') {
+
+					if (page.route == 'pages/homePage/noteIndex' ||
+						page.route == 'pages/personal/personalNote' ||
+						page.route == 'pages/personal/starNotes') {
 						page.$vm.refresh(); //如果页面存在，则重新刷新页面
 					}
 					uni.navigateBack()
-				}
-				else {
+				} else {
 					uni.switchTab({
 						url: '/pages/homePage/noteIndex'
 					})
 				}
 			},
-			
+
 			loadAuthorInfo(userId) {
 				uni.request({
 					url: myRequest.interfaceUrl() + `/user/info/${userId}`,
@@ -1046,34 +994,32 @@
 					header: {
 						'X-Token': myRequest.getToken()
 					},
-					
+
 					success: res => {
 						if (res.statusCode == 200) {
 							var data = res.data
 							this.authorInfo.avatar = myRequest.imageUrl() + '/public/' + data.avatar_path
 							this.authorInfo.nickName = data.nick_name
-							
+
 							console.log('avatar')
 							console.log(this.authorInfo.avatar)
-						}
-						else if (res.statusCode == 401) {
+						} else if (res.statusCode == 401) {
 							myRequest.toast('请先登录')
 							uni.redirectTo({
 								url: '/pages/login/login'
 							})
-						}
-						else {
+						} else {
 							console.log('wrong')
 							myRequest.toast()
 						}
 					},
-					
+
 					fail: res => {
 						myRequest.toast()
 					}
 				})
 			}
-			
+
 		},
 
 		onLoad() {
@@ -1083,12 +1029,12 @@
 			// var pages = getCurrentPages();
 			// var curRoutes = pages[pages.length - 1].route
 			// var curParam = pages[pages.length - 1].options;
-			
+
 			// var id = curParam['id']
-			
+
 			// if (id) this.note_id = id	
 		},
-		
+
 	}
 </script>
 
@@ -1124,7 +1070,7 @@
 	.container {
 		top: var(--status-bar-height);
 	}
-	
+
 	.u-popup-slot {
 		width: 200px;
 		height: 500px;
