@@ -92,8 +92,6 @@
 						this.list_height[i] = data.height + this.list_height[i-1];
 				}).exec();
 			}
-			
-
 
 		},
 		methods: {

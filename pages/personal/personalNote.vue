@@ -100,7 +100,7 @@
 				]
 			}
 		},
-		onLoad: function() {
+		onShow: function() {
 			this.refresh()
 		},
 		methods: {

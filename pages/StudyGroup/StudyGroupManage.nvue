@@ -328,38 +328,6 @@
 						myRequest.toast()
 					}
 				})
-
-
-				/*uni.request({
-					url: myRequest.interfaceUrl() + '/group/all_user/' + this.group.id,
-					method: 'GET',
-					header: {
-						'X-Token': myRequest.getToken()
-					},
-
-					success: (res) => {
-						console.log(res)
-						this.group_members = []
-						if (res.statusCode == 200) {
-							for (var i = 0; i < res.data.user.length; i++) {
-								this.group_members.push(res.data.user[i])
-								if (uid == res.data.user[i].user_id) {
-									this.isMember = true;
-								}
-							}
-						} else if (res.statusCode == 401) {
-							myRequest.redirectToLogin()
-						} else {
-							myRequest.toast()
-						}
-					},
-
-					fail: (res) => {
-						console.log(res)
-						myRequest.toast()
-					}
-				})*/
-
 			},
 
 			changeAvatar() {
@@ -430,13 +398,6 @@
 					}
 				})
 				this.$refs.inputDialog.close()
-
-				/*setTimeout(() => {
-					this.group.introduction = this.group.editIntroduction
-					this.group.name = this.group.editName
-					// 关闭窗口后，恢复默认内容
-			
-				}, 500)*/
 			},
 			inputDialogToggle() {
 				this.$refs.inputDialog.open()
@@ -561,8 +522,8 @@
 							setTimeout(() => {
 								uni.hideToast();
 								//关闭提示后跳转
-								uni.navigateTo({
-									url: "/pages/StudyGroup/StudyGroupIndex"
+								uni.navigateBack({
+									delta: 2
 								})
 							}, 1000)
 						} else if (res.statusCode == 401) {

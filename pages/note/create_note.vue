@@ -779,15 +779,14 @@
 								function(res) {
 									console.log(res)
 									if (res.statusCode == 200) {
-										myRequest.toast('笔记创建成功')
-										uni.switchTab({
-											url: '/pages/homePage/noteIndex',
-											success() {
-												let page = getCurrentPages().pop(); //跳转页面成功之后
-												if (!page) return;
-												page.$vm.refresh(); //如果页面存在，则重新刷新页面
-											}
-										})
+										myRequest.toast('笔记创建成功', 1500, true)
+										setTimeout(() => {
+											uni.hideToast();
+											//关闭提示后跳转
+											uni.navigateBack({
+												delta: 1
+											})
+										}, 1000)
 									} else if (res.statusCode == 401) {
 										if (myRequest.isLogin()) {
 											myRequest.toast('请重新登录')
