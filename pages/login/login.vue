@@ -54,53 +54,55 @@
 		</view>
 		
 		<tui-modal :show="show" @cancel="hide" :custom="true" fadeIn>
-			<view class="tui-modal-custom">
-				<view class="tui-prompt-title">请完善信息</view>
-				
-				<form :report-submit="true" @submit="formRegister">
-					<view class="register-form">
-						<view class="tui-line-cell">
-							<tui-icon name="people" :size="20" color="#6d7a87"></tui-icon>
-							<input placeholder-class="tui-phcolor" class="tui-input" name="r_username" placeholder="请输入用户名"
-								maxlength="35" v-model="r_username"/>
+			<view v-if="show">
+				<view class="tui-modal-custom">
+					<view class="tui-prompt-title">请完善信息</view>
+					
+					<form :report-submit="true" @submit="formRegister">
+						<view class="register-form">
+							<view class="tui-line-cell">
+								<tui-icon name="people" :size="20" color="#6d7a87"></tui-icon>
+								<input placeholder-class="tui-phcolor" class="tui-input" name="r_username" placeholder="请输入用户名"
+									maxlength="35" v-model="r_username"/>
+							</view>
+							
+							<view class="tui-line-cell tui-top28">
+								<tui-icon name="mail" :size="20" color="#6d7a87"></tui-icon>
+								<input placeholder-class="tui-phcolor" class="tui-input" name="email" placeholder="请输入邮箱"
+									maxlength="256" v-model="email" />
+							</view>
+							
+							<view class="tui-line-cell tui-top28">
+								<tui-icon name="pwd" :size="20" color="#6d7a87"></tui-icon>
+								<input placeholder-class="tui-phcolor" class="tui-input" name="code" placeholder="请输入验证码"
+									maxlength="6" v-model="code" />
+								<tui-button width="182rpx" height="56rpx" :size="24" type="primary" shape="circle" :plain="true" :disabled="disabled"
+									@click="btnSend">{{ btnText }}</tui-button>
+							</view>
+							
+							<view class="tui-line-cell tui-top28">
+								<tui-icon name="pwd" :size="20" color="#6d7a87"></tui-icon>
+								<input placeholder-class="tui-phcolor" class="tui-input" name="r_password" placeholder="请输入密码" password="true"
+									maxlength="35" v-model="r_password"/>
+							</view>
+							
+							<view class="tui-line-cell tui-top28">
+								<tui-icon name="pwd" :size="20" color="#6d7a87"></tui-icon>
+								<input placeholder-class="tui-phcolor" class="tui-input" name="r_confirm" placeholder="请再次确认密码" password="true"
+									maxlength="35" v-model="r_confirm"/>
+							</view>
+					
+							<view style="margin-top: 10px;">
+								<tui-button height="72rpx" :size="28" shape="circle" formType="submit">立即提交</tui-button>
+							</view>
+							
 						</view>
-						
-						<view class="tui-line-cell tui-top28">
-							<tui-icon name="mail" :size="20" color="#6d7a87"></tui-icon>
-							<input placeholder-class="tui-phcolor" class="tui-input" name="email" placeholder="请输入邮箱"
-								maxlength="256" v-model="email" />
-						</view>
-						
-						<view class="tui-line-cell tui-top28">
-							<tui-icon name="pwd" :size="20" color="#6d7a87"></tui-icon>
-							<input placeholder-class="tui-phcolor" class="tui-input" name="code" placeholder="请输入验证码"
-								maxlength="6" v-model="code" />
-							<tui-button width="182rpx" height="56rpx" :size="24" type="primary" shape="circle" :plain="true" :disabled="disabled"
-								@click="btnSend">{{ btnText }}</tui-button>
-						</view>
-						
-						<view class="tui-line-cell tui-top28">
-							<tui-icon name="pwd" :size="20" color="#6d7a87"></tui-icon>
-							<input placeholder-class="tui-phcolor" class="tui-input" name="r_password" placeholder="请输入密码" password="true"
-								maxlength="35" v-model="r_password"/>
-						</view>
-						
-						<view class="tui-line-cell tui-top28">
-							<tui-icon name="pwd" :size="20" color="#6d7a87"></tui-icon>
-							<input placeholder-class="tui-phcolor" class="tui-input" name="r_confirm" placeholder="请再次确认密码" password="true"
-								maxlength="35" v-model="r_confirm"/>
-						</view>
-				
-						<view style="margin-top: 10px;">
-							<tui-button height="72rpx" :size="28" shape="circle" formType="submit">立即提交</tui-button>
-						</view>
-						
-					</view>
-				</form>
-				
+					</form>
+				</view>
 			</view>
 		</tui-modal>
 		<!-- #endif -->
+		
 		
 	</view>
 </template>
