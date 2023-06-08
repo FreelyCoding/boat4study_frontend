@@ -139,7 +139,7 @@
 					marginTop: '0',
 				}" scroll-y="true">
 
-				<u-list customStyle="width: 94%; margin: auto; margin-top: 15px;">
+				<!-- <u-list customStyle="width: 94%; margin: auto; margin-top: 15px;">
 					<u-list-item v-for="(item, index) in problemSet" :key="index">
 						<uni-card spacing="0" padding="0" margin="10px 0px 0px 10px" @click="loadProblemList(item.id)">
 							<view>
@@ -166,8 +166,52 @@
 						</uni-card>
 
 					</u-list-item>
-				</u-list>
-
+				</u-list> -->
+			
+				<view v-for="(item, index) in problemSet">
+					<uni-card isShadow border padding="10px 0px 10px 0px" margin="15px 10px 15px 10px"
+						style="border-radius: 10px;" @click="loadProblemList(item.id)">
+						<view>
+							<uni-row>
+								<uni-col :span="3" align="start">
+									<view v-if="item.user_id == 0" style="max-width: 30px;">
+										<p class="official_PS_tag">
+											官方题库
+										</p>
+									</view>
+									<view v-else-if="item.group_id == 0" style="max-width: 30px;">
+										<div class="personal_PS_tag">
+											个人题库
+										</div>
+									</view>
+									<view v-else-if="item.group_id != 0" style="max-width: 30px;">
+										<div class="group_PS_tag">
+											小组题库
+										</div>
+									</view>
+								</uni-col>
+								<uni-col :offset="1" :span="7" align="start">
+									<p style="margin: auto;">
+										<u-avatar :src="myRequest.imageUrl() + '/public'
+											+ item.user_info.avatar_path" size="70px"></u-avatar>
+									<div class="user_name" style="margin-top: 10px; font-family: shuhei; margin: auto; text-align: center;">
+										{{item.user_info.nick_name}}
+									</div>
+									</p>
+								</uni-col>
+								
+								<uni-col :offset="2" :span="10" align="start">
+									<div class="shuhei" style="margin-bottom: 5px;margin-top: 18px;">
+										<p style="font-size: 22px;">{{item.name}}</p>
+									</div>
+									<div style="font-size: 16px; margin-top: 5px;">
+										{{item.problem_number}} 道题目
+									</div>
+								</uni-col>
+							</uni-row>
+						</view>
+					</uni-card>
+				</view>
 			</scroll-view>
 		</u-popup>
 
@@ -180,7 +224,7 @@
 				}" scroll-y="true">
 
 
-				<u-list customStyle="width: 94%; margin: auto; margin-top: 25px;">
+				<!-- <u-list customStyle="width: 94%; margin: auto; margin-top: 25px;">
 					<u-list-item v-for="(item, index) in problemList" :key="index">
 						<uni-card spacing="0" padding="0" margin="10px 0px 0px 10px" @click="select(item)">
 							<view>
@@ -213,7 +257,6 @@
 
 					<u-list-item style="margin-top: 15px; margin-bottom: 15px;">
 						<u-row>
-							<!-- <u-col span="4"></u-col> -->
 							<u-col span="3" offset="2">
 								<u-button type="primary" text="添加" @click="addToRelativeProblem"></u-button>
 							</u-col>
@@ -222,9 +265,54 @@
 							</u-col>
 						</u-row>
 					</u-list-item>
+				</u-list> -->
 
-
-				</u-list>
+				<view class="u-demo-block" style="margin-top: 30px;">
+					<u-list :customStyle="{height:'400px'}" @scrolltolower="loadNewProblem()">
+						<u-list-item v-for="(item, index) in problemList" :key="index">
+							<uni-card spacing="0" padding="0" margin="10px 0px 0px 10px" @click="select(item)">
+								<view>
+									<uni-row>
+										<uni-col :span="5" align="start">
+											<uni-tag text="选择题" type="primary" customStyle="background-color: #00aaff"
+												v-if="item.type===0" />
+											<uni-tag text="填空题" type="primary" customStyle="background-color: #00aaff"
+												v-if="item.type===1" />
+											<uni-tag text="判断题" type="primary" customStyle="background-color: #00aaff"
+												v-if="item.type===2" />
+										</uni-col>
+										<uni-col :span="15" align="start">
+											<div class="shuhei problem-title" style="margin-bottom: 5px;">
+												<p style="font-size: 20px;">{{item.title}}</p>
+											</div>
+										</uni-col>
+										<uni-col :span="4" align="start">
+											<u-icon name="/static/pic/problemSet/fxxz.svg" size="25px" v-if="item.selected === 1"></u-icon>
+											<u-icon name="/static/pic/problemSet/fxwxz.svg" size="25px" v-if="item.selected === 0"></u-icon>
+										</uni-col>
+									</uni-row>
+									<u-divider> </u-divider>
+								</view>
+							</uni-card>
+				
+						</u-list-item>	
+					</u-list>
+					
+				</view>
+				
+				<view class="footer">
+					<u-row>
+						<u-col span="2"></u-col>
+						<u-col span="3">
+							<u-button type="primary" shape="circle" text="加入题库" @click="addToRelativeProblem"></u-button>
+						</u-col>
+						<u-col span="2"></u-col>
+						<u-col span="3">
+							<u-button type="success" shape="circle" text="全选" @click="selectAll"></u-button>
+						</u-col>
+						<u-col span="2"></u-col>
+					</u-row>
+				</view>
 
 
 			</scroll-view>
@@ -242,7 +330,7 @@
 						marginTop: '0',
 					}" scroll-y="true">
 
-					<u-list customStyle="width: 94%; margin: auto; margin-top: 15px;">
+					<!-- <u-list customStyle="width: 94%; margin: auto; margin-top: 15px;">
 
 						<u-list-item style="margin-bottom: 15px;">
 							<view v-if="authorInfo.id == userId">
@@ -292,7 +380,56 @@
 
 						</u-list-item>
 
-					</u-list>
+					</u-list> -->
+					
+					
+					<view class="u-demo-block" style="margin-top: 15px;">
+						<u-list :customStyle="{height:'400px'}">
+							<u-list-item style="margin-bottom: 10px;">
+								<view v-if="authorInfo.id == userId">
+									<u-row>
+										<u-col span="6" offset="3">
+											<u-button type="success" text="添加相关题目" @click="showProblemSet"></u-button>
+										</u-col>
+									</u-row>
+							
+								</view>
+							</u-list-item>
+							
+							<u-list-item v-for="(item, index) in relativeProblem" :key="index">
+								<uni-card spacing="0" padding="0" margin="10px 0px 0px 10px">
+									<view>
+										<uni-row>
+											<uni-col :span="5" align="start">
+												<uni-tag text="选择题" type="primary" customStyle="background-color: #00aaff"
+													v-if="item.type===0" />
+												<uni-tag text="填空题" type="primary" customStyle="background-color: #00aaff"
+													v-if="item.type===1" />
+												<uni-tag text="判断题" type="primary" customStyle="background-color: #00aaff"
+													v-if="item.type===2" />
+											</uni-col>
+											<uni-col :offset="1" :span="14" align="start">
+												<div class="shuhei problem-title" style="margin-bottom: 5px;" @click="problemClick(item)">
+													<p style="font-size: 20px;">{{item.title}}</p>
+												</div>
+											</uni-col>
+											<uni-col :span="4" align="start">
+												<view v-if="authorInfo.id == userId">
+													<i-icon name="delete-bin-fill" color="red" :size="30"
+														style="margin-left: 10px;"
+														@click="removeRelativeProblem(item, index)"></i-icon>
+												</view>
+											</uni-col>
+										</uni-row>
+										<u-divider> </u-divider>
+									</view>
+								</uni-card>
+					
+							</u-list-item>	
+						</u-list>
+						
+					</view>
+					
 				</scroll-view>
 
 			</u-popup>
@@ -314,6 +451,8 @@
 	import uCol from '@/uni_modules/uview-ui/components/u-col/u-col.vue'
 	import uAvatar from '@/uni_modules/uview-ui/components/u-avatar/u-avatar.vue'
 	import tuiNoData from '@/components/tui-no-data/tui-no-data.vue'
+
+	import api from '@/common/api.js'
 
 	export default {
 		data() {
@@ -370,10 +509,53 @@
 				relativeProblem: [
 
 				],
+				
+				limit: 5, 
+				offset: 0,
+				curProblemSetId: 0
+				
 
 			}
 		},
 		methods: {
+			loadNewProblem() {
+				let that = this;
+				
+				var ret;
+				
+				myRequest.request(api.problem_set_all_problem({id:this.curProblemSetId, limit: this.limit, offset: this.offset}), 'GET', {}).then(
+					function(res) {
+						console.log(res)
+						if (res.statusCode == 200) {
+							ret = res.data.problems
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else {
+							myRequest.toast()
+						}
+						
+						if (ret == null) {
+							return;
+						}
+						
+						that.offset += ret.length
+						
+						for (var i = 0; i < ret.length; i++) {
+							that.problemList.push({
+								id: ret[i].id,
+								type: ret[i].problem_type_id,
+								selected: 0,
+								title: ret[i].description,
+							})
+						}
+					}
+				).catch(
+					function(res) {
+						console.log(res)
+						myRequest.toast()
+				})
+			},
+			
 			problemClick(item) {
 				console.log('click')
 				uni.navigateTo({
@@ -393,16 +575,17 @@
 					},
 
 					success: res => {
-						if (res.statusCode == 200) {
-							var data = res.data
+						if (res.statusCode == 200) {							
+							var ret = res.data
 
-							if (data == null) return
+							if (ret == null) return
 
-							for (var i = 0; i < data.length; i++) {
+							for (var i = 0; i < ret.length; i++) {
 								this.relativeProblem.push({
-									id: data[i].id,
-									type: data[i].problem_type_id,
-									description: data[i].description,
+									id: ret[i].id,
+									type: ret[i].problem_type_id,
+									selected: 0,
+									title: ret[i].description,
 								})
 							}
 						} else if (res.statusCode == 401) {
@@ -475,6 +658,7 @@
 				console.log('yyy')
 				console.log(problemSetId)
 
+				this.curProblemSetId = problemSetId
 				this.initProblemList(problemSetId)
 			},
 
@@ -483,7 +667,7 @@
 				var ret;
 
 				uni.request({
-					url: myRequest.interfaceUrl() + `/problem_set/all_problem/${problemSetId}`,
+					url: myRequest.interfaceUrl() + `/problem_set/all_problem/${problemSetId}?offset=${this.offset}&limit=${this.limit}`,
 					method: 'GET',
 					header: {
 						'X-Token': myRequest.getToken()
@@ -493,6 +677,10 @@
 						if (res.statusCode == 200) {
 							ret = res.data.problems
 
+							if (ret == null) {
+								return;
+							}
+							
 							this.problemList = []
 
 							for (var i = 0; i < ret.length; i++) {
@@ -500,9 +688,11 @@
 									id: ret[i].id,
 									type: ret[i].problem_type_id,
 									selected: 0,
-									description: ret[i].description,
+									title: ret[i].description,
 								})
 							}
+							
+							console.log(this.problemList)
 
 						} else if (res.statusCode == 401) {
 							uni.redirectTo({
@@ -527,7 +717,7 @@
 
 				myRequest.checkLogin()
 				uni.request({
-					url: myRequest.interfaceUrl() + '/user/problem_set',
+					url: myRequest.interfaceUrl() + '/problem_set/all',
 					method: 'GET',
 					header: {
 						'X-Token': myRequest.getToken()
@@ -537,17 +727,30 @@
 						console.log(res)
 						if (res.statusCode == 200) {
 							this.problemSet = []
-							for (var i = 0; i < res.data.length; i++) {
+							
+							if (res.data.problem_set == null) {
+								return
+							}
+							
+							for (var i = 0; i < res.data.problem_set.length; i++) {
 								var t = {
-									id: res.data[i].id,
-									description: res.data[i].description,
-									name: res.data[i].name,
-									pic: ".",
-									created_at: res.data[i].created_at.slice(0, 10),
-									problem_number: res.data[i].problem_count,
+									id: res.data.problem_set[i].id,
+									description: res.data.problem_set[i].description,
+									name: res.data.problem_set[i].name,
+									pic: "",
+									created_at: res.data.problem_set[i].created_at.slice(0, 10),
+									problem_number: res.data.problem_set[i].problem_count,
+									user_id: res.data.problem_set[i].user_id,
+									group_id: res.data.problem_set[i].group_id,
+									user_info: res.data.problem_set[i].user_info,
 								}
+								
 								this.problemSet.push(t);
 							}
+							
+							console.log('this problemSet')
+							console.log(this.problemSet)
+							
 						} else if (res.statusCode == 401) {
 							if (myRequest.isLogin()) {
 								myRequest.toast('请重新登录')
