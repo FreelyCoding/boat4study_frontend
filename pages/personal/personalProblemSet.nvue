@@ -10,7 +10,7 @@
 			</uni-nav-bar>
 		</view>
 		
-		<view v-if="this.problemSet.length != 0">
+		<view v-if="problemSet.length != 0">
 			<view class="u-demo-block">
 				<u-list customStyle="margin: auto; margin-top: 10px;">
 					<u-list-item v-for="(item, index) in problemSet" :key="index">

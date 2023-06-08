@@ -10,7 +10,7 @@
 			</uni-nav-bar>
 		</view>
 		
-		<view v-if="this.ps.length != 0">
+		<view v-if="ps.length != 0">
 			<view class="u-demo-block">
 				<u-list customStyle="width: 94%; margin: auto; margin-top: 5px;">
 					<u-list-item v-for="(item, index) in ps" :key="index">
@@ -49,8 +49,7 @@
 		</view>
 
 		<view v-else style="text-align: center;">
-			<image src="../../static/pic/note/no_note.png"
-				style="margin: auto; margin-top: 30px; height: 200px; width: 200px;"></image>
+			<image src="../../static/pic/note/no_note.png" style="margin: auto; margin-top: 30px; height: 200px; width: 200px;"></image>
 			<p style="font-size: 20px;margin-top: 30px;">暂无错题</p>
 		</view>
 
@@ -129,6 +128,10 @@
 <style>
 	page {
 		background: #EDEDED;
+	}
+	
+	.container {
+		padding-bottom: env(safe-area-inset-bottom);
 	}
 	
 	.status-bar {

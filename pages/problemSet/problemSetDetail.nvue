@@ -94,7 +94,6 @@
 		
 		<u-popup :show="showOperationTable" :round="10" mode="bottom" @close="closeOperationTable" :overlayOpacity="0.2">
 			<view style="margin: 20px 10px 20px 10px;">
-				
 				<u-row @click="editPS()">
 					<u-col :span="2">
 						<u-icon name="/static/pic/problemSet/edit_pro_set.svg" size="40px"></u-icon>

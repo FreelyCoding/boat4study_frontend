@@ -11,7 +11,7 @@
 			</uni-nav-bar>
 		</view>
 
-		<view v-if="this.problemSet.length != 0">
+		<view v-if="problemSet.length != 0">
 			<view class="u-demo-block">
 				<u-list customStyle="margin: auto; margin-top: 10px;">
 					<u-list-item v-for="(item, index) in problemSet" :key="index">
@@ -67,8 +67,7 @@
 		</view>
 
 		<view v-else style="text-align: center;">
-			<image src="../../static/pic/note/no_note.png"
-				style="margin: auto; margin-top: 30px; height: 200px; width: 200px;"></image>
+			<image src="../../static/pic/note/no_note.png" style="margin: auto; margin-top: 30px; height: 200px; width: 200px;"></image>
 			<p style="font-size: 20px;margin-top: 30px;">暂无题库</p>
 		</view>
 

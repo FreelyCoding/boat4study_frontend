@@ -54,7 +54,6 @@
 								</p>
 							</uni-col>
 							<uni-col :span="2">
-
 							</uni-col>
 							<uni-col :span="14" align="start">
 								<div class="shuhei" style="margin-bottom: 5px;margin-top: 12px;">
@@ -84,7 +83,7 @@
 
 
 		<view style="padding: 10px 0 10px 0; position: fixed; bottom: 0;background-color: #EDEDED; width: 100%;">
-			<p style="margin: auto; width: 90%;">
+			<p style="margin: auto; width: 96%;">
 				<button style="background-color: #00aaff; color: white; 
 				 margin-bottom: 10px;" @click="jumpToCreateGroup">
 					创建小组
