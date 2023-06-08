@@ -121,9 +121,12 @@
 				}
 
 				console.log(uni.getStorageSync('token'))
+				
+				console.log('type')
+				console.log(this.problemSet_type)
 
 				// TODO: 后续更改is_public字段
-				if (this.problemSet_type + 1 == this.problemSet_type_list.length) {
+				if (Number(this.problemSet_type) + 1 == Number(this.problemSet_type_list.length)) {
 					var data = JSON.stringify({
 						"description": this.problemSet.description,
 						"name": this.problemSet.name,
@@ -138,6 +141,9 @@
 						"area_id": this.problemSet_type + 1
 					})
 				}
+
+				console.log('data')
+				console.log(data)
 
 				myRequest.request(api.problem_set_create(), 'POST', data).then(
 					function(res) {
