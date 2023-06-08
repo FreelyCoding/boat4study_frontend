@@ -12,7 +12,7 @@
 		</view>
 		
 		<view class="u-demo-block">
-			<u-list customStyle="width: 94%; margin: auto; max-height: 600px; margin-top: 15px;">
+			<u-list :customStyle="{height:scrollH+'px'}" @scrolltolower="loadNewProblem()">
 				<u-list-item v-for="(item, index) in problem_id_list" :key="index">
 					<uni-card spacing="0" padding="0" margin="10px 0px 0px 10px" 
 						@click="select(item)">
@@ -40,8 +40,9 @@
 						</view>
 					</uni-card>
 		
-				</u-list-item>
+				</u-list-item>	
 			</u-list>
+			
 		</view>
 		
 		<view class="footer">
@@ -72,6 +73,9 @@
 				source_set_id: 0,
 				problem_id_list: [],
 				if_select_all: 0,
+				limit: 10,
+				offset: 0,
+				status: 'loading'
 			}
 		},
 		onLoad: function (option) {
@@ -79,6 +83,14 @@
 			this.source_set_id = option.source_set_id
 			console.log("problem_set_id:" + this.problem_set_id + " source_set_id:" + this.source_set_id)
 			this.init_problem_id_list()
+		},
+		
+		computed: {
+			scrollH: function() {
+				let sys = uni.getSystemInfoSync();
+				let winHeight = parseInt(sys.windowHeight) - 50
+				return winHeight
+			}
 		},
 		
 		methods: {
@@ -97,7 +109,7 @@
 			},
 			
 			async add_to_ps() {
-				for (var i=0;i<this.problem_id_list.length;i++) {
+				for (var i = 0; i < this.problem_id_list.length;i++) {
 					if (this.problem_id_list[i].selected != 0) {
 						await myRequest.request(api.problem_set_migrate_problem(this.problem_set_id, this.problem_id_list[i].id), 'POST', {}).then(
 							function(res) {
@@ -120,7 +132,7 @@
 			
 			async init_problem_id_list() {
 				var ret;
-				await myRequest.request(api.problem_set_all_problem({id:this.source_set_id}), 'GET', {}).then(
+				await myRequest.request(api.problem_set_all_problem({id:this.source_set_id, limit: this.limit, offset: this.offset}), 'GET', {}).then(
 					function(res) {
 						console.log(res)
 						if (res.statusCode == 200) {
@@ -137,7 +149,18 @@
 						myRequest.toast()
 				})
 				
-				for (var i=0;i<ret.length;i++) {
+				if (ret == null) {
+					this.status = 'nomore'
+					return
+				}
+				
+				this.offset += ret.length
+				
+				if (ret.length < this.limit) {
+					this.status = 'nomore'
+				}
+				
+				for (var i=0;i < ret.length;i++) {
 					await this.problem_id_list.push({
 						id: ret[i].id,
 						type: ret[i].problem_type_id,
@@ -256,6 +279,48 @@
 				} else {
 					item.selected = 0
 				}
+			},
+			loadNewProblem() {
+				let that = this;
+				
+				var ret;
+				
+				myRequest.request(api.problem_set_all_problem({id:this.source_set_id, limit: this.limit, offset: this.offset}), 'GET', {}).then(
+					function(res) {
+						console.log(res)
+						if (res.statusCode == 200) {
+							ret = res.data.problems
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else {
+							myRequest.toast()
+						}
+						
+						if (ret == null) {
+							this.status = 'nomore'
+							return;
+						}
+						
+						that.offset += ret.length
+						
+						if (ret.length < that.limit) {
+							that.status = 'nomore'
+						}
+						
+						for (var i = 0; i < ret.length; i++) {
+							that.problem_id_list.push({
+								id: ret[i].id,
+								type: ret[i].problem_type_id,
+								selected: 0,
+								title: ret[i].description,
+							})
+						}
+					}
+				).catch(
+					function(res) {
+						console.log(res)
+						myRequest.toast()
+				})
 			}
 		}
 		
@@ -281,8 +346,8 @@
 		width: 100vw;
 		background-color: #fcfcfc;
 		position: fixed;
-		bottom: 0;
-		height: 60px;
+		bottom: 0px;
+		height: 40px;
 		overflow: auto;
 	}
 </style>
