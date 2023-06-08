@@ -371,4 +371,20 @@
 		font-weight: bold;
 		margin-bottom: 5px;
 	}
+	
+	.discussion-content {
+		text-overflow: ellipsis;
+		overflow: hidden;
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 4;
+		line-height: 20px;
+		max-height: 80px;
+		font-family: 微软雅黑, serif;
+		font-size: 12px;
+		color: gray;
+		/*盒子宽自己设置想要的宽度*/
+		white-space: pre-wrap;
+		/*处理元素内的空白,保留空白符序列，但是正常地进行换行*/
+	}
 </style>
