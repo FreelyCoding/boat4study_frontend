@@ -26,7 +26,7 @@
 			</uni-forms>
 			<uni-forms ref="baseForm" :modelValue="group" label-position="top">
 				<uni-forms-item label="描述">
-					<uni-easyinput v-model="group.description" placeholder="请简要描述小组" />
+					<uni-easyinput v-model="group.introduction" placeholder="请简要描述小组" />
 				</uni-forms-item>
 			</uni-forms>
 			<uni-forms ref="baseForm" :modelValue="group" label-position="top">
@@ -116,7 +116,7 @@
 				console.log(uni.getStorageSync('token'))
 
 				// TODO: 后续更改is_public字段
-				if (this.studyGroup_type + 1 == this.studyGroup_type_list) {
+				if (this.studyGroup_type + 1 == this.studyGroup_type_list.length) {
 					var data = JSON.stringify({
 						"description": this.group.introduction,
 						"name": this.group.name,

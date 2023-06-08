@@ -123,7 +123,7 @@
 				console.log(uni.getStorageSync('token'))
 
 				// TODO: 后续更改is_public字段
-				if (this.problemSet_type + 1 == this.problemSet_type_list) {
+				if (this.problemSet_type + 1 == this.problemSet_type_list.length) {
 					var data = JSON.stringify({
 						"description": this.problemSet.description,
 						"name": this.problemSet.name,
