@@ -385,7 +385,7 @@
 					
 					<view class="u-demo-block" style="margin-top: 15px;">
 						<u-list>
-							<u-list-item style="margin-bottom: 10px;">
+							<u-list-item style="margin-bottom: 10px; margin-bottom: 10px;">
 								<view v-if="authorInfo.id == userId">
 									<u-row>
 										<u-col span="6" offset="3">
@@ -409,13 +409,13 @@
 													v-if="item.type===2" />
 											</uni-col>
 											<uni-col :offset="1" :span="14" align="start">
-												<div class="shuhei problem-title" style="margin-bottom: 5px;" @click="problemClick(item)">
+												<div class="shuhei problem-title" @click="problemClick(item)">
 													<p style="font-size: 20px;">{{item.title}}</p>
 												</div>
 											</uni-col>
 											<uni-col :span="4" align="start">
 												<view v-if="authorInfo.id == userId">
-													<i-icon name="delete-bin-fill" color="red" :size="30"
+													<i-icon name="delete-bin-fill" color="red" :size="18"
 														style="margin-left: 10px;"
 														@click="removeRelativeProblem(item, index)"></i-icon>
 												</view>
