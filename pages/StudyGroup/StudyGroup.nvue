@@ -491,6 +491,8 @@
 					}
 				})
 
+				//console.log("isMember = " + this.isMember)
+
 				uni.request({
 					url: myRequest.interfaceUrl() + '/problem_set/all?group_id=' + this.group.id,
 					method: 'GET',
@@ -515,6 +517,7 @@
 										user_id: res.data.problem_set[i].user_id,
 										group_id: res.data.problem_set[i].group_id,
 										user_info: res.data.problem_set[i].user_info,
+										is_public: res.data.problem_set[i].is_public,
 									}
 									this.problemSet.push(t);
 								}
@@ -623,7 +626,7 @@
 				})
 			},
 			jumpToProblemSetDetail(item) {
-				if (this.isMember) {
+				if (this.isMember || item.is_public) {
 					uni.navigateTo({
 						url: "/pages/problemSet/problemSetDetail?id=" + item.id
 					})
@@ -693,13 +696,6 @@
 					}
 				})
 				this.$refs.inputDialog.close()
-
-				/*setTimeout(() => {
-					this.group.introduction = this.group.editIntroduction
-					this.group.name = this.group.editName
-					// 关闭窗口后，恢复默认内容
-
-				}, 500)*/
 			},
 			inputDialogToggle() {
 				this.$refs.inputDialog.open()
