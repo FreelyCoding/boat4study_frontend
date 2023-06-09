@@ -615,7 +615,7 @@
 			publishPS() {
 				this.proDetail.is_public = true
 				this.proDetailEdit.is_public = true
-				if (this.user_info.user_id != this.proDetail.user_id) {
+				if (!this.have_access) {
 					myRequest.toast('您没有修改权限~', 1000)
 					setTimeout(() => {
 						uni.hideToast();
@@ -625,11 +625,11 @@
 				}
 			},
 			unPublishPS() {
-				if (this.user_info.user_id == this.proDetail.user_id) {
+				if (this.have_access) {
 					this.proDetail.is_public = false
 					this.proDetailEdit.is_public = false
 				}
-				if (this.user_info.user_id != this.proDetail.user_id) {
+				if (!this.have_access) {
 					myRequest.toast('您没有修改权限~', 1000)
 					setTimeout(() => {
 						uni.hideToast();
