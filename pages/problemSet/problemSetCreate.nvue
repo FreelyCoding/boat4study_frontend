@@ -94,6 +94,7 @@
 		onLoad(option) {
 			if (option.group_id && option.group_id != 0) {
 				this.problemSet.group_id = parseInt(option.group_id)
+				console.log("group_id = " + this.problemSet.group_id)
 			}
 		},
 		
@@ -131,14 +132,16 @@
 						"description": this.problemSet.description,
 						"name": this.problemSet.name,
 						"is_public": true,
-						"area_id": 100
+						"area_id": 100,
+						"group_id": this.problemSet.group_id,
 					})
 				} else {
 					var data = JSON.stringify({
 						"description": this.problemSet.description,
 						"name": this.problemSet.name,
 						"is_public": true,
-						"area_id": Number(this.problemSet_type) + 1
+						"area_id": Number(this.problemSet_type) + 1,
+						"group_id": this.problemSet.group_id,
 					})
 				}
 

@@ -618,16 +618,9 @@
 			},
 
 			jumpToAllProblemSet() {
-				if (this.isMember) {
-					uni.navigateTo({
-						url: "/pages/StudyGroup/StudyGroupProblemSet?group_id=" + this.group.id
-					})
-				} else {
-					myRequest.toast('您没有查看权限哦~', 1000)
-					setTimeout(() => {
-						uni.hideToast();
-					}, 1000)
-				}
+				uni.navigateTo({
+					url: "/pages/StudyGroup/StudyGroupProblemSet?group_id=" + this.group.id
+				})
 			},
 			jumpToProblemSetDetail(item) {
 				if (this.isMember) {
@@ -923,7 +916,7 @@
 		font-weight: bold;
 		margin-bottom: 5px;
 	}
-	
+
 	.discussion-content {
 		text-overflow: ellipsis;
 		overflow: hidden;
