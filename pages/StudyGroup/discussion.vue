@@ -111,7 +111,7 @@
 			<!-- <u-line></u-line> -->
 
 			<!--评论-->
-			<comment-discussion :articleId="discussion_id" :authorId="authorInfo.id"></comment-discussion>
+			<!-- <comment-discussion :articleId="discussion_id" :authorId="authorInfo.id"></comment-discussion> -->
 
 		</view>
 
