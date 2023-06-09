@@ -371,6 +371,12 @@
 		},
 
 		methods: {
+			cardClick(item) {
+				uni.navigateTo({
+					url: `/pages/StudyGroup/discussion?group_id=${this.group.id}&id=${item.id}`
+				})
+			},
+			
 			back() {
 				uni.navigateBack()
 			},
