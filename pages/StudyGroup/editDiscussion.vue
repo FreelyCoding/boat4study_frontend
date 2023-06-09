@@ -269,9 +269,15 @@
 				} 
 				else {
 					this.show = false;
-					uni.redirectTo({
-						url: '/pages/StudyGroup/StudyGroupIndex'
-					})
+					
+					if (getCurrentPages.length > 1) {
+						uni.navigateBack()
+					}
+					else {
+						uni.redirectTo({
+							url: `/pages/StudyGroup/StudyGroupIndex?group_id=${this.group_id}`
+						})
+					}
 				}
 			},
 
