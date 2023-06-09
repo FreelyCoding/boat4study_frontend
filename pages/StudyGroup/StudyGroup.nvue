@@ -526,6 +526,7 @@
 										is_public: res.data.problem_set[i].is_public,
 									}
 									this.problemSet.push(t);
+									console.log("is_public : " + t.is_public)
 								}
 							}
 						} else if (res.statusCode == 401) {
@@ -632,16 +633,11 @@
 				})
 			},
 			jumpToProblemSetDetail(item) {
-				if (this.isMember || item.is_public) {
-					uni.navigateTo({
-						url: "/pages/problemSet/problemSetDetail?id=" + item.id
-					})
-				} else {
-					myRequest.toast('您没有查看权限哦~', 1000)
-					setTimeout(() => {
-						uni.hideToast();
-					}, 1000)
-				}
+				console.log("isMember = " + this.isMember)
+				console.log("ispublic = " + item.is_public)
+				uni.navigateTo({
+					url: "/pages/problemSet/problemSetDetail?id=" + item.id
+				})
 			},
 			jumpToAddProblemSet() {
 				uni.navigateTo({

@@ -28,7 +28,7 @@
 				</uni-popup-dialog>
 			</uni-popup>
 		</view>
-		
+
 		<view>
 			<uni-popup ref="deleteProSetDialog" type="dialog" :isMaskClick="false">
 				<uni-popup-dialog cancelText="取消删除" confirmText="确认删除" title="您确定要删除题库吗" type="error"
@@ -36,28 +36,25 @@
 				</uni-popup-dialog>
 			</uni-popup>
 		</view>
-		
+
 		<view>
 			<uni-popup ref="selectProNumDialog" type="dialog" :isMaskClick="false">
 				<uni-popup-dialog cancelText="取消" confirmText="开始做题" title="请选择题目数量" type="info"
 					@confirm="jumpToSimuPractice()" @close="selectProNumDialogClose()">
 					<uni-card style="width: 280px; ">
-						<slider value="1" @change="selectProNum" min="1" block-size="14"
-						 :max="proDetail.totalNum" show-value />
+						<slider value="1" @change="selectProNum" min="1" block-size="14" :max="proDetail.totalNum"
+							show-value />
 					</uni-card>
 				</uni-popup-dialog>
 			</uni-popup>
 		</view>
-		
+
 		<view>
 			<uni-popup ref="selectProTypeDialog" type="dialog" :isMaskClick="false">
 				<uni-popup-dialog cancelText="取消" confirmText="开始做题" title="请选择题目类型" type="info"
 					@confirm="jumpToTypePractice()" @close="selectProTypeDialogClose()">
 					<uni-card style="width: 280px; ">
-						<u-radio-group 
-								v-model="problem_type_select"
-								placement="column"
-								iconPlacement="right">
+						<u-radio-group v-model="problem_type_select" placement="column" iconPlacement="right">
 							<u-radio label="选择题" :name="0" :customStyle="{marginBottom: '8px'}"></u-radio>
 							<u-radio label="填空题" :name="1" :customStyle="{marginBottom: '8px'}"></u-radio>
 							<u-radio label="判断题" :name="2" :customStyle="{marginBottom: '8px'}"></u-radio>
@@ -66,33 +63,31 @@
 				</uni-popup-dialog>
 			</uni-popup>
 		</view>
-		
+
 		<view>
 			<!-- 输入框示例 -->
 			<uni-popup ref="errorNoProDialog" type="dialog" :isMaskClick="false">
-				<uni-popup-dialog type="error" cancelText="关闭" confirmText="确认"
-				 title="错误" content="没有题目"
+				<uni-popup-dialog type="error" cancelText="关闭" confirmText="确认" title="错误" content="没有题目"
 					@confirm="confirmErrorNoProDialog()" @close="confirmErrorNoProDialog()"></uni-popup-dialog>
 			</uni-popup>
 		</view>
 		<view>
 			<!-- 输入框示例 -->
 			<uni-popup ref="errorNoFavDialog" type="dialog" :isMaskClick="false">
-				<uni-popup-dialog type="error" cancelText="关闭" confirmText="确认"
-				 title="错误" content="没有收藏题目"
+				<uni-popup-dialog type="error" cancelText="关闭" confirmText="确认" title="错误" content="没有收藏题目"
 					@confirm="confirmErrorNoFavDialog()" @close="confirmErrorNoFavDialog()"></uni-popup-dialog>
 			</uni-popup>
 		</view>
 		<view>
 			<!-- 输入框示例 -->
 			<uni-popup ref="errorNoWrongDialog" type="dialog" :isMaskClick="false">
-				<uni-popup-dialog type="error" cancelText="关闭" confirmText="确认"
-				 title="错误" content="没有错题"
+				<uni-popup-dialog type="error" cancelText="关闭" confirmText="确认" title="错误" content="没有错题"
 					@confirm="confirmErrorNoWrongDialog()" @close="confirmErrorNoWrongDialog()"></uni-popup-dialog>
 			</uni-popup>
 		</view>
-		
-		<u-popup :show="showOperationTable" :round="10" mode="bottom" @close="closeOperationTable" :overlayOpacity="0.2">
+
+		<u-popup :show="showOperationTable" :round="10" mode="bottom" @close="closeOperationTable"
+			:overlayOpacity="0.2">
 			<view style="margin: 20px 10px 20px 10px;">
 				<u-row @click="editPS()">
 					<u-col :span="2">
@@ -144,19 +139,17 @@
 						</view>
 					</uni-col>
 					<uni-col :span="3" :offset="9" align="right">
-						<u-icon name="/static/pic/problemSet/more.svg" size="25px"
-							style="width: 25px;" @click="openOperationTable"
-							 v-if="have_access"></u-icon>
+						<u-icon name="/static/pic/problemSet/more.svg" size="25px" style="width: 25px;"
+							@click="openOperationTable" v-if="have_access"></u-icon>
 					</uni-col>
 				</uni-row>
 			</view>
-			
+
 			<view class="owner_info_box">
 				<u-row>
 					<u-col :span="2">
 						<u-avatar :src="myRequest.imageUrl() + '/public' + proDetail.ownerAvatar"
-						size="55px"
-							></u-avatar>
+							size="55px"></u-avatar>
 					</u-col>
 					<u-col :span="8">
 						<view class="" style="font-size: 16px; margin-left: 10px;">
@@ -175,7 +168,7 @@
 					</u-col>
 				</u-row>
 			</view>
-			
+
 			<view class="proSetStatis">
 				<uni-row>
 					<uni-col :span="8">
@@ -349,13 +342,17 @@
 			<u-row>
 				<u-col span="2"></u-col>
 				<u-col span="3">
-					<u-button v-if="proDetail.is_public == true" type="primary" shape="circle" text="已公开" @click="unPublishPS()"></u-button>
-					<u-button v-if="proDetail.is_public == false" type="primary" shape="circle" text="公开" @click="publishPS()"></u-button>
+					<u-button v-if="proDetail.is_public == true" type="primary" shape="circle" text="已公开"
+						@click="unPublishPS()"></u-button>
+					<u-button v-if="proDetail.is_public == false" type="primary" shape="circle" text="公开"
+						@click="publishPS()"></u-button>
 				</u-col>
 				<u-col span="2"></u-col>
 				<u-col span="3">
-					<u-button v-if="proDetail.is_favorite == true" type="success" shape="circle" text="已收藏" @click="unstarPS()"></u-button>
-					<u-button v-if="proDetail.is_favorite == false" type="success" shape="circle" text="收藏" @click="starPS()"></u-button>
+					<u-button v-if="proDetail.is_favorite == true" type="success" shape="circle" text="已收藏"
+						@click="unstarPS()"></u-button>
+					<u-button v-if="proDetail.is_favorite == false" type="success" shape="circle" text="收藏"
+						@click="starPS()"></u-button>
 				</u-col>
 				<u-col span="2"></u-col>
 			</u-row>
@@ -372,9 +369,9 @@
 		data() {
 			return {
 				user_info: {},
-				
+
 				have_access: false,
-				
+
 				proDetail: {
 					user_id: -1,
 					title: "",
@@ -388,14 +385,14 @@
 					wrong_problem_count: 0,
 					fav_problem_count: 0,
 				},
-				
+
 				proDetailEdit: {
 					title: "",
 					descrip: '',
 				},
 				problem_set_id: 0,
 				practice_proNum: 1,
-				
+
 				problem_type_select: 0,
 				showOperationTable: false,
 			}
@@ -408,9 +405,8 @@
 		},
 		onShow: function() {
 			var _this = this
-			
-			myRequest.request('/check/problem_set/' + this.problem_set_id
-			, 'GET', {}).then(
+
+			myRequest.request('/check/problem_set/' + this.problem_set_id, 'GET', {}).then(
 				function(res) {
 					console.log(res)
 					if (res.statusCode == 200) {
@@ -429,8 +425,8 @@
 				function(res) {
 					console.log(res)
 					myRequest.toast()
-			})
-			
+				})
+
 			uni.request({
 				url: myRequest.interfaceUrl() + '/problem_set/all?id=' + this.problem_set_id,
 				method: 'GET',
@@ -487,7 +483,7 @@
 					myRequest.toast()
 				}
 			})
-			
+
 			uni.request({
 				url: myRequest.interfaceUrl() +
 					'/problem_set/statistic/wrong_count?id=' + this.problem_set_id,
@@ -495,7 +491,7 @@
 				header: {
 					'X-Token': myRequest.getToken()
 				},
-							
+
 				success: (res2) => {
 					console.log(res2)
 					if (res2.statusCode == 200) {
@@ -506,13 +502,13 @@
 						myRequest.toast()
 					}
 				},
-							
+
 				fail: (res2) => {
 					console.log(res2)
 					myRequest.toast()
 				},
 			})
-			
+
 			uni.request({
 				url: myRequest.interfaceUrl() +
 					'/problem_set/statistic/fav_count?id=' + this.problem_set_id,
@@ -520,7 +516,7 @@
 				header: {
 					'X-Token': myRequest.getToken()
 				},
-							
+
 				success: (res2) => {
 					console.log(res2)
 					if (res2.statusCode == 200) {
@@ -531,7 +527,7 @@
 						myRequest.toast()
 					}
 				},
-							
+
 				fail: (res2) => {
 					console.log(res2)
 					myRequest.toast()
@@ -555,7 +551,7 @@
 					url: "/pages/problemSet/problemSetFavProblems?id=" + this.problem_set_id
 				})
 			},
-			
+
 			jumpToSequencePractice() {
 				if (this.proDetail.totalNum == 0) {
 					this.$refs.errorNoProDialog.open()
@@ -595,27 +591,31 @@
 			jumpToSimuPractice() {
 				this.$refs.selectProNumDialog.close()
 				uni.navigateTo({
-					url: "/pages/problemExam/problemSimuExam?id=" + this.problem_set_id + "&problem_num=" + this.practice_proNum
+					url: "/pages/problemExam/problemSimuExam?id=" + this.problem_set_id + "&problem_num=" + this
+						.practice_proNum
 				})
 			},
 			jumpToTypePractice() {
 				this.$refs.selectProTypeDialog.close()
 				uni.navigateTo({
-					url: "/pages/problemExam/problemTypeExam?id=" + this.problem_set_id + "&problem_type=" + this.problem_type_select
+					url: "/pages/problemExam/problemTypeExam?id=" + this.problem_set_id + "&problem_type=" + this
+						.problem_type_select
 				})
 			},
-			
+
 			jumpToProblemUpload() {
 				this.showOperationTable = false
 				uni.navigateTo({
 					url: "/pages/problemSet/problemUpload?id=" + this.problem_set_id
 				})
 			},
-			
+
 			publishPS() {
-				this.proDetail.is_public = true
-				this.proDetailEdit.is_public = true
-				if (this.user_info.user_id != this.proDetail.user_id) {
+				if (this.have_access) {
+					this.proDetail.is_public = true
+					this.proDetailEdit.is_public = true
+				}
+				if (!this.have_access) {
 					myRequest.toast('您没有修改权限~', 1000)
 					setTimeout(() => {
 						uni.hideToast();
@@ -625,11 +625,11 @@
 				}
 			},
 			unPublishPS() {
-				if (this.user_info.user_id == this.proDetail.user_id) {
+				if (this.have_access) {
 					this.proDetail.is_public = false
 					this.proDetailEdit.is_public = false
 				}
-				if (this.user_info.user_id != this.proDetail.user_id) {
+				if (!this.have_access) {
 					myRequest.toast('您没有修改权限~', 1000)
 					setTimeout(() => {
 						uni.hideToast();
@@ -644,7 +644,7 @@
 					is_public: this.proDetailEdit.is_public
 				}
 				var _this = this
-				
+
 				myRequest.request(api.problem_set_update(), 'PUT', data).then(
 					function(res2) {
 						console.log(res2)
@@ -663,25 +663,25 @@
 					}
 				)
 			},
-			
+
 			openOperationTable() {
 				if (this.showOperationTable == false) {
 					this.showOperationTable = true
 				} else {
 					this.showOperationTable = false
 				}
-				
+
 			},
 			closeOperationTable() {
 				this.showOperationTable = false
 			},
-			
+
 			back() {
 				uni.navigateBack({
-				    delta: 1
+					delta: 1
 				});
 			},
-			
+
 			confirmErrorNoProDialog() {
 				setTimeout(() => {
 					this.$refs.errorNoProDialog.close()
@@ -697,7 +697,7 @@
 					this.$refs.errorNoWrongDialog.close()
 				}, 100)
 			},
-			
+
 			openProNumSelectDialog() {
 				if (this.proDetail.totalNum == 0) {
 					this.$refs.errorNoProDialog.open()
@@ -715,7 +715,7 @@
 				console.log(event.detail.value)
 				this.practice_proNum = event.detail.value
 			},
-			
+
 			openSelectProTypeDialog() {
 				if (this.proDetail.totalNum == 0) {
 					this.$refs.errorNoProDialog.open()
@@ -728,7 +728,7 @@
 					this.$refs.selectProTypeDialog.close()
 				}, 100)
 			},
-			
+
 			editPS() {
 				this.showOperationTable = false
 				this.proDetailEdit.descrip = this.proDetail.descrip
@@ -741,14 +741,14 @@
 				}, 100)
 			},
 			confirmProEdit() {
-				
+
 				var data = {
 					id: parseInt(this.problem_set_id),
 					name: this.proDetailEdit.title,
 					description: this.proDetailEdit.descrip,
 				}
 				var _this = this
-				
+
 				myRequest.request(api.problem_set_update(), 'PUT', data).then(
 					function(res2) {
 						console.log(res2)
@@ -771,9 +771,9 @@
 						myRequest.toast()
 					}
 				)
-				
+
 			},
-			
+
 			deletePS() {
 				this.showOperationTable = false
 				this.$refs.deleteProSetDialog.open()
@@ -790,7 +790,7 @@
 					header: {
 						'X-Token': myRequest.getToken()
 					},
-				
+
 					success: (res) => {
 						console.log(res)
 						if (res.statusCode == 200) {
@@ -799,7 +799,7 @@
 								uni.hideToast();
 								//关闭提示后跳转
 								uni.navigateBack({
-										delta: 1,
+									delta: 1,
 								});
 							}, 1000)
 						} else if (res.statusCode == 401) {
@@ -808,7 +808,7 @@
 							myRequest.toast()
 						}
 					},
-				
+
 					fail: (res) => {
 						console.log(res)
 						myRequest.toast()
@@ -823,7 +823,7 @@
 					header: {
 						'X-Token': myRequest.getToken()
 					},
-			
+
 					success: (res) => {
 						console.log(res)
 						if (res.statusCode == 200) {
@@ -835,7 +835,7 @@
 							myRequest.toast()
 						}
 					},
-			
+
 					fail: (res) => {
 						console.log(res)
 						myRequest.toast()
@@ -849,7 +849,7 @@
 					header: {
 						'X-Token': myRequest.getToken()
 					},
-							
+
 					success: (res) => {
 						console.log(res)
 						if (res.statusCode == 200) {
@@ -861,7 +861,7 @@
 							myRequest.toast()
 						}
 					},
-							
+
 					fail: (res) => {
 						console.log(res)
 						myRequest.toast()
@@ -881,7 +881,7 @@
 		top: 0;
 		z-index: 10;
 	}
-	
+
 	.container {
 		height: 100%;
 	}
