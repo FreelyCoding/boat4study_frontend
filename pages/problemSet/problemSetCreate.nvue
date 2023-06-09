@@ -138,7 +138,7 @@
 						"description": this.problemSet.description,
 						"name": this.problemSet.name,
 						"is_public": true,
-						"area_id": this.problemSet_type + 1
+						"area_id": Number(this.problemSet_type) + 1
 					})
 				}
 

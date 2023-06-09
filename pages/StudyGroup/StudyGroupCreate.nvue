@@ -116,7 +116,7 @@
 				console.log(uni.getStorageSync('token'))
 
 				// TODO: 后续更改is_public字段
-				if (this.studyGroup_type + 1 == this.studyGroup_type_list.length) {
+				if (Number(this.studyGroup_type) + 1 == this.studyGroup_type_list.length) {
 					var data = JSON.stringify({
 						"description": this.group.introduction,
 						"name": this.group.name,
