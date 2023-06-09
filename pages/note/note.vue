@@ -1187,13 +1187,6 @@
 			back() {
 				var pages = getCurrentPages()
 				if (pages.length > 1) {
-					let page = pages[pages.length - 2]; //跳转页面成功之后
-
-					if (page.route == 'pages/homePage/noteIndex' ||
-						page.route == 'pages/personal/personalNote' ||
-						page.route == 'pages/personal/starNotes') {
-						page.$vm.refresh(); //如果页面存在，则重新刷新页面
-					}
 					uni.navigateBack()
 				} else {
 					uni.switchTab({
