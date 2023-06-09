@@ -127,9 +127,8 @@
 					var html = this.notes[i].note_html
 					var plainText = html.replace(/<[^>]+>/g, "");
 					var plainText = html.replace(/<[^>]+>/g, "").replace(/&nbsp;/g, " ").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&");
-					
+
 					// console.log(plainText)
-					
 					// 替换所有换行符为空格
 					plainText = plainText.replace(/[\r\n\t]/g, " ");
 					// 替换所有空格为一个空格
@@ -146,7 +145,6 @@
 				
 			cardClick(item) {
 				console.log(item)
-				
 				uni.navigateTo({
 					url: `/pages/note/note?id=${item.id}`,
 				})
@@ -155,6 +153,7 @@
 				uni.navigateBack()
 			},
 			refresh() {
+				let _this = this
 				myRequest.checkLogin()
 				this.notes = []
 				let uid = myRequest.getUID();
@@ -180,9 +179,9 @@
 										like_count: res.data.notes[i].like_count,
 										star_count: res.data.notes[i].favorite_count 
 									}
-									this.notes.push(t);
+									_this.notes.push(t);
 								}
-								this.loadData()
+								_this.loadData()
 							}
 						}
 						else if (res.statusCode == 401) {

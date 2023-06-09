@@ -152,6 +152,7 @@
 	import note from '@/pages/note/note.vue'
 	import myRequest from '../../common/request';
 
+	const h = uni.getSystemInfoSync().statusBarHeight;
 	export default {
 		data() {
 			return {
