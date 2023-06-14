@@ -198,7 +198,7 @@
 				
 				var data = JSON.stringify({
 					'content': content,
-					'discussion_id': this.articleId,
+					'discussion_id': Number(this.articleId),
 					'title': 'title'
 				})
 				
