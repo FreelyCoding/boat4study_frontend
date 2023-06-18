@@ -297,7 +297,7 @@
 						}
 						
 						if (ret == null) {
-							this.status = 'nomore'
+							that.status = 'nomore'
 							return;
 						}
 						

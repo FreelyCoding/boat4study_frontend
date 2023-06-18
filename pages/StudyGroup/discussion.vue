@@ -82,7 +82,7 @@
 					
 					<uni-col :span="4">
 						<button type="primary" size="mini"
-							style="width: 60px; background-color: #00aaff; margin-left: 5px;">{{ likeCount }}</button>
+							style="width: 60px; background-color: #00aaff; margin-left: 5px;" @click="clickLike">{{ likeCount }}</button>
 					</uni-col>
 					<uni-col :offset="10" :span="2">
 						<view v-if="isStar">
@@ -95,7 +95,7 @@
 					</uni-col>
 					<uni-col :span="4">
 						<button size="mini"
-							style="width: 60px; background-color: #f9ae3d; color: white; margin-left: 5px;">
+							style="width: 60px; background-color: #f9ae3d; color: white; margin-left: 5px;" @click="clickStar">
 							{{ starCount }}</button>
 					</uni-col>
 				</uni-row>
