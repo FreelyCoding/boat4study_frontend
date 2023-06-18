@@ -8,7 +8,7 @@
 							<view>
 								<p style="text-align: center;">
 									<u-avatar :src="myRequest.imageUrl() + '/public' + user.avatar" size="100px"
-										@click="clickImg(user.avatar)"></u-avatar>
+										@click="clickImg(myRequest.imageUrl() + '/public' + user.avatar)"></u-avatar>
 								</p>
 							</view>
 						</uni-col>
