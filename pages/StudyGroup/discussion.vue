@@ -329,6 +329,12 @@
 									uni.redirectTo({
 										url: '/pages/login/login'
 									})
+								} else if (res.statusCode == 403) {
+									myRequest.toast('您没有权限哦~', 1500)
+									setTimeout(() => {
+										uni.hideToast();
+										//关闭提示后跳转
+									}, 1000)
 								}
 								else {
 									console.log('wrong')
