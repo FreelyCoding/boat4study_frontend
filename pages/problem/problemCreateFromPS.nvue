@@ -1,0 +1,181 @@
+<template>
+	<view>
+		<view class="status-bar">
+			<!--自定义navbar-->
+			<uni-nav-bar title="从其他题库录入" background-color="#00aaff" color="#FFFFFF" status-bar="true">
+				<block slot="left">
+					<view class="note-navbar">
+						<uni-icons type="left" color="#FFFFFF" size="18" @click="back()" />
+					</view>
+				</block>
+			</uni-nav-bar>
+		</view>
+
+		<view v-if="problemSet.length != 0">
+			<view class="u-demo-block">
+				<u-list customStyle="margin: auto; margin-top: 10px;">
+					<u-list-item v-for="(item, index) in problemSet" :key="index">
+						<uni-card isShadow border padding="10px 0px 10px 0px" margin="0px 10px 15px 10px"
+							style="border-radius: 10px;" @click="jumpToPSPList(item)">
+							<view>
+								<uni-row>
+									<uni-col :span="2" align="start">
+										<view v-if="item.user_id == 0" style="max-width: 30px;">
+											<p class="official_PS_tag">
+												官方题库
+											</p>
+										</view>
+										<view v-else-if="item.group_id == 0" style="max-width: 30px;">
+											<div class="personal_PS_tag">
+												个人题库
+											</div>
+										</view>
+										<view v-else-if="item.group_id != 0" style="max-width: 30px;">
+											<div class="group_PS_tag">
+												小组题库
+											</div>
+										</view>
+									</uni-col>
+									<uni-col :span="2" align="start">
+									</uni-col>
+									<uni-col :span="7" align="start">
+										<p style="margin: auto;">
+											<u-avatar :src="myRequest.imageUrl() + '/public'
+												+ item.user_info.avatar_path" size="70px"></u-avatar>
+										<div style="margin-top: 10px; font-family: shuhei; margin: auto;">
+											{{item.user_info.nick_name}}
+										</div>
+										</p>
+									</uni-col>
+									<uni-col :span="1" align="start">
+									</uni-col>
+									<uni-col :span="12" align="start">
+										<div class="shuhei" style="margin-bottom: 5px;margin-top: 18px;">
+											<p style="font-size: 22px;">{{item.name}}</p>
+										</div>
+										<div style="font-size: 16px; margin-top: 5px;">
+											{{item.problem_number}} 道题目
+										</div>
+									</uni-col>
+								</uni-row>
+							</view>
+						</uni-card>
+
+					</u-list-item>
+				</u-list>
+			</view>
+		</view>
+
+		<view v-else style="text-align: center;">
+			<image src="../../static/pic/note/no_note.png"
+				style="margin: auto; margin-top: 30px; height: 200px; width: 200px;"></image>
+			<p style="font-size: 20px;margin-top: 30px;">暂无题库</p>
+		</view>
+
+	</view>
+</template>
+
+<script>
+	import myRequest from '../../common/request';
+	import api from '@/common/api.js';
+
+	export default {
+		data() {
+			return {
+				problem_set_id: 0,
+				problemSet: [],
+			};
+		},
+		onShow: function(option) {
+			this.refresh()
+		},
+		methods: {
+			back() {
+				uni.navigateBack({
+					delta: 1
+				});
+			},
+			getParam() {
+				let routes = getCurrentPages(); // 获取当前打开过的页面路由数组
+				let curRoute = routes[routes.length - 1].route //获取当前页面路由
+				let curParam = routes[routes.length - 1].options; //获取路由参数
+				// 拼接参数
+				let param = ''
+				for (let key in curParam) {
+					param += '&' + key + '=' + curParam[key]
+				}
+
+				// 把参数保存为对像
+				let obj = {}
+				for (let key in curParam) {
+					obj[key] = curParam[key]
+				}
+				return obj
+			},
+			jumpToPSPList(item) {
+				console.log(item.id)
+				uni.navigateTo({
+					url: "/pages/problem/problemCreateFromPSPList?id=" + this.problem_set_id + "&source_set_id=" +
+						item.id
+				})
+			},
+			refresh() {
+				let uid = myRequest.getUID();
+				myRequest.checkLogin()
+				let params = this.getParam();
+				let id = params['id'];
+
+				this.problem_set_id = id;
+				console.log("problem_set_id: " + this.problem_set_id);
+				this.problemSet = []
+				let _this = this
+
+				myRequest.request(api.problem_set_all({}), 'GET', {}).then(
+					function(res) {
+						console.log(res)
+						if (res.statusCode == 200) {
+							if (res.data.problem_set && res.data.problem_set.length > 0) {
+								for (var i = 0; i < res.data.problem_set.length; i++) {
+									var t = {
+										id: res.data.problem_set[i].id,
+										description: res.data.problem_set[i].description,
+										name: res.data.problem_set[i].name,
+										pic: "",
+										created_at: res.data.problem_set[i].created_at.slice(0, 10),
+										problem_number: res.data.problem_set[i].problem_count,
+										user_id: res.data.problem_set[i].user_id,
+										group_id: res.data.problem_set[i].group_id,
+										user_info: res.data.problem_set[i].user_info,
+									}
+									_this.problemSet.push(t);
+								}
+							}
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else {
+							myRequest.toast()
+						}
+					}
+				).catch(
+					function(res) {
+						console.log(res)
+						myRequest.toast()
+					})
+
+			},
+		}
+	}
+</script>
+
+<style>
+	.status-bar {
+		width: 100%;
+		position: sticky;
+		top: 0;
+		z-index: 10;
+	}
+
+	page {
+		background: #EDEDED;
+	}
+</style>

@@ -1,0 +1,152 @@
+	.m-middle-5 {
+		margin-left: 5%;
+		margin-right: 5%;
+	}
+
+	.m-middle-2 {
+		width: 96%;
+		margin: auto;
+	}
+
+	.m-middle-7 {
+		margin-left: 7%;
+		margin-right: 7%;
+	}
+
+
+	.m-lr-0 {
+		margin-left: 0px;
+		margin-right: 0px;
+	}
+
+	.m-bt-0 {
+		margin-top: 0px;
+		margin-bottom: 0px;
+	}
+
+	.background-blue {
+		background-color: #00aaff;
+	}
+
+	.parent_center {
+		display: flex;
+		justify-content: center;
+		justify-items: center;
+	}
+
+	.notes-ul {
+		width: auto;
+		height: auto;
+		overflow: hidden;
+		overflow-x: scroll;
+		white-space: nowrap;
+		padding-left: 0;
+		/* ul中的内容不换行 */
+	}
+
+	.notes-ul li {
+		width: auto;
+		display: inline-block;
+		margin-right: 15px;
+		margin-bottom: 15px;
+	}
+
+	.homePage-header {
+		font-size: 24px;
+		font-family: shuhei;
+	}
+
+	.check-all {
+		padding-top: 7px;
+		text-align: right;
+		font-size: 14px;
+		color: #00aaff;
+		font-weight: bold;
+		font-family: 'Times New Roman', Times, serif;
+	}
+
+	.note-img {
+		max-height: 150px;
+	}
+
+	.note-title {
+		font-size: 15px;
+		color: black;
+		font-weight: bold;
+		margin-bottom: 5px;
+	}
+
+	.note-content {
+		text-overflow: ellipsis;
+		overflow: hidden;
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 4;
+		line-height: 20px;
+		max-height: 80px;
+		font-family: 微软雅黑, serif;
+		font-size: 12px;
+		color: gray;
+		/*盒子宽自己设置想要的宽度*/
+		white-space: pre-wrap;
+		/*处理元素内的空白,保留空白符序列，但是正常地进行换行*/
+	}
+
+	.table-style {
+		width: 96%;
+		margin: auto;
+		margin-bottom: 10px;
+	}
+
+	.d1 {
+		text-align: left;
+	}
+
+	.d3 {
+		text-align: right;
+	}
+
+	.shuhei {
+		font-family: shuhei;
+	}
+
+	.dakai {
+		font-family: alimama_dakai;
+	}
+
+	.puhui {
+		font-family: alibaba_puhui;
+	}
+
+	.official_PS_tag {
+		background-color: #2979ff;
+		writing-mode: vertical-lr;
+		border-top-right-radius: 15px;
+		border-bottom-right-radius: 15px;
+		color: white;
+		height: 80px;
+		text-align: center;
+		font-size: 16px;
+	}
+
+	.personal_PS_tag {
+		background-color: #18bc37;
+		writing-mode: vertical-lr;
+		border-top-right-radius: 15px;
+		border-bottom-right-radius: 15px;
+		color: white;
+		height: 80px;
+		text-align: center;
+		font-size: 16px;
+	}
+
+	.group_PS_tag {
+		background-color: #f9ae3d;
+		writing-mode: vertical-lr;
+		border-top-right-radius: 15px;
+		border-bottom-right-radius: 15px;
+		color: white;
+		height: 80px;
+		text-align: center;
+		font-size: 16px;
+	}

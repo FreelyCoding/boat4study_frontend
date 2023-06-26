@@ -1,0 +1,35 @@
+{
+  "id": "uview-ui",
+  "scripts": {
+    "test": "eslint . --fix",
+    "serve": "npm run dev",
+    "dev": "vite --open",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "egg-cors": "^2.2.3",
+    "html2plaintext": "^2.1.4",
+    "image-tools": "^1.4.0",
+    "img-tools": "^1.1.1",
+    "uview-ui": "^2.0.36"
+  },
+  "devDependencies": {
+    "eslint": "^8.2.0",
+    "eslint-config-airbnb": "^19.0.0"
+  },
+  "name": "boat4study",
+  "description": "学舟frontend",
+  "version": "1.0.0",
+  "main": "main.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FreelyCoding/boat4study_frontend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FreelyCoding/boat4study_frontend/issues"
+  },
+  "homepage": "https://github.com/FreelyCoding/boat4study_frontend#readme"
+}

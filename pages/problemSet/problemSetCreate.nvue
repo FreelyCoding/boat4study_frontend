@@ -1,0 +1,191 @@
+<template>
+	<view>
+		<view>
+			<uni-nav-bar title="创建题库" background-color="#00aaff" color="#FFFFFF" status-bar="true">
+				<block slot="left">
+					<view class="note-navbar">
+						<uni-icons type="left" color="#FFFFFF" size="18" @click="back()" />
+					</view>
+				</block>
+			</uni-nav-bar>
+		</view>
+
+		<view class="m-middle-5" style="margin-top: 30px;margin-bottom: 30px;">
+			<uni-row>
+				<uni-col :span="12">
+					<view>
+						<p class="homePage-header" style="margin-bottom: 20px;">题库信息</p>
+					</view>
+				</uni-col>
+			</uni-row>
+
+			<uni-forms ref="baseForm" :modelValue="problemSet" label-position="top">
+				<uni-forms-item label="名称" required>
+					<uni-easyinput v-model="problemSet.name" placeholder="请输入题库名称" />
+				</uni-forms-item>
+			</uni-forms>
+			<uni-forms ref="baseForm" :modelValue="problemSet" label-position="top">
+				<uni-forms-item label="描述">
+					<uni-easyinput v-model="problemSet.description" placeholder="请简要描述题库" />
+				</uni-forms-item>
+			</uni-forms>
+			<uni-forms ref="baseForm" :modelValue="problemSet" label-position="top">
+				<uni-forms-item label="分区" required>
+					<view class="type_select">
+						<picker @change="bindPickerChange" :value="problemSet_type" :range="problemSet_type_list">
+							<view class="uni-input">{{problemSet_type_list[problemSet_type]}}</view>
+						</picker>
+					</view>
+				</uni-forms-item>
+			</uni-forms>
+		</view>
+		<u-toast ref="uToast"></u-toast>
+		<view>
+			<uni-row>
+				<uni-col :span="3"></uni-col>
+				<uni-col :span="7">
+					<u-button text="取消创建" type="error" @click="back()"></u-button>
+				</uni-col>
+				<uni-col :span="4"></uni-col>
+				<uni-col :span="7">
+					<u-button text="确认提交" type="primary" customStyle="backgroundColor:#00aaff" @click="submit()">
+					</u-button>
+				</uni-col>
+				<uni-col :span="3"></uni-col>
+			</uni-row>
+
+		</view>
+
+	</view>
+</template>
+
+<script>
+	import api from '@/common/api.js';
+	import myRequest from '../../common/request';
+	import toast from '../../uni_modules/uview-ui/libs/config/props/toast';
+	import {
+		methods
+	} from '../../uni_modules/uview-ui/libs/mixin/mixin';
+	export default {
+		data() {
+			return {
+				problemSet: {
+					name: "",
+					description: "",
+					type:"",
+					group_id: 0
+				},
+				toast: {
+					type: 'default',
+					title: '结束后跳转标签页',
+					message: "创建成功",
+					url: '/pages/problemSet/problemUpload',
+					iconUrl: 'https://cdn.uviewui.com/uview/demo/toast/success.png'
+				},
+				problemSet_type: 0,
+				problemSet_type_list: [
+					'计算机','经济金融','电子信息','数学','生物',
+					'医学','物理','化学','历史','建筑','交通','人文社科','外语','体育健康',
+					'公务员','教师','天文学','地理','政治','其他'
+				],
+			}
+		},
+		
+		onLoad(option) {
+			if (option.group_id && option.group_id != 0) {
+				this.problemSet.group_id = parseInt(option.group_id)
+				console.log("group_id = " + this.problemSet.group_id)
+			}
+		},
+		
+		methods: {
+			back() {
+				uni.navigateBack({
+					delta: 1,
+				})
+			},
+			bindPickerChange: function(e) {
+				this.problemSet_type = e.detail.value
+			},
+
+			async submit() {
+				if (!myRequest.isLogin()) {
+					uni.redirectTo({
+						url: '/pages/login/login'
+					})
+					return;
+				}
+
+				if (!this.problemSet.name) {
+					myRequest.toast('题库名称不能为空')
+					return;
+				}
+
+				console.log(uni.getStorageSync('token'))
+				
+				console.log('type')
+				console.log(this.problemSet_type)
+
+				// TODO: 后续更改is_public字段
+				if (Number(this.problemSet_type) + 1 == Number(this.problemSet_type_list.length)) {
+					var data = JSON.stringify({
+						"description": this.problemSet.description,
+						"name": this.problemSet.name,
+						"is_public": true,
+						"area_id": 100,
+						"group_id": this.problemSet.group_id,
+					})
+				} else {
+					var data = JSON.stringify({
+						"description": this.problemSet.description,
+						"name": this.problemSet.name,
+						"is_public": true,
+						"area_id": Number(this.problemSet_type) + 1,
+						"group_id": this.problemSet.group_id,
+					})
+				}
+
+				console.log('data')
+				console.log(data)
+
+				myRequest.request(api.problem_set_create(), 'POST', data).then(
+					function(res) {
+						console.log(data)
+						if (res.statusCode == 200) {
+							myRequest.toast('题库创建成功', 1500, true)
+							setTimeout(() => {
+								uni.hideToast();
+								//关闭提示后跳转
+								uni.navigateBack({
+										delta: 1,
+								});
+							}, 1000)
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else {
+							myRequest.toast()
+						}
+					}
+				).catch(
+					function(res) {
+						console.log(res)
+						myRequest.toast()
+					}
+				)
+			}
+		}
+	}
+</script>
+
+<style>
+	.type_select {
+		border: 1px solid;
+		border-color: #ebebeb;
+		border-radius: 5px;
+		height: 40px;
+		display: flex;
+		justify-content: center;
+		padding-left: 10px;
+		width: 100%;
+	}
+</style>

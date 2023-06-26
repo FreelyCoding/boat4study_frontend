@@ -1,0 +1,29 @@
+/* @font-face {
+	font-family: "alimama_dakai";
+	font-weight: 400;
+	src: url('./Alimama_Regular.ttf');
+	font-display: swap;
+} */
+
+
+/* @font-face {
+	font-family: "alibaba_puhui";
+	font-weight: 400;
+	src: url('./Alibaba_PuHui.ttf');
+	font-display: swap;
+} */
+
+/* CDN 服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
+@font-face {
+	font-family: "alimama_shuhei";
+	font-weight: 700;
+	src: url("https://at.alicdn.com/wf/webfont/xJKUjGR96Q48/3bG1LDp6E9o6.ttf") format("truetype"),
+		url("https://at.alicdn.com/wf/webfont/xJKUjGR96Q48/IpqMWf3QWpS9.woff") format("woff");
+	font-display: swap;
+}
+
+
+@font-face {
+	font-family: 'shuhei';
+	src: url("http://123.249.3.32:9091/public/9/6ebf3166-dc0f-45d2-bff1-0fe39f0a60d2/shuhei.ttf") format('truetype');
+}

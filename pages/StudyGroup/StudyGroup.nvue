@@ -1,0 +1,933 @@
+<template>
+	<view>
+		<view class="status-bar">
+			<uni-nav-bar title="学习小组详情" background-color="#00aaff" color="#FFFFFF" status-bar="true">
+				<block slot="left">
+					<view class="note-navbar">
+						<uni-icons type="left" color="#FFFFFF" size="18" @click="back()" />
+					</view>
+				</block>
+			</uni-nav-bar>
+		</view>
+
+
+		<div class="background-light-blue">
+			<view style="width: 90%; margin: auto; margin-top: 10px; margin-bottom: 10px;">
+				<uni-row>
+					<uni-col :span="13">
+						<view style="margin: 10px 0px 0px 0px;">
+							<p class="group_name">小组名</p>
+							<p class="group_name ">{{group.name}}</p>
+							<p class="group_name" style="margin-top: 20px;">小组简介</p>
+							<p class="group_introduction">{{group.introduction}}</p>
+						</view>
+					</uni-col>
+
+					<uni-col :span="1">
+
+					</uni-col>
+
+					<uni-col :span="8">
+						<view>
+							<p style="margin: auto;">
+								<u-avatar :src="myRequest.imageUrl() + '/public' + group.avatar"
+									size="120px"></u-avatar>
+							</p>
+
+							<view style="margin: auto; margin-top: 30px;">
+								<p v-if="show && isAdministrator">
+									<button size="mini" style="background-color: #f9ae3d; color: white; width: 100px; "
+										@click="jumpToManage()">
+										管理小组
+									</button>
+								</p>
+
+								<p v-else-if="show && !isMember">
+									<button size="mini" style="background-color: #5ac725; color: white; width: 100px;"
+										@click="addGroupDialogToggle">
+										申请加入
+									</button>
+								</p>
+							</view>
+
+						</view>
+					</uni-col>
+				</uni-row>
+			</view>
+		</div>
+
+		<view>
+			<div style="background-color: #f7f7f7;">
+				<view>
+					<uni-card :isShadow="true" :border="true" padding="10px 0px 0px 0px">
+						<view>
+							<uni-row>
+								<uni-col :span="12">
+									<view>
+										<p class="homePage-header" style="color: black;"> 小组成员</p>
+									</view>
+								</uni-col>
+							</uni-row>
+						</view>
+
+						<view>
+							<div style="margin-top: 15px;">
+
+							</div>
+						</view>
+
+						<view>
+							<u-scroll-list indicatorColor="#fff0f0" indicatorActiveColor="#00aaff"
+								indicatorStyle="margin-top : 0">
+								<view class="scroll-list" style="flex-direction: row;">
+									<view v-for="(item, index) in group_members" :key="index"
+										style="margin-left: 10px; margin-right: 10px; margin-bottom: 10px;">
+										<p style="text-align: center;">
+											<u-avatar :src="myRequest.imageUrl() + '/public' + item.avatar_path"
+												size="70px"></u-avatar>
+
+											<!--
+											<image
+												style="width: 60px; height: 60px; background-color: white; margin: auto;"
+												mode="aspectFill" :src="group.avatar"></image> -->
+										</p>
+										<p
+											style="max-width: 80px;word-wrap:break-word;word-break:normal;text-align:center; ">
+											{{item.nick_name}}
+										</p>
+									</view>
+								</view>
+							</u-scroll-list>
+						</view>
+					</uni-card>
+				</view>
+
+				<view>
+					<uni-card :isShadow="true" :border="true" padding="10px 0px 0px 0px">
+						<view>
+							<uni-row>
+								<uni-col :span="12">
+									<view>
+										<p class="homePage-header" style="color: black;"> 小组题库</p>
+									</view>
+								</uni-col>
+
+								<uni-col :span="12">
+									<view>
+										<p class="check-all" style="padding-top: 3px;" @click="jumpToAllProblemSet()">
+											查看全部</p>
+									</view>
+								</uni-col>
+							</uni-row>
+						</view>
+
+
+						<view class="u-demo-block">
+							<u-list customStyle="margin: auto;margin-top: 10px; max-height: 375px;">
+								<u-list-item v-for="(item, index) in problemSet" :key="index">
+									<uni-card isShadow border padding="10px 0px 10px 0px" margin="0px 10px 15px 10px"
+										style="border-radius: 10px;" @click="jumpToProblemSetDetail(item)">
+										<view>
+											<uni-row>
+												<uni-col :span="2" align="start">
+													<view v-if="item.user_id == 0" style="max-width: 30px;">
+														<p class="official_PS_tag">
+															官方题库
+														</p>
+													</view>
+													<view v-else-if="item.group_id == 0" style="max-width: 30px;">
+														<div class="personal_PS_tag">
+															个人题库
+														</div>
+													</view>
+													<view v-else-if="item.group_id != 0" style="max-width: 30px;">
+														<div class="group_PS_tag">
+															小组题库
+														</div>
+													</view>
+												</uni-col>
+												<uni-col :span="2" align="start">
+												</uni-col>
+												<uni-col :span="7" align="start">
+													<p style="margin: auto;">
+														<u-avatar :src="myRequest.imageUrl() + '/public'
+															+ item.user_info.avatar_path" size="70px"></u-avatar>
+													<div style="margin-top: 10px; font-family: shuhei; margin: auto;">
+														{{item.user_info.nick_name}}
+													</div>
+													</p>
+												</uni-col>
+												<uni-col :span="2" align="start">
+												</uni-col>
+												<uni-col :span="12" align="start">
+													<div class="shuhei" style="margin-bottom: 5px;margin-top: 18px;">
+														<p style="font-size: 22px;">{{item.name}}</p>
+													</div>
+													<div style="font-size: 16px; margin-top: 5px;">
+														{{item.problem_number}} 道题目
+													</div>
+												</uni-col>
+											</uni-row>
+										</view>
+									</uni-card>
+								</u-list-item>
+							</u-list>
+						</view>
+
+						<view>
+							<p style="text-align: center; margin-bottom: 10px;" v-show="isMember">
+								<button style="background-color: #00aaff; color: white;" @click="jumpToAddProblemSet()">
+									添加题库
+								</button>
+							</p>
+						</view>
+					</uni-card>
+				</view>
+
+				<view>
+					<uni-card :isShadow="true" :border="true" spacing="0">
+						<view>
+							<uni-row>
+								<uni-col :span="12">
+									<view>
+										<p class="homePage-header" style="color: black;"> 小组讨论</p>
+									</view>
+								</uni-col>
+
+								<uni-col :span="12">
+									<view>
+										<p class="check-all" style="padding-top: 3px;" @click="jumpToAllDiscussion()">
+											查看全部</p>
+									</view>
+								</uni-col>
+							</uni-row>
+						</view>
+
+						<view style="min-height: 350px;">
+							<view v-for="(item, index) in discussions" :key="item.id">
+								<uni-card isShadow margin="0" style="margin-top: 10px; margin-bottom: 10px;"
+									@click="cardClick(item)">
+									<view>
+										<view>
+											<view>
+												<text class="discussion-title">{{item.discussion_title}}</text>
+
+												<uni-row v-if="item.pic" style="margin-top: 15px;">
+													<uni-col :span="12">
+														<view>
+															<p class="discussion-content">
+																{{item.discussion_content ? item.discussion_content : "..."}}
+															</p>
+														</view>
+													</uni-col>
+													<uni-col :offset="3" :span="9">
+														<view>
+															<u--image :src="item.pic" width="250rpx" height="180rpx"
+																radius="15"></u--image>
+														</view>
+													</uni-col>
+												</uni-row>
+
+												<uni-row v-else style="margin-top: 15px;">
+													<uni-col :span="24">
+														<view>
+															<p class="discussion-content"> {{item.discussion_content}}
+															</p>
+														</view>
+													</uni-col>
+												</uni-row>
+
+												<view style="margin-top: 5px;">
+													<u--text type="info" :text="item.create_time" size="12px"></u--text>
+												</view>
+
+												<view style="margin-top: 10px;">
+													<uni-row>
+														<uni-col :span="2">
+															<u-icon name="/static/pic/like.svg" size="30px"></u-icon>
+														</uni-col>
+														<uni-col :span="4">
+															<button type="primary" size="mini"
+																style="width: 60px; background-color: #00aaff; margin-left: 5px;">{{ item.like_count }}</button>
+														</uni-col>
+														<uni-col :offset="10" :span="2">
+															<u-icon name="/static/pic/star.svg" size="30px"></u-icon>
+														</uni-col>
+														<uni-col :span="4">
+															<button size="mini"
+																style="width: 60px; background-color: #f9ae3d; color: white; margin-left: 5px;">
+																{{ item.star_count }}</button>
+														</uni-col>
+													</uni-row>
+												</view>
+
+											</view>
+										</view>
+									</view>
+								</uni-card>
+							</view>
+						</view>
+
+						<view>
+							<view style="text-align: center; margin-bottom: 0px;" v-show="isMember">
+								<button style="background-color: #00aaff; color: white;" @click="jumpToAddDiscussion()">
+									添加讨论
+								</button>
+							</view>
+						</view>
+
+					</uni-card>
+				</view>
+			</div>
+
+			<view v-if="!isAdministrator && isMember">
+				<div style="background-color: #f7f7f7;">
+					<uni-card :isShadow="true" :border="true" padding="10px 0px 0px 0px" margin="0px 15px 10px 15px">
+						<view>
+							<p style="text-align: center; margin-bottom: 10px;">
+								<button style="color: white;" type="warn" @click="quitGroupDialogToggle">
+									退出小组
+								</button>
+							</p>
+						</view>
+					</uni-card>
+				</div>
+			</view>
+
+			<view>
+				<uni-popup ref="addGroupDialog" type="dialog" :isMaskClick="false">
+					<uni-popup-dialog cancelText="取消" confirmText="确定" title="申请加入小组" type="info"
+						@confirm="addGroupDialogInputConfirm()" @close="addGroupDialogClose()">
+						<uni-card style="padding: 0 0 10px 0; margin: 0;">
+							<uni-section title="申请理由" type="line" titleFontSize="16px">
+								<u-input type="text" placeholder="请输入您的申请理由" v-model="addGroupMessage" />
+							</uni-section>
+						</uni-card>
+					</uni-popup-dialog>
+				</uni-popup>
+			</view>
+
+			<view>
+				<uni-popup ref="deleteGroupDialog" type="dialog" :isMaskClick="false">
+					<uni-popup-dialog cancelText="取消" confirmText="确定" title="您确定要删除小组吗"
+						@confirm="deleteGroupDialogConfirm()" @close="deleteGroupDialogClose()"></uni-popup-dialog>
+				</uni-popup>
+			</view>
+
+			<view>
+				<uni-popup ref="quitGroupDialog" type="dialog" :isMaskClick="false">
+					<uni-popup-dialog cancelText="取消" confirmText="确定" title="您确定要退出小组吗"
+						@confirm="quitGroupDialogConfirm()" @close="quitGroupDialogClose()"></uni-popup-dialog>
+				</uni-popup>
+			</view>
+
+		</view>
+
+	</view>
+</template>
+
+<script>
+	import form from '@/components/tui-validation/tui-validation.js'
+	import tuiButton from '@/components/tui-button/tui-button.vue'
+	import tuiIcon from '@/components/tui-icon/tui-icon.vue'
+	import tuiToast from '@/components/tui-toast/tui-toast.vue'
+
+	import util from '@/util/thor_utils/util.js'
+	import api from '@/common/api.js';
+	import myRequest from '../../common/request';
+	export default {
+		data() {
+			return {
+				isAdministrator: false,
+				isMember: false,
+				show: false,
+				invitation: "abcd",
+				addGroupMessage: "",
+				group: {
+					id: 1,
+					owner_id: 1,
+					name: "",
+					avatar: "",
+					introduction: "",
+					editName: "",
+					editIntroduction: "",
+				},
+				group_members: [],
+				problemSet: [],
+				discussions: []
+			}
+		},
+		onLoad: function(option) {
+
+		},
+
+		onShow: function() {
+			let params = this.getParam();
+			let id = params['id'];
+			let option = {
+				"id": id
+			}
+			this.refresh(option)
+		},
+
+		methods: {
+			cardClick(item) {
+				uni.navigateTo({
+					url: `/pages/StudyGroup/discussion?group_id=${this.group.id}&id=${item.id}`
+				})
+			},
+			
+			back() {
+				uni.navigateBack()
+			},
+			getParam() {
+				let routes = getCurrentPages(); // 获取当前打开过的页面路由数组
+				let curRoute = routes[routes.length - 1].route //获取当前页面路由
+				let curParam = routes[routes.length - 1].options; //获取路由参数
+				// 拼接参数
+				let param = ''
+				for (let key in curParam) {
+					param += '&' + key + '=' + curParam[key]
+				}
+
+				// 把参数保存为对像
+				let obj = {}
+				for (let key in curParam) {
+					obj[key] = curParam[key]
+				}
+				return obj
+			},
+
+			refresh(option) {
+				let uid = myRequest.getUID();
+				myRequest.checkLogin()
+				this.group.id = parseInt(option.id)
+				console.log('this.group_id: ' + this.group.id); //打印出上个页面传递的参数。
+
+				uni.request({
+					url: myRequest.interfaceUrl() + '/group/all?id=' + this.group.id,
+					method: 'GET',
+					header: {
+						'X-Token': myRequest.getToken()
+					},
+
+					success: (res) => {
+						console.log(res)
+						if (res.statusCode == 200) {
+							this.group.name = res.data.group[0].name
+							this.group.introduction = res.data.group[0].description
+							this.group.created_at = res.data.group[0].created_at
+							this.group.editIntroduction = this.group.introduction
+							this.group.editName = this.group.name
+							this.group.owner_id = res.data.group[0].owner_id
+							this.group.avatar = res.data.group[0].avatar_url
+							if (uid == this.group.owner_id) {
+								this.isAdministrator = true;
+							} else {
+								this.isAdministrator = false;
+							}
+							this.show = true
+							if (this.isAdministrator) {
+								uni.request({
+									url: myRequest.interfaceUrl() + '/group/invitation/' + this.group
+										.id,
+									method: 'GET',
+									header: {
+										'X-Token': myRequest.getToken()
+									},
+
+									success: (res) => {
+										console.log("invitation = " + res)
+										if (res.statusCode == 200) {
+											this.invitation = res.data
+										} else if (res.statusCode == 401) {
+											myRequest.redirectToLogin()
+										} else {
+											myRequest.toast()
+										}
+									},
+
+									fail: (res) => {
+										console.log(res)
+										myRequest.toast()
+									}
+								})
+							}
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else {
+							myRequest.toast()
+						}
+					},
+
+					fail: (res) => {
+						console.log(res)
+						myRequest.toast()
+					}
+				})
+
+
+				uni.request({
+					url: myRequest.interfaceUrl() + '/group/all_user/' + this.group.id,
+					method: 'GET',
+					header: {
+						'X-Token': myRequest.getToken()
+					},
+
+					success: (res) => {
+						console.log(res)
+						this.group_members = []
+						if (res.statusCode == 200) {
+							for (var i = 0; i < res.data.user.length; i++) {
+								this.group_members.push(res.data.user[i])
+								if (uid == res.data.user[i].user_id) {
+									this.isMember = true;
+								}
+							}
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else {
+							myRequest.toast()
+						}
+					},
+
+					fail: (res) => {
+						console.log(res)
+						myRequest.toast()
+					}
+				})
+
+				//console.log("isMember = " + this.isMember)
+
+				uni.request({
+					url: myRequest.interfaceUrl() + '/problem_set/all?group_id=' + this.group.id,
+					method: 'GET',
+					header: {
+						'X-Token': myRequest.getToken()
+					},
+
+					success: (res) => {
+						console.log(res)
+						this.problemSet = []
+						if (res.statusCode == 200) {
+							if (res.data.problem_set && res.data.problem_set.length) {
+								for (var i = 0; i < res.data.problem_set.length; i++) {
+									let owner_id = res.data.problem_set[i].user_id
+									var t = {
+										id: res.data.problem_set[i].id,
+										description: res.data.problem_set[i].description,
+										name: res.data.problem_set[i].name,
+										pic: "",
+										created_at: res.data.problem_set[i].created_at.slice(0, 10),
+										problem_number: res.data.problem_set[i].problem_count,
+										user_id: res.data.problem_set[i].user_id,
+										group_id: res.data.problem_set[i].group_id,
+										user_info: res.data.problem_set[i].user_info,
+										is_public: res.data.problem_set[i].is_public,
+									}
+									this.problemSet.push(t);
+									console.log("is_public : " + t.is_public)
+								}
+							}
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else {
+							myRequest.toast()
+						}
+					},
+
+					fail: (res) => {
+						console.log(res)
+						myRequest.toast()
+					}
+				})
+
+				uni.request({
+					url: myRequest.interfaceUrl() + `/discussion/all?group_id=${Number(this.group.id)}&limit=3`,
+					method: 'GET',
+					header: {
+						'X-Token': myRequest.getToken()
+					},
+
+					success: (res) => {
+						console.log(res)
+						if (res.statusCode == 200) {
+							this.discussions = []
+							if (res.data.discussions && res.data.discussions.length > 0) {
+								for (var i = 0; i < res.data.discussions.length; i++) {
+									var t = {
+										discussion_content: "",
+										discussion_html: res.data.discussions[i].content,
+										discussion_title: res.data.discussions[i].title,
+										pic: "",
+										create_time: res.data.discussions[i].created_at.slice(0, 10),
+										id: res.data.discussions[i].id,
+										like_count: res.data.discussions[i].like_count,
+										star_count: res.data.discussions[i].favorite_count
+									}
+									this.discussions.push(t);
+								}
+							}
+							this.loadData()
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else {
+							myRequest.toast()
+						}
+					},
+
+					fail: (res) => {
+						console.log(res)
+						myRequest.toast()
+					}
+				})
+
+				console.log("member = " + this.isMember)
+				console.log("ad = " + this.isAdministrator)
+			},
+
+			loadData() {
+				for (var i = 0; i < this.discussions.length; i++) {
+					var html = this.discussions[i].discussion_html
+					var plainText = html.replace(/<[^>]+>/g, "");
+					var plainText = html.replace(/<[^>]+>/g, "").replace(/&nbsp;/g, " ").replace(/&lt;/g, "<").replace(
+						/&gt;/g, ">").replace(/&amp;/g, "&");
+
+					// console.log(plainText)
+
+					// 替换所有换行符为空格
+					plainText = plainText.replace(/[\r\n\t]/g, " ");
+					// 替换所有空格为一个空格
+					plainText = plainText.replace(/\s+/g, " ");
+					// 去除首尾空格
+					plainText = plainText.replace(/(^\s*)|(\s*$)/g, "");
+
+					this.discussions[i].discussion_content = plainText
+					// console.log(this.discussions[i].discussion_content)
+					this.discussions[i].pic = this.extractImage(this.discussions[i].discussion_html)
+
+				}
+			},
+
+			extractImage(htmlStr) {
+				// 从html中提取出第一个图片
+				var img = htmlStr.match(/<img.*?(?:>|\/>)/gi);
+				if (img) {
+					img = img[0].match(/src=[\'\"]?([^\'\"]*)[\'\"]?/i);
+					if (img) {
+						img = img[1];
+					}
+				}
+				return img;
+			},
+
+			jumpToAllDiscussion() {
+				uni.navigateTo({
+					url: `/pages/StudyGroup/discussionIndex?group_id=${this.group.id}`
+				})
+			},
+
+			jumpToAllProblemSet() {
+				uni.navigateTo({
+					url: "/pages/StudyGroup/StudyGroupProblemSet?group_id=" + this.group.id
+				})
+			},
+			jumpToProblemSetDetail(item) {
+				console.log("isMember = " + this.isMember)
+				console.log("ispublic = " + item.is_public)
+				uni.navigateTo({
+					url: "/pages/problemSet/problemSetDetail?id=" + item.id
+				})
+			},
+			jumpToAddProblemSet() {
+				uni.navigateTo({
+					url: "/pages/problemSet/problemSetCreate?group_id=" + this.group.id
+				})
+			},
+
+			jumpToAddDiscussion() {
+				uni.navigateTo({
+					url: `/pages/StudyGroup/createDiscussion?group_id=${this.group.id}`
+				})
+			},
+
+			jumpToManage() {
+				uni.navigateTo({
+					url: "/pages/StudyGroup/StudyGroupManage?group_id=" + this.group.id
+				})
+			},
+			dialogInputConfirm() {
+				let model = {
+					"description": this.group.editIntroduction,
+					"invitation": this.invitation,
+					"name": this.group.editName
+				}
+				let that = this
+				let option = {
+					"id": this.group.id,
+				}
+
+
+				uni.request({
+					url: myRequest.interfaceUrl() + '/group/update/' + this.group.id,
+					method: 'PUT',
+					data: model,
+					header: {
+						'X-Token': myRequest.getToken()
+					},
+
+					success: (res) => {
+						console.log(res)
+						if (res.statusCode == 200) {
+							myRequest.toast('编辑成功', 1500, true)
+							setTimeout(() => {
+								uni.hideToast();
+								//关闭提示后刷新
+								that.refresh(option)
+							}, 1000)
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else {
+							myRequest.toast()
+						}
+					},
+
+					fail: (res) => {
+						console.log(res)
+						myRequest.toast()
+					}
+				})
+				this.$refs.inputDialog.close()
+			},
+			inputDialogToggle() {
+				this.$refs.inputDialog.open()
+			},
+			inputDialogClose() {
+				setTimeout(() => {
+					this.group.editIntroduction = this.group.introduction
+					this.group.editName = this.group.name
+					this.$refs.inputDialog.close()
+				}, 100)
+			},
+
+			invitationDialogToggle() {
+				uni.request({
+					url: myRequest.interfaceUrl() + '/group/invitation/' + this.group.id,
+					method: 'GET',
+					header: {
+						'X-Token': myRequest.getToken()
+					},
+
+					success: (res) => {
+						if (res.statusCode == 200) {
+							this.invitation = res.data
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else if (res.statusCode == 403) {
+							myRequest.toast("您没有权限哦~")
+						} else if (res.statusCode == 404) {
+							myRequest.toast("小组不存在~")
+						} else {
+							myRequest.toast()
+						}
+					},
+
+					fail: (res) => {
+						console.log(res)
+						myRequest.toast()
+					}
+				})
+				this.$refs.invitationDialog.open()
+			},
+
+			addGroupDialogToggle() {
+				this.$refs.addGroupDialog.open()
+			},
+
+			addGroupDialogClose() {
+				setTimeout(() => {
+					this.addGroupCode = ""
+					this.$refs.addGroupDialog.close()
+				}, 100)
+			},
+
+			addGroupDialogInputConfirm() {
+				// 关闭窗口后，恢复默认内容
+				let uid = myRequest.getUID()
+				var data = JSON.stringify({
+					"group_id": this.group.id,
+					"message": this.addGroupMessage,
+				})
+
+				console.log(data)
+
+				myRequest.request(api.study_group_apply(), 'POST', data).then(
+					function(res) {
+						console.log(res)
+						if (res.statusCode == 200) {
+							myRequest.toast('申请成功', 1500, true)
+							setTimeout(() => {
+								uni.hideToast();
+								//关闭提示后跳转
+							}, 1000)
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else {
+							myRequest.toast()
+						}
+					}
+				).catch(
+					function(res) {
+						console.log(res)
+						myRequest.toast()
+					}
+				)
+				this.addGroupMessage = ""
+				this.$refs.addGroupDialog.close()
+			},
+
+			quitGroupDialogToggle() {
+				this.$refs.quitGroupDialog.open()
+			},
+
+			quitGroupDialogClose() {
+				this.$refs.quitGroupDialog.close()
+			},
+
+			quitGroupDialogConfirm() {
+				let that = this
+				let option = {
+					"id": this.group.id,
+				}
+				myRequest.request(api.study_group_quit(this.group.id), 'DELETE').then(
+					function(res) {
+						console.log(res)
+						if (res.statusCode == 200) {
+							myRequest.toast('退出成功', 1500, true)
+							setTimeout(() => {
+								uni.hideToast();
+								//关闭提示后跳转
+								that.refresh(option)
+							}, 1000)
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else if (res.statusCode == 403) {
+							myRequest.toast("您没有权限哦~")
+						} else if (res.statusCode == 404) {
+							myRequest.toast("小组不存在~")
+						} else {
+							myRequest.toast("")
+						}
+					}
+
+				).catch(
+					function(res) {
+						console.log(res)
+						myRequest.toast()
+					}
+				)
+
+				this.$refs.quitGroupDialog.close()
+			},
+
+			deleteGroupDialogToggle() {
+				this.$refs.deleteGroupDialog.open()
+			},
+
+			deleteGroupDialogClose() {
+				this.$refs.deleteGroupDialog.close()
+			},
+
+			deleteGroupDialogConfirm() {
+				myRequest.request(api.study_group_delete(this.group.id), 'DELETE').then(
+					function(res) {
+						console.log(res)
+						if (res.statusCode == 200) {
+							myRequest.toast('删除成功', 1500, true)
+							setTimeout(() => {
+								uni.hideToast();
+								//关闭提示后跳转
+								uni.navigateBack({
+									delta: 1,
+								});
+							}, 1000)
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else if (res.statusCode == 403) {
+							myRequest.toast("您没有权限哦~")
+						} else if (res.statusCode == 404) {
+							myRequest.toast("小组不存在~")
+						} else {
+							myRequest.toast("")
+						}
+					}
+				).catch(
+					function(res) {
+						console.log(res)
+						myRequest.toast()
+					}
+				)
+			},
+
+
+
+
+		},
+
+	}
+</script>
+
+<style>
+	.status-bar {
+		width: 100%;
+		position: sticky;
+		top: 0;
+		z-index: 10;
+	}
+
+	.background-light-blue {
+		background-color: #a8dbfb;
+	}
+
+	.group_name {
+		color: black;
+		font-family: shuhei;
+		font-size: 20px;
+		margin-bottom: 8px;
+	}
+
+
+	.group_introduction {
+		min-height: 80px;
+		color: black;
+		font-size: 14px;
+		margin-bottom: 8px;
+	}
+
+	.discussion-img {
+		max-height: 150px;
+	}
+
+	.discussion-title {
+		font-size: 18px;
+		color: black;
+		font-weight: bold;
+		margin-bottom: 5px;
+	}
+
+	.discussion-content {
+		text-overflow: ellipsis;
+		overflow: hidden;
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 4;
+		line-height: 20px;
+		max-height: 80px;
+		font-family: 微软雅黑, serif;
+		font-size: 12px;
+		color: gray;
+		/*盒子宽自己设置想要的宽度*/
+		white-space: pre-wrap;
+		/*处理元素内的空白,保留空白符序列，但是正常地进行换行*/
+	}
+</style>

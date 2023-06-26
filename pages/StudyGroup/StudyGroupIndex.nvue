@@ -1,0 +1,285 @@
+<template>
+	<view class="box">
+		<view class="status-bar">
+			<uni-nav-bar title="学习小组" background-color="#00aaff" color="#FFFFFF" status-bar="true">
+				<block slot="left">
+					<view class="note-navbar">
+						<uni-icons type="left" color="#FFFFFF" size="18" @click="back()" />
+					</view>
+				</block>
+			</uni-nav-bar>
+		</view>
+
+		<view>
+			<uni-row>
+				<uni-col :span="2">
+					<view style="display: flex; justify-content: center; align-items: center; height: 44px;">
+						<u-icon name="/static/pic/studyGroup/more.svg" size="25px" style="margin-left: 10px;"
+							@click="group_type_list_show = true"></u-icon>
+					</view>
+				</uni-col>
+				<uni-col :span="22">
+					<u-tabs :list="group_type_list" @click="click_area_tab" :current="select_area"></u-tabs>
+				</uni-col>
+			</uni-row>
+		</view>
+
+		<u-popup :show="group_type_list_show" :round="10" mode="bottom" @close="close" @open="open">
+			<view style="margin: 10px 10px 10px 10px;">
+				<view style="display: flex; align-items: center; margin-bottom: 10px;">
+					<text style="font-size: 18px; font-weight: bold;">全部分区</text>
+					<text style="font-size: 14px; color: #8c8c8c; margin-left: 10px;">点击进入分区</text>
+					<u-icon name="/static/pic/studyGroup/close1.svg" size="25px"
+						style="margin: 0 10px 0 10px; position: absolute; right: 0;" @click="close"></u-icon>
+				</view>
+				<u-grid :border="false" col="3">
+					<u-grid-item v-for="(listItem,listIndex) in group_type_list" :key="listIndex">
+						<view class="grid-item" @click="switch_area(listIndex)">{{listItem.name}}</view>
+					</u-grid-item>
+				</u-grid>
+
+			</view>
+		</u-popup>
+
+		<view v-if="groups != null && groups.length != 0" style="margin-top: 10px;">
+			<view v-for="(item, index) in groups" :key="index">
+				<uni-card @click="cardClick(item)" isShadow border padding="15px 0px 15px 0px"
+					margin="0px 15px 15px 15px" style="border-radius: 10px;">
+					<view>
+						<uni-row>
+							<uni-col :span="7">
+								<p style="margin: auto;">
+									<u-avatar :src="myRequest.imageUrl() + '/public' + item.avatar_path"
+										size="70px"></u-avatar>
+								</p>
+							</uni-col>
+							<uni-col :span="2">
+							</uni-col>
+							<uni-col :span="14" align="start">
+								<div class="shuhei" style="margin-bottom: 5px;margin-top: 12px;">
+									<p style="font-size: 20px;">{{item.name}}</p>
+								</div>
+								<div style="font-size: 16px; margin-top: 5px;">
+									{{item.member_count}} 个成员
+								</div>
+							</uni-col>
+						</uni-row>
+						<u-divider> </u-divider>
+					</view>
+
+					<text class="uni-body">{{item.description}}</text>
+				</uni-card>
+			</view>
+			<view style="margin-bottom: 80px;">
+				
+			</view>
+		</view>
+
+		<view v-else style="text-align: center;" >
+			<image src="../../static/pic/note/no_note.png"
+				style="margin: auto; margin-top: 30px; height: 200px; width: 200px;"></image>
+			<p style="font-size: 20px;margin-top: 30px;">暂无学习小组 </p>
+		</view>
+
+
+		<view style="padding: 10px 0 10px 0; position: fixed; bottom: 0;background-color: #EDEDED; width: 100%;">
+			<p style="margin: auto; width: 96%;">
+				<button style="background-color: #00aaff; color: white; 
+				 margin-bottom: 10px;" @click="jumpToCreateGroup">
+					创建小组
+				</button>
+			</p>
+		</view>
+
+	</view>
+</template>
+
+<script>
+	import tuiCard from '@/components/tui-card/tui-card.vue';
+	import tuiListCell from '@/components/tui-list-cell/tui-list-cell.vue';
+	import tuiNoData from '@/components/tui-no-data/tui-no-data.vue';
+	import myRequest from '../../common/request';
+	import api from '@/common/api.js';
+
+	export default {
+		components: {
+			tuiNoData
+		},
+		data() {
+			return {
+				searchValue: "",
+				groups: [],
+				select_area: 0,
+				page_size: 10,
+				loaded_num:0,
+				group_type_list_show: false,
+				group_type_list: [{
+					name: '综合',
+				}, {
+					name: '计算机',
+				}, {
+					name: '经济金融'
+				}, {
+					name: '电子信息'
+				}, {
+					name: '数学'
+				}, {
+					name: '生物'
+				}, {
+					name: '医学'
+				}, {
+					name: '物理'
+				}, {
+					name: '化学'
+				}, {
+					name: '历史'
+				}, {
+					name: '建筑'
+				}, {
+					name: '交通'
+				}, {
+					name: '人文社科'
+				}, {
+					name: '外语'
+				}, {
+					name: '体育健康'
+				}, {
+					name: '公务员'
+				}, {
+					name: '教师'
+				}, {
+					name: '天文学'
+				}, {
+					name: '地理'
+				}, {
+					name: '政治'
+				}, {
+					name: '其他'
+				}, ],
+			}
+		},
+		computed:{
+			scrollH:function(){
+				let sys = uni.getSystemInfoSync();
+				let winHeight =parseInt(sys.windowHeight)-50
+				return winHeight	
+			}
+		},
+		onShow: function() {
+			this.load_one_page()
+		},
+		methods: {
+			close() {
+				this.group_type_list_show = false;
+			},
+
+			onBackPress() {
+				// #ifdef APP-PLUS
+				plus.key.hideSoftKeybord();
+				// #endif
+			},
+
+			cardClick(item) {
+				console.log(item)
+				uni.navigateTo({
+					url: `/pages/StudyGroup/StudyGroup?id=` + item.id,
+				})
+			},
+			jumpToCreateGroup() {
+				uni.navigateTo({
+					url: '/pages/StudyGroup/StudyGroupCreate'
+				})
+			},
+			
+			switch_area(index) {
+				this.select_area = index;
+				this.group_type_list_show = false;
+				this.groups = []
+				this.load_one_page()
+			},
+			click_area_tab(item) {
+				this.select_area = item.index;
+				this.groups = []
+				this.load_one_page()
+			},
+
+
+			back() {
+				uni.navigateBack()
+			},
+			
+			load_one_page() {
+				this.groups = []
+				var _this = this
+				
+				if (this.select_area == 0) {
+					var the_api = api.group_all({
+					limit:this.page_size,offset:this.loaded_num})
+				} else if (this.select_area + 1 == this.group_type_list.length) {
+					var the_api = api.group_all({area_id: 100,
+					limit:this.page_size,offset:this.loaded_num})
+				} else {
+					var the_api = api.group_all({area_id: this.select_area,
+					limit:this.page_size,offset:this.loaded_num})
+				}
+				
+				myRequest.request(the_api, 'GET', {}).then(
+					function(res) {
+						console.log(res)
+						if (res.statusCode == 200) {
+							if (res.data.group != null && res.data.group.length > 0) {
+								for (var i = 0; i < res.data.group.length; i++) {
+									var t = {
+										description: res.data.group[i].description,
+										name: res.data.group[i].name,
+										avatar_path: res.data.group[i].avatar_url,
+										id: res.data.group[i].id,
+										member_count: res.data.group[i].member_count,
+										created_at: res.data.group[i].created_at.slice(0, 10),
+									}
+									_this.groups.push(t);
+								}
+							}
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else {
+							myRequest.toast()
+						}
+					}
+				).catch(
+					function(res) {
+						console.log(res)
+						myRequest.toast()
+				})
+				
+			},
+			
+		},
+
+	}
+</script>
+
+<style>
+	.status-bar {
+		width: 100%;
+		position: sticky;
+		top: 0;
+		z-index: 10;
+	}
+
+	page {
+		background: #EDEDED;
+	}
+
+	.grid-item {
+		margin: 5px 0 5px 0;
+		width: 80%;
+		height: 30px;
+		border-radius: 15px;
+		align-items: center;
+		justify-content: center;
+		display: flex;
+		background-color: #f0f0f0;
+	}
+
+</style>

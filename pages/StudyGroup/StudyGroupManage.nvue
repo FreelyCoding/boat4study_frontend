@@ -1,0 +1,562 @@
+<template>
+	<view>
+		<view class="status-bar">
+			<uni-nav-bar title="管理学习小组" background-color="#00aaff" color="#FFFFFF" status-bar="true">
+				<block slot="left">
+					<view class="note-navbar">
+						<uni-icons type="left" color="#FFFFFF" size="18" @click="back()" />
+					</view>
+				</block>
+			</uni-nav-bar>
+		</view>
+
+
+		<view>
+			<div style="background-color: white;">
+				<view class="m-middle-5" style="margin-top: 20px; margin-bottom: 30px;">
+					<u-row @click="changeAvatar()">
+						<u-col :span="2">
+							<u-icon name="/static/pic/avatar.svg" size="40px"></u-icon>
+						</u-col>
+						<u-col :span="9">
+							<p class="star-title"> 修改头像 </p>
+						</u-col>
+						<u-col :span="1">
+							<u-icon name="arrow-right" size="20px"></u-icon>
+						</u-col>
+					</u-row>
+					<u-divider style="margin-bottom: 15px;"></u-divider>
+					<u-row @click="inputDialogToggle()">
+						<u-col :span="2">
+							<u-icon name="/static/pic/info.svg" size="40px"></u-icon>
+						</u-col>
+						<u-col :span="9">
+							<p class="star-title"> 编辑信息 </p>
+						</u-col>
+						<u-col :span="1">
+							<u-icon name="arrow-right" size="20px"></u-icon>
+						</u-col>
+					</u-row>
+					<u-divider style="margin-bottom: 15px;"></u-divider>
+					<u-row @click="intendDialogToggle()">
+						<u-col :span="2">
+							<view v-if="group_intenders && group_intenders.length > 0">
+								<uni-badge :text="group_intenders.length" absolute="rightTop"
+									style="z-index: 0;max-width: 60px;" :offset="[20, 3]" size="small">
+									<view class="box">
+										<u-icon name="/static/pic/intend.svg" size="40px"></u-icon>
+									</view>
+								</uni-badge>
+
+							</view>
+							<view v-else>
+								<view class="box">
+									<u-icon name="/static/pic/intend.svg" size="40px"></u-icon>
+								</view>
+							</view>
+						</u-col>
+						<u-col :span="9">
+							<p class="star-title"> 查看申请 </p>
+						</u-col>
+						<u-col :span="1">
+							<u-icon name="arrow-right" size="20px"></u-icon>
+						</u-col>
+					</u-row>
+					<u-divider style="margin-bottom: 15px;"></u-divider>
+					<u-row @click="deleteGroupDialogToggle()" style="margin-bottom: 20px;">
+						<u-col :span="2">
+							<u-icon name="/static/pic/delete_group.svg" size="40px"></u-icon>
+						</u-col>
+						<u-col :span="9">
+							<p class="star-title"> 删除小组 </p>
+						</u-col>
+						<u-col :span="1">
+							<u-icon name="arrow-right" size="20px"></u-icon>
+						</u-col>
+					</u-row>
+				</view>
+			</div>
+		</view>
+
+
+		<view>
+			<!-- 输入框示例 -->
+			<uni-popup ref="inputDialog" type="dialog" :isMaskClick="false">
+				<uni-popup-dialog cancelText="取消编辑" confirmText="确定提交" title="编辑小组信息" type="info"
+					@confirm="dialogInputConfirm()" @close="inputDialogClose()">
+					<uni-card style="padding: 0 0 10px 0; margin: 0;">
+						<uni-section title="小组名" type="line" titleFontSize="16px">
+							<u-input type="text" placeholder="请输入小组名" v-model="group.editName" />
+						</uni-section>
+						<uni-section title="小组简介" type="line" titleFontSize="16px">
+							<u-input type="textarea" placeholder="请输入小组简介" v-model="group.editIntroduction" />
+						</uni-section>
+					</uni-card>
+				</uni-popup-dialog>
+			</uni-popup>
+		</view>
+
+		<view>
+			<uni-popup ref="intendDialog" type="dialog" :isMaskClick="true">
+				<view class="u-demo-block" v-if="group_intenders && group_intenders.length > 0">
+					<uni-card>
+						<text style="margin: auto; font-size: 20px; font-family: shuhei;"> 小组申请</text>
+						<u-list customStyle="margin: auto; max-height: 500px; margin-top: 15px;">
+							<u-list-item v-for="(item, index) in group_intenders" :key="index">
+								<uni-card isShadow border padding="15px 0px 15px 0px" margin="0px 15px 15px 15px"
+									style="border-radius: 10px;min-width: 300px;">
+									<view>
+										<uni-row>
+											<uni-col :span="6">
+												<p style="margin: auto;">
+													<u-avatar
+														:src="myRequest.imageUrl() + '/public' + item.user_info.avatar_path"
+														size="70px"></u-avatar>
+												</p>
+											</uni-col>
+											<uni-col :span="2">
+
+											</uni-col>
+											<uni-col :span="14" align="start">
+												<div class="shuhei" style="margin-bottom: 5px;margin-top: 12px;">
+													<p style="font-size: 16px;">{{item.user_info.nick_name}}</p>
+												</div>
+												<div style="font-size: 14px; margin-top: 5px;">
+													申请时间 &ensp; {{item.application.created_at.slice(0,10)}}
+												</div>
+											</uni-col>
+										</uni-row>
+										<u-divider> </u-divider>
+									</view>
+									<text class="uni-body">{{item.application.message}}</text>
+
+									<uni-row style="margin: 15px 5px 0px 5px;">
+										<uni-col :span="8">
+											<button size="mini" type="warn"
+												style="width: 80px; color: white; margin: auto;"
+												@click="reject(item)">拒绝</button>
+										</uni-col>
+										<uni-col :span="8"></uni-col>
+										<uni-col :span="8">
+											<button size="mini" type="default"
+												style="width: 80px; background-color: #77c545; color: white; margin: auto;"
+												@click="approve(item)">同意</button>
+										</uni-col>
+									</uni-row>
+
+								</uni-card>
+							</u-list-item>
+						</u-list>
+					</uni-card>
+				</view>
+
+				<view v-else>
+					<uni-card style="padding: 10px;">
+						<text style="font-size: 20px;"> 暂无申请 </text>
+					</uni-card>
+				</view>
+			</uni-popup>
+		</view>
+
+
+		<view>
+			<uni-popup ref="deleteGroupDialog" type="dialog" :isMaskClick="false">
+				<uni-popup-dialog cancelText="取消" confirmText="确定" title="您确定要删除小组吗"
+					@confirm="deleteGroupDialogConfirm()" @close="deleteGroupDialogClose()"></uni-popup-dialog>
+			</uni-popup>
+		</view>
+
+
+	</view>
+</template>
+
+<script>
+	import form from '@/components/tui-validation/tui-validation.js'
+	import tuiButton from '@/components/tui-button/tui-button.vue'
+	import tuiIcon from '@/components/tui-icon/tui-icon.vue'
+	import tuiToast from '@/components/tui-toast/tui-toast.vue'
+
+	import util from '@/util/thor_utils/util.js'
+	import api from '@/common/api.js';
+	import myRequest from '../../common/request';
+	export default {
+		data() {
+			return {
+				group: {
+					id: 1,
+					owner_id: 1,
+					name: "",
+					avatar: "/static/pic/personal_group.svg",
+					introduction: "",
+					editName: "",
+					editIntroduction: "",
+				},
+				group_members: [],
+				group_intenders: [{
+						user_id: 1,
+						message: "我很喜欢你们的小组，我很喜欢你们的小组，我很喜欢你们的小组，我很喜欢你们的小组，可以让我加入吗",
+						application_id: 3,
+						application: {
+							created_at: "2023-05-04",
+						},
+						user_info: {
+							nick_name: "FlyingLaird",
+							avatar_path: "/user.png",
+						}
+					},
+					{
+						user_id: 1,
+						message: "我很喜欢你们的小组，可以让我加入吗",
+						application_id: 3,
+						application: {
+							created_at: "2023-05-04",
+						},
+						user_info: {
+							nick_name: "FlyingLaird",
+							avatar_path: "/user.png",
+						}
+					},
+					{
+						user_id: 1,
+						message: "我很喜欢你们的小组，可以让我加入吗",
+						application_id: 3,
+						application: {
+							created_at: "2023-05-04",
+						},
+						user_info: {
+							nick_name: "FlyingLaird",
+							avatar_path: "/user.png",
+						}
+					},
+					{
+						user_id: 1,
+						message: "我很喜欢你们的小组，可以让我加入吗",
+						application_id: 3,
+						application: {
+							created_at: "2023-05-04",
+						},
+						user_info: {
+							nick_name: "FlyingLaird",
+							avatar_path: "/user.png",
+						}
+					},
+				],
+			}
+		},
+		onLoad: function() {
+			let params = this.getParam();
+			let id = params['group_id'];
+			this.refresh(id)
+		},
+		methods: {
+			back() {
+				uni.navigateBack()
+			},
+			getParam() {
+				let routes = getCurrentPages(); // 获取当前打开过的页面路由数组
+				let curRoute = routes[routes.length - 1].route //获取当前页面路由
+				let curParam = routes[routes.length - 1].options; //获取路由参数
+				// 拼接参数
+				let param = ''
+				for (let key in curParam) {
+					param += '&' + key + '=' + curParam[key]
+				}
+
+				// 把参数保存为对像
+				let obj = {}
+				for (let key in curParam) {
+					obj[key] = curParam[key]
+				}
+				return obj
+			},
+
+			refresh(id) {
+				let uid = myRequest.getUID();
+				myRequest.checkLogin()
+				this.group_intenders = []
+				this.group.id = id
+				console.log('this.group_id: ' + this.group.id); //打印出上个页面传递的参数。
+
+				uni.request({
+					url: myRequest.interfaceUrl() + '/group/all?id=' + this.group.id,
+					method: 'GET',
+					header: {
+						'X-Token': myRequest.getToken()
+					},
+
+					success: (res) => {
+						console.log(res)
+						if (res.statusCode == 200) {
+							this.group.name = res.data.group[0].name
+							this.group.introduction = res.data.group[0].description
+							this.group.created_at = res.data.group[0].created_at
+							this.group.editIntroduction = this.group.introduction
+							this.group.editName = this.group.name
+							this.group.owner_id = res.data.group[0].owner_id
+							this.group.avatar = res.data.group[0].avatar_url
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else {
+							myRequest.toast()
+						}
+					},
+					fail: (res) => {
+						console.log(res)
+						myRequest.toast()
+					}
+				})
+
+				uni.request({
+					url: myRequest.interfaceUrl() + '/group/application/' + this.group.id + "?status=0",
+					method: 'GET',
+					header: {
+						'X-Token': myRequest.getToken()
+					},
+
+					success: (res) => {
+						console.log(res)
+						if (res.statusCode == 200) {
+							this.group_intenders = res.data.applications
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else {
+							myRequest.toast()
+						}
+					},
+					fail: (res) => {
+						console.log(res)
+						myRequest.toast()
+					}
+				})
+			},
+
+			changeAvatar() {
+				let that = this;
+				uni.chooseImage({
+					count: 1,
+					success: (res) => {
+						uni.uploadFile({
+							url: myRequest.interfaceUrl() + '/upload/group_avatar?group_id=' + this
+								.group.id,
+							filePath: res.tempFilePaths[0],
+							name: 'file',
+							header: {
+								'X-Token': myRequest.getToken()
+							},
+							success: res => {
+								if (res.statusCode == 200) {
+									myRequest.toast('头像修改成功', 1500, true)
+									setTimeout(() => {
+										uni.hideToast();
+										//关闭提示后刷新
+										that.refresh(this.group.id)
+									}, 1500)
+								} else {
+									myRequest.toast()
+								}
+							}
+						})
+					}
+				})
+			},
+
+			dialogInputConfirm() {
+				let model = {
+					"description": this.group.editIntroduction,
+					"invitation": this.invitation,
+					"name": this.group.editName
+				}
+				let that = this
+
+				uni.request({
+					url: myRequest.interfaceUrl() + '/group/update/' + this.group.id,
+					method: 'PUT',
+					data: model,
+					header: {
+						'X-Token': myRequest.getToken()
+					},
+
+					success: (res) => {
+						console.log(res)
+						if (res.statusCode == 200) {
+							myRequest.toast('编辑成功', 1500, true)
+							setTimeout(() => {
+								uni.hideToast();
+								//关闭提示后刷新
+								that.refresh(this.group.id)
+							}, 1000)
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else {
+							myRequest.toast()
+						}
+					},
+
+					fail: (res) => {
+						console.log(res)
+						myRequest.toast()
+					}
+				})
+				this.$refs.inputDialog.close()
+			},
+			inputDialogToggle() {
+				this.$refs.inputDialog.open()
+			},
+			inputDialogClose() {
+				setTimeout(() => {
+					this.group.editIntroduction = this.group.introduction
+					this.group.editName = this.group.name
+					this.$refs.inputDialog.close()
+				}, 100)
+			},
+
+			intendDialogToggle() {
+				this.$refs.intendDialog.open()
+			},
+
+			intendDialogClose() {
+				this.$refs.intendDialog.close()
+			},
+
+			approve(item) {
+				let that = this
+				let model = {
+					"application_id": item.application.id,
+					"status": 1,
+				}
+
+				uni.request({
+					url: myRequest.interfaceUrl() + '/group/application',
+					method: 'PUT',
+					data: model,
+					header: {
+						'X-Token': myRequest.getToken()
+					},
+
+					success: (res) => {
+						console.log(res)
+						if (res.statusCode == 200) {
+							myRequest.toast('已通过申请', 1500, true)
+							setTimeout(() => {
+								uni.hideToast();
+								//关闭提示后刷新
+								that.refresh(this.group.id)
+							}, 1000)
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else if (res.statusCode == 400) {
+							myRequest.toast("该申请已被处理过了哦~")
+						} else if (res.statusCode == 403) {
+							myRequest.toast("您没有权限哦~")
+						} else {
+							myRequest.toast()
+						}
+					},
+
+					fail: (res) => {
+						console.log(res)
+						myRequest.toast()
+					}
+				})
+				this.$refs.intendDialog.close()
+			},
+
+			reject(item) {
+				let that = this
+				let model = {
+					"application_id": item.application.id,
+					"status": 2,
+				}
+
+				uni.request({
+					url: myRequest.interfaceUrl() + '/group/application',
+					method: 'PUT',
+					data: model,
+					header: {
+						'X-Token': myRequest.getToken()
+					},
+
+					success: (res) => {
+						console.log(res)
+						if (res.statusCode == 200) {
+							myRequest.toast('已拒绝申请', 1500, true)
+							setTimeout(() => {
+								uni.hideToast();
+								//关闭提示后刷新
+								that.refresh(this.group.id)
+							}, 1000)
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else if (res.statusCode == 400) {
+							myRequest.toast("该申请已被处理过了哦~")
+						} else if (res.statusCode == 403) {
+							myRequest.toast("您没有权限哦~")
+						} else {
+							myRequest.toast()
+						}
+					},
+
+					fail: (res) => {
+						console.log(res)
+						myRequest.toast()
+					}
+				})
+				this.$refs.intendDialog.close()
+			},
+
+			deleteGroupDialogToggle() {
+				this.$refs.deleteGroupDialog.open()
+			},
+
+			deleteGroupDialogClose() {
+				this.$refs.deleteGroupDialog.close()
+			},
+
+
+			deleteGroupDialogConfirm() {
+				myRequest.request(api.study_group_delete(this.group.id), 'DELETE').then(
+					function(res) {
+						console.log(res)
+						if (res.statusCode == 200) {
+							myRequest.toast('删除成功', 1500, true)
+							setTimeout(() => {
+								uni.hideToast();
+								//关闭提示后跳转
+								uni.navigateBack({
+									delta: 2
+								})
+							}, 1000)
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else if (res.statusCode == 403) {
+							myRequest.toast("您没有权限哦~")
+						} else if (res.statusCode == 404) {
+							myRequest.toast("小组不存在~")
+						} else {
+							myRequest.toast("")
+						}
+					}
+				).catch(
+					function(res) {
+						console.log(res)
+						myRequest.toast()
+					}
+				)
+			},
+
+		}
+	}
+</script>
+
+<style>
+	.status-bar {
+		width: 100%;
+		position: sticky;
+		top: 0;
+		z-index: 10;
+	}
+
+	.uni-badge-left-margin {
+		margin-left: 10px;
+	}
+</style>

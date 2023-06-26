@@ -1,0 +1,154 @@
+<template>
+	<view>
+		<view class="status-bar">
+			<uni-nav-bar title="上传题目" background-color="#00aaff" color="#FFFFFF" status-bar="true">
+				<block slot="left">
+					<view class="note-navbar">
+						<uni-icons type="left" color="#FFFFFF" size="18" @click="back()" />
+					</view>
+				</block>
+			</uni-nav-bar>
+		</view>
+
+		
+		<view class="u-demo-block">
+
+			<uni-card spacing="0" padding="0" margin="20px 10px 0px 10px" v-for="(item, index) in list" :key="index"
+				@click="jumpTo(index)">
+				<view style="margin-bottom: 20px;">
+					<uni-row>
+						<uni-col :span="8">				
+							<view>
+								<image :src="item.iconPath" style="width: 90px; height: 90px; margin-top: 20px; margin-left: 10px;"></image>
+							</view>
+						</uni-col>
+
+						<uni-col :span="18">
+							<div class="shuhei" style="padding-top: 24px;" >
+								<p style="font-size: 24px;">{{item.title}}</p>
+							</div>
+							<div style="margin-top: 14px;font-size: 16px; max-width: 200px;" class="description">
+								{{item.description}}
+							</div>
+						</uni-col>
+					</uni-row>
+				</view>
+			</uni-card>
+
+		</view>
+	</view>
+</template>
+
+<script>
+	export default {
+		data() {
+			return {
+				problem_set_id: 0,
+				list : [
+					{
+				
+						iconPath: "../../static/pic/single.svg",
+						title: "单题导入",
+						description: "单题手动逐一录入题库",
+						url: "/pages/problem/problemCreate?id="
+					},
+					{
+						iconPath: "../../static/pic/personal_pb2.svg",
+						title: "其他题库导入",
+						description: "从其他题库中导入题目",
+						url: "/pages/problem/problemCreateFromPS?id="
+					},
+					{
+						iconPath: "../../static/pic/problem/paizhao.svg",
+						title: "照片识别",
+						description: "由照片识别题目内容",
+						url: "/pages/tools/camera?id="
+					},
+					{
+						iconPath: "../../static/pic/PDF.svg",
+						title: "PDF识别",
+						description: "由PDF识别题目内容",
+						url: "/pages/problem/problemCreateFromPdfOCR?id="
+					},
+					{
+						iconPath: "../../static/pic/problemSet/piliang.svg",
+						title: "批量导入",
+						description: "参考模板调整文档格式内容, 上传文档",
+						url: "/pages/problem/problemCreateFromTxt?id="
+					},
+					
+				]
+			}
+		},
+		computed: {
+			photo_path() {
+				return this.$store.state.photo_path 
+			}
+		},
+		onLoad:function(option) {
+			this.problem_set_id = option.id
+			console.log(this.problem_set_id)
+			
+		},
+		onShow:function(){
+			console.log(this.photo_path)
+			if (this.photo_path != '') {
+				uni.navigateTo({
+					url: "/pages/problem/problemCreateFromPhotoOCR?id="+this.problem_set_id
+				})
+			}
+		},
+		methods: {
+			back() {
+				uni.navigateBack({
+				    delta: 1
+				});
+				/*
+				uni.navigateTo({
+					url: '/pages/problemSet/problemSetDetail?id='+this.problem_set_id
+				})*/
+			},
+			
+			jumpToSingelProUpload() {
+				uni.navigateTo({
+					url: "/pages/problem/problemCreate?id="+this.problem_set_id
+				})
+			},
+			
+			jumpTo(index) {
+				uni.navigateTo({
+					url: this.list[index].url + this.problem_set_id
+				})
+			}
+		}
+	}
+</script>
+
+<style>
+	page {
+		background: #EDEDED;
+	}
+	
+	.status-bar {
+		width: 100%;
+		position: sticky;
+		top: 0;
+		z-index: 10;
+	}
+
+	.description {
+		text-overflow: ellipsis;
+		overflow: hidden;
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 4;
+		line-height: 25px;
+		max-height: 80px;
+		font-family: 微软雅黑, serif;
+		font-size: 12px;
+		color: gray;
+		/*盒子宽自己设置想要的宽度*/
+		white-space: pre-wrap;
+		/*处理元素内的空白,保留空白符序列，但是正常地进行换行*/
+	}
+</style>

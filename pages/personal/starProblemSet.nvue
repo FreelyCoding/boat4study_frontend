@@ -1,0 +1,178 @@
+<template>
+	<view>
+
+		<view class="status-bar" :style="{height: barHeight}">
+			<uni-nav-bar title="题库收藏" background-color="#00aaff" color="#FFFFFF" status-bar="true">
+				<block slot="left">
+					<view class="note-navbar">
+						<uni-icons type="left" color="#FFFFFF" size="18" @click="back()" />
+					</view>
+				</block>
+			</uni-nav-bar>
+		</view>
+
+		<view v-if="problemSet.length != 0">
+			<view class="u-demo-block">
+				<u-list customStyle="margin: auto; margin-top: 10px;">
+					<u-list-item v-for="(item, index) in problemSet" :key="index">
+						<uni-card isShadow border padding="10px 0px 10px 0px" margin="0px 10px 15px 10px"
+							style="border-radius: 10px;" @click="jumpToPS(item)">
+							<view>
+								<uni-row>
+									<uni-col :span="2" align="start">
+										<view v-if="item.user_id == 0" style="max-width: 30px;">
+											<p class="official_PS_tag">
+												官方题库
+											</p>
+										</view>
+										<view v-else-if="item.group_id == 0" style="max-width: 30px;">
+											<div class="personal_PS_tag">
+												个人题库
+											</div>
+										</view>
+										<view v-else-if="item.group_id != 0" style="max-width: 30px;">
+											<div class="group_PS_tag">
+												小组题库
+											</div>
+										</view>
+									</uni-col>
+									<uni-col :span="2" align="start">
+									</uni-col>
+									<uni-col :span="7" align="start">
+										<p style="margin: auto;">
+											<u-avatar :src="myRequest.imageUrl() + '/public'
+												+ item.user_info.avatar_path" size="70px"></u-avatar>
+										<div style="margin-top: 10px; font-family: shuhei; margin: auto;">
+											{{item.user_info.nick_name}}
+										</div>
+										</p>
+									</uni-col>
+									<uni-col :span="1" align="start">
+									</uni-col>
+									<uni-col :span="12" align="start">
+										<div class="shuhei" style="margin-bottom: 5px;margin-top: 18px;">
+											<p style="font-size: 22px;">{{item.name}}</p>
+										</div>
+										<div style="font-size: 16px; margin-top: 5px;">
+											{{item.problem_number}} 道题目
+										</div>
+									</uni-col>
+								</uni-row>
+							</view>
+						</uni-card>
+
+					</u-list-item>
+				</u-list>
+			</view>
+		</view>
+
+		<view v-else style="text-align: center;">
+			<image src="../../static/pic/note/no_note.png" style="margin: auto; margin-top: 30px; height: 200px; width: 200px;"></image>
+			<p style="font-size: 20px;margin-top: 30px;">暂无题库</p>
+		</view>
+
+
+	</view>
+</template>
+
+<script>
+	import tuiNoData from '@/components/tui-no-data/tui-no-data.vue';
+	import note from '@/pages/note/note.vue'
+	import myRequest from '../../common/request';
+
+	const h = uni.getSystemInfoSync().statusBarHeight;
+	export default {
+		data() {
+			return {
+				searchValue: "",
+				problemSet: [],
+			}
+		},
+		computed:{
+			scrollH:function(){
+				let sys = uni.getSystemInfoSync();
+				let winHeight =parseInt(sys.windowHeight)-50
+				return winHeight	
+			},
+			barHeight() {
+				return `calc(${h}px + 44px)`
+			}
+		},
+		methods: {
+			back() {
+				note.methods.back()
+			},
+
+			jumpToPS(item) {
+				uni.navigateTo({
+					url: "/pages/problemSet/problemSetDetail?id=" + item.id
+				})
+			}
+
+		},
+		onShow() {
+			this.problemSet = []
+			if (!myRequest.isLogin()) {
+				myRequest.toast('请先登录')
+				uni.redirectTo({
+					url: '/pages/login/login'
+				})
+			}
+
+			console.log(uni.getStorageSync('token'))
+
+			uni.request({
+				url: myRequest.interfaceUrl() + '/problem_set/all?is_favorite=true',
+				method: 'GET',
+				header: {
+					'X-Token': myRequest.getToken()
+				},
+
+				success: (res) => {
+					console.log(res)
+					if (res.statusCode == 200) {
+						if (res.data.problem_set && res.data.problem_set.length > 0) {
+							for (var i = 0; i < res.data.problem_set.length; i++) {
+								var t = {
+									id: res.data.problem_set[i].id,
+									description: res.data.problem_set[i].description,
+									name: res.data.problem_set[i].name,
+									pic: "",
+									created_at: res.data.problem_set[i].created_at.slice(0, 10),
+									problem_number: res.data.problem_set[i].problem_count,
+									user_id: res.data.problem_set[i].user_id,
+									group_id: res.data.problem_set[i].group_id,
+									user_info: res.data.problem_set[i].user_info,
+								}
+								this.problemSet.push(t);
+							}
+						}
+
+					} else if (res.statusCode == 401) {
+						myRequest.redirectToLogin()
+					} else {
+						myRequest.toast()
+					}
+				},
+
+				fail: (res) => {
+					console.log(res)
+					myRequest.toast()
+				}
+			})
+		}
+	}
+</script>
+
+<style>
+	page {
+		background: #EDEDED;
+	}
+
+	.status-bar {
+		width: 100%;
+		position: sticky;
+		top: 0;
+		z-index: 10;
+	}
+</style>

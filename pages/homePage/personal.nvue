@@ -1,0 +1,590 @@
+<template>
+	<view class="u-page">
+		<view class="u-page__item">
+			<div class="background-blue">
+				<view style="width: 90%; margin: auto; margin-top: 60px; margin-bottom: 30px;">
+					<uni-row>
+						<uni-col :span="8">
+							<view>
+								<p style="text-align: center;">
+									<u-avatar :src="myRequest.imageUrl() + '/public' + user.avatar" size="100px"
+										@click="clickImg(myRequest.imageUrl() + '/public' + user.avatar)"></u-avatar>
+								</p>
+							</view>
+						</uni-col>
+
+						<uni-col :span="16">
+							<view style="margin: 20px 0px 10px 30px;">
+								<p class="user_name">{{user.nickName}}</p>
+								<p class="uid">uid: &ensp; {{user.uid}}</p>
+							</view>
+						</uni-col>
+
+					</uni-row>
+				</view>
+			</div>
+		</view>
+
+		<view>
+			<uni-popup ref="inputDialog" type="dialog" :isMaskClick="false">
+				<uni-popup-dialog cancelText="取消编辑" confirmText="确定提交" title="编辑个人信息" type="info"
+					@confirm="dialogInputConfirm()" @close="inputDialogClose()">
+					<uni-card style="margin: 0;">
+						<uni-section title="用户名" type="line" titleFontSize="16px">
+							<p style="margin-left: 10px; font-size: 16px;">
+								{{user.name}}
+							</p>
+						</uni-section>
+
+						<u-divider></u-divider>
+
+						<uni-section title="用户邮箱" type="line" titleFontSize="16px">
+							<p style="margin-left: 10px; font-size: 16px;">
+								{{user.email}}
+							</p>
+						</uni-section>
+
+						<u-divider></u-divider>
+
+						<uni-section title="用户昵称" type="line" titleFontSize="16px">
+							<u-input type="text" placeholder="请输入用户昵称" v-model="user.editName" />
+						</uni-section>
+						<p style="margin-top: 20px; width: 240px;">
+
+						</p>
+					</uni-card>
+				</uni-popup-dialog>
+
+			</uni-popup>
+		</view>
+
+		<view>
+			<uni-popup ref="logoutDialog" type="dialog" :isMaskClick="false">
+				<uni-popup-dialog cancelText="取消" confirmText="确定" title="您确认退出吗" @confirm="logout()"
+					@close="logoutDialogClose()"></uni-popup-dialog>
+			</uni-popup>
+		</view>
+
+
+		<view>
+			<div style="background-color: #f7f7f7;">
+				<view>
+					<div style="background-color: white;">
+						<view class="u-demo-block__content" style="margin-top: 20px; margin-bottom: 10px;">
+							<uni-row class="demo-uni-row">
+								<uni-col :span="6">
+									<view style="margin: auto;">
+										<u-icon name="/static/pic/homeNote.png" size="50px" @click="jumpToMyNote()">
+										</u-icon>
+									</view>
+									<view style="margin: auto;">
+										<p style="font-size: 15px; margin-top: 5px;"> 我的笔记</p>
+									</view>
+								</uni-col>
+								<uni-col :span="6">
+									<view style="margin: auto;">
+										<u-icon name="/static/pic/personal_group.svg" size="50px" color="white"
+											@click="jumpToMyGroup()">
+										</u-icon>
+									</view>
+									<view style="margin: auto;">
+										<p style="font-size: 15px;"> 我的小组 </p>
+									</view>
+								</uni-col>
+								<uni-col :span="6">
+									<view style="margin: auto;">
+										<u-icon name="/static/pic/personal_pb1.svg" size="50px" color="white"
+											@click="jumpToProblemSet()"></u-icon>
+									</view>
+									<view style="margin: auto;">
+										<p style="font-size: 15px;"> 我的题库 </p>
+									</view>
+								</uni-col>
+								<uni-col :span="6">
+									<view style="margin: auto;">
+										<u-icon name="/static/pic/wrongProblem.svg" size="50px"
+											@click="jumpToWrongProblem()"></u-icon>
+									</view>
+									<view style="margin: auto;">
+										<p style="font-size: 15px;"> 我的错题 </p>
+									</view>
+
+								</uni-col>
+							</uni-row>
+						</view>
+					</div>
+				</view>
+
+				<view>
+					<div style="margin-top: 20px;">
+
+					</div>
+				</view>
+
+				<view>
+					<div style="background-color: white;  ">
+						<view class="m-middle-5" style="margin-top: 20px;">
+							<view>
+								<p class="homePage-header">收藏夹</p>
+							</view>
+						</view>
+
+
+						<view class="m-middle-5" style="margin-top: 30px; margin-bottom: 30px;">
+							<u-row @click="jumpToStarProblemSet()">
+								<u-col :span="2">
+									<u-icon name="/static/pic/star.svg" size="40px"></u-icon>
+								</u-col>
+								<u-col :span="9">
+									<p class="star-title"> 题库收藏</p>
+								</u-col>
+								<u-col :span="1">
+									<u-icon name="arrow-right" size="20px"></u-icon>
+								</u-col>
+							</u-row>
+							<u-divider style="margin-bottom: 15px;"></u-divider>
+							<u-row @click="jumpToStarProblem()">
+								<u-col :span="2">
+									<u-icon name="/static/pic/star.svg" size="40px"></u-icon>
+								</u-col>
+								<u-col :span="9">
+									<p class="star-title"> 题目收藏</p>
+								</u-col>
+								<u-col :span="1">
+									<u-icon name="arrow-right" size="20px"></u-icon>
+								</u-col>
+							</u-row>
+							<u-divider style="margin-bottom: 15px;"></u-divider>
+							<u-row @click="jumpToStarNote()">
+								<u-col :span="2">
+									<u-icon name="/static/pic/star.svg" size="40px"></u-icon>
+								</u-col>
+								<u-col :span="9">
+									<p class="star-title"> 笔记收藏 </p>
+								</u-col>
+								<u-col :span="1">
+									<u-icon name="arrow-right" size="20px"></u-icon>
+								</u-col>
+							</u-row>
+						</view>
+					</div>
+
+				</view>
+
+				<view>
+					<div style="background-color: white;margin-top: 20px;">
+						<view class="m-middle-5" style="margin-top: 20px;">
+							<view>
+								<p class="homePage-header">更多功能</p>
+							</view>
+						</view>
+
+
+						<view class="m-middle-5" style="margin-top: 30px; margin-bottom: 30px;">
+							<u-row @click="changeAvatar()">
+								<u-col :span="2">
+									<u-icon name="/static/pic/avatar.svg" size="40px"></u-icon>
+								</u-col>
+								<u-col :span="9">
+									<p class="star-title"> 修改头像 </p>
+								</u-col>
+								<u-col :span="1">
+									<u-icon name="arrow-right" size="20px"></u-icon>
+								</u-col>
+							</u-row>
+							<u-divider style="margin-bottom: 15px;"></u-divider>
+							<u-row @click="inputDialogToggle()">
+								<u-col :span="2">
+									<u-icon name="/static/pic/info.svg" size="40px"></u-icon>
+								</u-col>
+								<u-col :span="9">
+									<p class="star-title"> 编辑信息 </p>
+								</u-col>
+								<u-col :span="1">
+									<u-icon name="arrow-right" size="20px"></u-icon>
+								</u-col>
+							</u-row>
+							<u-divider style="margin-bottom: 15px;"></u-divider>
+
+							<!-- #ifdef MP-WEIXIN -->
+							<u-row @click="wxBind()">
+								<u-col :span="2">
+									<u-icon name="weixin-fill" size="40px" color="#00aaff"></u-icon>
+								</u-col>
+								<u-col :span="9">
+									<p class="star-title"> 绑定微信 </p>
+								</u-col>
+								<u-col :span="1">
+									<u-icon name="arrow-right" size="20px"></u-icon>
+								</u-col>
+							</u-row>
+							<u-divider style="margin-bottom: 15px;"></u-divider>
+							<!-- #endif -->
+
+							<u-row @click="logoutDialogToggle()" style="margin-bottom: 20px;">
+								<u-col :span="2">
+									<u-icon name="/static/pic/exit.svg" size="40px"></u-icon>
+								</u-col>
+								<u-col :span="9">
+									<p class="star-title"> 退出登录 </p>
+								</u-col>
+								<u-col :span="1">
+									<u-icon name="arrow-right" size="20px"></u-icon>
+								</u-col>
+							</u-row>
+						</view>
+					</div>
+				</view>
+			</div>
+		</view>
+
+	</view>
+
+
+</template>
+
+<script>
+	import homePage from "@/pages/homePage/homePage"
+	import api from '@/common/api.js';
+	import myRequest from '../../common/request'
+	export default {
+		data() {
+			return {
+				user: {
+					avatar: "",
+					uid: 1,
+					name: "",
+					nickName: "",
+					editName: "",
+					phone: "",
+					email: "",
+				},
+				mode: "top",
+				searchValue: "",
+				tabValue: 0,
+				windowResizeCallback: '',
+				customWidth: "min-width: 400px"
+			}
+		},
+		watch: {
+			searchValue(newValue, oldValue) {
+				// console.log('v-model', newValue);
+			}
+		},
+		onLoad() {
+			this.refresh()
+		},
+		/*
+		onShow() {
+			this.refresh()
+			this.windowResizeCallback = (res) => {
+				console.log('onWindowResize', res);
+			}
+			uni.onWindowResize(this.windowResizeCallback);
+		},*/
+		methods: {
+			click1(e) {
+				console.log('click1', e);
+			},
+			search(e) {
+				console.log('searchChange', e);
+			},
+			jumpToProblemSet() {
+				uni.navigateTo({
+					url: "/pages/personal/personalProblemSet"
+				})
+			},
+			jumpToMyNote() {
+				uni.navigateTo({
+					url: "/pages/personal/personalNote"
+				})
+			},
+			jumpToStarProblemSet() {
+				uni.navigateTo({
+					url: '/pages/personal/starProblemSet'
+				})
+			},
+			jumpToStarNote() {
+				uni.navigateTo({
+					url: '/pages/personal/starNotes'
+				})
+			},
+			jumpToStarProblem() {
+				uni.navigateTo({
+					url: '/pages/personal/starProblem'
+				})
+			},
+			jumpToWrongProblem() {
+				uni.navigateTo({
+					url: '/pages/personal/wrongProblem'
+				})
+			},
+			jumpToMyGroup() {
+				uni.navigateTo({
+					url: '/pages/personal/personalGroup'
+				})
+			},
+			refresh() {
+				myRequest.checkLogin()
+				console.log(uni.getStorageSync('token'))
+				uni.request({
+					url: myRequest.interfaceUrl() + '/user/info',
+					method: 'GET',
+					header: {
+						'X-Token': myRequest.getToken()
+					},
+
+					success: (res) => {
+						console.log(res)
+						if (res.statusCode == 200) {
+							this.user.avatar = res.data.avatar_path;
+							this.user.name = res.data.user_name;
+							this.user.nickName = res.data.nick_name;
+							this.user.editName = res.data.nick_name;
+							this.user.email = res.data.email;
+							this.user.phone = res.data.phone;
+							this.user.uid = res.data.user_id;
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else {
+							myRequest.toast()
+						}
+					},
+
+					fail: (res) => {
+						console.log(res)
+						myRequest.toast()
+					}
+				})
+			},
+
+			dialogInputConfirm() {
+				let model = {
+					"avatar_path": this.user.avatar,
+					"email": this.user.email,
+					"phone": this.user.phone,
+					"nick_name": this.user.editName
+				}
+				let that = this
+
+				uni.request({
+					url: myRequest.interfaceUrl() + '/user/update',
+					method: 'PUT',
+					data: model,
+					header: {
+						'X-Token': myRequest.getToken()
+					},
+
+					success: (res) => {
+						console.log(res)
+						if (res.statusCode == 200) {
+							myRequest.toast('修改成功', 1500, true)
+							setTimeout(() => {
+								uni.hideToast();
+								//关闭提示后刷新
+								that.refresh()
+							}, 1000)
+						} else if (res.statusCode == 401) {
+							myRequest.redirectToLogin()
+						} else {
+							myRequest.toast()
+						}
+					},
+
+					fail: (res) => {
+						console.log(res)
+						myRequest.toast()
+					}
+				})
+
+				this.$refs.inputDialog.close()
+			},
+
+			inputDialogToggle() {
+				this.$refs.inputDialog.open()
+			},
+			inputDialogClose() {
+				setTimeout(() => {
+					this.user.editName = this.user.nickName
+					this.$refs.inputDialog.close()
+				}, 100)
+			},
+
+			changeAvatar() {
+				let that = this;
+				uni.chooseImage({
+					count: 1,
+					success: (res) => {
+						uni.uploadFile({
+							url: myRequest.interfaceUrl() + '/upload/avatar',
+							filePath: res.tempFilePaths[0],
+							name: 'file',
+							header: {
+								'X-Token': myRequest.getToken()
+							},
+							success: res => {
+								if (res.statusCode == 200) {
+									myRequest.toast('头像修改成功', 1500, true)
+									setTimeout(() => {
+										uni.hideToast();
+										//关闭提示后刷新
+										that.refresh()
+									}, 1500)
+								} else {
+									myRequest.toast()
+								}
+							}
+						})
+					}
+				})
+			},
+
+			clickImg(url) {
+				uni.previewImage({
+					urls: [url],
+					current: '', // 当前显示图片的http链接，默认是第一个
+				})
+			},
+
+
+			logoutDialogToggle() {
+				this.$refs.logoutDialog.open()
+			},
+			logoutDialogClose() {
+				setTimeout(() => {
+					this.$refs.logoutDialog.close()
+				}, 100)
+			},
+
+			logout() {
+				myRequest.request(api.logout(), 'GET').then(
+					function(res) {
+						console.log(res)
+						if (res.statusCode == 200) {
+							myRequest.toast('已退出', 1500, true)
+							setTimeout(() => {
+								uni.hideToast();
+								//关闭提示后跳转
+								uni.reLaunch({
+									url: "/pages/login/login"
+								})
+							}, 1000)
+						} else {
+							myRequest.toast()
+						}
+					}
+				).catch(
+					function(res) {
+						console.log(res)
+						myRequest.toast()
+					}
+				)
+			},
+
+			wxBind() {
+				console.log('waiting bind')
+
+				uni.login({
+					provider: 'weixin',
+					univerifyStyle: true,
+					success: (res) => {
+						console.log(res)
+						var code = res.code
+						var data = JSON.stringify({
+							"code": code
+						})
+
+						console.log(data)
+
+						uni.request({
+							url: myRequest.interfaceUrl() + '/weixin-bind',
+							method: 'POST',
+							data: data,
+							header: {
+								"X-Token": myRequest.getToken()
+							},
+
+							success: res => {
+
+								console.log(res)
+								if (res.statusCode == 200) {
+									console.log("绑定成功")
+									myRequest.toast("绑定成功")
+								} else {
+									myRequest.toast(res.data)
+								}
+							},
+							fail: res => {
+								myRequest.toast()
+								console.log('fail')
+							}
+						})
+					},
+
+					fail: (res) => {
+						myRequest.toast()
+					}
+				})
+			}
+
+		},
+	}
+</script>
+
+<style lang="scss">
+	.u-page {
+		padding: 0;
+
+		&__item {
+
+			&__title {
+				color: $u-tips-color;
+				background-color: $u-bg-color;
+				padding: 15px;
+				font-size: 15px;
+
+				&__slot-title {
+					color: $u-primary;
+					font-size: 14px;
+				}
+			}
+
+			&__slot-icon {
+				width: 17px;
+				height: 17px;
+			}
+		}
+	}
+
+	.user_name {
+		color: white;
+		font-family: shuhei;
+		font-size: 30px;
+		margin-bottom: 8px;
+		word-break: break-all;
+		word-wrap: break-word;
+		/*但在有些场景中，还需要加上下面这行代码*/
+		white-space: normal;
+	}
+
+	.uid {
+		color: white;
+		padding-left: 2px;
+		font-size: 20px;
+		font-weight: 500;
+		font-family: 'Times New Roman', Times, serif;
+	}
+
+	.wrap {
+		padding: 12px;
+	}
+
+	.demo-layout {
+		height: 25px;
+		border-radius: 4px;
+	}
+
+	.star-title {
+		font-size: 20px;
+	}
+</style>

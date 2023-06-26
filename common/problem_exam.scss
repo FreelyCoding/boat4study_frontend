@@ -1,0 +1,125 @@
+	.status-bar {
+		width: 100%;
+		position: sticky;
+		top: 0;
+		z-index: 10;
+	}
+
+	.note-navbar {
+		/* #ifndef APP-PLUS-NVUE */
+		display: flex;
+		/* #endif */
+		flex-direction: row;
+		align-items: center;
+		justify-content: flex-start;
+		// width: 160rpx;
+		margin-left: 4px;
+	}
+
+	.contain {
+		margin: 5% 5% 20% 5%;
+	}
+
+	.page_nav {
+		margin-bottom: 5%;
+	}
+
+	.problem_title {
+		margin-bottom: 20px;
+		font-size: 20px;
+	}
+
+	.option_item {
+		border-radius: 5px;
+		height: 40px;
+		display: flex;
+		align-items: center;
+		margin: 10px 0 10px 0;
+		border: #dadada solid 1px;
+		transition: 0.2s;
+		//background-color: #ebebeb;
+	}
+
+	.selected_option_item {
+		border: #55aaff solid 1px;
+		transition: 0.2s;
+		//background-color: #55aaff;
+	}
+
+	.wrong_option_item {
+		border: #c30421 solid 1px;
+		transition: 0.2s;
+		//background-color: #c30421;
+	}
+
+	.right_option_item {
+		border: #0ca006 solid 1px;
+		transition: 0.2s;
+		//background-color: #0ca006;
+	}
+
+	.option_letter_box {
+		font-weight: bold;
+		font-size: 16px;
+		border-radius: 20%;
+		text-align: center;
+		line-height: 15px;
+		height: 15px;
+		width: 15px;
+		padding: 5px;
+		margin-left: 10px;
+		background-color: #e0e0e0;
+		transition: 0.2s;
+	}
+	.selected_option_letter_box {
+		background-color: #55aaff;
+		color: #ffffff;
+		transition: 0.2s;
+	}
+	.wrong_option_letter_box {
+		background-color: #c30421;
+		color: #ffffff;
+		transition: 0.2s;
+	}
+	.right_option_letter_box {
+		background-color: #0ca006;
+		color: #ffffff;
+		transition: 0.2s;
+	}
+
+	.option_item_content {
+		font-size: 16px;
+		margin-left: 35px;
+	}
+
+	.selected_option_item_content {
+		//margin-left: 35px;
+		//color: #ffffff;
+	}
+
+	.option_group {
+		margin-bottom: 50px;
+	}
+	
+	.block_answer_box {
+		margin: 0 0 50px 0;
+	}
+	.block_answer_item {
+		margin: 20px 0 20px 0;
+	}
+	
+	.problem_answer_box_title {
+		margin-top: 10px;
+		margin-bottom: 10px;
+		font-size: 18px;
+		background-color: #00aaff;
+		color: white;
+		width: 50px;
+		justify-content: center;
+		text-align: center;
+		height: 25px;
+		border-radius: 10px;
+	}
+	.problem_answer_box {
+		font-size: 16px;
+	}

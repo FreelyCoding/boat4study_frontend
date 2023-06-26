@@ -1,1 +1,1 @@
-# boat4study_frontend
+学舟frontend

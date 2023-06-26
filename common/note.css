@@ -1,0 +1,71 @@
+.page-body {
+		height: calc(100vh - var(--window-top) - var(--status-bar-height));
+	}
+
+	.wrapper {
+		height: 100%;
+	}
+
+	.editor-wrapper {
+		height: calc(100vh - var(--window-top) - var(--status-bar-height) - 140px);
+		background: #fff;
+	}
+
+	.iconfont {
+		display: inline-block;
+		padding: 8px 8px;
+		width: 24px;
+		height: 24px;
+		cursor: pointer;
+		font-size: 20px;
+	}
+
+	.toolbar {
+		box-sizing: border-box;
+		border-bottom: 0;
+		font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+	}
+
+	.title_placeholder {
+		font-size: 25px;
+		/* color: #303133; */
+		/* font-weight: bold; */
+		font-family: 黑体;
+		/* font-style: italic; */
+	}
+
+	.title {
+		box-sizing: border-box;
+		padding: 10px 15px;
+		width: 100%;
+		min-height: 30vh;
+		height: 100%;
+		margin-top: 10px;
+		line-height: 1.5;
+
+		color: #303133;
+		font-size: 25px;
+		font-family: 黑体;
+		font-weight: bold;
+		/* font-style: italic;	 */
+	}
+
+	.title_wrapper {
+		height: 30px;
+		margin-bottom: 50px;
+	}
+
+	.ql-container {
+		box-sizing: border-box;
+		padding: 10px 15px;
+		width: 100%;
+		min-height: 30vh;
+		height: 100%;
+		margin-top: 10px;
+		font-size: 16px;
+		line-height: 1.5;
+	}
+
+	.ql-active {
+		color: #06c;
+	}
